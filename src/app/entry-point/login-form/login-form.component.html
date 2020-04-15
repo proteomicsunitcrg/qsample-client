@@ -1,0 +1,29 @@
+<div fxLayout="row" fxLayoutAlign="center center">
+    <mat-card class="box">
+        <img mat-card-image src="assets/logo-qcloud.png" alt="Photo of a Shiba Inu">
+        <mat-card-content>
+            <form class="loginForm" [formGroup]="loginForm">
+                <mat-form-field appearance="standard" class="fullWidth">
+                    <mat-label>Username</mat-label>
+                    <input matInput type="text" required name="username" formControlName="username">
+                    <mat-error
+                        *ngIf="loginForm.controls['username'].errors?.required && loginForm.controls['username'].touched">
+                        Email is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+                <br>
+                <mat-form-field appearance="standard" class="fullWidth">
+                    <mat-label>Password</mat-label>
+                    <input matInput type="password" required name="password" formControlName="password">
+                    <mat-error
+                        *ngIf="loginForm.controls['password'].errors?.required && loginForm.controls['password'].touched">
+                        Password is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+            </form>
+        </mat-card-content>
+        <mat-card-footer>
+            <button mat-raised-button color="primary" class="btn-block" (click) = "logIn()" [disabled]="!loginForm.valid">Log in</button>
+        </mat-card-footer>
+    </mat-card>
+</div>

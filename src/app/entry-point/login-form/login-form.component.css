@@ -1,0 +1,30 @@
+.box {
+    width: 20%;
+    margin: auto;
+    margin-top: 10%;
+    margin-bottom: 5%;
+}
+.fullWidth {
+    min-width: 100%;
+}
+
+mat-card-header {
+    text-align:center;
+    width:100%;
+    display:block;
+    font-weight:700;
+}
+
+.loginForm {
+    margin: auto;
+    width: 80%;
+}
+
+.btn-block {
+    margin: auto;
+    width: 80%;
+}
+mat-card-footer {
+    margin: auto;
+    text-align: center;
+}
