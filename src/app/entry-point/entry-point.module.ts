@@ -14,7 +14,7 @@ import { AngularMaterialModule } from '../angular-material.module';
     EntryPointRouterModule,
     FormsModule,
     ReactiveFormsModule,
-    AngularMaterialModule
+    AngularMaterialModule,
   ],
   declarations: [
     LoginFormComponent,
