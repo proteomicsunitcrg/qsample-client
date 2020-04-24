@@ -4,7 +4,7 @@ import { RoleGuardService as RoleGuard } from './services/role-guard.service'
 
 
 const routes: Routes = [
-  {path : '', loadChildren: () => import('./layout/layout.module').then(m => m.LayoutModule), canActivate: [RoleGuard] }
+  {path : '', loadChildren: () => import('./page/layout.module').then(m => m.LayoutModule), canActivate: [RoleGuard] }
 ];
 
 @NgModule({

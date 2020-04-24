@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MainWindowComponent } from './main-window/main-window.component';
 import { Routes, RouterModule } from '@angular/router';
-import { WelcomeComponent } from './welcome/welcome.component';
+import { HomePage } from './home-page/home-page.component';
 
 // const routes: Routes = [
 //   {
@@ -12,7 +12,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
 const routes: Routes = [
     {
       path: '', component: MainWindowComponent, children: [
-        { path: '', component: WelcomeComponent }
+        { path: '', component: HomePage }
         // { path: 'systems', component: MainSystemComponent},
         // { path: 'thresholds', component: MainThresholdComponent}
       ]

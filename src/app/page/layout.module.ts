@@ -3,8 +3,10 @@ import { CommonModule } from '@angular/common';
 import { MainWindowComponent } from './main-window/main-window.component';
 import { TopBarComponent } from './top-bar/top-bar.component'
 import { LayoutRouterModule } from './layout-router';
-import { WelcomeComponent } from './welcome/welcome.component';
+import { HomePage } from './home-page/home-page.component';
 import { AngularMaterialModule } from '../angular-material.module';
+import { MainRequestsComponent } from './requests/main-requests/main-requests.component';
+import { RequestsListComponent } from './requests/requests-list/requests-list.component';
 
 
 @NgModule({
@@ -16,7 +18,9 @@ import { AngularMaterialModule } from '../angular-material.module';
     declarations: [
         MainWindowComponent,
         TopBarComponent,
-        WelcomeComponent
+        HomePage,
+        MainRequestsComponent,
+        RequestsListComponent
     ],
     providers: [
     ]
