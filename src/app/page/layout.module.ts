@@ -7,6 +7,8 @@ import { HomePage } from './home-page/home-page.component';
 import { AngularMaterialModule } from '../angular-material.module';
 import { MainRequestsComponent } from './requests/main-requests/main-requests.component';
 import { RequestsListComponent } from './requests/requests-list/requests-list.component';
+import { MainWetlabComponent } from './wetlab/main-wetlab/main-wetlab.component'
+import { WetlabListComponent } from './wetlab/wetlab-list/wetlab-list.component'
 import { RequestService } from '../services/request.service';
 
 
@@ -21,7 +23,9 @@ import { RequestService } from '../services/request.service';
         TopBarComponent,
         HomePage,
         MainRequestsComponent,
-        RequestsListComponent
+        RequestsListComponent,
+        MainWetlabComponent,
+        WetlabListComponent
     ],
     providers: [
         RequestService

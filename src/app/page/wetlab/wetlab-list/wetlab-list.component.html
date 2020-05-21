@@ -1,0 +1,15 @@
+<div style="width: 48%; float: left; margin-right: 10px;">
+    <mat-card style="margin-top: 10px; margin-left: 10px;">
+        <mat-card-title>
+            Wetlab
+        </mat-card-title>
+        <mat-card-subtitle>
+            ADMIN
+        </mat-card-subtitle>
+        <mat-card-content>
+            <mat-nav-list>
+                <a mat-list-item *ngFor="let item of wetLabTypes">{{item.name}}</a>
+             </mat-nav-list>
+        </mat-card-content>
+    </mat-card>
+</div>
