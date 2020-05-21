@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import { RequestService } from '../../../services/request.service';
 @Component({
   selector: 'app-requests-list',
   templateUrl: './requests-list.component.html',
@@ -7,9 +7,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RequestsListComponent implements OnInit {
 
-  constructor() { }
 
+  constructor(private requestService: RequestService) { }
+  caca = [];
+  columnsToDisplay = ['class', 'creator', 'dateCreated', 'status'];
   ngOnInit(): void {
+    this.getAllRequests();
   }
 
+  private getAllRequests(): void {
+    this.requestService.getAllRequests().subscribe(
+      res => {
+        this.caca = res.request;
+        console.log(res);
+      },
+      err => {
+        console.error(err);
+      }
+    );
+  }
 }

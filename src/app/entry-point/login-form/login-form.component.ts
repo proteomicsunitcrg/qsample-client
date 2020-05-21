@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class LoginFormComponent implements OnInit {
 
-  
+  error = "";
   loginForm = new FormGroup({
     username: new FormControl('', [
       Validators.required,
@@ -52,13 +52,28 @@ export class LoginFormComponent implements OnInit {
       },
       err => {
         console.error(err);
+        switch (err.error.status) {
+          case 401:
+            this.error = "Bad credentials";
+            break;
+          case 500:
+            this.error = "Internal error";
+            break
+          case 408:
+            this.error = "Request timeout";
+            break;
+          case 418:
+            this.error = "Agendo Error";
+            break;
+          default:
+            this.error = "Unable to connect to QSample"
+            break;
+        }
       }
     );
   }
 
   private navigate(): void {
-    console.log('navi');
-    
     this.router.navigate(['']);
   }
 

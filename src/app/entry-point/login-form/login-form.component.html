@@ -21,6 +21,7 @@
                     </mat-error>
                 </mat-form-field>
             </form>
+            <p style="margin-left: 10%; color: red;">{{error}}</p>
         </mat-card-content>
         <mat-card-footer>
             <button mat-raised-button color="primary" class="btn-block" (click) = "logIn()" [disabled]="!loginForm.valid">Log in</button>
