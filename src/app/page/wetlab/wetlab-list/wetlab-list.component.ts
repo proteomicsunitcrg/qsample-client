@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FileService } from '../../../services/file.service';
 import { WetLabType } from '../../../models/WetLabType';
+import { WetLabService } from '../../../services/wetlab.service';
 
 @Component({
   selector: 'app-wetlab-list',
@@ -9,7 +9,7 @@ import { WetLabType } from '../../../models/WetLabType';
 })
 export class WetlabListComponent implements OnInit {
 
-  constructor(private fileService: FileService) { }
+  constructor(private wetLabService: WetLabService) { }
 
   wetLabTypes: WetLabType;
 
@@ -18,7 +18,7 @@ export class WetlabListComponent implements OnInit {
   }
 
   private getAllWetlabs() {
-    this.fileService.getWetlabLists().subscribe(
+    this.wetLabService.getWetlabLists().subscribe(
       res => {
         console.log(res);
         this.wetLabTypes = res;

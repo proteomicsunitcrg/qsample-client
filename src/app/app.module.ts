@@ -8,6 +8,7 @@ import { EntryPointModule } from './entry-point/entry-point.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AuthService } from './services/auth.service';
 import { FileService } from './services/file.service';
+import { WetLabService } from './services/wetlab.service';
 import {TestService} from './services/test.service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RoleGuardService } from './services/role-guard.service';
@@ -30,6 +31,7 @@ import { from, fromEventPattern } from 'rxjs';
   providers: [
     AuthService,
     FileService,
+    WetLabService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
