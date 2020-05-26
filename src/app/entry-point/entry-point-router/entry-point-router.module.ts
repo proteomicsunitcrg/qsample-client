@@ -5,7 +5,7 @@ import { LoginFormComponent } from '../login-form/login-form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
-  { path: 'login', component: LoginFormComponent },
+  { path: '', component: LoginFormComponent },
 ];
 
 @NgModule({

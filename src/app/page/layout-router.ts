@@ -12,9 +12,11 @@ import { HomePage } from './home-page/home-page.component';
 const routes: Routes = [
     {
       path: '', component: MainWindowComponent, children: [
-        { path: '', component: HomePage }
-        // { path: 'systems', component: MainSystemComponent},
-        // { path: 'thresholds', component: MainThresholdComponent}
+        { path: '', component: HomePage },
+        {
+          path: 'wetlab', loadChildren: () => import('../wetlab/wetlab.module')
+            .then(m => m.WetLabModule)
+        }
       ]
     },
   ];

@@ -74,7 +74,7 @@ export class LoginFormComponent implements OnInit {
   }
 
   private navigate(): void {
-    this.router.navigate(['']);
+    this.router.navigate(['/application']);
   }
 
 }

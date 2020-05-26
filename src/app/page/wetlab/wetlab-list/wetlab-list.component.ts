@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { WetLabType } from '../../../models/WetLabType';
 import { WetLabService } from '../../../services/wetlab.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-wetlab-list',
@@ -9,9 +10,9 @@ import { WetLabService } from '../../../services/wetlab.service';
 })
 export class WetlabListComponent implements OnInit {
 
-  constructor(private wetLabService: WetLabService) { }
+  constructor(private wetLabService: WetLabService, private router: Router) { }
 
-  wetLabTypes: WetLabType;
+  wetLabTypes: WetLabType[];
 
   ngOnInit(): void {
     this.getAllWetlabs();
@@ -27,6 +28,11 @@ export class WetlabListComponent implements OnInit {
         console.error(err);
       }
     );
+  }
+
+  public navigate(wetLab: WetLabType) {
+    this.router.navigate(['/application/wetlab', wetLab.apiKey]);
+
   }
 
 }

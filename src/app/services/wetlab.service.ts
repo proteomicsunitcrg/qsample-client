@@ -13,8 +13,14 @@ export class WetLabService {
 
   apiPrefix: String = environment.apiPrefix;
 
-  public getWetlabLists(): Observable<WetLabType> {
-    return this.httpClient.get<WetLabType>(`${this.apiPrefix}api/wetlab/getAllWetlabsType`);
+  public getWetlabLists(): Observable<WetLabType[]> {
+    return this.httpClient.get<WetLabType[]>(`${this.apiPrefix}api/wetlab/getAllWetlabsType`);
+  }
+
+  public getByApiKey(apiKey: string): Observable<WetLabType> {
+    console.log(apiKey);
+
+    return this.httpClient.get<WetLabType>(`${this.apiPrefix}api/wetlab/${apiKey}`);
   }
 
 }
