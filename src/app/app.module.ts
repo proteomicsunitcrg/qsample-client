@@ -24,7 +24,7 @@ import { from, fromEventPattern } from 'rxjs';
     AppRoutingModule,
     BrowserAnimationsModule,
     EntryPointModule,
-    FlexLayoutModule,
+    // FlexLayoutModule,
     HttpClientModule
 
   ],

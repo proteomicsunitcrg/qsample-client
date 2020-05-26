@@ -6,14 +6,18 @@ import { AngularMaterialModule } from '../angular-material.module';
 import { WetlabMainComponent } from './wetlab-main/wetlab-main.component';
 import { WetlabDetailsComponent } from './wetlab-details/wetlab-details.component';
 import { WetlabRouter } from './wetlab.router';
+import { WetlabPlotComponent } from './wetlab-plot/wetlab-plot.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 
 @NgModule({
   declarations: [
     WetlabMainComponent,
-    WetlabDetailsComponent
+    WetlabDetailsComponent,
+    WetlabPlotComponent
     ],
   imports: [
+    FlexLayoutModule,
     CommonModule,
     RouterModule,
     FormsModule,

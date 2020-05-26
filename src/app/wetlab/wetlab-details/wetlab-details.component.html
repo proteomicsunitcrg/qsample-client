@@ -1,1 +1,14 @@
-<p>wetlab-details works!</p>
+<p>{{wetlab.name}}</p>
+
+<!-- <div fxLayout="row" class="parent">
+  <div fxFlex="30%" class="left"> <app-wetlab-plot fxFlex="0 1 calc(33.3% - 32px)"></app-wetlab-plot></div>
+  <div fxFlex="70%" class="right"> <app-wetlab-plot fxFlex="0 1 calc(33.3% - 32px)"></app-wetlab-plot></div>
+</div> -->
+
+<div
+  fxLayout="column" fxLayoutGap="32px" fxLayoutAlign="space-around center">
+  <ng-container *ngFor="let plot of wetlab.plot">
+    <app-wetlab-plot fxFlex="0 1 calc(33.3% - 32px)" fxFlex.lt-md="0 1 calc(50% - 32px)"
+    fxFlex.lt-sm="100%"></app-wetlab-plot>
+  </ng-container>
+</div>
