@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { WetLabService } from '../../services/wetlab.service';
-import { WetLabType } from '../../models/WetLabType';
+import { WetLab } from '../../models/WetLab';
 
 @Component({
   selector: 'app-wetlab-details',
@@ -12,7 +12,7 @@ export class WetlabDetailsComponent implements OnInit {
 
   constructor(private activeRouter: ActivatedRoute, private wetLabService: WetLabService) { }
 
-  wetlab = new WetLabType(null, null, null);
+  wetlab = new WetLab(null, null, null);
 
   ngOnInit(): void {
     this.activeRouter.params.subscribe(

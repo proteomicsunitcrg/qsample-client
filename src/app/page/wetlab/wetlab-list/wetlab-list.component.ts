@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { WetLabType } from '../../../models/WetLabType';
+import { WetLab } from '../../../models/WetLab';
 import { WetLabService } from '../../../services/wetlab.service';
 import { Router } from '@angular/router';
 
@@ -12,7 +12,7 @@ export class WetlabListComponent implements OnInit {
 
   constructor(private wetLabService: WetLabService, private router: Router) { }
 
-  wetLabTypes: WetLabType[];
+  WetLabs: WetLab[];
 
   ngOnInit(): void {
     this.getAllWetlabs();
@@ -22,7 +22,7 @@ export class WetlabListComponent implements OnInit {
     this.wetLabService.getWetlabLists().subscribe(
       res => {
         console.log(res);
-        this.wetLabTypes = res;
+        this.WetLabs = res;
       },
       err => {
         console.error(err);
@@ -30,7 +30,7 @@ export class WetlabListComponent implements OnInit {
     );
   }
 
-  public navigate(wetLab: WetLabType) {
+  public navigate(wetLab: WetLab) {
     this.router.navigate(['/application/wetlab', wetLab.apiKey]);
 
   }

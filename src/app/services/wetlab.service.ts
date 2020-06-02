@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { WetLabType } from '../models/WetLabType';
+import { WetLab } from '../models/WetLab';
 
 @Injectable({
   providedIn: 'root'
@@ -13,14 +13,14 @@ export class WetLabService {
 
   apiPrefix: String = environment.apiPrefix;
 
-  public getWetlabLists(): Observable<WetLabType[]> {
-    return this.httpClient.get<WetLabType[]>(`${this.apiPrefix}api/wetlab/getAllWetlabsType`);
+  public getWetlabLists(): Observable<WetLab[]> {
+    return this.httpClient.get<WetLab[]>(`${this.apiPrefix}api/wetlab/getAllWetlabsType`);
   }
 
-  public getByApiKey(apiKey: string): Observable<WetLabType> {
+  public getByApiKey(apiKey: string): Observable<WetLab> {
     console.log(apiKey);
 
-    return this.httpClient.get<WetLabType>(`${this.apiPrefix}api/wetlab/${apiKey}`);
+    return this.httpClient.get<WetLab>(`${this.apiPrefix}api/wetlab/${apiKey}`);
   }
 
 }

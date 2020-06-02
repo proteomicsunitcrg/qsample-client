@@ -8,6 +8,7 @@ import { WetlabDetailsComponent } from './wetlab-details/wetlab-details.componen
 import { WetlabRouter } from './wetlab.router';
 import { WetlabPlotComponent } from './wetlab-plot/wetlab-plot.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { DataService } from '../services/data.service';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     WetlabRouter
   ],
   providers: [
+    DataService
   ],
   bootstrap: []
 })

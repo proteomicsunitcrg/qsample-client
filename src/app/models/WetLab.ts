@@ -1,4 +1,4 @@
-export class WetLabType {
+export class WetLab {
     id: number;
     apiKey: string;
     name: string
