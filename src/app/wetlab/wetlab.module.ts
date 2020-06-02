@@ -9,13 +9,16 @@ import { WetlabRouter } from './wetlab.router';
 import { WetlabPlotComponent } from './wetlab-plot/wetlab-plot.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { DataService } from '../services/data.service';
+import { DateSelectorComponent } from './date-selector/date-selector.component';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 
 @NgModule({
   declarations: [
     WetlabMainComponent,
     WetlabDetailsComponent,
-    WetlabPlotComponent
+    WetlabPlotComponent,
+    DateSelectorComponent
     ],
   imports: [
     FlexLayoutModule,
@@ -27,7 +30,9 @@ import { DataService } from '../services/data.service';
     WetlabRouter
   ],
   providers: [
-    DataService
+    DataService,
+    {provide: MAT_DATE_LOCALE, useValue: 'es'},
+
   ],
   bootstrap: []
 })

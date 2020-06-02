@@ -1,6 +1,23 @@
-/* :host {
-    display: block;
-    padding: 32px;
-    border: 1px solid black;
-    border-radius: 8px;
-  } */
+.notFound {
+  background-color: #424242;
+  width: 560px;
+  height: 480px;
+  line-height: 480px;
+  text-align: center;
+  color: #fff;
+  border-radius: 5px;
+}
+
+.notFound p {
+  line-height: 1.5;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.hide {
+  display: none;
+}
+
+.graph {
+  border-radius: 20px;
+}

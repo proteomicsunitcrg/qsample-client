@@ -1,1 +1,8 @@
-<div id="Graph" #Graph></div>
+<div [class.hide]="noDataFound === true" id="Graph{{randString}}" #Graph class="graph"></div>
+
+
+<h3 *ngIf="noDataFound">{{plot.name}}</h3>
+<div *ngIf="noDataFound" class="pater">
+
+    <h1 class="notFound">Nothing found</h1>
+</div>

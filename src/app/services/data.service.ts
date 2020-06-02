@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { WetLab } from '../models/WetLab';
 import { PlotTrace } from '../models/PlotTrace';
@@ -14,9 +14,17 @@ export class DataService {
 
   apiPrefix: String = environment.apiPrefix;
 
-  public getDataForPlot(startDate: string, endDate: string, plotApiKey: string, wetLabApiKey: string): Observable<PlotTrace[]> {
-    // return this.httpClient.get<any>(`${this.apiPrefix}api/file/dummy`);
-    return this.httpClient.get<PlotTrace[]>(`${this.apiPrefix}api/data/traces/${startDate}/${endDate}/${plotApiKey}/${wetLabApiKey}`);
+  private selectedDates = new Subject<Date[]>();
+  selectedDates$ = this.selectedDates.asObservable();
+  currentDates: Date[];
+
+  public selectDates(datesArray: Date[]): void {
+    this.currentDates = datesArray;
+    this.selectedDates.next(datesArray);
+  }
+
+  public getDataForPlot(plotApiKey: string, wetLabApiKey: string): Observable<PlotTrace[]> {
+    return this.httpClient.get<PlotTrace[]>(`${this.apiPrefix}api/data/traces/${this.currentDates[0]}/${this.currentDates[1]}/${plotApiKey}/${wetLabApiKey}`);
   }
 
 }

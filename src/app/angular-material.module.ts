@@ -8,6 +8,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+
 
 
 
@@ -24,7 +27,9 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatIconModule,
     MatTableModule,
     MatListModule,
-    MatGridListModule
+    MatGridListModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   exports: [
     MatInputModule,
@@ -34,7 +39,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatIconModule,
     MatTableModule,
     MatListModule,
-    MatGridListModule
+    MatGridListModule,
+    MatDatepickerModule
   ]
 })
 

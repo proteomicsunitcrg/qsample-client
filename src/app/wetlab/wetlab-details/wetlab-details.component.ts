@@ -12,7 +12,7 @@ export class WetlabDetailsComponent implements OnInit {
 
   constructor(private activeRouter: ActivatedRoute, private wetLabService: WetLabService) { }
 
-  wetlab = new WetLab(null, null, null);
+  wetlab = new WetLab(null, null, null, null);
 
   ngOnInit(): void {
     this.activeRouter.params.subscribe(
