@@ -1,0 +1,7 @@
+.icon {
+    cursor: pointer;
+    margin-left: 5px;
+}
+.icon:hover {
+    color: darkgray;
+}

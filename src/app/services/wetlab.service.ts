@@ -18,8 +18,6 @@ export class WetLabService {
   }
 
   public getByApiKey(apiKey: string): Observable<WetLab> {
-    console.log(apiKey);
-
     return this.httpClient.get<WetLab>(`${this.apiPrefix}api/wetlab/${apiKey}`);
   }
 

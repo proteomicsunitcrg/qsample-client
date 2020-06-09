@@ -36,10 +36,6 @@ export class LoginFormComponent implements OnInit {
     }
   }
 
-  ngAfterViewInit() {
-    this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = 'grey';
-  }
-
   public logIn(): void {
     console.log(this.loginForm.value.username, this.loginForm.value.password);
     this.authService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe(

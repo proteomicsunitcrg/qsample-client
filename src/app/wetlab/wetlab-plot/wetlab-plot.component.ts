@@ -3,6 +3,9 @@ import { DataService } from '../../services/data.service';
 import { WetLab } from '../../models/WetLab';
 import { PlotTrace } from '../../models/PlotTrace';
 import { Subscription } from 'rxjs';
+import { ThemeSelectorComponent } from '../../page/top-bar/theme-selector/theme-selector.component';
+import { ThemeService } from 'src/app/services/theme.service';
+import { LAYOUTDARK, LAYOUTLIGHT } from './plot.utils'
 declare var Plotly: any;
 
 @Component({
@@ -12,7 +15,7 @@ declare var Plotly: any;
 })
 export class WetlabPlotComponent implements OnInit {
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService, private themeService: ThemeService) { }
 
   @ViewChild("Graph", { static: true })
   private Graph: ElementRef;
@@ -25,6 +28,10 @@ export class WetlabPlotComponent implements OnInit {
 
   dateChangesSubscription$: Subscription;
 
+  themeChangesSubscription$: Subscription;
+
+  themeColor: string;
+
   currentDates: Date[];
 
   randString = '';
@@ -33,11 +40,12 @@ export class WetlabPlotComponent implements OnInit {
 
 
   ngOnInit(): void {
-    console.log(this.plot);
-
+    this.themeColor = this.themeService.currentTheme;
     this.randString = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    console.log(this.randString);
     this.getData();
     this.subscribeToDateChanges();
+    this.subscribeToThemeChanges();
   }
 
   plotTrace: PlotTrace[];
@@ -46,14 +54,12 @@ export class WetlabPlotComponent implements OnInit {
     this.dataService.getDataForPlot(this.plot.id, this.wetlab.apiKey).subscribe(
       res => {
         this.plotTrace = res;
-        console.log(this.plotTrace);
         if (this.plotTrace.length !== 0) { // Check the server have returned data
           this.plotGraph();
           this.noDataFound = false;
         } else {
           this.noDataFound = true;
         }
-        console.log(this.noDataFound);
       },
       err => {
         console.error(err);
@@ -89,37 +95,18 @@ export class WetlabPlotComponent implements OnInit {
 
       }
     );
+    if (this.themeColor === 'dark-theme') {
+      this.layout = LAYOUTDARK;
+    } else if (this.themeColor === 'light-theme') {
+      this.layout = LAYOUTLIGHT;
+    }
+    this.layout.title = this.plot.name;
 
-    this.layout = {
-      title: this.plot.name,
-      shapes: [],
-      hovermode: 'closest',
-      plot_bgcolor: "#424242",
-      paper_bgcolor: "#424242",
-      barmode: 'group',
-      xaxis: {
-        nticks: 10,
-        linecolor: '#FFFFFF',
-        tickcolor: '#FFFFFF'
-      },
-      yaxis: {
-        type: 'linear',
-        linecolor: '#FFFFFF',
-        tickcolor: '#FFFFFF'
-        // range: rangeArray
-      },
-      font: {
-        family: 'Roboto, monospace',
-        color: '#FFFFFF'
-      }
-
-    };
     let layout = { barmode: 'group' };
 
     this.Graph = Plotly.react(`Graph${this.randString}`, dataForPlot, this.layout);
     setTimeout(() => {  // The timeout is necessary because the PLOT isnt instant
       let plotSVG = document.getElementsByClassName('main-svg')[0];  // the only way because this inst plotly native LUL
-      console.log(plotSVG);
       (plotSVG as any).style["border-radius"] = '4px';
     }, 100);
 
@@ -134,6 +121,15 @@ export class WetlabPlotComponent implements OnInit {
           this.getData();
         }
       );
+  }
+
+  private subscribeToThemeChanges(): void {
+    this.themeChangesSubscription$ = this.themeService.selectedTheme$.subscribe(
+      theme => {
+        this.themeColor = theme;
+        this.getData();
+      }
+    )
   }
 
 }

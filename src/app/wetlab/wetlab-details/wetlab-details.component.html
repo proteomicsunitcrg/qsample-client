@@ -1,16 +1,23 @@
-<p>{{wetlab.name}}</p>
+<section class="mat-typography title-group">
+  <h1 style="margin: 20px;">
+    <span class="material-icons cursor" (click)="goBack()">
+      arrow_back_ios
+    </span>
+    {{wetlab.name}}
+  </h1>
+  <mat-divider></mat-divider>
+</section>
 
 <!-- <div fxLayout="row" class="parent">
   <div fxFlex="30%" class="left"> <app-wetlab-plot fxFlex="0 1 calc(33.3% - 32px)"></app-wetlab-plot></div>
   <div fxFlex="70%" class="right"> <app-wetlab-plot fxFlex="0 1 calc(33.3% - 32px)"></app-wetlab-plot></div>
 </div> -->
-<div fxLayout="row" fxLayoutAlign="space-between start">
+<div style="margin-top: 20px;" fxLayout="row" fxLayoutAlign="space-between start">
   <app-date-selector fxFlex="15%"></app-date-selector>
-  <div fxFlex="85%"
-    fxLayout="column" fxLayoutGap="32px" fxLayoutAlign="space-around center">
+  <div fxFlex="85%" fxLayout="column" fxLayoutGap="32px" fxLayoutAlign="space-around center">
     <ng-container *ngFor="let plot of wetlab.plot">
-      <app-wetlab-plot fxFlex="0 1 calc(33.3% - 32px)" fxFlex.lt-md="0 1 calc(50% - 32px)"
-      fxFlex.lt-sm="100%" [plot]="plot" [wetlab]="wetlab"></app-wetlab-plot>
+      <app-wetlab-plot fxFlex="0 1 calc(33.3% - 32px)" fxFlex.lt-md="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%"
+        [plot]="plot" [wetlab]="wetlab"></app-wetlab-plot>
     </ng-container>
   </div>
 </div>

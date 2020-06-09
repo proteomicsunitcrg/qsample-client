@@ -1,0 +1,43 @@
+// @import '~@angular/material/theming';
+
+// @include mat-core();
+// $custom-theme-primary: mat-palette($mat-grey, 900);
+// $custom-theme-accent:mat-palette($mat-pink, A200, A100, A400);
+// $custom-theme-warn: mat-palette($mat-red);
+// $custom-theme: mat-dark-theme($custom-theme-primary, $custom-theme-accent, $custom-theme-warn);
+// @include angular-material-theme($custom-theme);
+
+
+@import '~@angular/material/theming';
+@include mat-core();
+
+
+// Define the light theme
+$light-app-primary: mat-palette($mat-teal);
+$light-app-accent:  mat-palette($mat-pink, A200, A100, A400);
+$light-app-theme:   mat-light-theme($light-app-primary, $light-app-accent);
+
+// Include the light theme styles.
+@include angular-material-theme($light-app-theme);
+
+
+// Define an dark theme.
+$dark-primary: mat-palette($mat-grey, 900);
+$dark-accent:  mat-palette($mat-amber, A200, A100, A400);
+$dark-warn:    mat-palette($mat-deep-orange);
+$dark-theme:   mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+
+// themes will be switched based on class names, angular will switch classes which will trigger the theme change
+.dark-theme {
+    @include angular-material-theme($dark-theme);
+    .black-background {
+        background-color: #212121;
+    }
+}
+
+.light-theme {
+    @include angular-material-theme($light-app-theme);
+    .black-background {
+        background-color: #3F51B5;
+    }
+}

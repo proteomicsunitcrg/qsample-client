@@ -14,6 +14,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RoleGuardService } from './services/role-guard.service';
 import { authInterceptorProviders, AuthInterceptor } from './interceptors/auth.interceptor';
 import { from, fromEventPattern } from 'rxjs';
+import { ThemeSelectorComponent } from './page/top-bar/theme-selector/theme-selector.component';
+import { ThemeService } from './services/theme.service';
 
 @NgModule({
   declarations: [
@@ -38,7 +40,9 @@ import { from, fromEventPattern } from 'rxjs';
       multi: true
     },
     TestService,
-    RoleGuardService
+    RoleGuardService,
+    ThemeSelectorComponent,
+    ThemeService
   ],
   bootstrap: [AppComponent]
 })

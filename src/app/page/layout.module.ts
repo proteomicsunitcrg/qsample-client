@@ -10,6 +10,7 @@ import { RequestsListComponent } from './requests/requests-list/requests-list.co
 import { MainWetlabComponent } from './wetlab/main-wetlab/main-wetlab.component'
 import { WetlabListComponent } from './wetlab/wetlab-list/wetlab-list.component'
 import { RequestService } from '../services/request.service';
+import { ThemeSelectorComponent } from './top-bar/theme-selector/theme-selector.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { RequestService } from '../services/request.service';
         MainRequestsComponent,
         RequestsListComponent,
         MainWetlabComponent,
-        WetlabListComponent
+        WetlabListComponent,
+        ThemeSelectorComponent
     ],
     providers: [
         RequestService
