@@ -68,10 +68,10 @@ export class WetlabPlotComponent implements OnInit {
   }
 
   plotGraph() {
-    const values = [];
     const dataForPlot = [];
     this.plotTrace.forEach(
       plotTrace => {
+        const errorBar = [];
         const values = [];
         const filenames = [];
         const dates = [];
@@ -82,6 +82,7 @@ export class WetlabPlotComponent implements OnInit {
             filenames.push(plotTracePoint.file.filename);
             dates.push(plotTracePoint.file.creationDate);
             color.push('red');
+            errorBar.push(plotTracePoint.std);
           }
         );
         const trace = {
@@ -89,7 +90,13 @@ export class WetlabPlotComponent implements OnInit {
           y: values,
           type: 'bar',
           name: plotTrace.abbreviated,
-          filenames: filenames
+          filenames: filenames,
+          error_y: {
+            type: 'data',
+            array: errorBar,
+            color: '#85144B',
+            visible: true
+          },
         }
         dataForPlot.push(trace);
 
@@ -127,9 +134,35 @@ export class WetlabPlotComponent implements OnInit {
     this.themeChangesSubscription$ = this.themeService.selectedTheme$.subscribe(
       theme => {
         this.themeColor = theme;
-        this.getData();
+        this.reLayout();
       }
     )
+  }
+
+  private reLayout(): void {
+    let update = {};
+    switch (this.themeColor) {
+      case 'dark-theme':
+        update = {
+          plot_bgcolor: "#424242",
+          paper_bgcolor: "#424242",
+          font: {
+            color: '#FFFFFF'
+          }
+        }
+        break;
+      case 'light-theme':
+        update = {
+          plot_bgcolor: "white",
+          paper_bgcolor: "white",
+          font: {
+            color: 'black'
+          }
+        }
+        break;
+    }
+    this.Graph = Plotly.relayout(`Graph${this.randString}`, update);
+
   }
 
 }

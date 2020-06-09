@@ -11,5 +11,8 @@
                 <a mat-list-item *ngFor="let item of WetLabs" (click)="navigate(item)">{{item.name}}</a>
              </mat-nav-list>
         </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button color="primary">OPTIONS</button>
+        </mat-card-actions>
     </mat-card>
 </div>

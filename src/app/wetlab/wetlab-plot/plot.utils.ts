@@ -13,7 +13,9 @@ export const LAYOUTDARK = {
     yaxis: {
         type: 'linear',
         linecolor: '#FFFFFF',
-        tickcolor: '#FFFFFF'
+        tickcolor: '#FFFFFF',
+        // gridcolor: '#FFFFFF',
+
         // range: rangeArray
     },
     font: {
@@ -36,7 +38,8 @@ export const LAYOUTLIGHT = {
     yaxis: {
         type: 'linear',
         linecolor: '#FFFFFF',
-        tickcolor: '#FFFFFF'
+        tickcolor: '#FFFFFF',
+
         // range: rangeArray
     },
     font: {
