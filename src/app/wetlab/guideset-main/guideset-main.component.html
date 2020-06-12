@@ -1,0 +1,38 @@
+<section class="mat-typography title-group">
+    <h1 style="margin: 20px;">
+        <span class="material-icons cursor" (click)="goBack()">
+            arrow_back_ios
+        </span>
+        Guideset manager
+    </h1>
+    <mat-divider></mat-divider>
+</section>
+<div style="margin-top: 20px;" fxLayout="row" fxLayoutAlign="space-between start">
+    <app-date-selector fxFlex="15%"></app-date-selector>
+    <div fxFlex fxLayout="column" fxLayoutAlign="space-around center">
+        <mat-accordion *ngFor="let wetlab of allWetLabs" style="width: 90%;">
+            <mat-expansion-panel (opened)="getFiles(wetlab)" (afterCollapse)="cleanArray()">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        {{wetlab.name}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p *ngIf="setedGuideset==null">No guideset</p>
+                <div *ngIf="setedGuideset!=null">
+                    <p *ngFor="let file of setedGuideset.files">{{file.filename}}</p>
+                    <button mat-raised-button color="primary" style="margin-bottom: 20px;" (click)="deleteGuideSet()">Delete guideset</button>
+                </div>
+                <mat-divider></mat-divider>
+                <div *ngFor="let file of wetLabFiles" style="margin-top: 20px;">
+                    <mat-checkbox (change)="updateList(file, $event)" [disabled]="setedGuideset!=null">{{file.filename}}
+                    </mat-checkbox>
+                    <br>
+                </div>
+                <mat-action-row>
+                    <button mat-raised-button color="primary" (click)="setGuideset()"
+                        [disabled]="selectedFiles.length < 3">Set guideset</button>
+                </mat-action-row>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+</div>

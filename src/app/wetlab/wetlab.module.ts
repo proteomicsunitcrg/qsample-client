@@ -11,14 +11,16 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { DataService } from '../services/data.service';
 import { DateSelectorComponent } from './date-selector/date-selector.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
-
+import { GuidesetMainComponent } from './guideset-main/guideset-main.component';
+import { GuidesetService } from '../services/guideset.service'
 
 @NgModule({
   declarations: [
     WetlabMainComponent,
     WetlabDetailsComponent,
     WetlabPlotComponent,
-    DateSelectorComponent
+    DateSelectorComponent,
+    GuidesetMainComponent
     ],
   imports: [
     FlexLayoutModule,
@@ -31,6 +33,7 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
   ],
   providers: [
     DataService,
+    GuidesetService,
     {provide: MAT_DATE_LOCALE, useValue: 'es'},
 
   ],

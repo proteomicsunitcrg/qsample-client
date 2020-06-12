@@ -4,12 +4,17 @@ import { Routes, RouterModule } from '@angular/router';
 import { WetlabMainComponent } from './wetlab-main/wetlab-main.component';
 import { RoleGuardService as RoleGuard } from '../services/role-guard.service'
 import { WetlabDetailsComponent } from './wetlab-details/wetlab-details.component';
+import { GuidesetMainComponent } from './guideset-main/guideset-main.component';
 
 const routes: Routes = [
   {
-    path: '', component: WetlabMainComponent, canActivate: [RoleGuard], children: [
-        { path: ':apiKey', component: WetlabDetailsComponent }
+    path: 'plot', component: WetlabMainComponent, canActivate: [RoleGuard], children: [
+        { path: ':apiKey', component: WetlabDetailsComponent },
+        // { path: 'guideset', component: GuidesetMainComponent}
     ]
+  },
+  {
+    path: 'guideset', component: GuidesetMainComponent, canActivate: [RoleGuard]
   }
 ];
 

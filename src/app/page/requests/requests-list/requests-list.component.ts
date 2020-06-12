@@ -12,7 +12,7 @@ export class RequestsListComponent implements OnInit {
   caca = [];
   columnsToDisplay = ['class', 'creator', 'dateCreated', 'status'];
   ngOnInit(): void {
-    this.getAllRequests();
+    // this.getAllRequests();
   }
 
   private getAllRequests(): void {
