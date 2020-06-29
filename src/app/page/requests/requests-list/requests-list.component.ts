@@ -9,7 +9,32 @@ export class RequestsListComponent implements OnInit {
 
 
   constructor(private requestService: RequestService) { }
-  caca = [];
+  caca = [
+    {
+      class: "Identification of a protein in a gel band",
+      created_by: {
+        email: "Dio Brando",
+      },
+      date_created: "2019-01-12",
+      status: "In progress"
+    },
+    {
+      class: "TMT: Proteome quantification",
+      created_by: {
+        email: "Giorno Giovanna",
+      },
+      date_created: "2019-03-23",
+      status: "In progress"
+    },
+    {
+      class: "Structural elucidation of crosslinked protein complexes",
+      created_by: {
+        email: "Muhammad Avdol",
+      },
+      date_created: "2020-01-23",
+      status: "Completed"
+    },
+  ];
   columnsToDisplay = ['class', 'creator', 'dateCreated', 'status'];
   ngOnInit(): void {
     // this.getAllRequests();

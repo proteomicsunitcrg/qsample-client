@@ -4,8 +4,11 @@ import { WetLab } from '../../models/WetLab';
 import { PlotTrace } from '../../models/PlotTrace';
 import { Subscription } from 'rxjs';
 import { ThemeSelectorComponent } from '../../page/top-bar/theme-selector/theme-selector.component';
-import { ThemeService } from 'src/app/services/theme.service';
+import { ThemeService } from '../../services/theme.service';
 import { LAYOUTDARK, LAYOUTLIGHT } from './plot.utils'
+import { ThresholdService } from '../../services/threshold.service';
+import { Threshold } from '../../models/Threshold';
+import { ThresholdForPlot } from '../../models/ThresholdForPlot';
 declare var Plotly: any;
 
 @Component({
@@ -15,7 +18,7 @@ declare var Plotly: any;
 })
 export class WetlabPlotComponent implements OnInit {
 
-  constructor(private dataService: DataService, private themeService: ThemeService) { }
+  constructor(private dataService: DataService, private themeService: ThemeService, private threholdService: ThresholdService) { }
 
   @ViewChild("Graph", { static: true })
   private Graph: ElementRef;
@@ -24,7 +27,7 @@ export class WetlabPlotComponent implements OnInit {
 
   @Input("wetlab") wetlab: WetLab;
 
-  layout: any;
+  layout: any = {};
 
   dateChangesSubscription$: Subscription;
 
@@ -38,14 +41,22 @@ export class WetlabPlotComponent implements OnInit {
 
   noDataFound = false;
 
+  hasThreshold = false;
+
 
   ngOnInit(): void {
+    this.layout.shapes = [];
     this.themeColor = this.themeService.currentTheme;
     this.randString = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    console.log(this.randString);
     this.getData();
     this.subscribeToDateChanges();
     this.subscribeToThemeChanges();
+  }
+
+  ngOnDestroy() {
+    Plotly.purge(`Graph${this.randString}`);
+    this.dateChangesSubscription$.unsubscribe();
+    this.themeChangesSubscription$.unsubscribe();
   }
 
   plotTrace: PlotTrace[];
@@ -57,6 +68,7 @@ export class WetlabPlotComponent implements OnInit {
         if (this.plotTrace.length !== 0) { // Check the server have returned data
           this.plotGraph();
           this.noDataFound = false;
+          this.loadThreshold();
         } else {
           this.noDataFound = true;
         }
@@ -86,7 +98,7 @@ export class WetlabPlotComponent implements OnInit {
           }
         );
         const trace = {
-          x: dates,
+          x: filenames,
           y: values,
           type: 'bar',
           name: plotTrace.abbreviated,
@@ -99,7 +111,6 @@ export class WetlabPlotComponent implements OnInit {
           },
         }
         dataForPlot.push(trace);
-
       }
     );
     if (this.themeColor === 'dark-theme') {
@@ -108,15 +119,54 @@ export class WetlabPlotComponent implements OnInit {
       this.layout = LAYOUTLIGHT;
     }
     this.layout.title = this.plot.name;
-
-    let layout = { barmode: 'group' };
-
-    this.Graph = Plotly.react(`Graph${this.randString}`, dataForPlot, this.layout);
+    if (!this.hasThreshold) {
+      this.layout.shapes = [];
+    }
+    Plotly.react(`Graph${this.randString}`, dataForPlot, this.layout);
     setTimeout(() => {  // The timeout is necessary because the PLOT isnt instant
       let plotSVG = document.getElementsByClassName('main-svg')[0];  // the only way because this inst plotly native LUL
       (plotSVG as any).style["border-radius"] = '4px';
     }, 100);
 
+  }
+
+
+  private loadThreshold(): void {
+    this.threholdService.getThresholdForPlot(this.plot.apiKey, this.wetlab.apiKey).subscribe(
+      res => {
+        if (res != null) {
+          this.drawThreshold(res);
+        }
+      },
+      err => {
+        console.error(err);
+      }
+    );
+  }
+
+  private drawThreshold(thresholdToDraw: ThresholdForPlot): void {
+    this.hasThreshold = true;
+    const shapes: any[] = [];
+    for (let i = 0; i < thresholdToDraw.steps; i++) {
+      const shape = {
+        type: 'rect',
+        x0: 0,
+        x1: 1,
+        y0: thresholdToDraw.initialValue + ((i + 1) * thresholdToDraw.stepValue),
+        y1: thresholdToDraw.initialValue - ((i + 1) * thresholdToDraw.stepValue),
+        xref: 'paper',
+        fillcolor: 'red',
+        opacity: 0.5,
+        line: {
+          color: 'red',
+          width: 0
+        },
+        layer: 'below'
+      };
+      shapes.push(shape);
+    }
+    this.layout.shapes = shapes;
+    this.plotGraph();
   }
 
   private subscribeToDateChanges(): void {
@@ -161,8 +211,7 @@ export class WetlabPlotComponent implements OnInit {
         }
         break;
     }
-    this.Graph = Plotly.relayout(`Graph${this.randString}`, update);
-
+    this.getData();
   }
 
 }

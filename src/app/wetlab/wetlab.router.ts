@@ -10,7 +10,6 @@ const routes: Routes = [
   {
     path: 'plot', component: WetlabMainComponent, canActivate: [RoleGuard], children: [
         { path: ':apiKey', component: WetlabDetailsComponent },
-        // { path: 'guideset', component: GuidesetMainComponent}
     ]
   },
   {
@@ -23,6 +22,7 @@ const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes)
   ],
-  declarations: []
+  declarations: [],
+  exports: [RouterModule]
 })
 export class WetlabRouter { }

@@ -13,6 +13,7 @@ import { DateSelectorComponent } from './date-selector/date-selector.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { GuidesetMainComponent } from './guideset-main/guideset-main.component';
 import { GuidesetService } from '../services/guideset.service'
+import { ThresholdService } from '../services/threshold.service';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { GuidesetService } from '../services/guideset.service'
   providers: [
     DataService,
     GuidesetService,
+    ThresholdService,
     {provide: MAT_DATE_LOCALE, useValue: 'es'},
 
   ],

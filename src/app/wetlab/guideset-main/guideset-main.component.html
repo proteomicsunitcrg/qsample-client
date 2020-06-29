@@ -10,8 +10,8 @@
 <div style="margin-top: 20px;" fxLayout="row" fxLayoutAlign="space-between start">
     <app-date-selector fxFlex="15%"></app-date-selector>
     <div fxFlex fxLayout="column" fxLayoutAlign="space-around center">
-        <mat-accordion *ngFor="let wetlab of allWetLabs" style="width: 90%;">
-            <mat-expansion-panel (opened)="getFiles(wetlab)" (afterCollapse)="cleanArray()">
+        <mat-accordion  style="width: 90%;">
+            <mat-expansion-panel *ngFor="let wetlab of allWetLabs" (opened)="getFiles(wetlab)" (afterCollapse)="cleanArray()">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                         {{wetlab.name}}
@@ -30,7 +30,7 @@
                 </div>
                 <mat-action-row>
                     <button mat-raised-button color="primary" (click)="setGuideset()"
-                        [disabled]="selectedFiles.length < 3">Set guideset</button>
+                        [disabled]="selectedFiles.length < 3 || setedGuideset!=null">Set guideset</button>
                 </mat-action-row>
             </mat-expansion-panel>
         </mat-accordion>

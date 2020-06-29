@@ -16,7 +16,6 @@ export class DateSelectorComponent implements OnInit {
   dateEnd = new FormControl(new Date (this.today));
 
   ngOnInit(): void {
-    console.log(this.today.toISOString());
     this.submitDates();
   }
 
