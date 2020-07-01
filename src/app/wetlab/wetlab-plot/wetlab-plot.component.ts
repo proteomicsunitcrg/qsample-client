@@ -5,7 +5,7 @@ import { PlotTrace } from '../../models/PlotTrace';
 import { Subscription } from 'rxjs';
 import { ThemeSelectorComponent } from '../../page/top-bar/theme-selector/theme-selector.component';
 import { ThemeService } from '../../services/theme.service';
-import { LAYOUTDARK, LAYOUTLIGHT } from './plot.utils'
+import { LAYOUTDARK, LAYOUTLIGHT, thresholdShapesDOWN, thresholdShapesUP, thresholdShapesUPDOWN } from './plot.utils'
 import { ThresholdService } from '../../services/threshold.service';
 import { Threshold } from '../../models/Threshold';
 import { ThresholdForPlot } from '../../models/ThresholdForPlot';
@@ -20,29 +20,42 @@ export class WetlabPlotComponent implements OnInit {
 
   constructor(private dataService: DataService, private themeService: ThemeService, private threholdService: ThresholdService) { }
 
+  // The div element to draw the plot
   @ViewChild("Graph", { static: true })
   private Graph: ElementRef;
 
+  // The plot to draw from parent
   @Input("plot") plot;
 
+  // The current wetlab
   @Input("wetlab") wetlab: WetLab;
 
+  // Var to handle the plot layout
   layout: any = {};
 
+  // Subscription to update the plot on date change
   dateChangesSubscription$: Subscription;
 
+  // Subscription to update the plot on theme change
   themeChangesSubscription$: Subscription;
 
+  // The current colot schema
   themeColor: string;
 
+  // The selected dates
   currentDates: Date[];
 
+  // Random string to generate de div and plot
   randString = '';
 
+  // Flag to know if the plot has data
   noDataFound = false;
 
+  // Flag to know if the plot has threshold to draw
   hasThreshold = false;
 
+  // To store the plot data from server
+  plotTrace: PlotTrace[];
 
   ngOnInit(): void {
     this.layout.shapes = [];
@@ -53,14 +66,16 @@ export class WetlabPlotComponent implements OnInit {
     this.subscribeToThemeChanges();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     Plotly.purge(`Graph${this.randString}`);
     this.dateChangesSubscription$.unsubscribe();
     this.themeChangesSubscription$.unsubscribe();
   }
 
-  plotTrace: PlotTrace[];
 
+  /**
+   * Asks the server for the plot data
+   */
   private getData(): void {
     this.dataService.getDataForPlot(this.plot.id, this.wetlab.apiKey).subscribe(
       res => {
@@ -79,6 +94,9 @@ export class WetlabPlotComponent implements OnInit {
     );
   }
 
+  /**
+   * Draws the plot
+   */
   plotGraph() {
     const dataForPlot = [];
     this.plotTrace.forEach(
@@ -113,6 +131,7 @@ export class WetlabPlotComponent implements OnInit {
         dataForPlot.push(trace);
       }
     );
+    // Check current theme
     if (this.themeColor === 'dark-theme') {
       this.layout = LAYOUTDARK;
     } else if (this.themeColor === 'light-theme') {
@@ -131,6 +150,9 @@ export class WetlabPlotComponent implements OnInit {
   }
 
 
+  /**
+   * Asks the server for the threshold
+   */
   private loadThreshold(): void {
     this.threholdService.getThresholdForPlot(this.plot.apiKey, this.wetlab.apiKey).subscribe(
       res => {
@@ -144,31 +166,34 @@ export class WetlabPlotComponent implements OnInit {
     );
   }
 
+  /**
+   * Draws the threshold
+   */
   private drawThreshold(thresholdToDraw: ThresholdForPlot): void {
     this.hasThreshold = true;
-    const shapes: any[] = [];
-    for (let i = 0; i < thresholdToDraw.steps; i++) {
-      const shape = {
-        type: 'rect',
-        x0: 0,
-        x1: 1,
-        y0: thresholdToDraw.initialValue + ((i + 1) * thresholdToDraw.stepValue),
-        y1: thresholdToDraw.initialValue - ((i + 1) * thresholdToDraw.stepValue),
-        xref: 'paper',
-        fillcolor: 'red',
-        opacity: 0.5,
-        line: {
-          color: 'red',
-          width: 0
-        },
-        layer: 'below'
-      };
-      shapes.push(shape);
+    console.log(thresholdToDraw);
+    let shapes: any[] = [];
+    switch (thresholdToDraw.direction) {
+      case ('UP'):
+        shapes = thresholdShapesUP(thresholdToDraw);
+        break;
+      case ('DOWN'):
+        shapes = thresholdShapesDOWN(thresholdToDraw);
+        break;
+      case ('UPDOWN'):
+        shapes = thresholdShapesUPDOWN(thresholdToDraw);
+        break;
+      default:
+        console.log('bad direction!');
+      break;
     }
     this.layout.shapes = shapes;
     this.plotGraph();
   }
 
+  /**
+   * Subscribe to the date changes
+   */
   private subscribeToDateChanges(): void {
     this.dateChangesSubscription$ = this.dataService.selectedDates$
       .subscribe(
@@ -180,6 +205,9 @@ export class WetlabPlotComponent implements OnInit {
       );
   }
 
+  /**
+   * Subscribes to theme changes
+   */
   private subscribeToThemeChanges(): void {
     this.themeChangesSubscription$ = this.themeService.selectedTheme$.subscribe(
       theme => {
@@ -189,6 +217,9 @@ export class WetlabPlotComponent implements OnInit {
     )
   }
 
+  /**
+   * Relayouts the plot
+   */
   private reLayout(): void {
     let update = {};
     switch (this.themeColor) {
