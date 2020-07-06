@@ -126,6 +126,7 @@ export function thresholdShapesDOWN(thresholdToDraw: ThresholdForPlot): any {
 export function thresholdShapesUPDOWN(thresholdToDraw: ThresholdForPlot): any {
   const shapes = [];
   const color: string[] = ['#27AE60', '#FFC300', '#FF5733', '#C70039'];
+    // const color: string[] = ['#000000', 'red', '#FF5733', '#C70039'];
   for (let i = -1; i < thresholdToDraw.steps; i++) {
     console.log((i + 1) * thresholdToDraw.stepValue);
     const shape = {

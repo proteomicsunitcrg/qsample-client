@@ -40,6 +40,9 @@ export class RequestsListComponent implements OnInit {
     // this.getAllRequests();
   }
 
+  /**
+   *
+   */
   private getAllRequests(): void {
     this.requestService.getAllRequests().subscribe(
       res => {
