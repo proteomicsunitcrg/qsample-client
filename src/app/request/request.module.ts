@@ -8,12 +8,16 @@ import { RequestDetailsComponent } from './request-details/request-details.compo
 import { RequestRouter } from './request.router';
 import { RequestMainComponent } from './request-main/request-main.component';
 import { RequestQcloud2FilesComponent } from './request-qcloud2-files/request-qcloud2-files.component';
+import { RequestWetlabMainComponent } from './request-wetlab-main/request-wetlab-main.component';
+import { WetlabPlotComponent } from '../wetlab/wetlab-plot/wetlab-plot.component';
+import { SharedModule } from '../shared.module';
 
 @NgModule({
   declarations: [
   RequestMainComponent,
   RequestDetailsComponent,
-  RequestQcloud2FilesComponent
+  RequestQcloud2FilesComponent,
+  RequestWetlabMainComponent,
 ],
   imports: [
     FlexLayoutModule,
@@ -23,7 +27,8 @@ import { RequestQcloud2FilesComponent } from './request-qcloud2-files/request-qc
     ReactiveFormsModule,
     AngularMaterialModule,
     RequestRouter,
-    RouterModule
+    RouterModule,
+    SharedModule
   ],
   providers: [
 

@@ -58,6 +58,9 @@ export class WetlabPlotComponent implements OnInit {
   plotTrace: PlotTrace[];
 
   ngOnInit(): void {
+    console.log(this.wetlab);
+    console.log(this.plot);
+
     this.layout.shapes = [];
     this.themeColor = this.themeService.currentTheme;
     this.randString = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);

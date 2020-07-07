@@ -14,12 +14,13 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { GuidesetMainComponent } from './guideset-main/guideset-main.component';
 import { GuidesetService } from '../services/guideset.service'
 import { ThresholdService } from '../services/threshold.service';
+import { SharedModule } from '../shared.module';
 
 @NgModule({
   declarations: [
     WetlabMainComponent,
     WetlabDetailsComponent,
-    WetlabPlotComponent,
+    // WetlabPlotComponent,
     DateSelectorComponent,
     GuidesetMainComponent
     ],
@@ -30,12 +31,11 @@ import { ThresholdService } from '../services/threshold.service';
     FormsModule,
     ReactiveFormsModule,
     AngularMaterialModule,
-    WetlabRouter
+    WetlabRouter,
+    SharedModule
   ],
   providers: [
-    DataService,
     GuidesetService,
-    ThresholdService,
     {provide: MAT_DATE_LOCALE, useValue: 'es'},
 
   ],

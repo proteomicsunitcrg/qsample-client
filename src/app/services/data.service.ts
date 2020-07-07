@@ -24,6 +24,9 @@ export class DataService {
   }
 
   public getDataForPlot(plotApiKey: string, wetLabApiKey: string): Observable<PlotTrace[]> {
+    if (this.currentDates === undefined) { // for the plots in request details page
+      return this.httpClient.get<PlotTrace[]>(`${this.apiPrefix}api/data/traces/2018-06-07T10:54:50.229Z/2022-06-07T10:54:50.229Z/${plotApiKey}/${wetLabApiKey}`);
+    }
     return this.httpClient.get<PlotTrace[]>(`${this.apiPrefix}api/data/traces/${this.currentDates[0]}/${this.currentDates[1]}/${plotApiKey}/${wetLabApiKey}`);
   }
 

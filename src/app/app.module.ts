@@ -16,10 +16,14 @@ import { authInterceptorProviders, AuthInterceptor } from './interceptors/auth.i
 import { from, fromEventPattern } from 'rxjs';
 import { ThemeSelectorComponent } from './page/top-bar/theme-selector/theme-selector.component';
 import { ThemeService } from './services/theme.service';
+import { WetlabPlotComponent } from './wetlab/wetlab-plot/wetlab-plot.component';
+import { ThresholdService } from './services/threshold.service';
+import { DataService } from './services/data.service';
 
 @NgModule({
   declarations: [
     AppComponent,
+    // WetlabPlotComponent
   ],
   imports: [
     BrowserModule,
@@ -27,13 +31,19 @@ import { ThemeService } from './services/theme.service';
     BrowserAnimationsModule,
     EntryPointModule,
     // FlexLayoutModule,
-    HttpClientModule
+    HttpClientModule,
+
+
 
   ],
   providers: [
     AuthService,
     FileService,
     WetLabService,
+    ThresholdService,
+    DataService,
+    ThemeService,
+
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
