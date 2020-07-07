@@ -11,6 +11,10 @@ const routes: Routes = [
         {
           path: 'wetlab', loadChildren: () => import('../wetlab/wetlab.module')
             .then(m => m.WetLabModule)
+        },
+        {
+          path: 'request', loadChildren: () => import('../request/request.module')
+            .then(m => m.RequestModule)
         }
       ]
     },

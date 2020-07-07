@@ -1,0 +1,15 @@
+.warning {
+    color: yellow;
+}
+
+.danger {
+    color: red;
+}
+
+.ok {
+    color: green;
+}
+
+.align {
+    vertical-align: middle
+}

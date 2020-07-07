@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RequestService } from '../../../services/request.service';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-requests-list',
   templateUrl: './requests-list.component.html',
@@ -8,9 +10,10 @@ import { RequestService } from '../../../services/request.service';
 export class RequestsListComponent implements OnInit {
 
 
-  constructor(private requestService: RequestService) { }
+  constructor(private requestService: RequestService, private router: Router) { }
   caca = [
     {
+      apiKey: "12",
       class: "Identification of a protein in a gel band",
       created_by: {
         email: "Dio Brando",
@@ -19,6 +22,7 @@ export class RequestsListComponent implements OnInit {
       status: "In progress"
     },
     {
+      apiKey: "13",
       class: "TMT: Proteome quantification",
       created_by: {
         email: "Giorno Giovanna",
@@ -27,6 +31,7 @@ export class RequestsListComponent implements OnInit {
       status: "In progress"
     },
     {
+      apiKey: "14",
       class: "Structural elucidation of crosslinked protein complexes",
       created_by: {
         email: "Muhammad Avdol",
@@ -38,6 +43,12 @@ export class RequestsListComponent implements OnInit {
   columnsToDisplay = ['class', 'creator', 'dateCreated', 'status'];
   ngOnInit(): void {
     // this.getAllRequests();
+  }
+
+  public goTo(request): void {
+    console.log(request);
+    this.router.navigate(['/application/request/details', request.apiKey]);
+
   }
 
   /**

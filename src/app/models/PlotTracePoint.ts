@@ -1,13 +1,14 @@
 import { File } from './file';
+import { WetLabFile } from './WetLabFile';
 
 export class PlotTracePoint {
 
-    file: File;
+    file: WetLabFile;
     value: number;
     std: number;
     nonConformityStatus: string;
 
-    constructor(file: File, value: number, std: number,nonConformityStatus: string) {
+    constructor(file: WetLabFile, value: number, std: number,nonConformityStatus: string) {
         this.file = file;
         this.value = value;
         this.std = std;

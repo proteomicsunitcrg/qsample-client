@@ -1,0 +1,16 @@
+<mat-card>
+    <mat-card-title>
+        QCloud2 related files
+    </mat-card-title>
+    <mat-card-subtitle>
+        {{request.request_code}}
+    </mat-card-subtitle>
+    <mat-card-content>
+        <p *ngFor="let filerino of qCloud2Files">
+            {{filerino.filename}}
+            <span class="material-icons align" [class.warning]="filerino.conformity === 'WARNING'" [class.danger]="filerino.conformity === 'DANGER'" [class.ok]="filerino.conformity === 'OK'">
+                fiber_manual_record
+            </span>
+        </p>
+    </mat-card-content>
+</mat-card>

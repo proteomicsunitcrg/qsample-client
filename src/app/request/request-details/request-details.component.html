@@ -1,0 +1,17 @@
+<section class="mat-typography title-group">
+    <h1 style="margin: 20px;">
+        <span class="material-icons cursor" (click)="goBack()">
+            arrow_back_ios
+        </span>
+        {{currentRequest.class}} by {{currentRequest.created_by.email}}
+    </h1>
+    <mat-divider></mat-divider>
+</section>
+
+<div fxLayout="row">
+    <app-request-qcloud2-files style="margin-left: 3%; margin-top: 3%;" [request]="currentRequest"></app-request-qcloud2-files>
+</div>
+
+<div fxLayout="row">
+
+</div>
