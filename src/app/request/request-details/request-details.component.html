@@ -1,4 +1,4 @@
-<section class="mat-typography title-group">
+<section class="mat-typography title-group" (click)="caca()">
     <h1 style="margin: 20px;">
         <span class="material-icons cursor" (click)="goBack()">
             arrow_back_ios
@@ -8,10 +8,10 @@
     <mat-divider></mat-divider>
 </section>
 
-<div fxLayout="row">
+<div fxLayout="row" *ngIf="isInternal">
     <app-request-qcloud2-files style="margin-left: 3%; margin-top: 3%;" [request]="currentRequest"></app-request-qcloud2-files>
 </div>
 
-<div fxLayout="row">
+<div fxLayout="row" *ngIf="isInternal">
     <app-request-wetlab-main style="width: 100%; margin-top: 3%;"></app-request-wetlab-main>
 </div>

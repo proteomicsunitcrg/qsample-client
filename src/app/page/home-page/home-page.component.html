@@ -1,2 +1,12 @@
-<app-main-requests></app-main-requests>
-<app-main-wetlab></app-main-wetlab>
+<div fxLayout="row" *ngIf="isInternal">
+    <div style="width: 48%; float: left;">
+        <app-main-requests></app-main-requests>
+    </div>
+    <div style="width: 48%; float: left;">
+        <app-main-wetlab></app-main-wetlab>
+    </div>
+</div>
+<div fxLayout="row" fxLayoutAlign="center center" *ngIf="!isInternal"
+    style="margin-top: 10px; width: 98%; margin-left: 10px;">
+    <app-main-requests></app-main-requests>
+</div>

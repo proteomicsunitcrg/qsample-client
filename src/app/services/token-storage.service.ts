@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-
-
 const TOKEN_KEY = 'auth-token';
 const USER_KEY = 'auth-user';
 @Injectable({
@@ -21,6 +19,17 @@ export class TokenStorageService {
 
   public getToken(): string {
     return sessionStorage.getItem(TOKEN_KEY);
+  }
+
+  public isInternalUser(): boolean {
+    let admin = false;
+    const token = this.getUser();
+    token.roles.forEach(element => {
+      if (element === 'ROLE_INTERNAL') {
+        admin = true;
+      }
+    });
+    return admin;
   }
 
   public saveUser(user) {

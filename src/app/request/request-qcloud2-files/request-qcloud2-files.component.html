@@ -12,5 +12,13 @@
                 fiber_manual_record
             </span>
         </p>
+        <div *ngIf="error !=  undefined">
+            <p class="mat-body">
+                {{error.error.error}}
+            </p>
+            <p class="mat-small">
+                {{error.error.message}}
+            </p>
+        </div>
     </mat-card-content>
 </mat-card>

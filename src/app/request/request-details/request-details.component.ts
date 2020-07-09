@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { Subscription, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-request-details',
@@ -8,7 +10,13 @@ import { Router } from '@angular/router';
 })
 export class RequestDetailsComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private authService: AuthService) {
+    this.subscription = this.authService.getIsInternal().subscribe(res => this.isInternal = res);
+  }
+
+
+  subscription: Subscription;
+  isInternal = false;
 
   currentRequest = {
     apiKey: "14",
@@ -22,6 +30,15 @@ export class RequestDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.isInternal);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
+  public caca() {
+    console.log('hola');
   }
 
 

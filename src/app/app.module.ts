@@ -32,9 +32,6 @@ import { DataService } from './services/data.service';
     EntryPointModule,
     // FlexLayoutModule,
     HttpClientModule,
-
-
-
   ],
   providers: [
     AuthService,
