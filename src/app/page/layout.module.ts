@@ -11,13 +11,20 @@ import { MainWetlabComponent } from './wetlab/main-wetlab/main-wetlab.component'
 import { WetlabListComponent } from './wetlab/wetlab-list/wetlab-list.component'
 import { RequestService } from '../services/request.service';
 import { ThemeSelectorComponent } from './top-bar/theme-selector/theme-selector.component';
+import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
+import { FlexLayoutModule } from '@angular/flex-layout';
+
+
 
 
 @NgModule({
     imports: [
         CommonModule,
         LayoutRouterModule,
-        AngularMaterialModule
+        AngularMaterialModule,
+        FormsModule,
+        ReactiveFormsModule,
+        FlexLayoutModule
     ],
     declarations: [
         MainWindowComponent,

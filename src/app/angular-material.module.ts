@@ -13,6 +13,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatSelectModule } from '@angular/material/select';
+
 
 
 
@@ -31,7 +33,8 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatNativeDateModule,
     MatExpansionModule,
     MatCheckboxModule,
-    MatTabsModule
+    MatTabsModule,
+    MatSelectModule
   ],
   exports: [
     MatInputModule,
@@ -45,7 +48,8 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatDatepickerModule,
     MatExpansionModule,
     MatCheckboxModule,
-    MatTabsModule
+    MatTabsModule,
+    MatSelectModule
   ]
 })
 

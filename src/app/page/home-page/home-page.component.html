@@ -1,11 +1,16 @@
-<div fxLayout="row" *ngIf="isInternal">
-    <div style="width: 48%; float: left;">
+<div fxLayout fxLayout.lt-md="column" fxLayoutAlign="center" fxLayoutGap="3px" fxLayoutGap.xs="0!">
+    <div fxFlex="50%">
         <app-main-requests></app-main-requests>
     </div>
-    <div style="width: 48%; float: left;">
+    <div fxFlex="48%">
         <app-main-wetlab></app-main-wetlab>
     </div>
 </div>
+
+
+
+
+
 <div fxLayout="row" fxLayoutAlign="center center" *ngIf="!isInternal"
     style="margin-top: 10px; width: 98%; margin-left: 10px;">
     <app-main-requests></app-main-requests>
