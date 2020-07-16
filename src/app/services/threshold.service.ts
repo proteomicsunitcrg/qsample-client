@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable, Subject } from 'rxjs';
-import { ContextSource } from '../models/contextSource';
+import { ContextSource } from '../models/ContextSource';
 import { Threshold } from '../models/Threshold';
 import { ThresholdForPlot } from '../models/ThresholdForPlot';
 

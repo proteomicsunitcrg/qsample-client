@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { RequestService } from '../../../services/request.service';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormControl } from '@angular/forms';
+import { RequestStatus } from '../../../models/RequestStatus';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-requests-list',
@@ -13,6 +16,8 @@ export class RequestsListComponent implements OnInit {
 
   dataSource: MatTableDataSource<any>;
 
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   classFilter = "";
 
@@ -22,8 +27,15 @@ export class RequestsListComponent implements OnInit {
 
   constructor(private requestService: RequestService, private router: Router) {
     this.getAllRequests();
-
+    
   }
+
+  requestStatusValues = RequestStatus;
+  requestStatusValuesKeys() : Array<string> {
+    var keys = Object.keys(this.requestStatusValues);
+    return keys.slice(keys.length / 2);
+  };
+
   caca = [
     {
       apiKey: "12",
@@ -47,19 +59,17 @@ export class RequestsListComponent implements OnInit {
       status: "Completed"
     },
   ];
-  columnsToDisplay = ['class', 'email', 'dateCreated', 'status'];
+  columnsToDisplay = ['type', 'creatorMail', 'creationDate', 'status'];
 
   filteredValues = {};
 
   ngOnInit(): void {
-
-
   }
 
   applyFilterStatus(filterValue: string) {
     const tableFilters = [];
     tableFilters.push({
-      id: 'class',
+      id: 'type',
       value: this.classFilter
     },
     {
@@ -67,41 +77,37 @@ export class RequestsListComponent implements OnInit {
       value: filterValue
     },
     {
-      id: 'email',
+      id: 'creatorMail',
       value: this.creatorFilter
     }
     );
     this.dataSource.filter = JSON.stringify(tableFilters);
-    console.log(this.dataSource.filter)
   }
 
 
   applyFilterClass(filterValue: string) {
-    console.log(this.creatorFilter);
-
     const tableFilters = [];
     tableFilters.push({
-      id: 'class',
+      id: 'type',
       value: filterValue
     },
-    // {
-    //   id: 'status',
-    //   value: this.statusFilter
-    // },
-    // {
-    //   id: 'email',
-    //   value: this.creatorFilter
-    // }
+    {
+      id: 'status',
+      value: this.statusFilter
+    },
+    {
+      id: 'creatorMail',
+      value: this.creatorFilter
+    }
     );
     this.dataSource.filter = JSON.stringify(tableFilters);
-    console.log(this.dataSource.filter)
   }
 
   applyFilterCreator(filterValue: string) {
     const tableFilters = [];
     tableFilters.push(
       {
-      id: 'class',
+      id: 'type',
       value: this.classFilter
     },
     {
@@ -109,18 +115,16 @@ export class RequestsListComponent implements OnInit {
       value: this.statusFilter
     },
     {
-      id: 'email',
+      id: 'creatorMail',
       value: filterValue
     }
     );
     this.dataSource.filter = JSON.stringify(tableFilters);
-    console.log(this.dataSource.filter)
   }
 
 
 
   public goTo(request): void {
-    console.log(request);
     this.router.navigate(['/application/request/details', request.apiKey]);
   }
 
@@ -131,8 +135,6 @@ export class RequestsListComponent implements OnInit {
         const matchFilter = [];
         const filters = JSON.parse(filtersJson);
         filters.forEach(filter => {
-          console.log(filter.id);
-
           const val = data[filter.id] === null ? '' : data[filter.id];
           matchFilter.push(val.toLowerCase().includes(filter.value.toLowerCase()));
         });
@@ -146,7 +148,9 @@ export class RequestsListComponent implements OnInit {
   private getAllRequests(): void {
     this.requestService.getAllRequests().subscribe(
       res => {
-        this.dataSource = new MatTableDataSource(res.request);
+        this.dataSource = new MatTableDataSource(res);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
         this.predicate();
       },
       err => {

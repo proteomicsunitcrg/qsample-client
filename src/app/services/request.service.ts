@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
+import { MiniRequest } from '../models/MiniRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class RequestService {
 
   apiPrefix: String = environment.apiPrefix;
   
-  public getAllRequests(): Observable<any> {
-    return this.http.get<any>(`${this.apiPrefix}api/request`);
+  public getAllRequests(): Observable<MiniRequest[]> {
+    return this.http.get<MiniRequest[]>(`${this.apiPrefix}api/request`);
   }
 }

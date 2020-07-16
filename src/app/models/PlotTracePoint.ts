@@ -1,4 +1,4 @@
-import { File } from './file';
+import { File } from './File';
 import { WetLabFile } from './WetLabFile';
 
 export class PlotTracePoint {

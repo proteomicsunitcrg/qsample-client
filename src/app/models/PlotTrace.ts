@@ -1,5 +1,5 @@
 import { TraceColor } from './TraceColor';
-import { PlotTracePoint } from './plotTracePoint';
+import { PlotTracePoint } from './PlotTracePoint';
 
 export class PlotTrace {
     abbreviated: string;

@@ -14,6 +14,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 
 
 
@@ -34,7 +36,9 @@ import { MatSelectModule } from '@angular/material/select';
     MatExpansionModule,
     MatCheckboxModule,
     MatTabsModule,
-    MatSelectModule
+    MatSelectModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
   exports: [
     MatInputModule,
@@ -49,7 +53,9 @@ import { MatSelectModule } from '@angular/material/select';
     MatExpansionModule,
     MatCheckboxModule,
     MatTabsModule,
-    MatSelectModule
+    MatSelectModule,
+    MatPaginatorModule,
+    MatSortModule
   ]
 })
 
