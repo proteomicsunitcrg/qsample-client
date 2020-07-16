@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RequestService } from '../../../services/request.service';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-requests-list',
@@ -12,6 +13,7 @@ export class RequestsListComponent implements OnInit {
 
   dataSource: MatTableDataSource<any>;
 
+
   classFilter = "";
 
   statusFilter = "";
@@ -19,7 +21,8 @@ export class RequestsListComponent implements OnInit {
   creatorFilter= "";
 
   constructor(private requestService: RequestService, private router: Router) {
-    this.dataSource = new MatTableDataSource(this.caca);
+    this.getAllRequests();
+
   }
   caca = [
     {
@@ -46,24 +49,11 @@ export class RequestsListComponent implements OnInit {
   ];
   columnsToDisplay = ['class', 'email', 'dateCreated', 'status'];
 
+  filteredValues = {};
+
   ngOnInit(): void {
 
-    this.dataSource.filterPredicate =
-      (data: any, filtersJson: string) => {
-        console.log(filtersJson);
 
-        const matchFilter = [];
-        const filters = JSON.parse(filtersJson);
-        filters.forEach(filter => {
-          const val = data[filter.id] === null ? '' : data[filter.id];
-          console.log(val, "caca");
-
-          matchFilter.push(val.toLowerCase().includes(filter.value.toLowerCase()));
-        });
-        return matchFilter.every(Boolean);
-      };
-
-    // this.getAllRequests();
   }
 
   applyFilterStatus(filterValue: string) {
@@ -94,14 +84,14 @@ export class RequestsListComponent implements OnInit {
       id: 'class',
       value: filterValue
     },
-    {
-      id: 'status',
-      value: this.statusFilter
-    },
-    {
-      id: 'email',
-      value: this.creatorFilter
-    }
+    // {
+    //   id: 'status',
+    //   value: this.statusFilter
+    // },
+    // {
+    //   id: 'email',
+    //   value: this.creatorFilter
+    // }
     );
     this.dataSource.filter = JSON.stringify(tableFilters);
     console.log(this.dataSource.filter)
@@ -109,7 +99,8 @@ export class RequestsListComponent implements OnInit {
 
   applyFilterCreator(filterValue: string) {
     const tableFilters = [];
-    tableFilters.push({
+    tableFilters.push(
+      {
       id: 'class',
       value: this.classFilter
     },
@@ -133,14 +124,30 @@ export class RequestsListComponent implements OnInit {
     this.router.navigate(['/application/request/details', request.apiKey]);
   }
 
+  private predicate() {
+    this.dataSource.filterPredicate =
+      (data: any, filtersJson: string) => {
+
+        const matchFilter = [];
+        const filters = JSON.parse(filtersJson);
+        filters.forEach(filter => {
+          console.log(filter.id);
+
+          const val = data[filter.id] === null ? '' : data[filter.id];
+          matchFilter.push(val.toLowerCase().includes(filter.value.toLowerCase()));
+        });
+        return matchFilter.every(Boolean);
+      };
+  }
+
   /**
    *
    */
   private getAllRequests(): void {
     this.requestService.getAllRequests().subscribe(
       res => {
-        this.caca = res.request;
-        console.log(res);
+        this.dataSource = new MatTableDataSource(res.request);
+        this.predicate();
       },
       err => {
         console.error(err);

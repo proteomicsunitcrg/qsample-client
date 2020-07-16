@@ -7,7 +7,9 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "transpile:prod": "node --max_old_space_size=8196 node_modules/@angular/cli/bin/ng build --configuration=production",
+    "transpile:test": "node --max_old_space_size=8196 node_modules/@angular/cli/bin/ng build --configuration=test"
   },
   "private": true,
   "dependencies": {
