@@ -1,15 +1,17 @@
-<section class="mat-typography title-group" (click)="caca()">
+<section class="mat-typography title-group">
     <h1 style="margin: 20px;">
-        <span class="material-icons cursor" (click)="goBack()">
-            arrow_back_ios
-        </span>
-        {{realRequest.class}} by {{realRequest.created_by.email}}
+        <div *ngIf="request != undefined">
+            <span class="material-icons cursor" (click)="goBack()">
+                arrow_back_ios
+            </span>
+            {{request.classs}} by {{realRequest.created_by.email}} ({{requestCode}})
+        </div>
     </h1>
     <mat-divider></mat-divider>
 </section>
 
 <div fxLayout="row" *ngIf="isInternal">
-    <app-request-qcloud2-files style="margin-left: 3%; margin-top: 3%;" [request]="currentRequest"></app-request-qcloud2-files>
+    <app-request-qcloud2-files style="margin-left: 3%; margin-top: 3%;" [request]="requestCode"></app-request-qcloud2-files>
 </div>
 
 <div fxLayout="row" *ngIf="isInternal">

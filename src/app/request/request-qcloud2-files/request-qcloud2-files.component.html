@@ -3,7 +3,7 @@
         QCloud2 related files
     </mat-card-title>
     <mat-card-subtitle>
-        {{request.request_code}}
+        <!-- {{request.request_code}} -->
     </mat-card-subtitle>
     <mat-card-content>
         <p *ngFor="let filerino of qCloud2Files">
@@ -12,6 +12,13 @@
                 fiber_manual_record
             </span>
         </p>
+        <div *ngIf="qCloud2Files != undefined">
+            <div *ngIf="qCloud2Files.length === 0">
+                <p class="mat-body">
+                    Nothing found
+                </p>
+            </div>
+        </div>
         <div *ngIf="error !=  undefined">
             <p class="mat-body">
                 {{error.error.error}}

@@ -27,7 +27,7 @@ export class RequestsListComponent implements OnInit {
 
   constructor(private requestService: RequestService, private router: Router) {
     this.getAllRequests();
-    
+
   }
 
   requestStatusValues = RequestStatus;
@@ -125,7 +125,9 @@ export class RequestsListComponent implements OnInit {
 
 
   public goTo(request): void {
-    this.router.navigate(['/application/request/details', request.apiKey]);
+    console.log(request);
+
+    this.router.navigate(['/application/request/details', request.id]);
   }
 
   private predicate() {
