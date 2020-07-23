@@ -30,4 +30,9 @@ export class DataService {
     return this.httpClient.get<PlotTrace[]>(`${this.apiPrefix}api/data/traces/${this.currentDates[0]}/${this.currentDates[1]}/${plotApiKey}/${wetLabApiKey}`);
   }
 
+
+  public getDataForPlotRequest(contextSourceId: number, paramId: number, requestCode: string): Observable<PlotTrace[]> {
+    return this.httpClient.get<PlotTrace[]>(`${this.apiPrefix}api/data/tracesRequest/${contextSourceId}/${paramId}/${requestCode}`);
+  }
+
 }

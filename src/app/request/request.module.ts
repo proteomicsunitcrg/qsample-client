@@ -11,6 +11,8 @@ import { RequestQcloud2FilesComponent } from './request-qcloud2-files/request-qc
 import { RequestWetlabMainComponent } from './request-wetlab-main/request-wetlab-main.component';
 import { WetlabPlotComponent } from '../wetlab/wetlab-plot/wetlab-plot.component';
 import { SharedModule } from '../shared.module';
+import { RequestPlotRequestComponent } from './request-plot-request/request-plot-request.component';
+import { RequestPlotPlotComponent } from './request-plot-plot/request-plot-plot.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +20,8 @@ import { SharedModule } from '../shared.module';
   RequestDetailsComponent,
   RequestQcloud2FilesComponent,
   RequestWetlabMainComponent,
+  RequestPlotRequestComponent,
+  RequestPlotPlotComponent,
 ],
   imports: [
     FlexLayoutModule,

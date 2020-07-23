@@ -27,4 +27,12 @@ export class RequestService {
   public getRequestDetails(requestId: string): Observable<any> {
     return this.http.get<any>(`${this.apiPrefix}api/request/${requestId}`);
   }
+
+  public getRequestPlotName(csId: number, paramId: string): Observable<string> {
+    const requestOptions: Object = {
+      /* other options here */
+      responseType: 'text'
+    }
+    return this.http.get<string>(`${this.apiPrefix}api/request/getPlotName/${csId}/${paramId}`, requestOptions);
+  }
 }
