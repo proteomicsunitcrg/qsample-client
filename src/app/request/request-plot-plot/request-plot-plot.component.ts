@@ -40,6 +40,13 @@ export class RequestPlotPlotComponent implements OnInit {
   // Subscription to update the plot on theme change
   themeChangesSubscription$: Subscription;
 
+  // Flag to know if the plot has data
+  noDataFound = false;
+
+  // Message error
+  msgError = '';
+
+
   constructor(private dataService: DataService, private themeService: ThemeService, private requestService: RequestService) {
   }
 
@@ -63,13 +70,17 @@ export class RequestPlotPlotComponent implements OnInit {
     this.dataService.getDataForPlotRequest(this.cs, this.param, this.requestCode).subscribe(
       res => {
         this.plotTrace = res;
+        console.log(this.plotTrace.length);
+
         if (this.plotTrace.length !== 0) {
           this.getName();
           this.plotGraph();
+          this.noDataFound = false;
         }
       },
       err => {
-        console.error(err);
+        this.noDataFound = true;
+        this.msgError = err.error.message;
       }
     );
   }
@@ -128,8 +139,9 @@ export class RequestPlotPlotComponent implements OnInit {
       this.layout = LAYOUTLIGHT;
     }
     this.layout.shapes = [];
-
-    Plotly.react(`Graph${this.randString}`, dataForPlot, this.layout);
+    this.layout.title = '';
+    const config = {responsive: true}
+    Plotly.react(`Graph${this.randString}`, dataForPlot, this.layout, config);
     setTimeout(() => {  // The timeout is necessary because the PLOT isnt instant
       let plotSVG = document.getElementsByClassName('main-svg')[0];  // the only way because this inst plotly native LUL
       (plotSVG as any).style["border-radius"] = '4px';

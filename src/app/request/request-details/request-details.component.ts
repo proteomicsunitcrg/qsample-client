@@ -20,7 +20,7 @@ export class RequestDetailsComponent implements OnInit {
             console.log(res);
             this.request = res;
             this.requestCode = this.getRequestCodeFromRequest(this.request);
-            console.log(this.requestCode);
+            console.log(this.request);
 
             this.requestService.changeRequestCode(this.requestCode);
           },

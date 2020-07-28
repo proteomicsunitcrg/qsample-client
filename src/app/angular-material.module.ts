@@ -16,6 +16,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 
 
 
@@ -38,7 +40,8 @@ import { MatSortModule } from '@angular/material/sort';
     MatTabsModule,
     MatSelectModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatTooltipModule
   ],
   exports: [
     MatInputModule,
@@ -55,7 +58,8 @@ import { MatSortModule } from '@angular/material/sort';
     MatTabsModule,
     MatSelectModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatTooltipModule
   ]
 })
 

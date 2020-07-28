@@ -13,3 +13,7 @@
 .align {
     vertical-align: middle
 }
+
+.allow-cr {
+    white-space: pre-line;
+}

@@ -20,8 +20,12 @@ export class RequestService {
 
   apiPrefix: String = environment.apiPrefix;
 
-  public getAllRequests(): Observable<MiniRequest[]> {
+  public getAllRequestsInternal(): Observable<MiniRequest[]> {
     return this.http.get<MiniRequest[]>(`${this.apiPrefix}api/request`);
+  }
+
+  public getAllRequestsExternal(): Observable<MiniRequest[]> {
+    return this.http.get<MiniRequest[]>(`${this.apiPrefix}api/request/external`);
   }
 
   public getRequestDetails(requestId: string): Observable<any> {

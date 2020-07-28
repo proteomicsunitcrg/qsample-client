@@ -4,17 +4,16 @@
             <span class="material-icons cursor" (click)="goBack()">
                 arrow_back_ios
             </span>
-            {{request.classs}} by {{realRequest.created_by.email}} ({{requestCode}})
+            {{request.classs}} by {{request.created_by.email}} ({{requestCode}})
         </div>
     </h1>
     <mat-divider></mat-divider>
 </section>
-<div fxLayout="row">
-
-    <app-request-qcloud2-files style="margin-left: 3%; margin-top: 3%;" [request]="requestCode" fxFlex="15" ></app-request-qcloud2-files>
+<div fxLayout="row" *ngIf="isInternal">
+    <app-request-qcloud2-files style="margin-left: 3%; margin-top: 3%;" [request]="requestCode" fxFlex="17" ></app-request-qcloud2-files>
 </div>
 
-<div fxLayout="row" *ngIf="isInternal">
+<div fxLayout="row">
     <div fxLayout="column" fxLayoutAlign="space-around center" fxFlex>
         <app-request-plot-request ></app-request-plot-request>
     </div>

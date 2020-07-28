@@ -7,8 +7,12 @@
     </mat-card-subtitle>
     <mat-card-content>
         <p *ngFor="let filerino of qCloud2Files">
-            {{filerino.filename}}
-            <span class="material-icons align" [class.warning]="filerino.conformity === 'WARNING'" [class.danger]="filerino.conformity === 'DANGER'" [class.ok]="filerino.conformity === 'OK'">
+            <span [matTooltip]="filerino.ls" [matTooltipPosition]="'above'">
+                {{filerino.filename}}
+            </span>
+            <span class="material-icons align" [class.warning]="filerino.conformity === 'WARNING'"
+                [class.danger]="filerino.conformity === 'DANGER'" [class.ok]="filerino.conformity === 'OK'"
+                [matTooltip]="filerino.conformityError" [matTooltipPosition]="'right'" [matTooltipClass]="'allow-cr'">
                 fiber_manual_record
             </span>
         </p>

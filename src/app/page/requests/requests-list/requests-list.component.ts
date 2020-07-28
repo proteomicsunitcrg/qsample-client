@@ -6,6 +6,8 @@ import { FormControl } from '@angular/forms';
 import { RequestStatus } from '../../../models/RequestStatus';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { AuthService } from '../../../services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-requests-list',
@@ -25,9 +27,15 @@ export class RequestsListComponent implements OnInit {
 
   creatorFilter= "";
 
-  constructor(private requestService: RequestService, private router: Router) {
-    this.getAllRequests();
+  subscription: Subscription;
 
+  isInternal: boolean;
+
+
+
+
+  constructor(private requestService: RequestService, private router: Router, private authService: AuthService) {
+    this.subscription = this.authService.getIsInternal().subscribe(res => this.isInternal = res);
   }
 
   requestStatusValues = RequestStatus;
@@ -64,6 +72,11 @@ export class RequestsListComponent implements OnInit {
   filteredValues = {};
 
   ngOnInit(): void {
+    if (this.isInternal) {
+      this.getAllRequestsInternal();
+    } else {
+      this.getAllRequestsExternal();
+    }
   }
 
   applyFilterStatus(filterValue: string) {
@@ -147,8 +160,22 @@ export class RequestsListComponent implements OnInit {
   /**
    *
    */
-  private getAllRequests(): void {
-    this.requestService.getAllRequests().subscribe(
+  private getAllRequestsInternal(): void {
+    this.requestService.getAllRequestsInternal().subscribe(
+      res => {
+        this.dataSource = new MatTableDataSource(res);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.predicate();
+      },
+      err => {
+        console.error(err);
+      }
+    );
+  }
+
+  private getAllRequestsExternal(): void {
+    this.requestService.getAllRequestsExternal().subscribe(
       res => {
         this.dataSource = new MatTableDataSource(res);
         this.dataSource.paginator = this.paginator;
