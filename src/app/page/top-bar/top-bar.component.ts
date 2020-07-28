@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { TokenStorageService } from '../../services/token-storage.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-top-bar',
@@ -9,9 +11,17 @@ import { Router } from '@angular/router';
 })
 export class TopBarComponent implements OnInit {
 
-  constructor(private tokenService: TokenStorageService, private router: Router) { }
+  subscription: Subscription;
+
+  isAdmin = false;
+
+  constructor(private tokenService: TokenStorageService, private router: Router, private authService: AuthService) {
+    this.subscription = authService.getIsAdmin().subscribe(res => this.isAdmin = res);
+  }
 
   ngOnInit(): void {
+    console.log(this.isAdmin);
+
   }
 
   public logout(): void {
@@ -21,6 +31,11 @@ export class TopBarComponent implements OnInit {
 
   private navigate(): void {
     this.router.navigate(['/login']);
+  }
+
+  public goToSettings(): void {
+    console.log('go to settings');
+
   }
 
 }

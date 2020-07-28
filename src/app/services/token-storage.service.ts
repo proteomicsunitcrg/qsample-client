@@ -22,10 +22,21 @@ export class TokenStorageService {
   }
 
   public isInternalUser(): boolean {
-    let admin = false;
+    let internal = false;
     const token = this.getUser();
     token.roles.forEach(element => {
       if (element === 'ROLE_INTERNAL') {
+        internal = true;
+      }
+    });
+    return internal;
+  }
+
+  public isAdminUser(): boolean {
+    let admin = false;
+    const token = this.getUser();
+    token.roles.forEach(element => {
+      if (element === 'ROLE_ADMIN') {
         admin = true;
       }
     });

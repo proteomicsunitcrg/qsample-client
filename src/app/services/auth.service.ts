@@ -14,14 +14,24 @@ export class AuthService {
 
   private isInternal = new BehaviorSubject<boolean>(false);
 
+  private isAdmin = new BehaviorSubject<boolean>(false);
+
   apiPrefix: String = environment.apiPrefix;
 
   public updateIsInternal(value: boolean) {
     this.isInternal.next(value);
   }
 
+  public updateIsAdmin(value: boolean) {
+    this.isAdmin.next(value);
+  }
+
   public getIsInternal(): Observable<boolean> {
     return this.isInternal.asObservable();
+  }
+
+  public getIsAdmin(): Observable<boolean> {
+    return this.isAdmin.asObservable();
   }
 
   httpOptions = {

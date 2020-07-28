@@ -3,6 +3,9 @@
     <span>QSample</span>
     <span class="spacer"></span>
     <app-theme-selector></app-theme-selector>
+    <button mat-icon-button (click)="goToSettings()" *ngIf="isAdmin">
+      <mat-icon>settings</mat-icon>
+    </button>
     <button mat-icon-button>
       <mat-icon>help</mat-icon>
     </button>
