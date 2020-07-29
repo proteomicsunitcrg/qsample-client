@@ -34,7 +34,7 @@ export class TopBarComponent implements OnInit {
   }
 
   public goToSettings(): void {
-    console.log('go to settings');
+    this.router.navigate(['/application/settings']);
 
   }
 

@@ -15,6 +15,10 @@ const routes: Routes = [
         {
           path: 'request', loadChildren: () => import('../request/request.module')
             .then(m => m.RequestModule)
+        },
+        {
+          path: 'settings', loadChildren: () => import('../settings/settings.module')
+            .then(m => m.SettingsModule)
         }
       ]
     },
