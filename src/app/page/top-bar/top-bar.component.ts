@@ -20,7 +20,6 @@ export class TopBarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.isAdmin);
   }
 
   public goToHomePage(): void {
@@ -37,9 +36,7 @@ export class TopBarComponent implements OnInit {
   }
 
   public goToSettings(): void {
-
     this.router.navigate(['/application/settings']);
-
   }
 
 }
