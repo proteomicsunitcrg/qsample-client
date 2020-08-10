@@ -1,3 +1,4 @@
+<router-outlet></router-outlet>
 <section class="mat-typography title-group">
     <h1 style="margin: 20px;">
         <div *ngIf="request != undefined">
@@ -9,6 +10,7 @@
     </h1>
     <mat-divider></mat-divider>
 </section>
+<button mat-raised-button (click)="goToQGenerator()" >QGenerator</button>
 <div fxLayout="row" *ngIf="isInternal">
     <app-request-qcloud2-files style="margin-left: 3%; margin-top: 3%;" [request]="requestCode" fxFlex="17" ></app-request-qcloud2-files>
 </div>

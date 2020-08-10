@@ -31,11 +31,11 @@ export class WetlabListComponent implements OnInit {
   }
 
   public navigate(wetLab: WetLab) {
-    this.router.navigate(['/application/wetlab/plot', wetLab.apiKey]);
+    this.router.navigate(['/wetlab/plot', wetLab.apiKey]);
   }
 
   public navigateToGuideset() {
-    this.router.navigate(['/application/wetlab/guideset']);
+    this.router.navigate(['/wetlab/guideset']);
   }
 
 }

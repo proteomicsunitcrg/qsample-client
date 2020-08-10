@@ -115,7 +115,7 @@ export class GuidesetMainComponent implements OnInit {
   }
 
   public goBack(): void {
-    this.router.navigate(['/application']);
+    this.router.navigate(['']);
 
   }
 

@@ -13,6 +13,7 @@ import { WetlabPlotComponent } from '../wetlab/wetlab-plot/wetlab-plot.component
 import { SharedModule } from '../shared.module';
 import { RequestPlotRequestComponent } from './request-plot-request/request-plot-request.component';
 import { RequestPlotPlotComponent } from './request-plot-plot/request-plot-plot.component';
+import { RequestQueueGeneratorComponent } from './request-queue-generator/request-queue-generator.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { RequestPlotPlotComponent } from './request-plot-plot/request-plot-plot.
   RequestWetlabMainComponent,
   RequestPlotRequestComponent,
   RequestPlotPlotComponent,
+  RequestQueueGeneratorComponent,
 ],
   imports: [
     FlexLayoutModule,

@@ -15,6 +15,7 @@ export class RequestDetailsComponent implements OnInit {
     this.subscription = this.authService.getIsInternal().subscribe(res => this.isInternal = res);
     this.activeRouter.params.subscribe(
       params => {
+        this.requestId = params.apiKey;
         this.requestService.getRequestDetails(params.apiKey).subscribe(
           res => {
             console.log(res);
@@ -32,6 +33,7 @@ export class RequestDetailsComponent implements OnInit {
     );
   }
 
+  requestId: number;
 
   subscription: Subscription;
   isInternal = false;
@@ -221,7 +223,13 @@ export class RequestDetailsComponent implements OnInit {
   }
 
   public goBack(): void {
-    this.router.navigate(['/application']);
+    this.router.navigate(['']);
+  }
+
+  public goToQGenerator(): void {
+    console.log('caca');
+
+    this.router.navigate(['/request/QGenerator/' + this.requestId]);
   }
 
   // private getRequestDetails()
