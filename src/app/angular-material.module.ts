@@ -18,6 +18,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
 
@@ -44,7 +45,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatPaginatorModule,
     MatSortModule,
     MatTooltipModule,
-    MatDialogModule
+    MatDialogModule,
+    DragDropModule
   ],
   exports: [
     MatInputModule,
@@ -63,7 +65,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatPaginatorModule,
     MatSortModule,
     MatTooltipModule,
-    MatDialogModule
+    MatDialogModule,
+    DragDropModule
   ]
 })
 

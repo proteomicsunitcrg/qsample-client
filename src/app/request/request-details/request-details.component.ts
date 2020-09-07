@@ -229,7 +229,7 @@ export class RequestDetailsComponent implements OnInit {
   public goToQGenerator(): void {
     console.log('caca');
 
-    this.router.navigate(['/request/QGenerator/' + this.requestId]);
+    this.router.navigate(['/request/QGenerator', this.requestId]);
   }
 
   // private getRequestDetails()
