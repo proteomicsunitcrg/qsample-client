@@ -14,6 +14,7 @@ import { SharedModule } from '../shared.module';
 import { RequestPlotRequestComponent } from './request-plot-request/request-plot-request.component';
 import { RequestPlotPlotComponent } from './request-plot-plot/request-plot-plot.component';
 import { RequestQueueGeneratorComponent } from './request-queue-generator/request-queue-generator.component';
+import { QGeneratorDialogComponent } from './request-queue-generator/dialog/QGeneratorDialog.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { RequestQueueGeneratorComponent } from './request-queue-generator/reques
   RequestPlotRequestComponent,
   RequestPlotPlotComponent,
   RequestQueueGeneratorComponent,
+  QGeneratorDialogComponent
 ],
   imports: [
     FlexLayoutModule,

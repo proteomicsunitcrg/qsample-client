@@ -6,6 +6,8 @@ import { MatTable } from '@angular/material/table';
 import { qGeneratorService } from '../../services/qGenerator.service';
 import { Instrument } from '../../models/Instrument';
 import { InjectionCondition } from '../../models/InjectionCondition';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { QGeneratorDialogComponent } from './dialog/QGeneratorDialog.component';
 
 @Component({
   selector: 'app-request-queue-generator',
@@ -14,17 +16,15 @@ import { InjectionCondition } from '../../models/InjectionCondition';
 })
 export class RequestQueueGeneratorComponent implements OnInit {
 
-  constructor(private activeRouter: ActivatedRoute, private requestService: RequestService, private router: Router, private qGeneratorService: qGeneratorService) {
+  constructor(private activeRouter: ActivatedRoute, private requestService: RequestService, private router: Router, private qGeneratorService: qGeneratorService, public dialog: MatDialog) {
     this.activeRouter.params.subscribe(
       params => {
         this.requestId = params.apiKey;
         this.requestService.getRequestDetails(params.apiKey).subscribe(
           res => {
-            console.log(res);
             this.request = res;
             this.requestCode = this.getRequestCodeFromRequest(this.request);
             this.getSamplesFromRequests(this.request);
-            console.log(this.request);
             this.requestService.changeRequestCode(this.requestCode);
             this.getAvailableInstruments();
           },
@@ -36,7 +36,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
     );
   }
   @ViewChild('table') table: MatTable<Itemerino>;
-  displayedColumns: string[] = ['sampleType', 'filename', 'method', 'position', 'volume'];
+  displayedColumns: string[] = ['sampleType', 'filename', 'method', 'position', 'volume', 'edit', 'delete'];
   requestId: number;
 
   request: any;
@@ -69,7 +69,6 @@ export class RequestQueueGeneratorComponent implements OnInit {
   private getAvailableInstruments(): void {
     this.qGeneratorService.getAvailableInstruments(this.request.classs).subscribe(
       res => {
-        console.log(res);
         this.availableInstruments = res;
         if (this.availableInstruments.length === 1) {
           this.selectedInstrument = this.availableInstruments[0];
@@ -85,7 +84,6 @@ export class RequestQueueGeneratorComponent implements OnInit {
   private getMethodsByAppNameAndInstrumentId(): void {
     this.qGeneratorService.getMethodsByAppNameAndInstrumentId(this.request.classs, this.selectedInstrument).subscribe(
       res => {
-        console.log(res);
         this.injectionCondition = res;
         if (this.injectionCondition != undefined) {
           this.applyInjectionConditions();
@@ -116,10 +114,8 @@ export class RequestQueueGeneratorComponent implements OnInit {
   private getSamplesFromRequests(request: any): void {
     let cac = JSON.parse(request.fields[request.fields.length - 1].value);
     for (let val of cac) {
-      let position = 1;
-      let pedete = new Itemerino(position, 'Unkwown', val[0].value.replace(/\|/g, '_') + '_01', "none", "none", 0);
+      let pedete = new Itemerino('Unkwown', val[0].value.replace(/\|/g, '_') + '_01', "none", "none", 0);
       this.samples.push(pedete);
-      position = position++;
       // this.samples.push(val[0].value.replace(/\|/g, '_'));
     }
     this.dataSource = this.samples;
@@ -134,8 +130,6 @@ export class RequestQueueGeneratorComponent implements OnInit {
   }
 
   public publicAddQCloud2(type: string, associated: boolean): void {
-    console.log('QCLoud2');
-
     let qcType: string;
     switch (type) {
       case 'bsa':
@@ -148,9 +142,9 @@ export class RequestQueueGeneratorComponent implements OnInit {
         return;
     }
     if (associated) {
-      this.dataSource.push(new Itemerino(this.samples.length - 1, 'QC', `${this.requestCode}_${this.clientCode}_001_${qcType}_${this.year}${this.month}${this.day}_${qcType}_001_01`, 'none', 'none', 1));
+      this.dataSource.push(new Itemerino('QC', `${this.requestCode}_${this.clientCode}_001_${qcType}_${this.year}${this.month}${this.day}_${qcType}_001_01`, 'none', 'none', 1));
     } else {
-      this.dataSource.push(new Itemerino(this.samples.length - 1, 'QC', `${this.year}${this.month}${this.day}_${qcType}_001_01`, 'none', 'none', 1));
+      this.dataSource.push(new Itemerino('QC', `${this.year}${this.month}${this.day}_${qcType}_001_01`, 'none', 'none', 1));
     }
     this.table.renderRows();
   }
@@ -168,10 +162,11 @@ export class RequestQueueGeneratorComponent implements OnInit {
         return;
     }
     if (associated) {
-      this.dataSource.push(new Itemerino(this.samples.length - 1, 'QC', `${this.requestCode}_${this.clientCode}_001_${qcType}_${this.year}${this.month}${this.day}_${qcType}_001_01`, 'none', 'none', 1));
+      this.dataSource.push(new Itemerino('QC', `${this.requestCode}_${this.clientCode}_001_${qcType}_${this.year}${this.month}${this.day}_${qcType}_001_01`, 'none', 'none', 1));
     } else {
-      this.dataSource.push(new Itemerino(this.samples.length - 1, 'QC', `${this.year}${this.month}${this.day}_${qcType}_001_01`, 'none', 'none', 1));
+      this.dataSource.push(new Itemerino('QC', `${this.year}${this.month}${this.day}_${qcType}_001_01`, 'none', 'none', 1));
     }
+
     this.table.renderRows();
   }
 
@@ -184,16 +179,36 @@ export class RequestQueueGeneratorComponent implements OnInit {
   public autoQC(): void {
     if (confirm('All QCs will be removed')) {
       let backup = [];
-      console.log(this.dataSource);
       this.dataSource = this.samples.filter(item => item.sampleType != 'QC');
       for (let item of this.dataSource) {
         backup.push(item);
-        backup.push(new Itemerino(this.samples.length - 1, 'QC', `${this.year}${this.month}${this.day}_QC1_001_01`, 'none', 'none', 1))
-        backup.push(new Itemerino(this.samples.length - 1, 'QC', `${this.year}${this.month}${this.day}_QC1_001_01`, 'none', 'none', 1))
+        backup.push(new Itemerino('QC', `${this.year}${this.month}${this.day}_QC1_001_01`, 'none', 'none', 1))
+        backup.push(new Itemerino('QC', `${this.year}${this.month}${this.day}_QC1_001_01`, 'none', 'none', 1))
       }
       this.dataSource = backup;
       this.table.renderRows();
     }
+  }
+
+  public editRow(item: Itemerino, i: number): void {
+    this.openDialog(item);
+  }
+
+  public deleteRow(item: Itemerino, i: number): void {
+    this.dataSource.splice(this.dataSource.indexOf(item),1);
+    this.table.renderRows();
+  }
+
+  private openDialog(item: Itemerino): void {
+    const dialogRef = this.dialog.open(QGeneratorDialogComponent, {
+      data: {
+        item: item
+      }
+    });
+  }
+
+  public generateCSV(): void {
+    console.log(this.dataSource);
   }
 
 }
@@ -204,10 +219,8 @@ export class Itemerino {
   method: string;
   position: string;
   volume: number;
-  positionTable: number;
 
-  constructor(positionTable: number, sampleType: string, filename: string, method: string, position: string, volume: number) {
-    this.positionTable = positionTable;
+  constructor(sampleType: string, filename: string, method: string, position: string, volume: number) {
     this.sampleType = sampleType;
     this.filename = filename;
     this.method = method;
