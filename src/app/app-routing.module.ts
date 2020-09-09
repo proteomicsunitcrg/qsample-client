@@ -7,7 +7,7 @@ import { HomePage } from './page/home-page/home-page.component';
 
 const routes: Routes = [
   // { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: '', loadChildren: () => import('./page/layout.module').then(m => m.LayoutModule) },
+  { path: '', loadChildren: () => import('./page/layout.module').then(m => m.LayoutModule), canActivate: [RoleGuard]},
   { path: 'login', loadChildren: () => import('./entry-point/entry-point.module').then(m => m.EntryPointModule) },
   // { path: '**', redirectTo: '/login', pathMatch: 'full' },
 

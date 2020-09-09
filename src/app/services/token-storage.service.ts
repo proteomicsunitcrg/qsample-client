@@ -24,6 +24,9 @@ export class TokenStorageService {
   public isInternalUser(): boolean {
     let internal = false;
     const token = this.getUser();
+    if (token == null) {
+      return;
+    }
     token.roles.forEach(element => {
       if (element === 'ROLE_INTERNAL') {
         internal = true;
@@ -35,6 +38,9 @@ export class TokenStorageService {
   public isAdminUser(): boolean {
     let admin = false;
     const token = this.getUser();
+    if (token == null) {
+      return;
+    }
     token.roles.forEach(element => {
       if (element === 'ROLE_ADMIN') {
         admin = true;
