@@ -27,7 +27,7 @@
     <button mat-raised-button (click)="autoQC()">Auto QCs</button>
     <mat-form-field appearance="fill" *ngIf="availableInstruments.length > 1">
         <mat-label>Instrument</mat-label>
-        <mat-select [(value)]="selectedInstrument">
+        <mat-select [(value)]="selectedInstrument" (selectionChange)="changeInstrument()">
             <mat-option [value]="ins" *ngFor="let ins of availableInstruments">{{ins.name}}</mat-option>
         </mat-select>
     </mat-form-field>
@@ -36,6 +36,10 @@
         <mat-select [(value)]="selectedInstrument" disabled>
             <mat-option default [value]="availableInstruments[0]">{{availableInstruments[0].name}}</mat-option>
         </mat-select>
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+        <mat-label>Path</mat-label>
+        <input matInput [(ngModel)]="path">
     </mat-form-field>
     <button mat-raised-button (click)="generateCSV()">Generate CSV</button>
 </div>

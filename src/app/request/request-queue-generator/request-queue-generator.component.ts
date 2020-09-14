@@ -8,6 +8,8 @@ import { Instrument } from '../../models/Instrument';
 import { InjectionCondition } from '../../models/InjectionCondition';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { QGeneratorDialogComponent } from './dialog/QGeneratorDialog.component';
+import { saveAs } from 'file-saver';
+
 
 @Component({
   selector: 'app-request-queue-generator',
@@ -61,6 +63,8 @@ export class RequestQueueGeneratorComponent implements OnInit {
 
   injectionCondition: InjectionCondition;
 
+  path = 'C:\\Xcalibur\\Data';
+
 
 
   ngOnInit(): void {
@@ -95,7 +99,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
   }
 
   private applyInjectionConditions(): void {
-    for(let item of this.dataSource) {
+    for (let item of this.dataSource) {
       if (item.sampleType === "Unkwown") {
         item.method = this.injectionCondition.method;
         item.volume = this.injectionCondition.volume;
@@ -142,9 +146,9 @@ export class RequestQueueGeneratorComponent implements OnInit {
         return;
     }
     if (associated) {
-      this.dataSource.push(new Itemerino('QC', `${this.requestCode}_${this.clientCode}_001_${qcType}_${this.year}${this.month}${this.day}_${qcType}_001_01`, 'none', 'none', 1));
+      this.dataSource.push(new Itemerino(qcType, `${this.requestCode}_${this.clientCode}_001_${this.year}${this.month}${this.day}_${qcType}_01_01`, 'none', 'none', 1));
     } else {
-      this.dataSource.push(new Itemerino('QC', `${this.year}${this.month}${this.day}_${qcType}_001_01`, 'none', 'none', 1));
+      this.dataSource.push(new Itemerino(qcType, `${this.year}${this.month}${this.day}_${qcType}_01_01`, 'none', 'none', 1));
     }
     this.table.renderRows();
   }
@@ -162,9 +166,9 @@ export class RequestQueueGeneratorComponent implements OnInit {
         return;
     }
     if (associated) {
-      this.dataSource.push(new Itemerino('QC', `${this.requestCode}_${this.clientCode}_001_${qcType}_${this.year}${this.month}${this.day}_${qcType}_001_01`, 'none', 'none', 1));
+      this.dataSource.push(new Itemerino(qcType, `${this.requestCode}_${this.clientCode}_001_${this.year}${this.month}${this.day}_${qcType}_01_01`, 'none', 'none', 1));
     } else {
-      this.dataSource.push(new Itemerino('QC', `${this.year}${this.month}${this.day}_${qcType}_001_01`, 'none', 'none', 1));
+      this.dataSource.push(new Itemerino(qcType, `${this.year}${this.month}${this.day}_${qcType}_01_01`, 'none', 'none', 1));
     }
 
     this.table.renderRows();
@@ -182,8 +186,8 @@ export class RequestQueueGeneratorComponent implements OnInit {
       this.dataSource = this.samples.filter(item => item.sampleType != 'QC');
       for (let item of this.dataSource) {
         backup.push(item);
-        backup.push(new Itemerino('QC', `${this.year}${this.month}${this.day}_QC1_001_01`, 'none', 'none', 1))
-        backup.push(new Itemerino('QC', `${this.year}${this.month}${this.day}_QC1_001_01`, 'none', 'none', 1))
+        backup.push(new Itemerino('QBSA', `${this.requestCode}_${this.clientCode}_001_${this.year}${this.month}${this.day}_QBSA_001_01`, this.getMethodAndVolumeQC(this.selectedInstrument, 'QBSA').method, 'none', this.getMethodAndVolumeQC(this.selectedInstrument, 'QBSA').volume))
+        backup.push(new Itemerino('QC', `${this.year}${this.month}${this.day}_QC1_001_01`, this.getMethodAndVolumeQC(this.selectedInstrument, 'QC01').method, 'none', this.getMethodAndVolumeQC(this.selectedInstrument, 'QC01').volume))
       }
       this.dataSource = backup;
       this.table.renderRows();
@@ -195,7 +199,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
   }
 
   public deleteRow(item: Itemerino, i: number): void {
-    this.dataSource.splice(this.dataSource.indexOf(item),1);
+    this.dataSource.splice(this.dataSource.indexOf(item), 1);
     this.table.renderRows();
   }
 
@@ -207,8 +211,103 @@ export class RequestQueueGeneratorComponent implements OnInit {
     });
   }
 
+
+  private getMethodAndVolumeQC(instrument: Instrument, qcType: string): any {
+    if (instrument === undefined) {
+      return { 'method': 'none', 'volume': 1 };
+    }
+    switch (instrument.name) {
+      case 'Lumos':
+        switch (qcType) {
+          case 'QBSA':
+          case 'QC01':
+            return { 'method': 'STD-L1-BSA-8min-T3-HCD-IT', 'volume': 0.5 };
+            break;
+          case 'QC02':
+          case 'QHELA':
+            return { 'method': 'STD-L1-QC02-60min-TSP-HCD-IT_max2ul', 'volume': 1 };
+            break;
+          case 'QC03':
+            return { 'method': 'QC4L-Fusion-Lumos', 'volume': 1 };
+            break;
+          default:
+            return { 'method': 'none', 'volume': 1 };
+            break;
+        }
+        break;
+      case 'Velos':
+        switch (qcType) {
+          case 'QBSA':
+          case 'QC01':
+            return { 'method': 'STD-VL-BSA-8min-T3-CID-IT', 'volume': 0.5 };
+            break;
+          case 'QC02':
+          case 'QHELA':
+            return { 'method': 'STD-VL-QC02-60min-T20-CID-IT', 'volume': 1 };
+            break;
+          case 'QC03':
+            return { 'method': 'STD-VL-DDA-60min-T4-CID-IT-HCD-FT-QC4L', 'volume': 1 };
+            break;
+          default:
+            return { 'method': 'none', 'volume': 1 };
+            break;
+        }
+        break;
+      case 'Eclipse':
+        switch (qcType) {
+          case 'QBSA':
+          case 'QC01':
+            return { 'method': 'STD-E1-BSA-8min-T3-HCD-IT', 'volume': 0.5 };
+            break;
+          case 'QC02':
+          case 'QHELA':
+            return { 'method': 'STD-E1-QC02-60min-TSP-HCD-IT_max2ul', 'volume': 1 };
+            break;
+          case 'QC03':
+            return { 'method': 'QC4L-Eclipse', 'volume': 1 };
+            break;
+          default:
+            return { 'method': 'none', 'volume': 1 };
+            break;
+        }
+        break;
+      case 'XL':
+        switch (qcType) {
+          case 'QBSA':
+          case 'QC01':
+            return { 'method': 'STD-XL-BSA-8min-T3-CID-IT', 'volume': 0.5 };
+            break;
+          case 'QC02':
+          case 'QHELA':
+            return { 'method': 'STD-XL-60min-T10-CID-IT', 'volume': 1 };
+            break;
+          case 'QC03':
+            return { 'method': 'STD-XL-DDA-60min-T4-CID-IT-HCD-FT-QC4L', 'volume': 1 };
+            break;
+          default:
+            return { 'method': 'none', 'volume': 1 };
+            break;
+        }
+        default:
+          return { 'method': 'none', 'volume': 1 };
+          break;
+    }
+  }
+
   public generateCSV(): void {
     console.log(this.dataSource);
+    const separator = ';';
+    const header = `Sample Type${separator}File Name${separator}Inst Meth${separator}Position${separator}Inj Vol${separator}Path\n`;
+    let csvString: string = header;
+    for (let item of this.dataSource) {
+      csvString = `${csvString}${item.sampleType}${separator}${item.filename}${separator}C:\\Xcalibur\\methods\\current\\${item.method}${separator}${item.position}${separator}${item.volume}${separator}${this.path}\n`;
+    }
+    var blob = new Blob([csvString], { type: 'text/csv' })
+    saveAs(blob, "myFile.csv");
+  }
+
+  public changeInstrument(): void {
+    this.getMethodsByAppNameAndInstrumentId();
   }
 
 }
