@@ -9,6 +9,8 @@ import { InjectionCondition } from '../../models/InjectionCondition';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { QGeneratorDialogComponent } from './dialog/QGeneratorDialog.component';
 import { saveAs } from 'file-saver';
+import { MatGridList} from '@angular/material/grid-list';
+
 
 
 @Component({
@@ -24,9 +26,12 @@ export class RequestQueueGeneratorComponent implements OnInit {
         this.requestId = params.apiKey;
         this.requestService.getRequestDetails(params.apiKey).subscribe(
           res => {
+            console.log(res);
+
             this.request = res;
             this.requestCode = this.getRequestCodeFromRequest(this.request);
             this.getSamplesFromRequests(this.request);
+            this.taxonomyCode = this.getTaxonomyCodeFromName(this.getTaxonomyFromRequest());
             this.requestService.changeRequestCode(this.requestCode);
             this.getAvailableInstruments();
           },
@@ -40,6 +45,8 @@ export class RequestQueueGeneratorComponent implements OnInit {
   @ViewChild('table') table: MatTable<Itemerino>;
   displayedColumns: string[] = ['sampleType', 'filename', 'method', 'position', 'volume', 'edit', 'delete'];
   requestId: number;
+
+  taxonomyCode: number
 
   request: any;
 
@@ -64,6 +71,8 @@ export class RequestQueueGeneratorComponent implements OnInit {
   injectionCondition: InjectionCondition;
 
   path = 'C:\\Xcalibur\\Data';
+
+  methodPath = 'C:\\Xcalibur\\methods\\current\\';
 
 
 
@@ -100,9 +109,12 @@ export class RequestQueueGeneratorComponent implements OnInit {
 
   private applyInjectionConditions(): void {
     for (let item of this.dataSource) {
-      if (item.sampleType === "Unkwown") {
+      if (item.sampleType === "Unknown") {
         item.method = this.injectionCondition.method;
         item.volume = this.injectionCondition.volume;
+      } else {
+        item.method = this.getMethodAndVolumeQC(this.selectedInstrument, item.qcType).method;
+        item.volume = this.getMethodAndVolumeQC(this.selectedInstrument, item.qcType).volume;
       }
     }
 
@@ -118,11 +130,28 @@ export class RequestQueueGeneratorComponent implements OnInit {
   private getSamplesFromRequests(request: any): void {
     let cac = JSON.parse(request.fields[request.fields.length - 1].value);
     for (let val of cac) {
-      let pedete = new Itemerino('Unkwown', val[0].value.replace(/\|/g, '_') + '_01', "none", "none", 0);
+      let pedete = new Itemerino('Unknown', val[0].value.replace(/\|/g, '_') + '_01', "none", "none", 0, this.clientCode,'', this.request.id, this.taxonomyCode, 'Unknown');
       this.samples.push(pedete);
       // this.samples.push(val[0].value.replace(/\|/g, '_'));
     }
     this.dataSource = this.samples;
+  }
+
+  private getTaxonomyFromRequest(): string {
+    for (let item of this.request.fields) {
+      if (item.name == 'Taxonomy') {
+        return item.value;
+      }
+    }
+  }
+
+  private getTaxonomyCodeFromName(taxonomyName: string): number {
+    switch (taxonomyName) {
+      case 'Human':
+        return 9606;
+      default:
+        return undefined;
+    }
   }
 
   public goBack(): void {
@@ -142,13 +171,16 @@ export class RequestQueueGeneratorComponent implements OnInit {
       case 'hela':
         qcType = 'QC02';
         break
+      case 'qc4l':
+        qcType = 'QC03';
+        break;
       default:
         return;
     }
     if (associated) {
-      this.dataSource.push(new Itemerino(qcType, `${this.requestCode}_${this.clientCode}_001_${this.year}${this.month}${this.day}_${qcType}_01_01`, 'none', 'none', 1));
+      this.dataSource.push(new Itemerino('QC', `${this.requestCode}_${this.clientCode}_001_${this.year}${this.month}${this.day}_${qcType}_01_01`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume,'', '', undefined, undefined, qcType));
     } else {
-      this.dataSource.push(new Itemerino(qcType, `${this.year}${this.month}${this.day}_${qcType}_01_01`, 'none', 'none', 1));
+      this.dataSource.push(new Itemerino('QC', `${this.year}${this.month}${this.day}_${qcType}_01_01`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume,'','', undefined, undefined, qcType));
     }
     this.table.renderRows();
   }
@@ -166,9 +198,9 @@ export class RequestQueueGeneratorComponent implements OnInit {
         return;
     }
     if (associated) {
-      this.dataSource.push(new Itemerino(qcType, `${this.requestCode}_${this.clientCode}_001_${this.year}${this.month}${this.day}_${qcType}_01_01`, 'none', 'none', 1));
+      this.dataSource.push(new Itemerino('QC', `${this.requestCode}_${this.clientCode}_001_${this.year}${this.month}${this.day}_${qcType}_01_01`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType));
     } else {
-      this.dataSource.push(new Itemerino(qcType, `${this.year}${this.month}${this.day}_${qcType}_01_01`, 'none', 'none', 1));
+      this.dataSource.push(new Itemerino('QC', `${this.year}${this.month}${this.day}_${qcType}_01_01`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume,'', '', undefined, undefined, qcType));
     }
 
     this.table.renderRows();
@@ -186,12 +218,19 @@ export class RequestQueueGeneratorComponent implements OnInit {
       this.dataSource = this.samples.filter(item => item.sampleType != 'QC');
       for (let item of this.dataSource) {
         backup.push(item);
-        backup.push(new Itemerino('QBSA', `${this.requestCode}_${this.clientCode}_001_${this.year}${this.month}${this.day}_QBSA_001_01`, this.getMethodAndVolumeQC(this.selectedInstrument, 'QBSA').method, 'none', this.getMethodAndVolumeQC(this.selectedInstrument, 'QBSA').volume))
-        backup.push(new Itemerino('QC', `${this.year}${this.month}${this.day}_QC1_001_01`, this.getMethodAndVolumeQC(this.selectedInstrument, 'QC01').method, 'none', this.getMethodAndVolumeQC(this.selectedInstrument, 'QC01').volume))
+        backup.push(new Itemerino('QBSA', `${this.requestCode}_${this.clientCode}_001_${this.year}${this.month}${this.day}_QBSA_01_01`, this.getMethodAndVolumeQC(this.selectedInstrument, 'QBSA').method, this.getVialPositionByQCType('QBSA'), this.getMethodAndVolumeQC(this.selectedInstrument, 'QBSA').volume,'', '', undefined, undefined, 'QBSA'));
+        backup.push(new Itemerino('QC', `${this.requestCode}_${this.clientCode}_001_${this.year}${this.month}${this.day}_QC01_01_01`, this.getMethodAndVolumeQC(this.selectedInstrument, 'QC01').method, this.getVialPositionByQCType('QC01'), this.getMethodAndVolumeQC(this.selectedInstrument, 'QC01').volume,'', '', undefined, undefined,'QC01'));
       }
       this.dataSource = backup;
       this.table.renderRows();
     }
+  }
+
+  public qHelaCombo(): void {
+    this.dataSource.push(new Itemerino('QC', `${this.year}${this.month}${this.day}_QHELA_01_01`, this.getMethodAndVolumeQC(this.selectedInstrument, 'QHELA').method, '1-V4', this.getMethodAndVolumeQC(this.selectedInstrument, 'QHELA').volume,'', '', undefined, undefined, 'QHELA'));
+    this.publicAddQ('bsa', false);
+    this.publicAddQCloud2('bsa', false);
+    this.table.renderRows();
   }
 
   public editRow(item: Itemerino, i: number): void {
@@ -211,6 +250,20 @@ export class RequestQueueGeneratorComponent implements OnInit {
     });
   }
 
+  private getVialPositionByQCType(qcType: string): any {
+    switch (qcType) {
+      case 'QBSA':
+      case 'QC01':
+      case 'QC':
+        return '1-V1';
+      case 'QC02':
+      case 'QHELA':
+        return '1-V2';
+      case 'QC03':
+        return '1-V3';
+    }
+  }
+
 
   private getMethodAndVolumeQC(instrument: Instrument, qcType: string): any {
     if (instrument === undefined) {
@@ -221,6 +274,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
         switch (qcType) {
           case 'QBSA':
           case 'QC01':
+          case 'QC':
             return { 'method': 'STD-L1-BSA-8min-T3-HCD-IT', 'volume': 0.5 };
             break;
           case 'QC02':
@@ -239,6 +293,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
         switch (qcType) {
           case 'QBSA':
           case 'QC01':
+          case 'QC':
             return { 'method': 'STD-VL-BSA-8min-T3-CID-IT', 'volume': 0.5 };
             break;
           case 'QC02':
@@ -257,6 +312,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
         switch (qcType) {
           case 'QBSA':
           case 'QC01':
+          case 'QC':
             return { 'method': 'STD-E1-BSA-8min-T3-HCD-IT', 'volume': 0.5 };
             break;
           case 'QC02':
@@ -275,6 +331,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
         switch (qcType) {
           case 'QBSA':
           case 'QC01':
+          case 'QC':
             return { 'method': 'STD-XL-BSA-8min-T3-CID-IT', 'volume': 0.5 };
             break;
           case 'QC02':
@@ -297,10 +354,14 @@ export class RequestQueueGeneratorComponent implements OnInit {
   public generateCSV(): void {
     console.log(this.dataSource);
     const separator = ';';
-    const header = `Sample Type${separator}File Name${separator}Inst Meth${separator}Position${separator}Inj Vol${separator}Path\n`;
+    const header = `Sample Type${separator}File Name${separator}Inst Meth${separator}Position${separator}Inj Vol${separator}Path${separator}Client${separator}Comment${separator}AgendoId${separator}TaxonomyId\n`;
     let csvString: string = header;
     for (let item of this.dataSource) {
-      csvString = `${csvString}${item.sampleType}${separator}${item.filename}${separator}C:\\Xcalibur\\methods\\current\\${item.method}${separator}${item.position}${separator}${item.volume}${separator}${this.path}\n`;
+      if (item.sampleType == 'Unknown') {
+        csvString = `${csvString}${item.sampleType}${separator}${item.filename}${separator}${this.methodPath}${item.method}${separator}${item.position}${separator}${item.volume}${separator}${this.path}${separator}${item.client}${separator}${item.comment}${separator}${item.agendoId}${separator}${item.taxonomyId}\n`;
+      } else {
+        csvString = `${csvString}${item.sampleType}${separator}${item.filename}${separator}${this.methodPath}${item.method}${separator}${item.position}${separator}${item.volume}${separator}${this.path}${separator}${item.client}${separator}${item.comment}${separator}${separator} \n`;
+      }
     }
     var blob = new Blob([csvString], { type: 'text/csv' })
     saveAs(blob, "myFile.csv");
@@ -318,13 +379,23 @@ export class Itemerino {
   method: string;
   position: string;
   volume: number;
+  client: string;
+  comment: string;
+  agendoId: number;
+  taxonomyId: number;
+  qcType: string;
 
-  constructor(sampleType: string, filename: string, method: string, position: string, volume: number) {
+  constructor(sampleType: string, filename: string, method: string, position: string, volume: number, client: string, comment: string, agendoId: number, taxonomyId: number, qcType: string) {
     this.sampleType = sampleType;
     this.filename = filename;
     this.method = method;
     this.position = position;
     this.volume = volume;
+    this.client = client;
+    this.comment = comment;
+    this.agendoId = agendoId;
+    this.taxonomyId = taxonomyId;
+    this.qcType = qcType;
   }
 
 

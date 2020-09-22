@@ -9,40 +9,76 @@
     </h1>
     <mat-divider></mat-divider>
 </section>
-<div fxLayout="row" fxLayoutAlign="space-around center" style="margin-top: 20px;">
-    <button mat-raised-button (click)="publicAddQCloud2('bsa', true)">Add associated QCloud BSA</button>
-    <button mat-raised-button (click)="publicAddQ('bsa', true)">Add associated QBSA</button>
-    <button mat-raised-button (click)="publicAddQCloud2('bsa', false)">Add QCloud BSA</button>
-    <button mat-raised-button (click)="publicAddQ('bsa', false)">Add QCloud QBSA</button>
-</div>
-<mat-divider style="margin-top: 20px;"></mat-divider>
-<div fxLayout="row" fxLayoutAlign="space-around center" style="margin-top: 20px;">
-    <button mat-raised-button (click)="publicAddQCloud2('hela', true)">Add associated QCloud Hela</button>
-    <button mat-raised-button (click)="publicAddQ('hela', true)">Add associated QHela</button>
-    <button mat-raised-button (click)="publicAddQCloud2('hela', false)">Add QCloud Hela</button>
-    <button mat-raised-button (click)="publicAddQ('hela', false)">Add QHela</button>
-</div>
-<mat-divider style="margin-top: 20px;"></mat-divider>
-<div fxLayout="row" fxLayoutAlign="space-around center" style="margin-top: 20px;">
-    <button mat-raised-button (click)="autoQC()">Auto QCs</button>
-    <mat-form-field appearance="fill" *ngIf="availableInstruments.length > 1">
-        <mat-label>Instrument</mat-label>
-        <mat-select [(value)]="selectedInstrument" (selectionChange)="changeInstrument()">
-            <mat-option [value]="ins" *ngFor="let ins of availableInstruments">{{ins.name}}</mat-option>
-        </mat-select>
-    </mat-form-field>
-    <mat-form-field appearance="fill" *ngIf="availableInstruments.length == 1">
-        <mat-label>Instrument</mat-label>
-        <mat-select [(value)]="selectedInstrument" disabled>
-            <mat-option default [value]="availableInstruments[0]">{{availableInstruments[0].name}}</mat-option>
-        </mat-select>
-    </mat-form-field>
-    <mat-form-field class="example-full-width">
-        <mat-label>Path</mat-label>
-        <input matInput [(ngModel)]="path">
-    </mat-form-field>
-    <button mat-raised-button (click)="generateCSV()">Generate CSV</button>
-</div>
+<mat-grid-list cols="4" rowHeight="100px">
+    <mat-grid-tile>
+        <button mat-raised-button (click)="publicAddQCloud2('bsa', true)">Add associated QC01</button>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <button mat-raised-button (click)="publicAddQCloud2('bsa', false)">Add QC01</button>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <button mat-raised-button (click)="publicAddQ('bsa', true)">Add associated QBSA</button>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <button mat-raised-button (click)="publicAddQ('bsa', false)">Add QBSA</button>
+    </mat-grid-tile>
+</mat-grid-list>
+<mat-divider></mat-divider>
+
+<mat-grid-list cols="4" rowHeight="100px">
+    <mat-grid-tile>
+        <button mat-raised-button (click)="publicAddQCloud2('hela', false)">Add QC02</button>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <button mat-raised-button (click)="publicAddQ('hela', false)">Add QHela</button>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <button mat-raised-button (click)="publicAddQCloud2('qc4l', false)">Add QC03</button>
+    </mat-grid-tile>
+</mat-grid-list>
+<mat-divider></mat-divider>
+
+<mat-grid-list cols="4" rowHeight="100px">
+    <mat-grid-tile>
+        <mat-form-field class="example-full-width">
+            <mat-label>Path</mat-label>
+            <input matInput [(ngModel)]="path">
+        </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <mat-form-field class="example-full-width">
+            <mat-label>Method path</mat-label>
+            <input matInput [(ngModel)]="methodPath">
+        </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <mat-form-field appearance="fill" *ngIf="availableInstruments.length > 1">
+            <mat-label>Instrument</mat-label>
+            <mat-select [(value)]="selectedInstrument" (selectionChange)="changeInstrument()">
+                <mat-option [value]="ins" *ngFor="let ins of availableInstruments">{{ins.name}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill" *ngIf="availableInstruments.length == 1">
+            <mat-label>Instrument</mat-label>
+            <mat-select [(value)]="selectedInstrument" disabled>
+                <mat-option default [value]="availableInstruments[0]">{{availableInstruments[0].name}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </mat-grid-tile>
+</mat-grid-list>
+<mat-divider></mat-divider>
+
+<mat-grid-list cols="4" rowHeight="100px">
+    <mat-grid-tile>
+        <button mat-raised-button (click)="autoQC()">Auto QCs</button>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <button mat-raised-button (click)="qHelaCombo()">QHela combo</button>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <button mat-raised-button (click)="generateCSV()">Generate CSV</button>
+    </mat-grid-tile>
+</mat-grid-list>
 <!-- </div> -->
 
 
@@ -77,13 +113,15 @@
 
         <ng-container matColumnDef="edit">
             <th mat-header-cell *matHeaderCellDef> Edit </th>
-            <td mat-cell *matCellDef="let element; index as i;" (click)="editRow(element, i)"><button mat-button>Edit</button>
+            <td mat-cell *matCellDef="let element; index as i;" (click)="editRow(element, i)"><button
+                    mat-button>Edit</button>
             </td>
         </ng-container>
 
         <ng-container matColumnDef="delete">
             <th mat-header-cell *matHeaderCellDef> Remove </th>
-            <td mat-cell *matCellDef="let element; index as i;" (click)="deleteRow(element, i)"><button mat-button>Remove</button>
+            <td mat-cell *matCellDef="let element; index as i;" (click)="deleteRow(element, i)"><button
+                    mat-button>Remove</button>
             </td>
         </ng-container>
 
@@ -96,3 +134,4 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag [cdkDragData]="row"></tr>
     </table>
 </div>
+
