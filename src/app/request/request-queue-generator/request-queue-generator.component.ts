@@ -9,7 +9,7 @@ import { InjectionCondition } from '../../models/InjectionCondition';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { QGeneratorDialogComponent } from './dialog/QGeneratorDialog.component';
 import { saveAs } from 'file-saver';
-import { MatGridList} from '@angular/material/grid-list';
+import { MatGridList } from '@angular/material/grid-list';
 
 
 
@@ -142,7 +142,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
     let cac = JSON.parse(request.fields[request.fields.length - 1].value);
     let sampleNumber = 1;
     for (let val of cac) {
-      let pedete = new Itemerino('Unknown', val[0].value.replace(/\|/g, '_') + '_01', "none", "none", 0, this.clientCode,'', this.request.id, this.taxonomyCode, 'Unknown', sampleNumber);
+      let pedete = new Itemerino('Unknown', val[0].value.replace(/\|/g, '_') + '_01', "none", "none", 0, this.clientCode, '', this.request.id, this.taxonomyCode, 'Unknown', sampleNumber, false);
       this.samples.push(pedete);
       sampleNumber = sampleNumber + 1;
       // this.samples.push(val[0].value.replace(/\|/g, '_'));
@@ -187,11 +187,11 @@ export class RequestQueueGeneratorComponent implements OnInit {
         }
         qcType = 'QC01';
         break;
-        case 'hela':
-          if (!associated) {
-            this.qc2Counter = this.qc2Counter + 1;
-            counterToApply = this.qc2Counter;
-            quantity = '_100ng';
+      case 'hela':
+        if (!associated) {
+          this.qc2Counter = this.qc2Counter + 1;
+          counterToApply = this.qc2Counter;
+          quantity = '_100ng';
         }
         qcType = 'QC02';
         break
@@ -206,11 +206,16 @@ export class RequestQueueGeneratorComponent implements OnInit {
       default:
         return;
     }
+    let nextSampleIndex = this.getNextSample(this.dataSource[position - 1].sampleNumber);
+      if (nextSampleIndex == undefined) {
+        nextSampleIndex = position;
+      }
     if (associated) {
-      const sampleNumber = this.getLastSampleFromList().sampleNumber;
-      this.dataSource.splice(position, 0, new Itemerino('QC', `${this.requestCode}_${this.clientCode}_00${sampleNumber}_${this.year}${this.month}${this.day}_${qcType}_001_01`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume,'', '', undefined, undefined, qcType, undefined));
+      let qcNumber = this.getAssociatedQCsQuantityBetweenSamples(position, 'QC01') + 1;
+      const sampleNumber = this.getLastSampleFromList(position).sampleNumber;
+      this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC', `${this.requestCode}_${this.clientCode}_00${sampleNumber}_${this.year}${this.month}${this.day}_${qcType}_001_${('0' + qcNumber).slice(-2)}`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, true));
     } else {
-      this.dataSource.splice(position, 0, new Itemerino('QC', `${this.year}${this.month}${this.day}_${qcType}_001_0${counterToApply}${quantity}`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume,'','', undefined, undefined, qcType, undefined));
+      this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC', `${this.year}${this.month}${this.day}_${qcType}_001_0${counterToApply}${quantity}`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, false));
     }
     this.table.renderRows();
   }
@@ -238,11 +243,16 @@ export class RequestQueueGeneratorComponent implements OnInit {
       default:
         return;
     }
+    let nextSampleIndex = this.getNextSample(this.dataSource[position - 1].sampleNumber);
+      if (nextSampleIndex == undefined) {
+        nextSampleIndex = position;
+      }
     if (associated) {
-      const sampleNumber = this.getLastSampleFromList().sampleNumber;
-      this.dataSource.splice(position, 0, new Itemerino('QC', `${this.requestCode}_${this.clientCode}_00${sampleNumber}_${this.year}${this.month}${this.day}_${qcType}_001_01`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined));
+      const sampleNumber = this.getLastSampleFromList(position).sampleNumber;
+      let qcNumber = this.getAssociatedQCsQuantityBetweenSamples(position, 'QBSA') + 1;
+      this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC', `${this.requestCode}_${this.clientCode}_00${sampleNumber}_${this.year}${this.month}${this.day}_${qcType}_001_${('0' + qcNumber).slice(-2)}`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, true));
     } else {
-      this.dataSource.splice(position, 0, new Itemerino('QC', `${this.year}${this.month}${this.day}_${qcType}_001_0${counterToApply}${quantity}`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume,'', '', undefined, undefined, qcType, undefined));
+      this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC', `${this.year}${this.month}${this.day}_${qcType}_001_0${counterToApply}${quantity}`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, false));
     }
     this.table.renderRows();
   }
@@ -253,8 +263,33 @@ export class RequestQueueGeneratorComponent implements OnInit {
     this.table.renderRows();
   }
 
-  private getLastSampleFromList(): Itemerino {
-    let i = this.dataSource.length;
+  private getAssociatedQCsQuantityBetweenSamples(position: number, qcTypeToFind: string) {
+    let counter = 0;
+    for (let i = position; i < this.dataSource.length; i++) {
+      console.log(this.dataSource[i]);
+
+      if (this.dataSource[i].sampleType == 'Unknown') {
+        return counter;
+      } else {
+        if (this.dataSource[i].associated && this.dataSource[i].qcType == qcTypeToFind) {
+          counter = counter + 1;
+        }
+      }
+    }
+    return counter;
+  }
+
+  private getNextSample(currentSampleNumber: number) {
+    for (let [index,item] of this.dataSource.entries()) {
+      if (item.sampleNumber == currentSampleNumber + 1) {
+        return index;
+      }
+    }
+    return this.dataSource.length;
+  }
+
+  private getLastSampleFromList(position: number): Itemerino {
+    let i = position;
     while (i--) { // The fatest loop in the west https://web.archive.org/web/20110526000316/https://blogs.oracle.com/greimer/entry/best_way_to_code_a
       if (this.dataSource[i].sampleNumber != undefined) {
         return this.dataSource[i];
@@ -275,9 +310,9 @@ export class RequestQueueGeneratorComponent implements OnInit {
   }
 
   public qHelaCombo(position: number): void {
-    this.dataSource.splice(position, 0, new Itemerino('QC', `${this.year}${this.month}${this.day}_QHELA_01_01`, this.getMethodAndVolumeQC(this.selectedInstrument, 'QHELA').method, '1-V4', this.getMethodAndVolumeQC(this.selectedInstrument, 'QHELA').volume,'', '', undefined, undefined, 'QHELA', undefined));
-    this.publicAddQ('bsa', false, position);
-    this.publicAddQCloud2('bsa', false, position);
+    this.publicAddQ('hela', false, position);
+    this.publicAddQ('bsa', false, position + 1);
+    this.publicAddQCloud2('bsa', false, position + 2);
     this.table.renderRows();
   }
 
@@ -401,9 +436,9 @@ export class RequestQueueGeneratorComponent implements OnInit {
             return { 'method': 'none', 'volume': 1 };
             break;
         }
-        default:
-          return { 'method': 'none', 'volume': 1 };
-          break;
+      default:
+        return { 'method': 'none', 'volume': 1 };
+        break;
     }
   }
 
@@ -441,8 +476,9 @@ export class Itemerino {
   taxonomyId: number;
   qcType: string;
   sampleNumber: number;
+  associated: boolean;
 
-  constructor(sampleType: string, filename: string, method: string, position: string, volume: number, client: string, comment: string, agendoId: number, taxonomyId: number, qcType: string, sampleNumber: number) {
+  constructor(sampleType: string, filename: string, method: string, position: string, volume: number, client: string, comment: string, agendoId: number, taxonomyId: number, qcType: string, sampleNumber: number, associated: boolean) {
     this.sampleType = sampleType;
     this.filename = filename;
     this.method = method;
@@ -454,6 +490,7 @@ export class Itemerino {
     this.taxonomyId = taxonomyId;
     this.qcType = qcType;
     this.sampleNumber = sampleNumber;
+    this.associated = associated;
   }
 
 
