@@ -43,7 +43,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
     );
   }
   @ViewChild('table') table: MatTable<Itemerino>;
-  displayedColumns: string[] = ['sampleType', 'filename', 'method', 'position', 'volume', 'edit', 'delete'];
+  displayedColumns: string[] = ['sampleType', 'filename', 'method', 'position', 'volume', 'edit', 'delete', 'add'];
   requestId: number;
 
   taxonomyCode: number
@@ -73,6 +73,16 @@ export class RequestQueueGeneratorComponent implements OnInit {
   path = 'C:\\Xcalibur\\Data';
 
   methodPath = 'C:\\Xcalibur\\methods\\current\\';
+
+  qc1Counter = 0;
+
+  qc2Counter = 0;
+
+  qc3Counter = 0;
+
+  qBSACounter = 0;
+
+  qHELACounter = 0;
 
 
 
@@ -128,10 +138,13 @@ export class RequestQueueGeneratorComponent implements OnInit {
   }
 
   private getSamplesFromRequests(request: any): void {
+    this.samples = [];
     let cac = JSON.parse(request.fields[request.fields.length - 1].value);
+    let sampleNumber = 1;
     for (let val of cac) {
-      let pedete = new Itemerino('Unknown', val[0].value.replace(/\|/g, '_') + '_01', "none", "none", 0, this.clientCode,'', this.request.id, this.taxonomyCode, 'Unknown');
+      let pedete = new Itemerino('Unknown', val[0].value.replace(/\|/g, '_') + '_01', "none", "none", 0, this.clientCode,'', this.request.id, this.taxonomyCode, 'Unknown', sampleNumber);
       this.samples.push(pedete);
+      sampleNumber = sampleNumber + 1;
       // this.samples.push(val[0].value.replace(/\|/g, '_'));
     }
     this.dataSource = this.samples;
@@ -162,47 +175,75 @@ export class RequestQueueGeneratorComponent implements OnInit {
     moveItemInArray(this.samples, event.previousIndex, event.currentIndex);
   }
 
-  public publicAddQCloud2(type: string, associated: boolean): void {
+  public publicAddQCloud2(type: string, associated: boolean, position: number): void {
     let qcType: string;
+    let counterToApply: number;
+    let quantity: string = '';
     switch (type) {
       case 'bsa':
+        if (!associated) {
+          this.qc1Counter = this.qc1Counter + 1;
+          counterToApply = this.qc1Counter;
+        }
         qcType = 'QC01';
         break;
-      case 'hela':
+        case 'hela':
+          if (!associated) {
+            this.qc2Counter = this.qc2Counter + 1;
+            counterToApply = this.qc2Counter;
+            quantity = '_100ng';
+        }
         qcType = 'QC02';
         break
       case 'qc4l':
+        if (!associated) {
+          this.qc3Counter = this.qc3Counter + 1;
+          counterToApply = this.qc3Counter;
+          quantity = '_25ng';
+        }
         qcType = 'QC03';
         break;
       default:
         return;
     }
     if (associated) {
-      this.dataSource.push(new Itemerino('QC', `${this.requestCode}_${this.clientCode}_001_${this.year}${this.month}${this.day}_${qcType}_01_01`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume,'', '', undefined, undefined, qcType));
+      const sampleNumber = this.getLastSampleFromList().sampleNumber;
+      this.dataSource.splice(position, 0, new Itemerino('QC', `${this.requestCode}_${this.clientCode}_00${sampleNumber}_${this.year}${this.month}${this.day}_${qcType}_001_01`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume,'', '', undefined, undefined, qcType, undefined));
     } else {
-      this.dataSource.push(new Itemerino('QC', `${this.year}${this.month}${this.day}_${qcType}_01_01`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume,'','', undefined, undefined, qcType));
+      this.dataSource.splice(position, 0, new Itemerino('QC', `${this.year}${this.month}${this.day}_${qcType}_001_0${counterToApply}${quantity}`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume,'','', undefined, undefined, qcType, undefined));
     }
     this.table.renderRows();
   }
 
-  public publicAddQ(type: string, associated: boolean): void {
+  public publicAddQ(type: string, associated: boolean, position: number): void {
     let qcType: string;
+    let counterToApply: number;
+    let quantity: string = '';
     switch (type) {
       case 'bsa':
+        if (!associated) {
+          this.qBSACounter = this.qBSACounter + 1;
+          counterToApply = this.qBSACounter;
+        }
         qcType = 'QBSA';
         break;
       case 'hela':
+        if (!associated) {
+          this.qHELACounter = this.qHELACounter + 1;
+          counterToApply = this.qHELACounter;
+          quantity = '_1ug';
+        }
         qcType = 'QHELA';
         break
       default:
         return;
     }
     if (associated) {
-      this.dataSource.push(new Itemerino('QC', `${this.requestCode}_${this.clientCode}_001_${this.year}${this.month}${this.day}_${qcType}_01_01`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType));
+      const sampleNumber = this.getLastSampleFromList().sampleNumber;
+      this.dataSource.splice(position, 0, new Itemerino('QC', `${this.requestCode}_${this.clientCode}_00${sampleNumber}_${this.year}${this.month}${this.day}_${qcType}_001_01`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined));
     } else {
-      this.dataSource.push(new Itemerino('QC', `${this.year}${this.month}${this.day}_${qcType}_01_01`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume,'', '', undefined, undefined, qcType));
+      this.dataSource.splice(position, 0, new Itemerino('QC', `${this.year}${this.month}${this.day}_${qcType}_001_0${counterToApply}${quantity}`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume,'', '', undefined, undefined, qcType, undefined));
     }
-
     this.table.renderRows();
   }
 
@@ -212,24 +253,38 @@ export class RequestQueueGeneratorComponent implements OnInit {
     this.table.renderRows();
   }
 
-  public autoQC(): void {
-    if (confirm('All QCs will be removed')) {
-      let backup = [];
-      this.dataSource = this.samples.filter(item => item.sampleType != 'QC');
-      for (let item of this.dataSource) {
-        backup.push(item);
-        backup.push(new Itemerino('QBSA', `${this.requestCode}_${this.clientCode}_001_${this.year}${this.month}${this.day}_QBSA_01_01`, this.getMethodAndVolumeQC(this.selectedInstrument, 'QBSA').method, this.getVialPositionByQCType('QBSA'), this.getMethodAndVolumeQC(this.selectedInstrument, 'QBSA').volume,'', '', undefined, undefined, 'QBSA'));
-        backup.push(new Itemerino('QC', `${this.requestCode}_${this.clientCode}_001_${this.year}${this.month}${this.day}_QC01_01_01`, this.getMethodAndVolumeQC(this.selectedInstrument, 'QC01').method, this.getVialPositionByQCType('QC01'), this.getMethodAndVolumeQC(this.selectedInstrument, 'QC01').volume,'', '', undefined, undefined,'QC01'));
+  private getLastSampleFromList(): Itemerino {
+    let i = this.dataSource.length;
+    while (i--) { // The fatest loop in the west https://web.archive.org/web/20110526000316/https://blogs.oracle.com/greimer/entry/best_way_to_code_a
+      if (this.dataSource[i].sampleNumber != undefined) {
+        return this.dataSource[i];
       }
-      this.dataSource = backup;
-      this.table.renderRows();
     }
   }
 
-  public qHelaCombo(): void {
-    this.dataSource.push(new Itemerino('QC', `${this.year}${this.month}${this.day}_QHELA_01_01`, this.getMethodAndVolumeQC(this.selectedInstrument, 'QHELA').method, '1-V4', this.getMethodAndVolumeQC(this.selectedInstrument, 'QHELA').volume,'', '', undefined, undefined, 'QHELA'));
-    this.publicAddQ('bsa', false);
-    this.publicAddQCloud2('bsa', false);
+  public autoQC(): void { //TODO repair this
+    if (confirm("All QCs will be removed")) {
+      this.getSamplesFromRequests(this.request);
+      this.dataSource = [];
+      for (let sample of this.samples) {
+        this.dataSource.push(sample);
+        this.publicAddQ('bsa', true, this.dataSource.length);
+        this.publicAddQCloud2('bsa', true, this.dataSource.length);
+      }
+    }
+  }
+
+  public qHelaCombo(position: number): void {
+    this.dataSource.splice(position, 0, new Itemerino('QC', `${this.year}${this.month}${this.day}_QHELA_01_01`, this.getMethodAndVolumeQC(this.selectedInstrument, 'QHELA').method, '1-V4', this.getMethodAndVolumeQC(this.selectedInstrument, 'QHELA').volume,'', '', undefined, undefined, 'QHELA', undefined));
+    this.publicAddQ('bsa', false, position);
+    this.publicAddQCloud2('bsa', false, position);
+    this.table.renderRows();
+  }
+
+  public fullCombo(position: number): void {
+    this.publicAddQCloud2('bsa', false, position);
+    this.publicAddQCloud2('hela', false, position);
+    this.publicAddQCloud2('qc4l', false, position);
     this.table.renderRows();
   }
 
@@ -257,8 +312,9 @@ export class RequestQueueGeneratorComponent implements OnInit {
       case 'QC':
         return '1-V1';
       case 'QC02':
-      case 'QHELA':
         return '1-V2';
+      case 'QHELA':
+        return '1-V4';
       case 'QC03':
         return '1-V3';
     }
@@ -313,11 +369,11 @@ export class RequestQueueGeneratorComponent implements OnInit {
           case 'QBSA':
           case 'QC01':
           case 'QC':
-            return { 'method': 'STD-E1-BSA-8min-T3-HCD-IT', 'volume': 0.5 };
+            return { 'method': 'STD-EU-BSA-8min-T3-HCD-IT', 'volume': 0.5 };
             break;
           case 'QC02':
           case 'QHELA':
-            return { 'method': 'STD-E1-QC02-60min-TSP-HCD-IT_max2ul', 'volume': 1 };
+            return { 'method': 'STD-EU-QC02-60min-TSP-HCD-IT_max2ul', 'volume': 1 };
             break;
           case 'QC03':
             return { 'method': 'QC4L-Eclipse', 'volume': 1 };
@@ -364,7 +420,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
       }
     }
     var blob = new Blob([csvString], { type: 'text/csv' })
-    saveAs(blob, "myFile.csv");
+    saveAs(blob, `${this.requestCode}.csv`);
   }
 
   public changeInstrument(): void {
@@ -384,8 +440,9 @@ export class Itemerino {
   agendoId: number;
   taxonomyId: number;
   qcType: string;
+  sampleNumber: number;
 
-  constructor(sampleType: string, filename: string, method: string, position: string, volume: number, client: string, comment: string, agendoId: number, taxonomyId: number, qcType: string) {
+  constructor(sampleType: string, filename: string, method: string, position: string, volume: number, client: string, comment: string, agendoId: number, taxonomyId: number, qcType: string, sampleNumber: number) {
     this.sampleType = sampleType;
     this.filename = filename;
     this.method = method;
@@ -396,6 +453,7 @@ export class Itemerino {
     this.agendoId = agendoId;
     this.taxonomyId = taxonomyId;
     this.qcType = qcType;
+    this.sampleNumber = sampleNumber;
   }
 
 

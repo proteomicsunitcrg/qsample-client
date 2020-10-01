@@ -19,6 +19,8 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatMenuModule } from '@angular/material/menu';
+
 
 
 
@@ -46,7 +48,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MatSortModule,
     MatTooltipModule,
     MatDialogModule,
-    DragDropModule
+    DragDropModule,
+    MatMenuModule
   ],
   exports: [
     MatInputModule,
@@ -66,7 +69,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MatSortModule,
     MatTooltipModule,
     MatDialogModule,
-    DragDropModule
+    DragDropModule,
+    MatMenuModule
   ]
 })
 
