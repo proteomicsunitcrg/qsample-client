@@ -215,7 +215,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
       const sampleNumber = this.getLastSampleFromList(position).sampleNumber;
       this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC', `${this.requestCode}_${this.clientCode}_00${sampleNumber}_${this.year}${this.month}${this.day}_${qcType}_001_${('0' + qcNumber).slice(-2)}`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, true));
     } else {
-      this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC', `${this.year}${this.month}${this.day}_${qcType}_001_0${counterToApply}${quantity}`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, false));
+      this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC', `${this.year}${this.month}${this.day}_${qcType}_001_${('0' + counterToApply).slice(-2)}${quantity}`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, false));
     }
     this.table.renderRows();
   }
@@ -252,7 +252,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
       let qcNumber = this.getAssociatedQCsQuantityBetweenSamples(position, 'QBSA') + 1;
       this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC', `${this.requestCode}_${this.clientCode}_00${sampleNumber}_${this.year}${this.month}${this.day}_${qcType}_001_${('0' + qcNumber).slice(-2)}`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, true));
     } else {
-      this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC', `${this.year}${this.month}${this.day}_${qcType}_001_0${counterToApply}${quantity}`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, false));
+      this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC', `${this.year}${this.month}${this.day}_${qcType}_001_${('0' + counterToApply).slice(-2)}${quantity}`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, false));
     }
     this.table.renderRows();
   }
