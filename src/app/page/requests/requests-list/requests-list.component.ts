@@ -43,30 +43,6 @@ export class RequestsListComponent implements OnInit {
     var keys = Object.keys(this.requestStatusValues);
     return keys.slice(keys.length / 2);
   };
-
-  caca = [
-    {
-      apiKey: "12",
-      class: "Identification of a protein in a gel band",
-      email: "Dio Brando",
-      date_created: "2019-01-12",
-      status: "In progress"
-    },
-    {
-      apiKey: "13",
-      class: "TMT: Proteome quantification",
-        email: "Giorno Giovanna",
-      date_created: "2019-03-23",
-      status: "In progress"
-    },
-    {
-      apiKey: "14",
-      class: "Structural elucidation of crosslinked protein complexes",
-      email: "Muhammad Avdol",
-      date_created: "2020-01-23",
-      status: "Completed"
-    },
-  ];
   columnsToDisplay = ['type', 'creatorMail', 'creationDate', 'status'];
 
   filteredValues = {};
