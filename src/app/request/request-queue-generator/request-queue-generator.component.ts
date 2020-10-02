@@ -311,15 +311,15 @@ export class RequestQueueGeneratorComponent implements OnInit {
 
   public qHelaCombo(position: number): void {
     this.publicAddQ('hela', false, position);
-    this.publicAddQ('bsa', false, position + 1);
-    this.publicAddQCloud2('bsa', false, position + 2);
+    this.publicAddQ('bsa', false, position);
+    this.publicAddQCloud2('bsa', false, position);
     this.table.renderRows();
   }
 
   public fullCombo(position: number): void {
-    this.publicAddQCloud2('bsa', false, position);
-    this.publicAddQCloud2('hela', false, position);
     this.publicAddQCloud2('qc4l', false, position);
+    this.publicAddQCloud2('hela', false, position);
+    this.publicAddQCloud2('bsa', false, position);
     this.table.renderRows();
   }
 
