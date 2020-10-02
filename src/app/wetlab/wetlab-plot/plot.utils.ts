@@ -1,6 +1,8 @@
 import { ThresholdForPlot } from '../../models/ThresholdForPlot';
 export const LAYOUTDARK = {
-
+  autosize: false,
+  width: 700,
+  height: 450,
   shapes: [],
   hovermode: 'closest',
   plot_bgcolor: "#424242",
@@ -25,7 +27,9 @@ export const LAYOUTDARK = {
   }
 };
 export const LAYOUTLIGHT = {
-
+  autosize: false,
+  width: 700,
+  height: 450,
   shapes: [],
   hovermode: 'closest',
   plot_bgcolor: "white",

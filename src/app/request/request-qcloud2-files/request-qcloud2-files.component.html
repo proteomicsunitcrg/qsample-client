@@ -6,16 +6,24 @@
         <!-- {{request.request_code}} -->
     </mat-card-subtitle>
     <mat-card-content>
-        <p *ngFor="let filerino of qCloud2Files">
-            <span [matTooltip]="filerino.ls" [matTooltipPosition]="'above'">
-                {{filerino.filename}}
-            </span>
-            <span class="material-icons align" [class.warning]="filerino.conformity === 'WARNING'"
+        <div>
+            <p *ngFor="let filerino of qCloud2Files">
+                <span [matTooltip]="filerino.ls" [matTooltipPosition]="'above'">
+                    {{filerino.filename}}
+                </span>
+                <span class="material-icons align" [class.warning]="filerino.conformity === 'WARNING'"
                 [class.danger]="filerino.conformity === 'DANGER'" [class.ok]="filerino.conformity === 'OK'"
                 [matTooltip]="filerino.conformityError" [matTooltipPosition]="'right'" [matTooltipClass]="'allow-cr'">
                 fiber_manual_record
             </span>
         </p>
+
+        <!-- <mat-paginator [length]="qCloud2Files.length"
+              [pageSize]="5"
+              [pageSizeOptions]="[5, 10, 25, 100]"
+              (page)="onPaginate($event)">
+        </mat-paginator> -->
+    </div>
         <div *ngIf="qCloud2Files != undefined">
             <div *ngIf="qCloud2Files.length === 0">
                 <p class="mat-body">

@@ -4,6 +4,7 @@ import { QCloud2File } from '../../models/QCloud2File';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RequestService } from '../../services/request.service';
 import { Observable, Subscription } from 'rxjs';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-request-qcloud2-files',

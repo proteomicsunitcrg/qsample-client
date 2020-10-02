@@ -102,7 +102,6 @@ export class RequestPlotPlotComponent implements OnInit {
     const dataForPlot = [];
     this.plotTrace.forEach(
       plotTrace => {
-        const errorBar = [];
         const values = [];
         const filenames = [];
         const dates = [];
@@ -113,7 +112,6 @@ export class RequestPlotPlotComponent implements OnInit {
             filenames.push(plotTracePoint.file.filename);
             dates.push(plotTracePoint.file.creationDate);
             color.push('red');
-            errorBar.push(plotTracePoint.std);
           }
         );
         const trace = {
@@ -122,12 +120,6 @@ export class RequestPlotPlotComponent implements OnInit {
           type: 'bar',
           name: plotTrace.abbreviated,
           filenames: filenames,
-          error_y: {
-            type: 'data',
-            array: errorBar,
-            color: '#85144B',
-            visible: true
-          },
         }
         dataForPlot.push(trace);
       }
@@ -143,8 +135,10 @@ export class RequestPlotPlotComponent implements OnInit {
     const config = {responsive: true}
     Plotly.react(`Graph${this.randString}`, dataForPlot, this.layout, config);
     setTimeout(() => {  // The timeout is necessary because the PLOT isnt instant
-      let plotSVG = document.getElementsByClassName('main-svg')[0];  // the only way because this inst plotly native LUL
-      (plotSVG as any).style["border-radius"] = '4px';
+      const plotsSVG = document.getElementsByClassName('main-svg');  // the only way because this inst plotly native LUL
+      for (let ploterino of (plotsSVG as any)) {
+        ploterino.style['border-radius'] = '4px';
+      }
     }, 100);
   }
 

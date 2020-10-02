@@ -143,8 +143,10 @@ export class WetlabPlotComponent implements OnInit {
     }
     Plotly.react(`Graph${this.randString}`, dataForPlot, this.layout);
     setTimeout(() => {  // The timeout is necessary because the PLOT isnt instant
-      let plotSVG = document.getElementsByClassName('main-svg')[0];  // the only way because this inst plotly native LUL
-      (plotSVG as any).style["border-radius"] = '4px';
+      const plotsSVG = document.getElementsByClassName('main-svg');  // the only way because this inst plotly native LUL
+      for (let ploterino of (plotsSVG as any)) {
+        ploterino.style['border-radius'] = '4px';
+      }
     }, 100);
 
   }

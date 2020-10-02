@@ -37,7 +37,6 @@ export class LoginFormComponent implements OnInit {
   }
 
   public logIn(): void {
-    console.log(this.loginForm.value.username, this.loginForm.value.password);
     this.authService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe(
       res => {
         this.tokenService.saveToken(res.accessToken);

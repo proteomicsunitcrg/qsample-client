@@ -17,9 +17,3 @@
   .hide {
     display: none;
   }
-
-  .graph {
-    border-radius: 20px;
-    width: 700px;
-    height: 450px;
-  }

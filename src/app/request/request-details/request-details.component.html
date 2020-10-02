@@ -4,21 +4,19 @@
             <span class="material-icons cursor" (click)="goBack()">
                 arrow_back_ios
             </span>
-            {{request.classs}} by {{request.created_by.email}} ({{requestCode}})
+            {{request.classs}} by {{request.created_by.email}} ({{requestCode}}) <button style="float: right;" mat-raised-button (click)="goToQGenerator()" >QGenerator</button>
         </div>
     </h1>
     <mat-divider></mat-divider>
 </section>
-<button mat-raised-button (click)="goToQGenerator()" >QGenerator</button>
-<div fxLayout="row" *ngIf="isInternal">
-    <app-request-qcloud2-files style="margin-left: 3%; margin-top: 3%;" [request]="requestCode" fxFlex="17" ></app-request-qcloud2-files>
-</div>
-
-<div fxLayout="row">
-    <div fxLayout="column" fxLayoutAlign="space-around center" fxFlex>
+<mat-grid-list cols = "8" rowHeight="200px" style="margin-top: 30px;">
+    <mat-grid-tile [colspan]="3" [rowspan]="2">
+        <app-request-qcloud2-files style="margin-left: 3%; margin-top: 3%;" [request]="requestCode" ></app-request-qcloud2-files>
+    </mat-grid-tile>
+    <mat-grid-tile  [colspan]="5" [rowspan]="5">
         <app-request-plot-request ></app-request-plot-request>
-    </div>
-</div>
+    </mat-grid-tile>
+</mat-grid-list>
 
 <div fxLayout="row" *ngIf="isInternal">
     <app-request-wetlab-main style="width: 100%; margin-top: 3%;"></app-request-wetlab-main>
