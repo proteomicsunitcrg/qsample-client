@@ -12,8 +12,8 @@ export class DateSelectorComponent implements OnInit {
   constructor(private dataService: DataService) { }
   today = new Date();
   lastMonth = new Date(this.today.getTime());
-  dateStart = new FormControl(new Date(this.lastMonth.setMonth(this.today.getMonth()-1)));
-  dateEnd = new FormControl(new Date (this.today));
+  dateStart = new FormControl(new Date(this.lastMonth.setMonth(this.today.getMonth() - 1)));
+  dateEnd = new FormControl(new Date(this.today));
 
   ngOnInit(): void {
     this.submitDates();

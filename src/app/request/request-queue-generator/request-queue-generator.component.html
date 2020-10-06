@@ -11,7 +11,8 @@
 </section>
 <mat-grid-list cols="4" rowHeight="100px">
     <mat-grid-tile>
-        <button mat-raised-button (click)="publicAddQCloud2('bsa', true, dataSource.length)">Add associated QC01</button>
+        <button mat-raised-button (click)="publicAddQCloud2('bsa', true, dataSource.length)">Add associated
+            QC01</button>
     </mat-grid-tile>
     <mat-grid-tile>
         <button mat-raised-button (click)="publicAddQCloud2('bsa', false, dataSource.length)">Add QC01</button>
@@ -149,4 +150,3 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag [cdkDragData]="row"></tr>
     </table>
 </div>
-

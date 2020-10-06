@@ -8,9 +8,9 @@ describe('RequestPlotPlotComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RequestPlotPlotComponent ]
+      declarations: [RequestPlotPlotComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

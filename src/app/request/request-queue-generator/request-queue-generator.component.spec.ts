@@ -8,9 +8,9 @@ describe('RequestQueueGeneratorComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RequestQueueGeneratorComponent ]
+      declarations: [RequestQueueGeneratorComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

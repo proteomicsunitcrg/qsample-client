@@ -10,7 +10,7 @@ export class TestService {
 
   constructor(private http: HttpClient) { }
 
-  apiPrefix: String = environment.apiPrefix + 'api/test/';
+  apiPrefix: string = environment.apiPrefix + 'api/test/';
 
 
   getPublicContent(): Observable<any> {

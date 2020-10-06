@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { PlotTrace } from '../../models/PlotTrace';
 import { ThemeService } from '../../services/theme.service';
-import { LAYOUTDARK, LAYOUTLIGHT, thresholdShapesDOWN, thresholdShapesUP, thresholdShapesUPDOWN } from '../../wetlab/wetlab-plot/plot.utils'
+import { LAYOUTDARK, LAYOUTLIGHT } from '../../wetlab/wetlab-plot/plot.utils';
 import { Subscription } from 'rxjs';
 import { RequestService } from '../../services/request.service';
 import { LoginFormComponent } from '../../entry-point/login-form/login-form.component';
@@ -13,20 +13,24 @@ declare var Plotly: any;
   templateUrl: './request-plot-plot.component.html',
   styleUrls: ['./request-plot-plot.component.css']
 })
-export class RequestPlotPlotComponent implements OnInit {
+export class RequestPlotPlotComponent implements OnInit, OnDestroy {
 
-  @ViewChild("Graph", { static: true })
+  // tslint:disable-next-line:no-input-rename
+  @ViewChild('Graph', { static: true })
   private Graph: ElementRef;
 
-  @Input("cs") cs;
+  // tslint:disable-next-line:no-input-rename
+  @Input('cs') cs;
 
-  @Input("param") param;
+  // tslint:disable-next-line:no-input-rename
+  @Input('param') param;
 
-  @Input("requestCode") requestCode;
+  // tslint:disable-next-line:no-input-rename
+  @Input('requestCode') requestCode;
 
   randString = '';
 
-  title: string = "";
+  title = '';
 
   // To store the plot data from server
   plotTrace: PlotTrace[];
@@ -119,8 +123,8 @@ export class RequestPlotPlotComponent implements OnInit {
           y: values,
           type: 'bar',
           name: plotTrace.abbreviated,
-          filenames: filenames,
-        }
+          filenames,
+        };
         dataForPlot.push(trace);
       }
     );
@@ -132,17 +136,17 @@ export class RequestPlotPlotComponent implements OnInit {
     }
     this.layout.shapes = [];
     this.layout.title = '';
-    const config = {responsive: true}
+    const config = { responsive: true };
     Plotly.react(`Graph${this.randString}`, dataForPlot, this.layout, config);
     setTimeout(() => {  // The timeout is necessary because the PLOT isnt instant
       const plotsSVG = document.getElementsByClassName('main-svg');  // the only way because this inst plotly native LUL
-      for (let ploterino of (plotsSVG as any)) {
+      for (const ploterino of (plotsSVG as any)) {
         ploterino.style['border-radius'] = '4px';
       }
     }, 100);
   }
 
-    /**
+  /**
    * Relayouts the plot
    */
   private reLayout(): void {
@@ -150,27 +154,27 @@ export class RequestPlotPlotComponent implements OnInit {
     switch (this.themeColor) {
       case 'dark-theme':
         update = {
-          plot_bgcolor: "#424242",
-          paper_bgcolor: "#424242",
+          plot_bgcolor: '#424242',
+          paper_bgcolor: '#424242',
           font: {
             color: '#FFFFFF'
           }
-        }
+        };
         break;
       case 'light-theme':
         update = {
-          plot_bgcolor: "white",
-          paper_bgcolor: "white",
+          plot_bgcolor: 'white',
+          paper_bgcolor: 'white',
           font: {
             color: 'black'
           }
-        }
+        };
         break;
     }
     this.getData();
   }
 
-    /**
+  /**
    * Subscribes to theme changes
    */
   private subscribeToThemeChanges(): void {
@@ -179,7 +183,7 @@ export class RequestPlotPlotComponent implements OnInit {
         this.themeColor = theme;
         this.reLayout();
       }
-    )
+    );
   }
 
 }

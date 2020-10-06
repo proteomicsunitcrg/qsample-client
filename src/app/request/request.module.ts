@@ -20,17 +20,17 @@ import { RequestDetailsPanelComponent } from './request-details-panel/request-de
 
 @NgModule({
   declarations: [
-  RequestMainComponent,
-  RequestDetailsComponent,
-  RequestQcloud2FilesComponent,
-  RequestWetlabMainComponent,
-  RequestPlotRequestComponent,
-  RequestPlotPlotComponent,
-  RequestQueueGeneratorComponent,
-  QGeneratorDialogComponent,
-  RequestPanelDialogComponent,
-  RequestDetailsPanelComponent
-],
+    RequestMainComponent,
+    RequestDetailsComponent,
+    RequestQcloud2FilesComponent,
+    RequestWetlabMainComponent,
+    RequestPlotRequestComponent,
+    RequestPlotPlotComponent,
+    RequestQueueGeneratorComponent,
+    QGeneratorDialogComponent,
+    RequestPanelDialogComponent,
+    RequestDetailsPanelComponent
+  ],
   imports: [
     FlexLayoutModule,
     CommonModule,

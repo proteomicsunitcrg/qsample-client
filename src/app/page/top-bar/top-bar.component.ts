@@ -23,7 +23,7 @@ export class TopBarComponent implements OnInit {
   }
 
   public goToHomePage(): void {
-    this.router.navigate([''])
+    this.router.navigate(['']);
   }
 
   public logout(): void {

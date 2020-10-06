@@ -6,7 +6,8 @@ export class ThresholdParams {
     initialValue: number;
     stepValue: number;
 
-    constructor(thresholdParamsId: { thresholdId: number, contextSourceId: number }, contextSource: ContextSource, enabled: boolean, initialValue: number, stepValue: number){
+    constructor(thresholdParamsId: { thresholdId: number, contextSourceId: number }, contextSource: ContextSource,
+        enabled: boolean, initialValue: number, stepValue: number) {
         this.thresholdParamsId = thresholdParamsId;
         this.contextSource = contextSource;
         this.enabled = enabled;

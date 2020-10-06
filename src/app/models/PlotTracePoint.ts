@@ -8,7 +8,7 @@ export class PlotTracePoint {
     std: number;
     nonConformityStatus: string;
 
-    constructor(file: WetLabFile, value: number, std: number,nonConformityStatus: string) {
+    constructor(file: WetLabFile, value: number, std: number, nonConformityStatus: string) {
         this.file = file;
         this.value = value;
         this.std = std;

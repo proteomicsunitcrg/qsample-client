@@ -30,15 +30,15 @@ export class SettingsUserComponent implements OnInit {
     );
   }
 
-  allUsers: User[] = []
+  allUsers: User[] = [];
 
   ngOnInit(): void {
   }
 
   public openDialog(user: User): void {
-    const dialogRef = this.dialog.open(UserSettingDialog, {
+    const dialogRef = this.dialog.open(UserSettingDialogComponent, {
       data: {
-        user: user
+        user
       }
     });
 
@@ -50,10 +50,10 @@ export class SettingsUserComponent implements OnInit {
 }
 
 @Component({
-  selector: 'dialog-content-example-dialog',
+  selector: 'app-dialog-content-example-dialog',
   templateUrl: 'dialog-content-example-dialog.html',
 })
-export class UserSettingDialog {
+export class UserSettingDialogComponent {
 
   user: User;
   constructor(@Inject(MAT_DIALOG_DATA) public userC: any, private userService: UserService) {
@@ -64,14 +64,14 @@ export class UserSettingDialog {
 
   isInternal: boolean;
 
-  isExternal: boolean
+  isExternal: boolean;
 
   private getMainRole(): void {
-    for (let role of this.user.roles) {
+    for (const role of this.user.roles) {
       if (role.name === 'ROLE_INTERNAL') {
         this.isInternal = true;
         break;
-      } else if (role.name === 'ROLE_EXTERNAL'){
+      } else if (role.name === 'ROLE_EXTERNAL') {
         this.isExternal = true;
         break;
       }

@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class LoginFormComponent implements OnInit {
 
-  error = "";
+  error = '';
   loginForm = new FormGroup({
     username: new FormControl('', [
       Validators.required,
@@ -26,7 +26,8 @@ export class LoginFormComponent implements OnInit {
   });
   isLoggedIn = false;
   roles: string[] = [];
-  constructor(private elementRef: ElementRef, private authService: AuthService, private tokenService: TokenStorageService, private router: Router) { }
+  constructor(private elementRef: ElementRef, private authService: AuthService,
+    private tokenService: TokenStorageService, private router: Router) { }
 
   ngOnInit(): void {
     if (this.tokenService.getToken()) {
@@ -40,7 +41,7 @@ export class LoginFormComponent implements OnInit {
     this.authService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe(
       res => {
         this.tokenService.saveToken(res.accessToken);
-        this.tokenService.saveUser(res)
+        this.tokenService.saveUser(res);
         this.isLoggedIn = true;
         this.roles = this.tokenService.getUser().roles;
         this.navigate();
@@ -49,19 +50,19 @@ export class LoginFormComponent implements OnInit {
         console.error(err);
         switch (err.error.status) {
           case 401:
-            this.error = "Bad credentials";
+            this.error = 'Bad credentials';
             break;
           case 500:
-            this.error = "Internal error";
-            break
+            this.error = 'Internal error';
+            break;
           case 408:
-            this.error = "Request timeout";
+            this.error = 'Request timeout';
             break;
           case 418:
-            this.error = "Agendo Error";
+            this.error = 'Agendo Error';
             break;
           default:
-            this.error = "Unable to connect to QSample"
+            this.error = 'Unable to connect to QSample';
             break;
         }
       }

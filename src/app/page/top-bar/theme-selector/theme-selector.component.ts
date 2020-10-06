@@ -22,9 +22,9 @@ export class ThemeSelectorComponent implements OnInit {
   private setDefaultTheme(): void {
     // if theme is stored in storage - use it
     if (localStorage.getItem('pxTheme')) {
-      //set theme color to one from storage
+      // set theme color to one from storage
       this.themeColor = localStorage.getItem('pxTheme');
-      //add that class to body
+      // add that class to body
       const body = document.getElementsByTagName('body')[0];
       body.classList.add(this.themeColor);
       this.themeService.selectTheme(this.themeColor);
@@ -35,9 +35,9 @@ export class ThemeSelectorComponent implements OnInit {
     const body = document.getElementsByTagName('body')[0];
     body.classList.remove(this.themeColor);
     // switch theme
-    (this.themeColor == 'light-theme') ? this.themeColor = 'dark-theme' : this.themeColor = 'light-theme';
+    (this.themeColor === 'light-theme') ? this.themeColor = 'dark-theme' : this.themeColor = 'light-theme';
     body.classList.add(this.themeColor);
-    //save it to local storage
+    // save it to local storage
     localStorage.setItem('pxTheme', this.themeColor);
     this.themeService.selectTheme(this.themeColor);
   }

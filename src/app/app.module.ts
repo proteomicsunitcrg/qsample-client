@@ -9,7 +9,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { AuthService } from './services/auth.service';
 import { FileService } from './services/file.service';
 import { WetLabService } from './services/wetlab.service';
-import {TestService} from './services/test.service';
+import { TestService } from './services/test.service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RoleGuardService } from './services/role-guard.service';
 import { authInterceptorProviders, AuthInterceptor } from './interceptors/auth.interceptor';
@@ -19,7 +19,7 @@ import { ThemeService } from './services/theme.service';
 import { WetlabPlotComponent } from './wetlab/wetlab-plot/wetlab-plot.component';
 import { ThresholdService } from './services/threshold.service';
 import { DataService } from './services/data.service';
-import { qGeneratorService } from './services/qGenerator.service';
+import { QGeneratorService } from './services/qGenerator.service';
 
 @NgModule({
   declarations: [
@@ -41,7 +41,7 @@ import { qGeneratorService } from './services/qGenerator.service';
     ThresholdService,
     DataService,
     ThemeService,
-    qGeneratorService,
+    QGeneratorService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

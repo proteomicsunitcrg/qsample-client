@@ -1,11 +1,10 @@
-import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, OnDestroy } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { WetLab } from '../../models/WetLab';
 import { PlotTrace } from '../../models/PlotTrace';
 import { Subscription } from 'rxjs';
-import { ThemeSelectorComponent } from '../../page/top-bar/theme-selector/theme-selector.component';
 import { ThemeService } from '../../services/theme.service';
-import { LAYOUTDARK, LAYOUTLIGHT, thresholdShapesDOWN, thresholdShapesUP, thresholdShapesUPDOWN } from './plot.utils'
+import { LAYOUTDARK, LAYOUTLIGHT, thresholdShapesDOWN, thresholdShapesUP, thresholdShapesUPDOWN } from './plot.utils';
 import { ThresholdService } from '../../services/threshold.service';
 import { Threshold } from '../../models/Threshold';
 import { ThresholdForPlot } from '../../models/ThresholdForPlot';
@@ -16,19 +15,21 @@ declare var Plotly: any;
   templateUrl: './wetlab-plot.component.html',
   styleUrls: ['./wetlab-plot.component.css']
 })
-export class WetlabPlotComponent implements OnInit {
+export class WetlabPlotComponent implements OnInit, OnDestroy {
 
   constructor(private dataService: DataService, private themeService: ThemeService, private threholdService: ThresholdService) { }
 
   // The div element to draw the plot
-  @ViewChild("Graph", { static: true })
+  @ViewChild('Graph', { static: true })
   private Graph: ElementRef;
 
   // The plot to draw from parent
-  @Input("plot") plot;
+  // tslint:disable-next-line:no-input-rename
+  @Input('plot') plot;
 
   // The current wetlab
-  @Input("wetlab") wetlab: WetLab;
+  // tslint:disable-next-line:no-input-rename
+  @Input('wetlab') wetlab: WetLab;
 
   // Var to handle the plot layout
   layout: any = {};
@@ -120,14 +121,14 @@ export class WetlabPlotComponent implements OnInit {
           y: values,
           type: 'bar',
           name: plotTrace.abbreviated,
-          filenames: filenames,
+          filenames, // same as filenames: filenames
           error_y: {
             type: 'data',
             array: errorBar,
             color: '#85144B',
             visible: true
           },
-        }
+        };
         dataForPlot.push(trace);
       }
     );
@@ -144,7 +145,7 @@ export class WetlabPlotComponent implements OnInit {
     Plotly.react(`Graph${this.randString}`, dataForPlot, this.layout);
     setTimeout(() => {  // The timeout is necessary because the PLOT isnt instant
       const plotsSVG = document.getElementsByClassName('main-svg');  // the only way because this inst plotly native LUL
-      for (let ploterino of (plotsSVG as any)) {
+      for (const ploterino of (plotsSVG as any)) {
         ploterino.style['border-radius'] = '4px';
       }
     }, 100);
@@ -186,7 +187,7 @@ export class WetlabPlotComponent implements OnInit {
         break;
       default:
         console.log('bad direction!');
-      break;
+        break;
     }
     this.layout.shapes = shapes;
     this.plotGraph();
@@ -215,7 +216,7 @@ export class WetlabPlotComponent implements OnInit {
         this.themeColor = theme;
         this.reLayout();
       }
-    )
+    );
   }
 
   /**
@@ -226,21 +227,21 @@ export class WetlabPlotComponent implements OnInit {
     switch (this.themeColor) {
       case 'dark-theme':
         update = {
-          plot_bgcolor: "#424242",
-          paper_bgcolor: "#424242",
+          plot_bgcolor: '#424242',
+          paper_bgcolor: '#424242',
           font: {
             color: '#FFFFFF'
           }
-        }
+        };
         break;
       case 'light-theme':
         update = {
-          plot_bgcolor: "white",
-          paper_bgcolor: "white",
+          plot_bgcolor: 'white',
+          paper_bgcolor: 'white',
           font: {
             color: 'black'
           }
-        }
+        };
         break;
     }
     this.getData();

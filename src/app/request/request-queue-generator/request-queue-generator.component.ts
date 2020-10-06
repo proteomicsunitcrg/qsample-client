@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RequestService } from '../../services/request.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatTable } from '@angular/material/table';
-import { qGeneratorService } from '../../services/qGenerator.service';
+import { QGeneratorService } from '../../services/qGenerator.service';
 import { Instrument } from '../../models/Instrument';
 import { InjectionCondition } from '../../models/InjectionCondition';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
@@ -20,7 +20,8 @@ import { MatGridList } from '@angular/material/grid-list';
 })
 export class RequestQueueGeneratorComponent implements OnInit {
 
-  constructor(private activeRouter: ActivatedRoute, private requestService: RequestService, private router: Router, private qGeneratorService: qGeneratorService, public dialog: MatDialog) {
+  constructor(private activeRouter: ActivatedRoute, private requestService: RequestService, private router: Router,
+    private qGeneratorService: QGeneratorService, public dialog: MatDialog) {
     this.activeRouter.params.subscribe(
       params => {
         this.requestId = params.apiKey;
@@ -46,7 +47,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
   displayedColumns: string[] = ['sampleType', 'filename', 'method', 'position', 'volume', 'edit', 'delete', 'add'];
   requestId: number;
 
-  taxonomyCode: number
+  taxonomyCode: number;
 
   request: any;
 
@@ -108,18 +109,18 @@ export class RequestQueueGeneratorComponent implements OnInit {
     this.qGeneratorService.getMethodsByAppNameAndInstrumentId(this.request.classs, this.selectedInstrument).subscribe(
       res => {
         this.injectionCondition = res;
-        if (this.injectionCondition != undefined) {
+        if (this.injectionCondition !== undefined) {
           this.applyInjectionConditions();
         }
       }, err => {
         console.error(err);
       }
-    )
+    );
   }
 
   private applyInjectionConditions(): void {
-    for (let item of this.dataSource) {
-      if (item.sampleType === "Unknown") {
+    for (const item of this.dataSource) {
+      if (item.sampleType === 'Unknown') {
         item.method = this.injectionCondition.method;
         item.volume = this.injectionCondition.volume;
       } else {
@@ -131,7 +132,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
   }
 
   private getRequestCodeFromRequest(request: any): string {
-    let cac = JSON.parse(request.fields[request.fields.length - 1].value);
+    const cac = JSON.parse(request.fields[request.fields.length - 1].value);
     this.clientCode = cac[0][0].value.split('|')[1];
     console.log(cac[0][0].value.split('|')[0]);
     return cac[0][0].value.split('|')[0];
@@ -139,10 +140,11 @@ export class RequestQueueGeneratorComponent implements OnInit {
 
   private getSamplesFromRequests(request: any): void {
     this.samples = [];
-    let cac = JSON.parse(request.fields[request.fields.length - 1].value);
+    const cac = JSON.parse(request.fields[request.fields.length - 1].value);
     let sampleNumber = 1;
-    for (let val of cac) {
-      let pedete = new Itemerino('Unknown', val[0].value.replace(/\|/g, '_') + '_01', "none", "none", 0, this.clientCode, '', this.request.id, this.taxonomyCode, 'Unknown', sampleNumber, false);
+    for (const val of cac) {
+      const pedete = new Itemerino('Unknown', val[0].value.replace(/\|/g, '_') + '_01', 'none', 'none', 0,
+        this.clientCode, '', this.request.id, this.taxonomyCode, 'Unknown', sampleNumber, false);
       this.samples.push(pedete);
       sampleNumber = sampleNumber + 1;
       // this.samples.push(val[0].value.replace(/\|/g, '_'));
@@ -151,8 +153,8 @@ export class RequestQueueGeneratorComponent implements OnInit {
   }
 
   private getTaxonomyFromRequest(): string {
-    for (let item of this.request.fields) {
-      if (item.name == 'Taxonomy') {
+    for (const item of this.request.fields) {
+      if (item.name === 'Taxonomy') {
         return item.value;
       }
     }
@@ -178,7 +180,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
   public publicAddQCloud2(type: string, associated: boolean, position: number): void {
     let qcType: string;
     let counterToApply: number;
-    let quantity: string = '';
+    let quantity = '';
     switch (type) {
       case 'bsa':
         if (!associated) {
@@ -194,7 +196,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
           quantity = '_100ng';
         }
         qcType = 'QC02';
-        break
+        break;
       case 'qc4l':
         if (!associated) {
           this.qc3Counter = this.qc3Counter + 1;
@@ -207,15 +209,27 @@ export class RequestQueueGeneratorComponent implements OnInit {
         return;
     }
     let nextSampleIndex = this.getNextSample(this.dataSource[position - 1].sampleNumber);
-      if (nextSampleIndex == undefined) {
-        nextSampleIndex = position;
-      }
+    if (nextSampleIndex === undefined) {
+      nextSampleIndex = position;
+    }
     if (associated) {
-      let qcNumber = this.getAssociatedQCsQuantityBetweenSamples(position, 'QC01') + 1;
+      const qcNumber = this.getAssociatedQCsQuantityBetweenSamples(position, 'QC01') + 1;
       const sampleNumber = this.getLastSampleFromList(position).sampleNumber;
-      this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC', `${this.requestCode}_${this.clientCode}_00${sampleNumber}_${this.year}${this.month}${this.day}_${qcType}_001_${('0' + qcNumber).slice(-2)}`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, true));
+      this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC',
+        // tslint:disable-next-line:max-line-length
+        `${this.requestCode}_${this.clientCode}_00${sampleNumber}_${this.year}${this.month}${this.day}_${qcType}_001_${('0' + qcNumber).slice(-2)}`,
+        // tslint:disable-next-line:max-line-length
+        this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType),
+        // tslint:disable-next-line:max-line-length
+        this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, true));
     } else {
-      this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC', `${this.year}${this.month}${this.day}_${qcType}_001_${('0' + counterToApply).slice(-2)}${quantity}`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, false));
+      this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC',
+        // tslint:disable-next-line:max-line-length
+        `${this.year}${this.month}${this.day}_${qcType}_001_${('0' + counterToApply).slice(-2)}${quantity}`,
+        // tslint:disable-next-line:max-line-length
+        this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType),
+        // tslint:disable-next-line:max-line-length
+        this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, false));
     }
     this.table.renderRows();
   }
@@ -223,7 +237,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
   public publicAddQ(type: string, associated: boolean, position: number): void {
     let qcType: string;
     let counterToApply: number;
-    let quantity: string = '';
+    let quantity = '';
     switch (type) {
       case 'bsa':
         if (!associated) {
@@ -239,19 +253,21 @@ export class RequestQueueGeneratorComponent implements OnInit {
           quantity = '_1ug';
         }
         qcType = 'QHELA';
-        break
+        break;
       default:
         return;
     }
     let nextSampleIndex = this.getNextSample(this.dataSource[position - 1].sampleNumber);
-      if (nextSampleIndex == undefined) {
-        nextSampleIndex = position;
-      }
+    if (nextSampleIndex === undefined) {
+      nextSampleIndex = position;
+    }
     if (associated) {
       const sampleNumber = this.getLastSampleFromList(position).sampleNumber;
-      let qcNumber = this.getAssociatedQCsQuantityBetweenSamples(position, 'QBSA') + 1;
+      const qcNumber = this.getAssociatedQCsQuantityBetweenSamples(position, 'QBSA') + 1;
+      // tslint:disable-next-line:max-line-length
       this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC', `${this.requestCode}_${this.clientCode}_00${sampleNumber}_${this.year}${this.month}${this.day}_${qcType}_001_${('0' + qcNumber).slice(-2)}`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, true));
     } else {
+      // tslint:disable-next-line:max-line-length
       this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC', `${this.year}${this.month}${this.day}_${qcType}_001_${('0' + counterToApply).slice(-2)}${quantity}`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, false));
     }
     this.table.renderRows();
@@ -268,10 +284,10 @@ export class RequestQueueGeneratorComponent implements OnInit {
     for (let i = position; i < this.dataSource.length; i++) {
       console.log(this.dataSource[i]);
 
-      if (this.dataSource[i].sampleType == 'Unknown') {
+      if (this.dataSource[i].sampleType === 'Unknown') {
         return counter;
       } else {
-        if (this.dataSource[i].associated && this.dataSource[i].qcType == qcTypeToFind) {
+        if (this.dataSource[i].associated && this.dataSource[i].qcType === qcTypeToFind) {
           counter = counter + 1;
         }
       }
@@ -280,8 +296,8 @@ export class RequestQueueGeneratorComponent implements OnInit {
   }
 
   private getNextSample(currentSampleNumber: number) {
-    for (let [index,item] of this.dataSource.entries()) {
-      if (item.sampleNumber == currentSampleNumber + 1) {
+    for (const [index, item] of this.dataSource.entries()) {
+      if (item.sampleNumber === currentSampleNumber + 1) {
         return index;
       }
     }
@@ -290,18 +306,19 @@ export class RequestQueueGeneratorComponent implements OnInit {
 
   private getLastSampleFromList(position: number): Itemerino {
     let i = position;
-    while (i--) { // The fatest loop in the west https://web.archive.org/web/20110526000316/https://blogs.oracle.com/greimer/entry/best_way_to_code_a
-      if (this.dataSource[i].sampleNumber != undefined) {
+    // The fatest loop in the west https://web.archive.org/web/20110526000316/https://blogs.oracle.com/greimer/entry/best_way_to_code_a
+    while (i--) {
+      if (this.dataSource[i].sampleNumber !== undefined) {
         return this.dataSource[i];
       }
     }
   }
 
-  public autoQC(): void { //TODO repair this
-    if (confirm("All QCs will be removed")) {
+  public autoQC(): void { // TODO repair this
+    if (confirm('All QCs will be removed')) {
       this.getSamplesFromRequests(this.request);
       this.dataSource = [];
-      for (let sample of this.samples) {
+      for (const sample of this.samples) {
         this.dataSource.push(sample);
         this.publicAddQ('bsa', true, this.dataSource.length);
         this.publicAddQCloud2('bsa', true, this.dataSource.length);
@@ -335,7 +352,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
   private openDialog(item: Itemerino): void {
     const dialogRef = this.dialog.open(QGeneratorDialogComponent, {
       data: {
-        item: item
+        item
       }
     });
   }
@@ -358,7 +375,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
 
   private getMethodAndVolumeQC(instrument: Instrument, qcType: string): any {
     if (instrument === undefined) {
-      return { 'method': 'none', 'volume': 1 };
+      return { method: 'none', volume: 1 };
     }
     switch (instrument.name) {
       case 'Lumos':
@@ -366,17 +383,17 @@ export class RequestQueueGeneratorComponent implements OnInit {
           case 'QBSA':
           case 'QC01':
           case 'QC':
-            return { 'method': 'STD-L1-BSA-8min-T3-HCD-IT', 'volume': 0.5 };
+            return { method: 'STD-L1-BSA-8min-T3-HCD-IT', volume: 0.5 };
             break;
           case 'QC02':
           case 'QHELA':
-            return { 'method': 'STD-L1-QC02-60min-TSP-HCD-IT_max2ul', 'volume': 1 };
+            return { method: 'STD-L1-QC02-60min-TSP-HCD-IT_max2ul', volume: 1 };
             break;
           case 'QC03':
-            return { 'method': 'QC4L-Fusion-Lumos', 'volume': 1 };
+            return { method: 'QC4L-Fusion-Lumos', volume: 1 };
             break;
           default:
-            return { 'method': 'none', 'volume': 1 };
+            return { method: 'none', volume: 1 };
             break;
         }
         break;
@@ -385,17 +402,17 @@ export class RequestQueueGeneratorComponent implements OnInit {
           case 'QBSA':
           case 'QC01':
           case 'QC':
-            return { 'method': 'STD-VL-BSA-8min-T3-CID-IT', 'volume': 0.5 };
+            return { method: 'STD-VL-BSA-8min-T3-CID-IT', volume: 0.5 };
             break;
           case 'QC02':
           case 'QHELA':
-            return { 'method': 'STD-VL-QC02-60min-T20-CID-IT', 'volume': 1 };
+            return { method: 'STD-VL-QC02-60min-T20-CID-IT', volume: 1 };
             break;
           case 'QC03':
-            return { 'method': 'STD-VL-DDA-60min-T4-CID-IT-HCD-FT-QC4L', 'volume': 1 };
+            return { method: 'STD-VL-DDA-60min-T4-CID-IT-HCD-FT-QC4L', volume: 1 };
             break;
           default:
-            return { 'method': 'none', 'volume': 1 };
+            return { method: 'none', volume: 1 };
             break;
         }
         break;
@@ -404,17 +421,17 @@ export class RequestQueueGeneratorComponent implements OnInit {
           case 'QBSA':
           case 'QC01':
           case 'QC':
-            return { 'method': 'STD-EU-BSA-8min-T3-HCD-IT', 'volume': 0.5 };
+            return { method: 'STD-EU-BSA-8min-T3-HCD-IT', volume: 0.5 };
             break;
           case 'QC02':
           case 'QHELA':
-            return { 'method': 'STD-EU-QC02-60min-TSP-HCD-IT_max2ul', 'volume': 1 };
+            return { method: 'STD-EU-QC02-60min-TSP-HCD-IT_max2ul', volume: 1 };
             break;
           case 'QC03':
-            return { 'method': 'QC4L-Eclipse', 'volume': 1 };
+            return { method: 'QC4L-Eclipse', volume: 1 };
             break;
           default:
-            return { 'method': 'none', 'volume': 1 };
+            return { method: 'none', volume: 1 };
             break;
         }
         break;
@@ -423,21 +440,21 @@ export class RequestQueueGeneratorComponent implements OnInit {
           case 'QBSA':
           case 'QC01':
           case 'QC':
-            return { 'method': 'STD-XL-BSA-8min-T3-CID-IT', 'volume': 0.5 };
+            return { method: 'STD-XL-BSA-8min-T3-CID-IT', volume: 0.5 };
             break;
           case 'QC02':
           case 'QHELA':
-            return { 'method': 'STD-XL-60min-T10-CID-IT', 'volume': 1 };
+            return { method: 'STD-XL-60min-T10-CID-IT', volume: 1 };
             break;
           case 'QC03':
-            return { 'method': 'STD-XL-DDA-60min-T4-CID-IT-HCD-FT-QC4L', 'volume': 1 };
+            return { method: 'STD-XL-DDA-60min-T4-CID-IT-HCD-FT-QC4L', volume: 1 };
             break;
           default:
-            return { 'method': 'none', 'volume': 1 };
+            return { method: 'none', volume: 1 };
             break;
         }
       default:
-        return { 'method': 'none', 'volume': 1 };
+        return { method: 'none', volume: 1 };
         break;
     }
   }
@@ -445,16 +462,19 @@ export class RequestQueueGeneratorComponent implements OnInit {
   public generateCSV(): void {
     console.log(this.dataSource);
     const separator = ';';
+    // tslint:disable-next-line:max-line-length
     const header = `Sample Type${separator}File Name${separator}Inst Meth${separator}Position${separator}Inj Vol${separator}Path${separator}Client${separator}Comment${separator}AgendoId${separator}TaxonomyId\n`;
     let csvString: string = header;
-    for (let item of this.dataSource) {
-      if (item.sampleType == 'Unknown') {
+    for (const item of this.dataSource) {
+      if (item.sampleType === 'Unknown') {
+        // tslint:disable-next-line:max-line-length
         csvString = `${csvString}${item.sampleType}${separator}${item.filename}${separator}${this.methodPath}${item.method}${separator}${item.position}${separator}${item.volume}${separator}${this.path}${separator}${item.client}${separator}${item.comment}${separator}${item.agendoId}${separator}${item.taxonomyId}\n`;
       } else {
+        // tslint:disable-next-line:max-line-length
         csvString = `${csvString}${item.sampleType}${separator}${item.filename}${separator}${this.methodPath}${item.method}${separator}${item.position}${separator}${item.volume}${separator}${this.path}${separator}${item.client}${separator}${item.comment}${separator}${separator} \n`;
       }
     }
-    var blob = new Blob([csvString], { type: 'text/csv' })
+    const blob = new Blob([csvString], { type: 'text/csv' });
     saveAs(blob, `${this.requestCode}.csv`);
   }
 
@@ -478,7 +498,8 @@ export class Itemerino {
   sampleNumber: number;
   associated: boolean;
 
-  constructor(sampleType: string, filename: string, method: string, position: string, volume: number, client: string, comment: string, agendoId: number, taxonomyId: number, qcType: string, sampleNumber: number, associated: boolean) {
+  constructor(sampleType: string, filename: string, method: string, position: string, volume: number, client: string, comment: string,
+    agendoId: number, taxonomyId: number, qcType: string, sampleNumber: number, associated: boolean) {
     this.sampleType = sampleType;
     this.filename = filename;
     this.method = method;

@@ -11,14 +11,14 @@ export class RequestService {
 
   constructor(private http: HttpClient) { }
 
+  apiPrefix: string = environment.apiPrefix;
   public currentRequestCode = new Subject<string>();
 
   public changeRequestCode(value: string) {
     this.currentRequestCode.next(value);
-}
+  }
 
 
-  apiPrefix: String = environment.apiPrefix;
 
   public getAllRequestsInternal(): Observable<MiniRequest[]> {
     return this.http.get<MiniRequest[]>(`${this.apiPrefix}api/request`);
@@ -33,10 +33,10 @@ export class RequestService {
   }
 
   public getRequestPlotName(csId: number, paramId: string): Observable<string> {
-    const requestOptions: Object = {
+    const requestOptions: object = {
       /* other options here */
       responseType: 'text'
-    }
+    };
     return this.http.get<string>(`${this.apiPrefix}api/request/getPlotName/${csId}/${paramId}`, requestOptions);
   }
 }

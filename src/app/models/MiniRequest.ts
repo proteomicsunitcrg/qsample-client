@@ -5,7 +5,7 @@ export class MiniRequest {
     creationDate: string;
     creatorMail: string;
     status: RequestStatus;
-    type: string
+    type: string;
 
     constructor(id: number, creationDate: string, creatorMail: string, status: RequestStatus, type: string) {
         this.id = id;

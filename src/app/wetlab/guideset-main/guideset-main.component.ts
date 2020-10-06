@@ -15,7 +15,8 @@ import { Guideset } from '../../models/Guideset';
 })
 export class GuidesetMainComponent implements OnInit {
 
-  constructor(private wetLabService: WetLabService, private fileService: FileService, private router: Router, private guidesetService: GuidesetService) { }
+  constructor(private wetLabService: WetLabService, private fileService: FileService,
+    private router: Router, private guidesetService: GuidesetService) { }
 
   allWetLabs: WetLab[];
 
@@ -83,7 +84,7 @@ export class GuidesetMainComponent implements OnInit {
     if ($event.checked) {
       this.selectedFiles.push(file);
     } else {
-      this.selectedFiles.splice(this.selectedFiles.indexOf(file),1);
+      this.selectedFiles.splice(this.selectedFiles.indexOf(file), 1);
     }
     console.log(this.selectedFiles);
   }

@@ -8,9 +8,9 @@ describe('RequestDetailsPanelComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RequestDetailsPanelComponent ]
+      declarations: [RequestDetailsPanelComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

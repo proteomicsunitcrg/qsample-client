@@ -8,9 +8,9 @@ describe('RequestQcloud2FilesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RequestQcloud2FilesComponent ]
+      declarations: [RequestQcloud2FilesComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

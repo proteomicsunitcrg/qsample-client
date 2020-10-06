@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 @Component({
-    selector: 'dialog-content-request-panel',
+    selector: 'app-dialog-content-request-panel',
     templateUrl: 'dialog-content-request-panel.html',
 })
 export class RequestPanelDialogComponent {

@@ -8,18 +8,18 @@ import { InjectionCondition } from '../models/InjectionCondition';
 @Injectable({
   providedIn: 'root'
 })
-export class qGeneratorService {
+export class QGeneratorService {
 
   constructor(private httpClient: HttpClient) { }
 
-  apiPrefix: String = environment.apiPrefix + 'api/qgenerator/';
+  apiPrefix: string = environment.apiPrefix + 'api/qgenerator/';
 
 
-  public getAvailableInstruments(appName: string): Observable <Instrument[]> {
+  public getAvailableInstruments(appName: string): Observable<Instrument[]> {
     return this.httpClient.get<Instrument[]>(`${this.apiPrefix}available/${appName}`);
   }
 
-  public getMethodsByAppNameAndInstrumentId(appName: string, selectedInstrument: Instrument): Observable <InjectionCondition> {
+  public getMethodsByAppNameAndInstrumentId(appName: string, selectedInstrument: Instrument): Observable<InjectionCondition> {
     return this.httpClient.get<InjectionCondition>(`${this.apiPrefix}getByAppNameAndInstrumentId/${appName}/${selectedInstrument.id}`);
   }
 

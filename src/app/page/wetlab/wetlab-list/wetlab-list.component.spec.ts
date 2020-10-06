@@ -8,9 +8,9 @@ describe('WetlabListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WetlabListComponent ]
+      declarations: [WetlabListComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

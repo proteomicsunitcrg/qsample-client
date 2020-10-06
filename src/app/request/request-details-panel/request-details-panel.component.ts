@@ -11,7 +11,8 @@ export class RequestDetailsPanelComponent implements OnInit {
 
   constructor(private dialog: MatDialog) { }
 
-  @Input("request") request: any;
+  // tslint:disable-next-line:no-input-rename
+  @Input('request') request: any;
 
   ngOnInit(): void {
   }

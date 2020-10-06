@@ -3,7 +3,7 @@ import { Application } from './Application';
 export class InjectionCondition {
 
     id: number;
-    application: Application
+    application: Application;
     instrument: Instrument;
     method: string;
     volume: number;

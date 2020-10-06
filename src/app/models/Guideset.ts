@@ -3,7 +3,7 @@ import { WetLabFile } from './WetLabFile';
 export class Guideset {
     id: number;
     apiKey: string;
-    files: WetLabFile[]
+    files: WetLabFile[];
 
     constructor(id: number, apiKey: string, files: WetLabFile[]) {
         this.id = id;

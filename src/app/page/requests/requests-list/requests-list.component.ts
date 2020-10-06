@@ -18,19 +18,22 @@ export class RequestsListComponent implements OnInit {
 
   dataSource: MatTableDataSource<any>;
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  classFilter = "";
+  classFilter = '';
 
-  statusFilter = "";
+  statusFilter = '';
 
-  creatorFilter= "";
+  creatorFilter = '';
 
   subscription: Subscription;
 
   isInternal: boolean;
 
+  columnsToDisplay = ['type', 'creatorMail', 'creationDate', 'status'];
+
+  filteredValues = {};
 
 
 
@@ -39,13 +42,10 @@ export class RequestsListComponent implements OnInit {
   }
 
   requestStatusValues = RequestStatus;
-  requestStatusValuesKeys() : Array<string> {
-    var keys = Object.keys(this.requestStatusValues);
+  requestStatusValuesKeys(): Array<string> {
+    const keys = Object.keys(this.requestStatusValues);
     return keys.slice(keys.length / 2);
-  };
-  columnsToDisplay = ['type', 'creatorMail', 'creationDate', 'status'];
-
-  filteredValues = {};
+  }
 
   ngOnInit(): void {
     if (this.isInternal) {
@@ -61,14 +61,14 @@ export class RequestsListComponent implements OnInit {
       id: 'type',
       value: this.classFilter
     },
-    {
-      id: 'status',
-      value: filterValue
-    },
-    {
-      id: 'creatorMail',
-      value: this.creatorFilter
-    }
+      {
+        id: 'status',
+        value: filterValue
+      },
+      {
+        id: 'creatorMail',
+        value: this.creatorFilter
+      }
     );
     this.dataSource.filter = JSON.stringify(tableFilters);
   }
@@ -80,14 +80,14 @@ export class RequestsListComponent implements OnInit {
       id: 'type',
       value: filterValue
     },
-    {
-      id: 'status',
-      value: this.statusFilter
-    },
-    {
-      id: 'creatorMail',
-      value: this.creatorFilter
-    }
+      {
+        id: 'status',
+        value: this.statusFilter
+      },
+      {
+        id: 'creatorMail',
+        value: this.creatorFilter
+      }
     );
     this.dataSource.filter = JSON.stringify(tableFilters);
   }
@@ -96,17 +96,17 @@ export class RequestsListComponent implements OnInit {
     const tableFilters = [];
     tableFilters.push(
       {
-      id: 'type',
-      value: this.classFilter
-    },
-    {
-      id: 'status',
-      value: this.statusFilter
-    },
-    {
-      id: 'creatorMail',
-      value: filterValue
-    }
+        id: 'type',
+        value: this.classFilter
+      },
+      {
+        id: 'status',
+        value: this.statusFilter
+      },
+      {
+        id: 'creatorMail',
+        value: filterValue
+      }
     );
     this.dataSource.filter = JSON.stringify(tableFilters);
   }

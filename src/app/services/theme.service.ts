@@ -10,7 +10,7 @@ export class ThemeService {
 
   constructor(private httpClient: HttpClient) { }
 
-  apiPrefix: String = environment.apiPrefix;
+  apiPrefix: string = environment.apiPrefix;
 
   private selectedTheme = new Subject<string>();
   selectedTheme$ = this.selectedTheme.asObservable();

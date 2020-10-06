@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, OnDestroy } from '@angular/core';
 import { FileService } from '../../services/file.service';
 import { QCloud2File } from '../../models/QCloud2File';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -12,14 +12,14 @@ import { MatTableDataSource } from '@angular/material/table';
   templateUrl: './request-qcloud2-files.component.html',
   styleUrls: ['./request-qcloud2-files.component.css']
 })
-export class RequestQcloud2FilesComponent implements OnInit {
+export class RequestQcloud2FilesComponent implements OnInit, OnDestroy {
 
   myEventSubscription: Subscription;
 
   constructor(private fileService: FileService, private requestService: RequestService) {
     this.myEventSubscription = this.requestService.currentRequestCode.subscribe(value => {
       if (value !== undefined) {
-        this.requestCode = value
+        this.requestCode = value;
         this.getQCloud2Files();
       }
     }
@@ -27,7 +27,8 @@ export class RequestQcloud2FilesComponent implements OnInit {
 
   }
 
-  @Input("request") requestCode: string;
+  // tslint:disable-next-line:no-input-rename
+  @Input('request') requestCode: string;
 
   qCloud2Files: QCloud2File[];
 
@@ -37,7 +38,7 @@ export class RequestQcloud2FilesComponent implements OnInit {
 
   dataSource: MatTableDataSource<any>;
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
 
   ngOnInit(): void {

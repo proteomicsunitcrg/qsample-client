@@ -7,7 +7,7 @@ export class ContextSource {
     name: string;
     charge: number;
     mz: number;
-    traceColor: TraceColor
+    traceColor: TraceColor;
 
     constructor(id: number, apiKey: string, abbreviated: string, name: string, charge: number, mz: number, traceColor: TraceColor) {
         this.id = id;

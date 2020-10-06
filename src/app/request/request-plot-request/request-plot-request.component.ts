@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { RequestService } from '../../services/request.service';
 
@@ -7,7 +7,7 @@ import { RequestService } from '../../services/request.service';
   templateUrl: './request-plot-request.component.html',
   styleUrls: ['./request-plot-request.component.css']
 })
-export class RequestPlotRequestComponent implements OnInit {
+export class RequestPlotRequestComponent implements OnInit, OnDestroy {
 
   myEventSubscription: Subscription;
 
@@ -16,7 +16,7 @@ export class RequestPlotRequestComponent implements OnInit {
   constructor(private requestService: RequestService) {
     this.myEventSubscription = this.requestService.currentRequestCode.subscribe(value => {
       if (value !== undefined) {
-        this.requestCode = value
+        this.requestCode = value;
       }
     }
     );

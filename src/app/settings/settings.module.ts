@@ -8,14 +8,14 @@ import { SharedModule } from '../shared.module';
 import { SettingsMainComponent } from './settings-main/settings-main.component';
 import { SettingsRouter } from './settings.router';
 import { SettingsSidebarComponent } from './settings-sidebar/settings-sidebar.component';
-import { SettingsUserComponent, UserSettingDialog } from './settings-user/settings-user.component';
+import { SettingsUserComponent, UserSettingDialogComponent } from './settings-user/settings-user.component';
 
 @NgModule({
     declarations: [
         SettingsMainComponent,
         SettingsSidebarComponent,
         SettingsUserComponent,
-        UserSettingDialog
+        UserSettingDialogComponent
     ],
     imports: [
         FlexLayoutModule,

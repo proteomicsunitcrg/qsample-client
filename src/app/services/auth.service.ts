@@ -12,11 +12,17 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
+  apiPrefix: string = environment.apiPrefix;
+
+
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
+
   private isInternal = new BehaviorSubject<boolean>(false);
 
   private isAdmin = new BehaviorSubject<boolean>(false);
 
-  apiPrefix: String = environment.apiPrefix;
 
   public updateIsInternal(value: boolean) {
     this.isInternal.next(value);
@@ -34,11 +40,8 @@ export class AuthService {
     return this.isAdmin.asObservable();
   }
 
-  httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-  };
 
-  public login(user: String, password: String): Observable<any> {
-    return this.http.post<any>(`${this.apiPrefix}api/auth/signin`, {username: user, password: password}, this.httpOptions);
+  public login(username: string, password: string): Observable<any> {
+    return this.http.post<any>(`${this.apiPrefix}api/auth/signin`, { username, password }, this.httpOptions);
   }
 }

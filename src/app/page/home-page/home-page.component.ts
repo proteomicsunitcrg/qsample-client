@@ -8,7 +8,7 @@ import { TokenStorageService } from '../../services/token-storage.service';
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.css']
 })
-export class HomePage implements OnInit {
+export class HomePageComponent implements OnInit {
 
   constructor(private authService: AuthService, private tokenStorageService: TokenStorageService) {
     this.subscription = this.authService.getIsInternal().subscribe(res => this.isInternal = res);
@@ -17,7 +17,7 @@ export class HomePage implements OnInit {
   subscription: Subscription;
   isInternal = false;
   ngOnInit(): void {
-    this.authService.updateIsInternal(this.tokenStorageService.isInternalUser())
+    this.authService.updateIsInternal(this.tokenStorageService.isInternalUser());
     console.log(this.isInternal);
 
   }

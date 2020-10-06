@@ -8,9 +8,9 @@ describe('WetlabPlotComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WetlabPlotComponent ]
+      declarations: [WetlabPlotComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

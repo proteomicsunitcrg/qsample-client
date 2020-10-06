@@ -13,7 +13,7 @@ export class FileService {
 
   constructor(private httpClient: HttpClient) { }
 
-  apiPrefix: String = environment.apiPrefix + 'api/file/';
+  apiPrefix: string = environment.apiPrefix + 'api/file/';
 
   public getWetlabLists(): Observable<WetLab> {
     return this.httpClient.get<WetLab>(`${this.apiPrefix}getAllWetlabsType`);

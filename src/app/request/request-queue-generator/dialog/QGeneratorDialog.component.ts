@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { Itemerino } from '../request-queue-generator.component';
 @Component({
-    selector: 'dialog-content-qgenerator-dialog',
+    selector: 'app-dialog-content-qgenerator-dialog',
     templateUrl: 'dialog-content-qgenerator-dialog.html',
 })
 export class QGeneratorDialogComponent {

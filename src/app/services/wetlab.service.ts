@@ -11,7 +11,7 @@ export class WetLabService {
 
   constructor(private httpClient: HttpClient) { }
 
-  apiPrefix: String = environment.apiPrefix;
+  apiPrefix: string = environment.apiPrefix;
 
   public getWetlabLists(): Observable<WetLab[]> {
     return this.httpClient.get<WetLab[]>(`${this.apiPrefix}api/wetlab/getAllWetlabsType`);

@@ -13,12 +13,12 @@ export class GuidesetService {
 
   constructor(private httpClient: HttpClient) { }
 
-  apiPrefix: String = environment.apiPrefix + 'api/guideset/';
+  apiPrefix: string = environment.apiPrefix + 'api/guideset/';
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
   public setGuideset(wetlab: WetLab, files: File[]): Observable<Guideset> {
-    const params = JSON.stringify(files)
+    const params = JSON.stringify(files);
     return this.httpClient.post<Guideset>(`${this.apiPrefix}set/${wetlab.apiKey}`, params, this.httpOptions);
   }
 
@@ -27,7 +27,7 @@ export class GuidesetService {
   }
 
   public deleteGuideset(guideset: Guideset): Observable<boolean> {
-    const params = JSON.stringify(guideset)
+    const params = JSON.stringify(guideset);
     return this.httpClient.post<boolean>(`${this.apiPrefix}delete`, params, this.httpOptions);
   }
 

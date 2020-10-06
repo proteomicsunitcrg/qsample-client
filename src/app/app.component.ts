@@ -9,7 +9,7 @@ import { AuthService } from './services/auth.service';
 })
 export class AppComponent implements OnInit {
 
-  constructor(private tokenStorageService: TokenStorageService, private authService: AuthService) {}
+  constructor(private tokenStorageService: TokenStorageService, private authService: AuthService) { }
 
   title = 'qsample-client';
 
