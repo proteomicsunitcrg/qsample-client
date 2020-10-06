@@ -2,3 +2,11 @@ table {
   margin-top: 20px;
   width: 90%;
 }
+
+.cursor {
+  cursor: pointer;
+}
+
+tr {
+  cursor: grab;
+}
