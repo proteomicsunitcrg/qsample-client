@@ -10,15 +10,15 @@
     </h1>
     <mat-divider></mat-divider>
 </section>
-<mat-grid-list cols="10" rowHeight="200px" style="margin-top: 30px;">
+<mat-grid-list cols="10" rowHeight="150px">
     <mat-grid-tile [colspan]="3" [rowspan]="2">
         <app-request-details-panel [request]="request" style="margin-left: 50px;"></app-request-details-panel>
     </mat-grid-tile>
-    <mat-grid-tile [colspan]="7" [rowspan]="5">
-        <app-request-plot-request></app-request-plot-request>
+    <mat-grid-tile [colspan]="7" [rowspan]="8">
+        <app-request-plot-request style="margin-top: 0px;"></app-request-plot-request>
     </mat-grid-tile>
-    <mat-grid-tile [colspan]="3" [rowspan]="2">
-        <app-request-qcloud2-files style="margin-left: 50px; margin-top: 3%;" [request]="requestCode">
+    <mat-grid-tile [colspan]="3" [rowspan]="3">
+        <app-request-qcloud2-files style="margin-left: 50px;" [request]="requestCode">
         </app-request-qcloud2-files>
     </mat-grid-tile>
 </mat-grid-list>

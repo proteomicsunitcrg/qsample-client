@@ -1,6 +1,6 @@
 <mat-card *ngIf="request != undefined">
     <mat-card-title>
-        Request details <button style="float: right;" mat-stroked-button>More</button>
+        Request details <button style="float: right;" mat-stroked-button (click)="openDialog(request)">More</button>
     </mat-card-title>
     <mat-card-content>
         <mat-list>
