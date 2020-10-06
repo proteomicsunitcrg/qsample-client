@@ -1,0 +1,29 @@
+<mat-card *ngIf="request != undefined">
+    <mat-card-title>
+        Request details <button style="float: right;" mat-stroked-button>More</button>
+    </mat-card-title>
+    <mat-card-content>
+        <mat-list>
+            <mat-list-item>
+                <p>
+                    <span class="bold">Application:</span> {{request.classs}}
+                </p>
+            </mat-list-item>
+            <mat-list-item>
+                <p>
+                    <span class="bold">Creator:</span> {{request.created_by.name}} ({{request.created_by.email}})
+                </p>
+            </mat-list-item>
+            <mat-list-item>
+                <p>
+                    <span class="bold">Creation date:</span> {{request.date_created}}
+                </p>
+            </mat-list-item>
+            <mat-list-item>
+                <p>
+                    <span class="bold">Group:</span> {{request.group}}
+                </p>
+            </mat-list-item>
+        </mat-list>
+    </mat-card-content>
+</mat-card>

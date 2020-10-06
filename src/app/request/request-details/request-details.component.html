@@ -4,17 +4,22 @@
             <span class="material-icons cursor" (click)="goBack()">
                 arrow_back_ios
             </span>
-            {{request.classs}} by {{request.created_by.email}} ({{requestCode}}) <button style="float: right;" mat-raised-button (click)="goToQGenerator()" >QGenerator</button>
+            {{requestCode}}<button style="float: right;" mat-raised-button
+                (click)="goToQGenerator()">QGenerator</button>
         </div>
     </h1>
     <mat-divider></mat-divider>
 </section>
-<mat-grid-list cols = "8" rowHeight="200px" style="margin-top: 30px;">
+<mat-grid-list cols="10" rowHeight="200px" style="margin-top: 30px;">
     <mat-grid-tile [colspan]="3" [rowspan]="2">
-        <app-request-qcloud2-files style="margin-left: 3%; margin-top: 3%;" [request]="requestCode" ></app-request-qcloud2-files>
+        <app-request-details-panel [request]="request" style="margin-left: 50px;"></app-request-details-panel>
     </mat-grid-tile>
-    <mat-grid-tile  [colspan]="5" [rowspan]="5">
-        <app-request-plot-request ></app-request-plot-request>
+    <mat-grid-tile [colspan]="7" [rowspan]="5">
+        <app-request-plot-request></app-request-plot-request>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="3" [rowspan]="2">
+        <app-request-qcloud2-files style="margin-left: 50px; margin-top: 3%;" [request]="requestCode">
+        </app-request-qcloud2-files>
     </mat-grid-tile>
 </mat-grid-list>
 
