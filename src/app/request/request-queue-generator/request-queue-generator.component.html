@@ -9,7 +9,7 @@
     </h1>
     <mat-divider></mat-divider>
 </section>
-<mat-grid-list cols="4" rowHeight="100px">
+<!-- <mat-grid-list cols="4" rowHeight="100px">
     <mat-grid-tile>
         <button mat-raised-button (click)="publicAddQCloud2('bsa', true, dataSource.length)">Add associated
             QC01</button>
@@ -37,7 +37,7 @@
         <button mat-raised-button (click)="publicAddQCloud2('qc4l', false, dataSource.length)">Add QC03</button>
     </mat-grid-tile>
 </mat-grid-list>
-<mat-divider></mat-divider>
+<mat-divider></mat-divider> -->
 
 <mat-grid-list cols="4" rowHeight="100px">
     <mat-grid-tile>
@@ -73,12 +73,12 @@
     <mat-grid-tile>
         <button mat-raised-button (click)="autoQC()">Auto QCs</button>
     </mat-grid-tile>
-    <mat-grid-tile>
+     <!--<mat-grid-tile>
         <button mat-raised-button (click)="qHelaCombo(dataSource.length)">QHela combo</button>
     </mat-grid-tile>
     <mat-grid-tile>
         <button mat-raised-button (click)="fullCombo(dataSource.length)">Full combo</button>
-    </mat-grid-tile>
+    </mat-grid-tile> -->
     <mat-grid-tile>
         <button mat-raised-button (click)="generateCSV()">Generate CSV</button>
     </mat-grid-tile>
@@ -134,15 +134,15 @@
             <td mat-cell *matCellDef="let element; index as i;">
                 <button mat-button [disabled]="element.sampleType != 'Unknown'" [matMenuTriggerFor]="menu">Add</button>
                 <mat-menu #menu="matMenu">
-                    <button mat-menu-item (click)="publicAddQCloud2('bsa', true, i + 1)">Add associated QC01</button>
-                    <button mat-menu-item (click)="publicAddQCloud2('bsa', false, i + 1)">Add QC01</button>
-                    <button mat-menu-item (click)="publicAddQ('bsa', true, i + 1)">Add associated QBSA</button>
-                    <button mat-menu-item (click)="publicAddQ('bsa', false, i + 1)">Add QBSA</button>
-                    <button mat-menu-item (click)="publicAddQCloud2('hela', false, i + 1)">Add QC02</button>
-                    <button mat-menu-item (click)="publicAddQ('hela', false, i + 1)">Add QHela</button>
-                    <button mat-menu-item (click)="publicAddQCloud2('qc4l', false, i + 1)">Add QC03</button>
-                    <button mat-menu-item (click)="qHelaCombo(i + 1)">QHela combo</button>
-                    <button mat-menu-item (click)="fullCombo(i + 1)">Full combo</button>
+                    <button mat-menu-item (click)="addQC('QC01', i, true)">Add associated QC01</button>
+                    <button mat-menu-item (click)="addQC('QC01', i, false)">Add QC01</button>
+                    <button mat-menu-item (click)="addQC('QBSA', i, true)">Add associated QBSA</button>
+                    <button mat-menu-item (click)="addQC('QBSA', i, false)">Add QBSA</button>
+                    <button mat-menu-item (click)="addQC('QC02', i, false)">Add QC02</button>
+                    <button mat-menu-item (click)="addQC('QHELA', i, false)">Add QHela</button>
+                    <button mat-menu-item (click)="addQC('QC03', i, false)">Add QC03</button>
+                    <button mat-menu-item (click)="qHelaCombo(i)">QHela combo</button>
+                    <button mat-menu-item (click)="fullCombo(i)">Full combo</button>
                 </mat-menu>
             </td>
         </ng-container>

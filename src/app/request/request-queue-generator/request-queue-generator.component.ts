@@ -63,6 +63,8 @@ export class RequestQueueGeneratorComponent implements OnInit {
 
   dataSource: Itemerino[] = [];
 
+  cloneGlobal: Itemerino[] = [];
+
   clientCode: string;
 
   availableInstruments: Instrument[] = [];
@@ -75,15 +77,15 @@ export class RequestQueueGeneratorComponent implements OnInit {
 
   methodPath = 'C:\\Xcalibur\\methods\\current\\';
 
-  qc1Counter = 0;
+  qc1Counter = 1;
 
-  qc2Counter = 0;
+  qc2Counter = 1;
 
-  qc3Counter = 0;
+  qc3Counter = 1;
 
-  qBSACounter = 0;
+  qBSACounter = 1;
 
-  qHELACounter = 0;
+  qHELACounter = 1;
 
 
 
@@ -150,6 +152,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
       // this.samples.push(val[0].value.replace(/\|/g, '_'));
     }
     this.dataSource = this.samples;
+    this.cloneGlobal = this.samples;
   }
 
   private getTaxonomyFromRequest(): string {
@@ -178,99 +181,229 @@ export class RequestQueueGeneratorComponent implements OnInit {
   }
 
   public publicAddQCloud2(type: string, associated: boolean, position: number): void {
-    let qcType: string;
-    let counterToApply: number;
-    let quantity = '';
+    return;
+    // let qcType: string;
+    // let counterToApply: number;
+    // let quantity = '';
+    // switch (type) {
+    //   case 'bsa':
+    //     if (!associated) {
+    //       this.qc1Counter = this.qc1Counter + 1;
+    //       counterToApply = this.qc1Counter;
+    //     }
+    //     qcType = 'QC01';
+    //     break;
+    //   case 'hela':
+    //     if (!associated) {
+    //       this.qc2Counter = this.qc2Counter + 1;
+    //       counterToApply = this.qc2Counter;
+    //       quantity = '_100ng';
+    //     }
+    //     qcType = 'QC02';
+    //     break;
+    //   case 'qc4l':
+    //     if (!associated) {
+    //       this.qc3Counter = this.qc3Counter + 1;
+    //       counterToApply = this.qc3Counter;
+    //       quantity = '_25ng';
+    //     }
+    //     qcType = 'QC03';
+    //     break;
+    //   default:
+    //     return;
+    // }
+    // let nextSampleIndex = this.getNextSample(this.dataSource[position - 1].sampleNumber);
+    // if (nextSampleIndex === undefined) {
+    //   nextSampleIndex = position;
+    // }
+    // if (associated) {
+    //   const qcNumber = this.getAssociatedQCsQuantityBetweenSamples(position, 'QC01') + 1;
+    //   const sampleNumber = this.getLastSampleFromList(position).sampleNumber;
+    //   this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC',
+    //     // tslint:disable-next-line:max-line-length
+    //     `${this.requestCode}_${this.clientCode}_00${sampleNumber}_${this.year}${this.month}${this.day}_${qcType}_001_${('0' + qcNumber).slice(-2)}`,
+    //     // tslint:disable-next-line:max-line-length
+    //     this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType),
+    //     // tslint:disable-next-line:max-line-length
+    //     this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, true));
+    // } else {
+    //   this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC',
+    //     // tslint:disable-next-line:max-line-length
+    //     `${this.year}${this.month}${this.day}_${qcType}_001_${('0' + counterToApply).slice(-2)}${quantity}`,
+    //     // tslint:disable-next-line:max-line-length
+    //     this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType),
+    //     // tslint:disable-next-line:max-line-length
+    //     this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, false));
+    // }
+    // this.table.renderRows();
+  }
+
+  public publicAddQ(type: string, associated: boolean, position: number): void {
+    return;
+    // let qcType: string;
+    // let counterToApply: number;
+    // let quantity = '';
+    // switch (type) {
+    //   case 'bsa':
+    //     if (!associated) {
+    //       this.qBSACounter = this.qBSACounter + 1;
+    //       counterToApply = this.qBSACounter;
+    //     }
+    //     qcType = 'QBSA';
+    //     break;
+    //   case 'hela':
+    //     if (!associated) {
+    //       this.qHELACounter = this.qHELACounter + 1;
+    //       counterToApply = this.qHELACounter;
+    //       quantity = '_1ug';
+    //     }
+    //     qcType = 'QHELA';
+    //     break;
+    //   default:
+    //     return;
+    // }
+    // let nextSampleIndex = this.getNextSample(this.dataSource[position - 1].sampleNumber);
+    // if (nextSampleIndex === undefined) {
+    //   nextSampleIndex = position;
+    // }
+    // if (associated) {
+    //   const sampleNumber = this.getLastSampleFromList(position).sampleNumber;
+    //   const qcNumber = this.getAssociatedQCsQuantityBetweenSamples(position, 'QBSA') + 1;
+    //   // tslint:disable-next-line:max-line-length
+    //   this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC', `${this.requestCode}_${this.clientCode}_00${sampleNumber}_${this.year}${this.month}${this.day}_${qcType}_001_${('0' + qcNumber).slice(-2)}`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, true));
+    // } else {
+    //   // tslint:disable-next-line:max-line-length
+    //   this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC', `${this.year}${this.month}${this.day}_${qcType}_001_${('0' + counterToApply).slice(-2)}${quantity}`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, false));
+    // }
+    // this.table.renderRows();
+  }
+
+
+  public addQC(type: string, index: number, associated?: boolean,) {
+
+
+    // return
     switch (type) {
-      case 'bsa':
-        if (!associated) {
-          this.qc1Counter = this.qc1Counter + 1;
-          counterToApply = this.qc1Counter;
+      case 'QC01':
+        switch (associated) {
+          case true:
+            let sampleNumber = this.getPositionFromSampleName(this.dataSource[index].filename);
+
+            let qcNumber = this.getQCsByTypeBetweenIndexs(index, this.getNextSampleIndexGivenActualIndex(index), type);
+            console.log(qcNumber);
+            this.dataSource.splice(this.getNextSampleIndexGivenActualIndex(index), 0, new Itemerino('QC',
+              // tslint:disable-next-line:max-line-length
+              `${this.requestCode}_${this.clientCode}_${sampleNumber}_${this.year}${this.month}${this.day}_${type}_001_${('0' + qcNumber).slice(-2)}`,
+              // tslint:disable-next-line:max-line-length
+              this.getMethodAndVolumeQC(this.selectedInstrument, type).method, this.getVialPositionByQCType(type),
+              // tslint:disable-next-line:max-line-length
+              this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, '', '', undefined, undefined, type, undefined, true));
+            break;
+          case false:
+            this.dataSource.splice(this.getNextSampleIndexGivenActualIndex(index), 0, new Itemerino('QC',
+              // tslint:disable-next-line:max-line-length
+              `${this.year}${this.month}${this.day}_${type}_001_${('0' + this.qc1Counter).slice(-2)}`,
+              // tslint:disable-next-line:max-line-length
+              this.getMethodAndVolumeQC(this.selectedInstrument, type).method, this.getVialPositionByQCType(type),
+              // tslint:disable-next-line:max-line-length
+              this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, '', '', undefined, undefined, type, undefined, false));
+            this.qc1Counter = this.qc1Counter + 1;
+            break;
         }
-        qcType = 'QC01';
+
         break;
-      case 'hela':
-        if (!associated) {
-          this.qc2Counter = this.qc2Counter + 1;
-          counterToApply = this.qc2Counter;
-          quantity = '_100ng';
+      case 'QC02':
+        this.dataSource.splice(this.getNextSampleIndexGivenActualIndex(index), 0, new Itemerino('QC',
+          // tslint:disable-next-line:max-line-length
+          `${this.year}${this.month}${this.day}_${type}_001_${('0' + this.qc2Counter).slice(-2)}_100ng`,
+          // tslint:disable-next-line:max-line-length
+          this.getMethodAndVolumeQC(this.selectedInstrument, type).method, this.getVialPositionByQCType(type),
+          // tslint:disable-next-line:max-line-length
+          this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, '', '', undefined, undefined, type, undefined, false));
+        this.qc2Counter = this.qc2Counter + 1;
+        break;
+      case 'QC03':
+        this.dataSource.splice(this.getNextSampleIndexGivenActualIndex(index), 0, new Itemerino('QC',
+          // tslint:disable-next-line:max-line-length
+          `${this.year}${this.month}${this.day}_${type}_001_${('0' + this.qc3Counter).slice(-2)}_25ng`,
+          // tslint:disable-next-line:max-line-length
+          this.getMethodAndVolumeQC(this.selectedInstrument, type).method, this.getVialPositionByQCType(type),
+          // tslint:disable-next-line:max-line-length
+          this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, '', '', undefined, undefined, type, undefined, false));
+        this.qc3Counter = this.qc3Counter + 1;
+        break;
+      case 'QBSA':
+        switch (associated) {
+          case true:
+            let sampleNumber = this.getPositionFromSampleName(this.dataSource[index].filename);
+
+            let qcNumber = this.getQCsByTypeBetweenIndexs(index, this.getNextSampleIndexGivenActualIndex(index), type);
+
+            this.dataSource.splice(this.getNextSampleIndexGivenActualIndex(index), 0, new Itemerino('QC',
+              // tslint:disable-next-line:max-line-length
+              `${this.requestCode}_${this.clientCode}_${sampleNumber}_${this.year}${this.month}${this.day}_${type}_001_${('0' + qcNumber).slice(-2)}`,
+              // tslint:disable-next-line:max-line-length
+              this.getMethodAndVolumeQC(this.selectedInstrument, type).method, this.getVialPositionByQCType(type),
+              // tslint:disable-next-line:max-line-length
+              this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, '', '', undefined, undefined, type, undefined, true));
+            break;
+          case false:
+            this.dataSource.splice(this.getNextSampleIndexGivenActualIndex(index), 0, new Itemerino('QC',
+              // tslint:disable-next-line:max-line-length
+              `${this.year}${this.month}${this.day}_${type}_001_${('0' + this.qBSACounter).slice(-2)}`,
+              // tslint:disable-next-line:max-line-length
+              this.getMethodAndVolumeQC(this.selectedInstrument, type).method, this.getVialPositionByQCType(type),
+              // tslint:disable-next-line:max-line-length
+              this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, '', '', undefined, undefined, type, undefined, false));
+            this.qBSACounter = this.qBSACounter + 1;
+
+            break;
         }
-        qcType = 'QC02';
+
         break;
-      case 'qc4l':
-        if (!associated) {
-          this.qc3Counter = this.qc3Counter + 1;
-          counterToApply = this.qc3Counter;
-          quantity = '_25ng';
-        }
-        qcType = 'QC03';
+      case 'QHELA':
+        this.dataSource.splice(this.getNextSampleIndexGivenActualIndex(index), 0, new Itemerino('QC',
+          // tslint:disable-next-line:max-line-length
+          `${this.year}${this.month}${this.day}_${type}_001_${('0' + this.qHELACounter).slice(-2)}_1ug`,
+          // tslint:disable-next-line:max-line-length
+          this.getMethodAndVolumeQC(this.selectedInstrument, type).method, this.getVialPositionByQCType(type),
+          // tslint:disable-next-line:max-line-length
+          this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, '', '', undefined, undefined, type, undefined, false));
+        this.qHELACounter = this.qHELACounter + 1;
         break;
+
       default:
-        return;
-    }
-    let nextSampleIndex = this.getNextSample(this.dataSource[position - 1].sampleNumber);
-    if (nextSampleIndex === undefined) {
-      nextSampleIndex = position;
-    }
-    if (associated) {
-      const qcNumber = this.getAssociatedQCsQuantityBetweenSamples(position, 'QC01') + 1;
-      const sampleNumber = this.getLastSampleFromList(position).sampleNumber;
-      this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC',
-        // tslint:disable-next-line:max-line-length
-        `${this.requestCode}_${this.clientCode}_00${sampleNumber}_${this.year}${this.month}${this.day}_${qcType}_001_${('0' + qcNumber).slice(-2)}`,
-        // tslint:disable-next-line:max-line-length
-        this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType),
-        // tslint:disable-next-line:max-line-length
-        this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, true));
-    } else {
-      this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC',
-        // tslint:disable-next-line:max-line-length
-        `${this.year}${this.month}${this.day}_${qcType}_001_${('0' + counterToApply).slice(-2)}${quantity}`,
-        // tslint:disable-next-line:max-line-length
-        this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType),
-        // tslint:disable-next-line:max-line-length
-        this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, false));
+        break;
     }
     this.table.renderRows();
   }
 
-  public publicAddQ(type: string, associated: boolean, position: number): void {
-    let qcType: string;
-    let counterToApply: number;
-    let quantity = '';
-    switch (type) {
-      case 'bsa':
-        if (!associated) {
-          this.qBSACounter = this.qBSACounter + 1;
-          counterToApply = this.qBSACounter;
+  getQCsByTypeBetweenIndexs(indexStart: number, indexEnd: number, type: string) {
+    let counter = 1;
+    for (let i = indexStart + 1; i < indexEnd; i++) {
+      if (this.dataSource[i].sampleType !== 'Unknown') {
+        if (this.dataSource[i].qcType === type && this.dataSource[i].associated) {
+          counter = counter + 1;
         }
-        qcType = 'QBSA';
-        break;
-      case 'hela':
-        if (!associated) {
-          this.qHELACounter = this.qHELACounter + 1;
-          counterToApply = this.qHELACounter;
-          quantity = '_1ug';
-        }
-        qcType = 'QHELA';
-        break;
-      default:
-        return;
+      } else {
+        return counter;
+      }
     }
-    let nextSampleIndex = this.getNextSample(this.dataSource[position - 1].sampleNumber);
-    if (nextSampleIndex === undefined) {
-      nextSampleIndex = position;
+    return counter;
+  }
+
+  getNextSampleIndexGivenActualIndex(index: number) {
+    let i = index + 1;
+
+    while (i < this.dataSource.length) {
+      if (this.dataSource[i].sampleType === 'Unknown') {
+        console.log(this.dataSource[i].filename);
+        return i;
+      }
+      i++;
     }
-    if (associated) {
-      const sampleNumber = this.getLastSampleFromList(position).sampleNumber;
-      const qcNumber = this.getAssociatedQCsQuantityBetweenSamples(position, 'QBSA') + 1;
-      // tslint:disable-next-line:max-line-length
-      this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC', `${this.requestCode}_${this.clientCode}_00${sampleNumber}_${this.year}${this.month}${this.day}_${qcType}_001_${('0' + qcNumber).slice(-2)}`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, true));
-    } else {
-      // tslint:disable-next-line:max-line-length
-      this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC', `${this.year}${this.month}${this.day}_${qcType}_001_${('0' + counterToApply).slice(-2)}${quantity}`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, false));
-    }
-    this.table.renderRows();
+    return this.dataSource.length; // the last sample
+
   }
 
   dropTable(event: CdkDragDrop<Itemerino[]>) {
@@ -279,64 +412,67 @@ export class RequestQueueGeneratorComponent implements OnInit {
     this.table.renderRows();
   }
 
-  private getAssociatedQCsQuantityBetweenSamples(position: number, qcTypeToFind: string) {
-    let counter = 0;
-    for (let i = position; i < this.dataSource.length; i++) {
-      console.log(this.dataSource[i]);
 
-      if (this.dataSource[i].sampleType === 'Unknown') {
-        return counter;
-      } else {
-        if (this.dataSource[i].associated && this.dataSource[i].qcType === qcTypeToFind) {
-          counter = counter + 1;
-        }
-      }
-    }
-    return counter;
-  }
-
-  private getNextSample(currentSampleNumber: number) {
-    for (const [index, item] of this.dataSource.entries()) {
-      if (item.sampleNumber === currentSampleNumber + 1) {
-        return index;
-      }
-    }
-    return this.dataSource.length;
-  }
-
-  private getLastSampleFromList(position: number): Itemerino {
-    let i = position;
-    // The fatest loop in the west https://web.archive.org/web/20110526000316/https://blogs.oracle.com/greimer/entry/best_way_to_code_a
-    while (i--) {
-      if (this.dataSource[i].sampleNumber !== undefined) {
-        return this.dataSource[i];
-      }
-    }
-  }
 
   public autoQC(): void { // TODO repair this
     if (confirm('All QCs will be removed')) {
-      this.getSamplesFromRequests(this.request);
+      this.dataSource = this.removeQCsFromList(this.dataSource);
+      let clone: Itemerino[] = [];
+      let clone2 = [];
+      this.dataSource.forEach(val => clone.push(Object.assign({}, val)));
+      this.dataSource.forEach(val => clone2.push(Object.assign({}, val)));
       this.dataSource = [];
-      for (const sample of this.samples) {
-        this.dataSource.push(sample);
-        this.publicAddQ('bsa', true, this.dataSource.length);
-        this.publicAddQCloud2('bsa', true, this.dataSource.length);
+      for (const sample of clone) {
+        console.log(sample);
+
+        this.dataSource.push(sample)
+        this.dataSource.push(new Itemerino('QC',
+          // tslint:disable-next-line:max-line-length
+          `${this.requestCode}_${this.clientCode}_${this.getPositionFromSampleName(sample.filename)}_${this.year}${this.month}${this.day}_QBSA_001_01`,
+          // tslint:disable-next-line:max-line-length
+          this.getMethodAndVolumeQC(this.selectedInstrument, 'QBSA').method, this.getVialPositionByQCType('QBSA'),
+          // tslint:disable-next-line:max-line-length
+          this.getMethodAndVolumeQC(this.selectedInstrument, 'QBSA').volume, '', '', undefined, undefined, 'QBSA', undefined, true));
+
+          this.dataSource.push(new Itemerino('QC',
+          // tslint:disable-next-line:max-line-length
+          `${this.requestCode}_${this.clientCode}_${this.getPositionFromSampleName(sample.filename)}_${this.year}${this.month}${this.day}_QC01_001_01`,
+          // tslint:disable-next-line:max-line-length
+          this.getMethodAndVolumeQC(this.selectedInstrument, 'QC01').method, this.getVialPositionByQCType('QC01'),
+          // tslint:disable-next-line:max-line-length
+          this.getMethodAndVolumeQC(this.selectedInstrument, 'QC01').volume, '', '', undefined, undefined, 'QC01', undefined, true));
+
+
+
+        //   this.addQC('QBSA', this.dataSource.length, true);
+        // this.addQC('QC01', this.dataSource.length, true);
+        // this.publicAddQ('bsa', true, this.dataSource.length);
+        // this.publicAddQCloud2('bsa', true, this.dataSource.length);
+
       }
     }
+    this.table.renderRows();
+
   }
 
+  private removeQCsFromList(list: Itemerino[]): Itemerino[] {
+    return list.filter(ele => ele.sampleType === "Unknown");
+  }
+
+
   public qHelaCombo(position: number): void {
-    this.publicAddQ('hela', false, position);
-    this.publicAddQ('bsa', false, position);
-    this.publicAddQCloud2('bsa', false, position);
+
+    this.addQC('QHELA', position, false);
+    this.addQC('QBSA', position, false);
+    this.addQC('QC01', position, false);
     this.table.renderRows();
   }
 
   public fullCombo(position: number): void {
-    this.publicAddQCloud2('qc4l', false, position);
-    this.publicAddQCloud2('hela', false, position);
-    this.publicAddQCloud2('bsa', false, position);
+    this.addQC('QC03', position, false);
+    this.addQC('QC02', position, false);
+    this.addQC('QC01', position, false);
+
     this.table.renderRows();
   }
 
@@ -480,6 +616,11 @@ export class RequestQueueGeneratorComponent implements OnInit {
 
   public changeInstrument(): void {
     this.getMethodsByAppNameAndInstrumentId();
+  }
+
+  private getPositionFromSampleName(name: string): string {
+    let splited = name.split('_')
+    return splited[splited.length - 2];
   }
 
 }
