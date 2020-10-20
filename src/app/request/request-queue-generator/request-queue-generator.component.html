@@ -5,9 +5,6 @@
                 arrow_back_ios
             </span>
             {{request.classs}} by {{request.created_by.email}} ({{requestCode}})
-            <button mat-icon-button style="float: right;" (click)="goToSettings()" *ngIf="isManager">
-                <mat-icon>settings</mat-icon>
-            </button>
         </div>
     </h1>
     <mat-divider></mat-divider>

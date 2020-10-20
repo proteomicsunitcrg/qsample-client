@@ -61,8 +61,6 @@ export class TokenStorageService {
         admin = true;
       }
     });
-    console.log(admin);
-
     return admin;
   }
 

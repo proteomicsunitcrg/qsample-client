@@ -20,6 +20,7 @@ import { WetlabPlotComponent } from './wetlab/wetlab-plot/wetlab-plot.component'
 import { ThresholdService } from './services/threshold.service';
 import { DataService } from './services/data.service';
 import { QGeneratorService } from './services/qGenerator.service';
+import { InstrumentService } from './services/instrument.service';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { QGeneratorService } from './services/qGenerator.service';
     DataService,
     ThemeService,
     QGeneratorService,
+    InstrumentService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
