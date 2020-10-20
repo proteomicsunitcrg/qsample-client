@@ -5,40 +5,13 @@
                 arrow_back_ios
             </span>
             {{request.classs}} by {{request.created_by.email}} ({{requestCode}})
+            <button mat-icon-button style="float: right;" (click)="goToSettings()" *ngIf="isManager">
+                <mat-icon>settings</mat-icon>
+            </button>
         </div>
     </h1>
     <mat-divider></mat-divider>
 </section>
-<!-- <mat-grid-list cols="4" rowHeight="100px">
-    <mat-grid-tile>
-        <button mat-raised-button (click)="publicAddQCloud2('bsa', true, dataSource.length)">Add associated
-            QC01</button>
-    </mat-grid-tile>
-    <mat-grid-tile>
-        <button mat-raised-button (click)="publicAddQCloud2('bsa', false, dataSource.length)">Add QC01</button>
-    </mat-grid-tile>
-    <mat-grid-tile>
-        <button mat-raised-button (click)="publicAddQ('bsa', true, dataSource.length)">Add associated QBSA</button>
-    </mat-grid-tile>
-    <mat-grid-tile>
-        <button mat-raised-button (click)="publicAddQ('bsa', false, dataSource.length)">Add QBSA</button>
-    </mat-grid-tile>
-</mat-grid-list>
-<mat-divider></mat-divider>
-
-<mat-grid-list cols="4" rowHeight="100px">
-    <mat-grid-tile>
-        <button mat-raised-button (click)="publicAddQCloud2('hela', false, dataSource.length)">Add QC02</button>
-    </mat-grid-tile>
-    <mat-grid-tile>
-        <button mat-raised-button (click)="publicAddQ('hela', false, dataSource.length)">Add QHela</button>
-    </mat-grid-tile>
-    <mat-grid-tile>
-        <button mat-raised-button (click)="publicAddQCloud2('qc4l', false, dataSource.length)">Add QC03</button>
-    </mat-grid-tile>
-</mat-grid-list>
-<mat-divider></mat-divider> -->
-
 <mat-grid-list cols="4" rowHeight="100px">
     <mat-grid-tile>
         <mat-form-field class="example-full-width">

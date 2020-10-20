@@ -20,6 +20,7 @@ export class AppComponent implements OnInit {
   private getMajorRole(): void {
     this.authService.updateIsInternal(this.tokenStorageService.isInternalUser());
     this.authService.updateIsAdmin(this.tokenStorageService.isAdminUser());
+    this.authService.updateIsManager(this.tokenStorageService.isManagerUser());
   }
 
 }

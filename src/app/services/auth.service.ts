@@ -23,6 +23,8 @@ export class AuthService {
 
   private isAdmin = new BehaviorSubject<boolean>(false);
 
+  private isManager = new BehaviorSubject<boolean>(false);
+
 
   public updateIsInternal(value: boolean) {
     this.isInternal.next(value);
@@ -32,12 +34,20 @@ export class AuthService {
     this.isAdmin.next(value);
   }
 
+  public updateIsManager(value: boolean) {
+    this.isManager.next(value);
+  }
+
   public getIsInternal(): Observable<boolean> {
     return this.isInternal.asObservable();
   }
 
   public getIsAdmin(): Observable<boolean> {
     return this.isAdmin.asObservable();
+  }
+
+  public getIsManager(): Observable<boolean> {
+    return this.isManager.asObservable();
   }
 
 

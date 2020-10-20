@@ -49,6 +49,23 @@ export class TokenStorageService {
     return admin;
   }
 
+
+  public isManagerUser(): boolean {
+    let admin = false;
+    const token = this.getUser();
+    if (token == null) {
+      return;
+    }
+    token.roles.forEach(element => {
+      if (element === 'ROLE_MANAGER') {
+        admin = true;
+      }
+    });
+    console.log(admin);
+
+    return admin;
+  }
+
   public saveUser(user) {
     window.sessionStorage.removeItem(USER_KEY);
     window.sessionStorage.setItem(USER_KEY, JSON.stringify(user));
