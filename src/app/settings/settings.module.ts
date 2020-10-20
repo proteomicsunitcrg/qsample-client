@@ -13,6 +13,8 @@ import { SettingsQgeneratorSystemsComponent } from './system/settings-qgenerator
 import { SettingsQgeneratorApplicationsComponent } from './application/settings-qgenerator-applications/settings-qgenerator-applications.component';
 import { SettingsQgeneratorMethodsComponent } from './method/settings-qgenerator-methods/settings-qgenerator-methods.component';
 import { SettingsQgeneratorSystemsCreatorComponent } from './system/settings-qgenerator-systems-creator/settings-qgenerator-systems-creator.component';
+import { SettingsQgeneratorMethodsCreatorComponent } from './method/settings-qgenerator-methods-creator/settings-qgenerator-methods-creator.component';
+import { SettingsQgeneratorApplicationsCreatorComponent } from './application/settings-qgenerator-applications-creator/settings-qgenerator-applications-creator.component';
 
 @NgModule({
     declarations: [
@@ -23,7 +25,9 @@ import { SettingsQgeneratorSystemsCreatorComponent } from './system/settings-qge
         SettingsQgeneratorSystemsComponent,
         SettingsQgeneratorApplicationsComponent,
         SettingsQgeneratorMethodsComponent,
-        SettingsQgeneratorSystemsCreatorComponent
+        SettingsQgeneratorSystemsCreatorComponent,
+        SettingsQgeneratorMethodsCreatorComponent,
+        SettingsQgeneratorApplicationsCreatorComponent
     ],
     imports: [
         FlexLayoutModule,

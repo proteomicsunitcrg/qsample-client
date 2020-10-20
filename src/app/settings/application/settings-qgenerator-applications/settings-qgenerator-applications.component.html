@@ -1,1 +1,20 @@
-<p>settings-qgenerator-applications works!</p>
+<div style=" margin-left: 20px;">
+    <mat-card>
+        <mat-card-title>
+            Applications
+            <button mat-icon-button (click)="newSystem()" style="float: right;">
+                <mat-icon>add_circle</mat-icon>
+            </button>
+        </mat-card-title>
+        <mat-card-content>
+            <table style="width: 100%;" mat-table [dataSource]="dataSource">
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> Name </th>
+                    <td mat-cell *matCellDef="let entry"> {{entry.name}} </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay" (click)="edit(myRowData)"></tr>
+            </table>
+        </mat-card-content>
+    </mat-card>
+</div>

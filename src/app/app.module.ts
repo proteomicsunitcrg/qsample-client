@@ -21,6 +21,7 @@ import { ThresholdService } from './services/threshold.service';
 import { DataService } from './services/data.service';
 import { QGeneratorService } from './services/qGenerator.service';
 import { InstrumentService } from './services/instrument.service';
+import { ApplicationService } from './services/application.service';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { InstrumentService } from './services/instrument.service';
     ThemeService,
     QGeneratorService,
     InstrumentService,
+    ApplicationService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
