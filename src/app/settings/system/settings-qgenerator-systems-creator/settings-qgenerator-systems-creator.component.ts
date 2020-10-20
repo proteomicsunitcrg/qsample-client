@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InstrumentService } from 'src/app/services/instrument.service';
-import { Instrument } from '../../models/Instrument';
+import { Instrument } from '../../../models/Instrument';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 

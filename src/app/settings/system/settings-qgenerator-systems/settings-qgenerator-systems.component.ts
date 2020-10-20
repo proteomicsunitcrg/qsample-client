@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { InstrumentService } from 'src/app/services/instrument.service';
-import { QGeneratorService } from '../../services/qGenerator.service';
-import { Instrument } from '../../models/Instrument';
+import { QGeneratorService } from '../../../services/qGenerator.service';
+import { Instrument } from '../../../models/Instrument';
 import { Router } from '@angular/router';
 
 @Component({

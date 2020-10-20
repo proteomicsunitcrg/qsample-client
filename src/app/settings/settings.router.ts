@@ -4,10 +4,10 @@ import { Routes, RouterModule } from '@angular/router';
 import { RoleGuardService as RoleGuard } from '../services/role-guard.service';
 import { SettingsMainComponent } from './settings-main/settings-main.component';
 import { SettingsUserComponent } from './settings-user/settings-user.component';
-import { SettingsQgeneratorSystemsComponent } from './settings-qgenerator-systems/settings-qgenerator-systems.component';
-import { SettingsQgeneratorApplicationsComponent } from './settings-qgenerator-applications/settings-qgenerator-applications.component';
-import { SettingsQgeneratorMethodsComponent } from './settings-qgenerator-methods/settings-qgenerator-methods.component';
-import { SettingsQgeneratorSystemsCreatorComponent } from './settings-qgenerator-systems-creator/settings-qgenerator-systems-creator.component';
+import { SettingsQgeneratorSystemsComponent } from './system/settings-qgenerator-systems/settings-qgenerator-systems.component';
+import { SettingsQgeneratorApplicationsComponent } from './application/settings-qgenerator-applications/settings-qgenerator-applications.component';
+import { SettingsQgeneratorMethodsComponent } from './method/settings-qgenerator-methods/settings-qgenerator-methods.component';
+import { SettingsQgeneratorSystemsCreatorComponent } from './system/settings-qgenerator-systems-creator/settings-qgenerator-systems-creator.component';
 
 const routes: Routes = [
   {
