@@ -11,9 +11,7 @@ import { SettingsSidebarComponent } from './settings-sidebar/settings-sidebar.co
 import { SettingsUserComponent, UserSettingDialogComponent } from './settings-user/settings-user.component';
 import { SettingsQgeneratorSystemsComponent } from './system/settings-qgenerator-systems/settings-qgenerator-systems.component';
 import { SettingsQgeneratorApplicationsComponent } from './application/settings-qgenerator-applications/settings-qgenerator-applications.component';
-import { SettingsQgeneratorMethodsComponent } from './method/settings-qgenerator-methods/settings-qgenerator-methods.component';
 import { SettingsQgeneratorSystemsCreatorComponent } from './system/settings-qgenerator-systems-creator/settings-qgenerator-systems-creator.component';
-import { SettingsQgeneratorMethodsCreatorComponent } from './method/settings-qgenerator-methods-creator/settings-qgenerator-methods-creator.component';
 import { SettingsQgeneratorApplicationsCreatorComponent } from './application/settings-qgenerator-applications-creator/settings-qgenerator-applications-creator.component';
 import { InjectionConditionsDialog } from './system/settings-qgenerator-systems-creator/dialog/injection-conditions-dialog.component';
 
@@ -26,9 +24,7 @@ import { InjectionConditionsDialog } from './system/settings-qgenerator-systems-
         UserSettingDialogComponent,
         SettingsQgeneratorSystemsComponent,
         SettingsQgeneratorApplicationsComponent,
-        SettingsQgeneratorMethodsComponent,
         SettingsQgeneratorSystemsCreatorComponent,
-        SettingsQgeneratorMethodsCreatorComponent,
         SettingsQgeneratorApplicationsCreatorComponent,
         InjectionConditionsDialog
     ],
