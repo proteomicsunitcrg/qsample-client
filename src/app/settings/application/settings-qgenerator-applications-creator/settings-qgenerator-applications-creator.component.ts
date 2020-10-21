@@ -60,7 +60,7 @@ export class SettingsQgeneratorApplicationsCreatorComponent implements OnInit {
           this.openSnackBar('Instrument deleted', 'Close');
           this.goBack();
         } else {
-          this.openSnackBar('Error, contact the administrators', 'Close');
+          this.openSnackBar('Not deleted. Remember to delete all injection conditions before deleting an application', 'Close');
         }
       },
       err => {

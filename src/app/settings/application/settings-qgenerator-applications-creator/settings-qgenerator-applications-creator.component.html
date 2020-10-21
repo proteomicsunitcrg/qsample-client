@@ -15,7 +15,7 @@
             </form>
             <br>
             <button mat-raised-button color="primary" (click)="save()" [disabled]="!systemFrom.valid">Save</button>
-            <button mat-raised-button color="accent" (click)="delete()" style="margin-left: 10px;">Delete</button>
+            <button mat-raised-button color="accent" (click)="delete()" style="margin-left: 10px;" [disabled]="!isEdit">Delete</button>
             <button mat-raised-button color="basic" (click)="goBack()" style="margin-left: 10px;">Go back</button>
         </mat-card-content>
     </mat-card>

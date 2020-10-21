@@ -71,6 +71,7 @@ export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
     this.instrumentService.save(this.instrument).subscribe(
       res => {
         this.openSnackBar('Instrument saved', 'Close');
+        this.goBack();
       },
       err => {
         this.openSnackBar('Error, contact the administrators', 'Close');
@@ -85,7 +86,7 @@ export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
           this.openSnackBar('Instrument deleted', 'Close');
           this.goBack();
         } else {
-          this.openSnackBar('Error, contact the administrators', 'Close');
+          this.openSnackBar('Remove all injection conditions before the deletion', 'Close');
         }
       },
       err => {
@@ -123,9 +124,7 @@ export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
         application,
         instrument
       },
-      // height: '75%',
       width: '75%',
-
     });
   }
 

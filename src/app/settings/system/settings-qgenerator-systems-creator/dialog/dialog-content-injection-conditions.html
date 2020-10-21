@@ -24,5 +24,6 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
     <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button (click)="delete()" *ngIf="isUpdate">Delete</button>
     <button mat-button (click)="save()" [disabled]="!injCondForm.valid">Save</button>
 </mat-dialog-actions>

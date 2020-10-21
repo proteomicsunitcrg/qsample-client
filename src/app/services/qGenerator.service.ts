@@ -33,6 +33,10 @@ export class QGeneratorService {
     return this.httpClient.post<InjectionCondition>(`${this.apiPrefix}`, params, { headers: this.headers });
   }
 
+  public deleteInjectionCondition(id: number): Observable<boolean> {
+    return this.httpClient.delete<boolean>(`${this.apiPrefix}${id}`);
+  }
+
   errorHandler(error: HttpErrorResponse) {
     // console.log(error);
     return throwError(error || 'Server Error');

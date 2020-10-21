@@ -6,6 +6,7 @@ import { Instrument } from '../../../../models/Instrument';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { QGeneratorService } from '../../../../services/qGenerator.service';
 import { InjectionCondition } from '../../../../models/InjectionCondition';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-dialog-content-injection-conditions',
   templateUrl: 'dialog-content-injection-conditions.html',
@@ -19,7 +20,7 @@ export class InjectionConditionsDialog {
 
   constructor(
     public dialogRef: MatDialogRef<InjectionConditionsDialog>,
-    @Inject(MAT_DIALOG_DATA) public itemC: any, private qGeneratorService: QGeneratorService) {
+    @Inject(MAT_DIALOG_DATA) public itemC: any, private qGeneratorService: QGeneratorService, private snackBar: MatSnackBar) {
     this.application = itemC.application;
     this.instrument = itemC.instrument;
     this.getMethodsByAppNameAndInstrumentId();
@@ -54,22 +55,41 @@ export class InjectionConditionsDialog {
   }
 
   public save(): void {
-    // if (this.isUpdate) {
       this.injectionCondition.method = this.injCondForm.get('method').value;
       this.injectionCondition.volume = this.injCondForm.get('volume').value;
       this.injectionCondition.application = this.application;
       this.injectionCondition.instrument = this.instrument;
-    // } else {
-
-    // }
       this.qGeneratorService.saveInjectionCondition(this.injectionCondition).subscribe(
         res => {
-          console.log(res);
+          this.openSnackBar('Injection condition saved', 'Close');
+          this.dialogRef.close();
         },
         err => {
-          console.error(err);
+          this.openSnackBar('Error, contact the administrators', 'Close');
         }
       );
+  }
+
+  public delete(): void {
+    this.qGeneratorService.deleteInjectionCondition(this.injectionCondition.id).subscribe(
+      res => {
+        if (res) {
+          this.openSnackBar('Injection condition deleted', 'Close');
+          this.dialogRef.close();
+        } else {
+          this.openSnackBar('Error, contact the administrators', 'Close');
+        }
+      },
+      err => {
+        console.error(err);
+      }
+    );
+  }
+
+  private openSnackBar(message: string, action: string): void {
+    this.snackBar.open(message, action, {
+      duration: 2000,
+    });
   }
 
 }
