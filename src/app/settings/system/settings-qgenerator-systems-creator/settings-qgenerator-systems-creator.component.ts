@@ -1,9 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { InstrumentService } from 'src/app/services/instrument.service';
+import { InstrumentService } from '../../../services/instrument.service';
 import { Instrument } from '../../../models/Instrument';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ApplicationService } from '../../../services/application.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
+import { InjectionConditionsDialog } from './dialog/injection-conditions-dialog.component';
+import { Application } from '../../../models/Application';
 
 
 @Component({
@@ -13,7 +18,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
 
-  constructor(private activeRouter: ActivatedRoute, private instrumentService: InstrumentService, private snackBar: MatSnackBar, private router: Router) {
+  constructor(private activeRouter: ActivatedRoute, private instrumentService: InstrumentService, private snackBar: MatSnackBar, private router: Router, private applicationService: ApplicationService, private dialog: MatDialog) {
 
   }
 
@@ -22,6 +27,9 @@ export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
       Validators.required,
     ]),
   });
+
+  columnsToDisplay = ['name'];
+  dataSource: MatTableDataSource<any>;
 
 
   oldName: string;
@@ -42,6 +50,7 @@ export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
         console.error(err);
       }
     );
+    this.getAllApplications();
   }
 
   private getByid(id: number): void {
@@ -95,6 +104,31 @@ export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
   public goBack(): void {
     this.router.navigate(['/settings/QGenerator/systems']);
   }
+
+  private getAllApplications(): void {
+    this.applicationService.getAll().subscribe(
+      res => {
+        this.dataSource = new MatTableDataSource(res);
+      },
+      err => {
+        console.error(err);
+      }
+    );
+  }
+
+
+  public openDialog(application: Application, instrument: Instrument): void {
+    const dialogRef = this.dialog.open(InjectionConditionsDialog, {
+      data: {
+        application,
+        instrument
+      },
+      // height: '75%',
+      width: '75%',
+
+    });
+  }
+
 
 }
 

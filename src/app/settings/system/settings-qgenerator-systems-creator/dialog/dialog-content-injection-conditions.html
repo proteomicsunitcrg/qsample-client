@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>
+    Injection conditions
+</h2>
+<mat-dialog-content>
+    <h3>
+        {{instrument.name}}
+    </h3>
+    <h3>
+        {{application.name}}
+    </h3>
+    <div>
+        <form [formGroup]="injCondForm">
+            <mat-form-field appearance="standard">
+                <mat-label>Volume</mat-label>
+                <input matInput formControlName="volume" type="number">
+            </mat-form-field>
+            <!-- <br> -->
+            <mat-form-field appearance="standard" style="width: 90%;">
+                <mat-label>Method</mat-label>
+                <input matInput formControlName="method">
+            </mat-form-field>
+        </form>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button (click)="save()" [disabled]="!injCondForm.valid">Save</button>
+</mat-dialog-actions>
