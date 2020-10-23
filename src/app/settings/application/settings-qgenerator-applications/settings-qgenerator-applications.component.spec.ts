@@ -8,9 +8,9 @@ describe('SettingsQgeneratorApplicationsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SettingsQgeneratorApplicationsComponent ]
+      declarations: [SettingsQgeneratorApplicationsComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

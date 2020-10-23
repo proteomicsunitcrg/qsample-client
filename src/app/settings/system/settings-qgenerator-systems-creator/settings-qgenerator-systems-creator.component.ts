@@ -7,7 +7,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ApplicationService } from '../../../services/application.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import { InjectionConditionsDialog } from './dialog/injection-conditions-dialog.component';
+import { InjectionConditionsDialogComponent } from './dialog/injection-conditions-dialog.component';
 import { Application } from '../../../models/Application';
 
 
@@ -18,7 +18,8 @@ import { Application } from '../../../models/Application';
 })
 export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
 
-  constructor(private activeRouter: ActivatedRoute, private instrumentService: InstrumentService, private snackBar: MatSnackBar, private router: Router, private applicationService: ApplicationService, private dialog: MatDialog) {
+  constructor(private activeRouter: ActivatedRoute, private instrumentService: InstrumentService, private snackBar: MatSnackBar,
+              private router: Router, private applicationService: ApplicationService, private dialog: MatDialog) {
 
   }
 
@@ -93,7 +94,7 @@ export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
         console.log(err);
         this.openSnackBar('Error, contact the administrators', 'Close');
       }
-    )
+    );
   }
 
   private openSnackBar(message: string, action: string): void {
@@ -119,7 +120,7 @@ export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
 
 
   public openDialog(application: Application, instrument: Instrument): void {
-    const dialogRef = this.dialog.open(InjectionConditionsDialog, {
+    const dialogRef = this.dialog.open(InjectionConditionsDialogComponent, {
       data: {
         application,
         instrument

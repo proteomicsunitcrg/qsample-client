@@ -10,10 +10,14 @@ import { SettingsRouter } from './settings.router';
 import { SettingsSidebarComponent } from './settings-sidebar/settings-sidebar.component';
 import { SettingsUserComponent, UserSettingDialogComponent } from './settings-user/settings-user.component';
 import { SettingsQgeneratorSystemsComponent } from './system/settings-qgenerator-systems/settings-qgenerator-systems.component';
+// tslint:disable-next-line:max-line-length
 import { SettingsQgeneratorApplicationsComponent } from './application/settings-qgenerator-applications/settings-qgenerator-applications.component';
+// tslint:disable-next-line:max-line-length
 import { SettingsQgeneratorSystemsCreatorComponent } from './system/settings-qgenerator-systems-creator/settings-qgenerator-systems-creator.component';
+// tslint:disable-next-line:max-line-length
 import { SettingsQgeneratorApplicationsCreatorComponent } from './application/settings-qgenerator-applications-creator/settings-qgenerator-applications-creator.component';
-import { InjectionConditionsDialog } from './system/settings-qgenerator-systems-creator/dialog/injection-conditions-dialog.component';
+// tslint:disable-next-line:max-line-length
+import { InjectionConditionsDialogComponent } from './system/settings-qgenerator-systems-creator/dialog/injection-conditions-dialog.component';
 
 
 @NgModule({
@@ -26,7 +30,7 @@ import { InjectionConditionsDialog } from './system/settings-qgenerator-systems-
         SettingsQgeneratorApplicationsComponent,
         SettingsQgeneratorSystemsCreatorComponent,
         SettingsQgeneratorApplicationsCreatorComponent,
-        InjectionConditionsDialog
+        InjectionConditionsDialogComponent
     ],
     imports: [
         FlexLayoutModule,

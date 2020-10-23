@@ -28,10 +28,11 @@
                         [(ngModel)]="creatorFilter">
                 </mat-form-field>
                 <!-- <mat-form-field> -->
-                    <!-- </mat-form-field> -->
-                </div>
+                <!-- </mat-form-field> -->
+            </div>
             <mat-checkbox (change)="getAllCheckBoxChange()" matInput [(ngModel)]="showAll">Show all
-                <span class="material-icons" matTooltip="Hide rejected/completed/created/cancelled/created as draft requests">
+                <span class="material-icons"
+                    matTooltip="Hide rejected/completed/created/cancelled/created as draft requests">
                     help
                 </span>
             </mat-checkbox>
@@ -43,7 +44,9 @@
                 </ng-container>
                 <ng-container matColumnDef="type">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Application </th>
-                    <td mat-cell *matCellDef="let entry" [matTooltip]="entry.type"> {{ (entry.type.length>50)? (entry.type | slice:0:50)+'...':(entry.type) }} </td> <!--Very proud of this KEKW-->
+                    <td mat-cell *matCellDef="let entry" [matTooltip]="entry.type">
+                        {{ (entry.type.length>50)? (entry.type | slice:0:50)+'...':(entry.type) }} </td>
+                    <!--Very proud of this KEKW-->
                 </ng-container>
                 <ng-container matColumnDef="creatorName">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Creator </th>

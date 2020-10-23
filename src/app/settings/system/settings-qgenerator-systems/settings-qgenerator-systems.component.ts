@@ -14,12 +14,13 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
 
   constructor(private instrumentService: InstrumentService, private router: Router) { }
 
+  columnsToDisplay = ['name'];
+  dataSource: MatTableDataSource<any>;
+
   ngOnInit(): void {
     this.getAllInstruments();
   }
 
-  columnsToDisplay = ['name'];
-  dataSource: MatTableDataSource<any>;
 
   private getAllInstruments(): void {
     this.instrumentService.getAll().subscribe(

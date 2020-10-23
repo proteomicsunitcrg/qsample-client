@@ -191,7 +191,7 @@ export class RequestsListComponent implements OnInit {
     this.requestService.getAllRequestsInternal(this.showAll).subscribe(
       res => {
         this.allRequests = res;
-        for (let request of this.allRequests) {
+        for (const request of this.allRequests) {
           request.lastField = this.getRequestCodeFromRequest(request.lastField);
         }
 

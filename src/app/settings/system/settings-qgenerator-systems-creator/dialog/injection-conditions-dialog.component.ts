@@ -11,15 +11,25 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   selector: 'app-dialog-content-injection-conditions',
   templateUrl: 'dialog-content-injection-conditions.html',
 })
-export class InjectionConditionsDialog {
+export class InjectionConditionsDialogComponent {
 
   injectionCondition = new InjectionCondition(null, null, null, null, null);
   application: Application;
   instrument: Instrument;
   isUpdate = false;
 
+    injCondForm = new FormGroup({
+      method: new FormControl('', [
+        Validators.required,
+      ]),
+      volume: new FormControl('', [
+        Validators.required,
+        Validators.min(0)
+      ]),
+    });
+
   constructor(
-    public dialogRef: MatDialogRef<InjectionConditionsDialog>,
+    public dialogRef: MatDialogRef<InjectionConditionsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public itemC: any, private qGeneratorService: QGeneratorService, private snackBar: MatSnackBar) {
     this.application = itemC.application;
     this.instrument = itemC.instrument;
@@ -30,21 +40,11 @@ export class InjectionConditionsDialog {
     this.dialogRef.close();
   }
 
-  injCondForm = new FormGroup({
-    method: new FormControl('', [
-      Validators.required,
-    ]),
-    volume: new FormControl('', [
-      Validators.required,
-      Validators.min(0)
-    ]),
-  });
-
 
   private getMethodsByAppNameAndInstrumentId(): void {
     this.qGeneratorService.getMethodsByAppNameAndInstrumentId(this.application.name, this.instrument).subscribe(
       res => {
-        if (res !== null)  {
+        if (res !== null) {
           this.injectionCondition = res;
           this.injCondForm.get('method').setValue(this.injectionCondition.method);
           this.injCondForm.get('volume').setValue(this.injectionCondition.volume);
@@ -55,19 +55,19 @@ export class InjectionConditionsDialog {
   }
 
   public save(): void {
-      this.injectionCondition.method = this.injCondForm.get('method').value;
-      this.injectionCondition.volume = this.injCondForm.get('volume').value;
-      this.injectionCondition.application = this.application;
-      this.injectionCondition.instrument = this.instrument;
-      this.qGeneratorService.saveInjectionCondition(this.injectionCondition).subscribe(
-        res => {
-          this.openSnackBar('Injection condition saved', 'Close');
-          this.dialogRef.close();
-        },
-        err => {
-          this.openSnackBar('Error, contact the administrators', 'Close');
-        }
-      );
+    this.injectionCondition.method = this.injCondForm.get('method').value;
+    this.injectionCondition.volume = this.injCondForm.get('volume').value;
+    this.injectionCondition.application = this.application;
+    this.injectionCondition.instrument = this.instrument;
+    this.qGeneratorService.saveInjectionCondition(this.injectionCondition).subscribe(
+      res => {
+        this.openSnackBar('Injection condition saved', 'Close');
+        this.dialogRef.close();
+      },
+      err => {
+        this.openSnackBar('Error, contact the administrators', 'Close');
+      }
+    );
   }
 
   public delete(): void {

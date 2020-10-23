@@ -13,7 +13,8 @@ import { ApplicationService } from '../../../services/application.service';
 })
 export class SettingsQgeneratorApplicationsCreatorComponent implements OnInit {
 
-  constructor(private activeRouter: ActivatedRoute, private applicationService: ApplicationService, private snackBar: MatSnackBar, private router: Router) { }
+  constructor(private activeRouter: ActivatedRoute, private applicationService: ApplicationService,
+              private snackBar: MatSnackBar, private router: Router) { }
 
   systemFrom = new FormGroup({
     name: new FormControl('', [
@@ -67,7 +68,7 @@ export class SettingsQgeneratorApplicationsCreatorComponent implements OnInit {
         console.log(err);
         this.openSnackBar('Error, contact the administrators', 'Close');
       }
-    )
+    );
   }
 
 

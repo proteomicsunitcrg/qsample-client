@@ -14,7 +14,7 @@ export class RequestService {
   apiPrefix: string = environment.apiPrefix;
   public currentRequestCode = new Subject<string>();
 
-  params = new HttpParams()
+  params = new HttpParams();
 
   public changeRequestCode(value: string) {
     this.currentRequestCode.next(value);
@@ -23,8 +23,8 @@ export class RequestService {
 
 
   public getAllRequestsInternal(showAll: boolean): Observable<MiniRequest[]> {
-    this.params = this.params.set('showAll', showAll? "true":"false");
-    return this.http.get<MiniRequest[]>(`${this.apiPrefix}api/request`, {params: this.params});
+    this.params = this.params.set('showAll', showAll ? 'true' : 'false');
+    return this.http.get<MiniRequest[]>(`${this.apiPrefix}api/request`, { params: this.params });
   }
 
   public getAllRequestsExternal(): Observable<MiniRequest[]> {

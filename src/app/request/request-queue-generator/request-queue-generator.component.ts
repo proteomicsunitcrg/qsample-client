@@ -180,116 +180,14 @@ export class RequestQueueGeneratorComponent implements OnInit {
     moveItemInArray(this.samples, event.previousIndex, event.currentIndex);
   }
 
-  public publicAddQCloud2(type: string, associated: boolean, position: number): void {
-    return;
-    // let qcType: string;
-    // let counterToApply: number;
-    // let quantity = '';
-    // switch (type) {
-    //   case 'bsa':
-    //     if (!associated) {
-    //       this.qc1Counter = this.qc1Counter + 1;
-    //       counterToApply = this.qc1Counter;
-    //     }
-    //     qcType = 'QC01';
-    //     break;
-    //   case 'hela':
-    //     if (!associated) {
-    //       this.qc2Counter = this.qc2Counter + 1;
-    //       counterToApply = this.qc2Counter;
-    //       quantity = '_100ng';
-    //     }
-    //     qcType = 'QC02';
-    //     break;
-    //   case 'qc4l':
-    //     if (!associated) {
-    //       this.qc3Counter = this.qc3Counter + 1;
-    //       counterToApply = this.qc3Counter;
-    //       quantity = '_25ng';
-    //     }
-    //     qcType = 'QC03';
-    //     break;
-    //   default:
-    //     return;
-    // }
-    // let nextSampleIndex = this.getNextSample(this.dataSource[position - 1].sampleNumber);
-    // if (nextSampleIndex === undefined) {
-    //   nextSampleIndex = position;
-    // }
-    // if (associated) {
-    //   const qcNumber = this.getAssociatedQCsQuantityBetweenSamples(position, 'QC01') + 1;
-    //   const sampleNumber = this.getLastSampleFromList(position).sampleNumber;
-    //   this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC',
-    //     // tslint:disable-next-line:max-line-length
-    //     `${this.requestCode}_${this.clientCode}_00${sampleNumber}_${this.year}${this.month}${this.day}_${qcType}_001_${('0' + qcNumber).slice(-2)}`,
-    //     // tslint:disable-next-line:max-line-length
-    //     this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType),
-    //     // tslint:disable-next-line:max-line-length
-    //     this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, true));
-    // } else {
-    //   this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC',
-    //     // tslint:disable-next-line:max-line-length
-    //     `${this.year}${this.month}${this.day}_${qcType}_001_${('0' + counterToApply).slice(-2)}${quantity}`,
-    //     // tslint:disable-next-line:max-line-length
-    //     this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType),
-    //     // tslint:disable-next-line:max-line-length
-    //     this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, false));
-    // }
-    // this.table.renderRows();
-  }
 
-  public publicAddQ(type: string, associated: boolean, position: number): void {
-    return;
-    // let qcType: string;
-    // let counterToApply: number;
-    // let quantity = '';
-    // switch (type) {
-    //   case 'bsa':
-    //     if (!associated) {
-    //       this.qBSACounter = this.qBSACounter + 1;
-    //       counterToApply = this.qBSACounter;
-    //     }
-    //     qcType = 'QBSA';
-    //     break;
-    //   case 'hela':
-    //     if (!associated) {
-    //       this.qHELACounter = this.qHELACounter + 1;
-    //       counterToApply = this.qHELACounter;
-    //       quantity = '_1ug';
-    //     }
-    //     qcType = 'QHELA';
-    //     break;
-    //   default:
-    //     return;
-    // }
-    // let nextSampleIndex = this.getNextSample(this.dataSource[position - 1].sampleNumber);
-    // if (nextSampleIndex === undefined) {
-    //   nextSampleIndex = position;
-    // }
-    // if (associated) {
-    //   const sampleNumber = this.getLastSampleFromList(position).sampleNumber;
-    //   const qcNumber = this.getAssociatedQCsQuantityBetweenSamples(position, 'QBSA') + 1;
-    //   // tslint:disable-next-line:max-line-length
-    //   this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC', `${this.requestCode}_${this.clientCode}_00${sampleNumber}_${this.year}${this.month}${this.day}_${qcType}_001_${('0' + qcNumber).slice(-2)}`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, true));
-    // } else {
-    //   // tslint:disable-next-line:max-line-length
-    //   this.dataSource.splice(nextSampleIndex, 0, new Itemerino('QC', `${this.year}${this.month}${this.day}_${qcType}_001_${('0' + counterToApply).slice(-2)}${quantity}`, this.getMethodAndVolumeQC(this.selectedInstrument, qcType).method, this.getVialPositionByQCType(qcType), this.getMethodAndVolumeQC(this.selectedInstrument, qcType).volume, '', '', undefined, undefined, qcType, undefined, false));
-    // }
-    // this.table.renderRows();
-  }
-
-
-  public addQC(type: string, index: number, associated?: boolean,) {
-
-
-    // return
+  public addQC(type: string, index: number, associated?: boolean) {
     switch (type) {
       case 'QC01':
         switch (associated) {
           case true:
-            let sampleNumber = this.getPositionFromSampleName(this.dataSource[index].filename);
-
-            let qcNumber = this.getQCsByTypeBetweenIndexs(index, this.getNextSampleIndexGivenActualIndex(index), type);
+            const sampleNumber = this.getPositionFromSampleName(this.dataSource[index].filename);
+            const qcNumber = this.getQCsByTypeBetweenIndexs(index, this.getNextSampleIndexGivenActualIndex(index), type);
             console.log(qcNumber);
             this.dataSource.splice(this.getNextSampleIndexGivenActualIndex(index), 0, new Itemerino('QC',
               // tslint:disable-next-line:max-line-length
@@ -335,10 +233,8 @@ export class RequestQueueGeneratorComponent implements OnInit {
       case 'QBSA':
         switch (associated) {
           case true:
-            let sampleNumber = this.getPositionFromSampleName(this.dataSource[index].filename);
-
-            let qcNumber = this.getQCsByTypeBetweenIndexs(index, this.getNextSampleIndexGivenActualIndex(index), type);
-
+            const sampleNumber = this.getPositionFromSampleName(this.dataSource[index].filename);
+            const qcNumber = this.getQCsByTypeBetweenIndexs(index, this.getNextSampleIndexGivenActualIndex(index), type);
             this.dataSource.splice(this.getNextSampleIndexGivenActualIndex(index), 0, new Itemerino('QC',
               // tslint:disable-next-line:max-line-length
               `${this.requestCode}_${this.clientCode}_${sampleNumber}_${this.year}${this.month}${this.day}_${type}_001_${('0' + qcNumber).slice(-2)}`,
@@ -417,15 +313,13 @@ export class RequestQueueGeneratorComponent implements OnInit {
   public autoQC(): void { // TODO repair this
     if (confirm('All QCs will be removed')) {
       this.dataSource = this.removeQCsFromList(this.dataSource);
-      let clone: Itemerino[] = [];
-      let clone2 = [];
+      const clone: Itemerino[] = [];
+      const clone2 = [];
       this.dataSource.forEach(val => clone.push(Object.assign({}, val)));
       this.dataSource.forEach(val => clone2.push(Object.assign({}, val)));
       this.dataSource = [];
       for (const sample of clone) {
-        console.log(sample);
-
-        this.dataSource.push(sample)
+        this.dataSource.push(sample);
         this.dataSource.push(new Itemerino('QC',
           // tslint:disable-next-line:max-line-length
           `${this.requestCode}_${this.clientCode}_${this.getPositionFromSampleName(sample.filename)}_${this.year}${this.month}${this.day}_QBSA_001_01`,
@@ -434,7 +328,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
           // tslint:disable-next-line:max-line-length
           this.getMethodAndVolumeQC(this.selectedInstrument, 'QBSA').volume, '', '', undefined, undefined, 'QBSA', undefined, true));
 
-          this.dataSource.push(new Itemerino('QC',
+        this.dataSource.push(new Itemerino('QC',
           // tslint:disable-next-line:max-line-length
           `${this.requestCode}_${this.clientCode}_${this.getPositionFromSampleName(sample.filename)}_${this.year}${this.month}${this.day}_QC01_001_01`,
           // tslint:disable-next-line:max-line-length
@@ -456,7 +350,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
   }
 
   private removeQCsFromList(list: Itemerino[]): Itemerino[] {
-    return list.filter(ele => ele.sampleType === "Unknown");
+    return list.filter(ele => ele.sampleType === 'Unknown');
   }
 
 
@@ -619,7 +513,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
   }
 
   private getPositionFromSampleName(name: string): string {
-    let splited = name.split('_')
+    const splited = name.split('_');
     return splited[splited.length - 2];
   }
 

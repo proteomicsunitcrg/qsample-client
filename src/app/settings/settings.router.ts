@@ -5,8 +5,11 @@ import { RoleGuardService as RoleGuard } from '../services/role-guard.service';
 import { SettingsMainComponent } from './settings-main/settings-main.component';
 import { SettingsUserComponent } from './settings-user/settings-user.component';
 import { SettingsQgeneratorSystemsComponent } from './system/settings-qgenerator-systems/settings-qgenerator-systems.component';
+// tslint:disable-next-line:max-line-length
 import { SettingsQgeneratorApplicationsComponent } from './application/settings-qgenerator-applications/settings-qgenerator-applications.component';
+// tslint:disable-next-line:max-line-length
 import { SettingsQgeneratorSystemsCreatorComponent } from './system/settings-qgenerator-systems-creator/settings-qgenerator-systems-creator.component';
+// tslint:disable-next-line:max-line-length
 import { SettingsQgeneratorApplicationsCreatorComponent } from './application/settings-qgenerator-applications-creator/settings-qgenerator-applications-creator.component';
 
 const routes: Routes = [
