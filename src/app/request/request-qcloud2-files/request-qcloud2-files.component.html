@@ -5,8 +5,11 @@
     <mat-card-subtitle style="color: red; cursor: pointer;" *ngIf="errorCounter != 0" (click)="openDialog()">
         Found {{errorCounter}} files with non-conformities
     </mat-card-subtitle>
-    <mat-card-subtitle style="color: green; cursor: pointer;" *ngIf="errorCounter == 0">
+    <mat-card-subtitle style="color: green; cursor: pointer;" *ngIf="errorCounter == 0 && qCloud2Files.length !== 0">
         All files are correct
+    </mat-card-subtitle>
+    <mat-card-subtitle *ngIf="qCloud2Files.length === 0">
+        Nothing found
     </mat-card-subtitle>
     <mat-card-content>
         <div>

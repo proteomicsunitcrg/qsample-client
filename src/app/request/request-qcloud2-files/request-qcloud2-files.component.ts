@@ -32,7 +32,7 @@ export class RequestQcloud2FilesComponent implements OnInit, OnDestroy {
   // tslint:disable-next-line:no-input-rename
   @Input('request') requestCode: string;
 
-  qCloud2Files: QCloud2File[];
+  qCloud2Files: QCloud2File[] = [];
 
   nonConformityFiles: QCloud2File[] = [];
 
