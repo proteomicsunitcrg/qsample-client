@@ -1,0 +1,10 @@
+.warning {
+    color: yellow;
+}
+
+.danger {
+    color: red;
+}
+.notFirst {
+    margin-top: 0px !important;
+}

@@ -6,6 +6,8 @@ import { RequestService } from '../../services/request.service';
 import { Observable, Subscription } from 'rxjs';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { NonConformitiesDialogComponent } from './dialog/non-conformities-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-request-qcloud2-files',
@@ -16,7 +18,7 @@ export class RequestQcloud2FilesComponent implements OnInit, OnDestroy {
 
   myEventSubscription: Subscription;
 
-  constructor(private fileService: FileService, private requestService: RequestService) {
+  constructor(private fileService: FileService, private requestService: RequestService, private dialog: MatDialog) {
     this.myEventSubscription = this.requestService.currentRequestCode.subscribe(value => {
       if (value !== undefined) {
         this.requestCode = value;
@@ -32,6 +34,8 @@ export class RequestQcloud2FilesComponent implements OnInit, OnDestroy {
 
   qCloud2Files: QCloud2File[];
 
+  nonConformityFiles: QCloud2File[] = [];
+
   error: HttpErrorResponse;
 
   columnsToDisplay = ['filename', 'conformity'];
@@ -39,6 +43,8 @@ export class RequestQcloud2FilesComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<any>;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+
+  errorCounter = 0;
 
 
   ngOnInit(): void {
@@ -52,10 +58,17 @@ export class RequestQcloud2FilesComponent implements OnInit, OnDestroy {
     // console.log(this.requestCode);
     this.fileService.getQCloud2Files(this.requestCode).subscribe(
       res => {
+        console.log(res);
+
         this.qCloud2Files = res;
         this.dataSource = new MatTableDataSource(res);
         this.dataSource.paginator = this.paginator;
-        console.log(res);
+        for (const file of this.qCloud2Files) {
+          if (file.conformity !== 'OK') {
+            this.errorCounter += 1;
+            this.nonConformityFiles.push(file);
+          }
+        }
 
       },
       err => {
@@ -63,6 +76,15 @@ export class RequestQcloud2FilesComponent implements OnInit, OnDestroy {
         this.error = err;
       }
     );
+  }
+
+  public openDialog(): void {
+    const dialogRef = this.dialog.open(NonConformitiesDialogComponent, {
+      data: {
+        files: this.nonConformityFiles
+      },
+      width: '35%'
+    });
   }
 
 }

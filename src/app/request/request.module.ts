@@ -17,6 +17,7 @@ import { RequestQueueGeneratorComponent } from './request-queue-generator/reques
 import { QGeneratorDialogComponent } from './request-queue-generator/dialog/QGeneratorDialog.component';
 import { RequestPanelDialogComponent } from './request-details-panel/dialog/request-panel-dialog.component';
 import { RequestDetailsPanelComponent } from './request-details-panel/request-details-panel.component';
+import { NonConformitiesDialogComponent } from './request-qcloud2-files/dialog/non-conformities-dialog.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { RequestDetailsPanelComponent } from './request-details-panel/request-de
     RequestQueueGeneratorComponent,
     QGeneratorDialogComponent,
     RequestPanelDialogComponent,
-    RequestDetailsPanelComponent
+    RequestDetailsPanelComponent,
+    NonConformitiesDialogComponent
   ],
   imports: [
     FlexLayoutModule,
