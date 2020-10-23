@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { MiniRequest } from '../models/MiniRequest';
@@ -14,14 +14,17 @@ export class RequestService {
   apiPrefix: string = environment.apiPrefix;
   public currentRequestCode = new Subject<string>();
 
+  params = new HttpParams()
+
   public changeRequestCode(value: string) {
     this.currentRequestCode.next(value);
   }
 
 
 
-  public getAllRequestsInternal(): Observable<MiniRequest[]> {
-    return this.http.get<MiniRequest[]>(`${this.apiPrefix}api/request`);
+  public getAllRequestsInternal(showAll: boolean): Observable<MiniRequest[]> {
+    this.params = this.params.set('showAll', showAll? "true":"false");
+    return this.http.get<MiniRequest[]>(`${this.apiPrefix}api/request`, {params: this.params});
   }
 
   public getAllRequestsExternal(): Observable<MiniRequest[]> {

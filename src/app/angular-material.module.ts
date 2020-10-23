@@ -21,6 +21,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatMenuModule } from '@angular/material/menu';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 
 
@@ -51,7 +52,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     MatDialogModule,
     DragDropModule,
     MatMenuModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatFormFieldModule
   ],
   exports: [
     MatInputModule,
@@ -73,7 +75,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     MatDialogModule,
     DragDropModule,
     MatMenuModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatFormFieldModule
   ]
 })
 

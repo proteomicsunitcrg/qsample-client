@@ -53,14 +53,6 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
     const cac = JSON.parse(request.fields[request.fields.length - 1].value);
     console.log(cac[0][0].value.split('|')[0]);
     return cac[0][0].value.split('|')[0];
-    // for (let element of cac[0]) {
-    //   console.log(element.value);
-    //   if (element.type == 9) {
-
-    //     console.log(element.value.split('|')[0]);
-    //     return element.value.split('|')[0];
-    //   }
-    // }
   }
 
   ngOnDestroy(): void {

@@ -20,19 +20,34 @@
                         [(ngModel)]="classFilter">
                 </mat-form-field>
                 <mat-form-field>
+                    <input matInput (keyup)="applyFilterCode($event.target.value)" placeholder="Request code"
+                        [(ngModel)]="lastFieldFilter">
+                </mat-form-field>
+                <mat-form-field>
                     <input matInput (keyup)="applyFilterCreator($event.target.value)" placeholder="Creator"
                         [(ngModel)]="creatorFilter">
                 </mat-form-field>
-            </div>
+                <!-- <mat-form-field> -->
+                    <!-- </mat-form-field> -->
+                </div>
+            <mat-checkbox (change)="getAllRequestsInternal()" matInput [(ngModel)]="showAll">Show all
+                <span class="material-icons" matTooltip="Hide rejected/completed/created/cancelled/created as draft requests">
+                    help
+                </span>
+            </mat-checkbox>
             <table mat-table [dataSource]="dataSource" style="width: 100%;" matSort matSortActive="creationDate"
                 matSortDirection="desc">
+                <ng-container matColumnDef="code">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Code </th>
+                    <td mat-cell *matCellDef="let entry"> {{entry.lastField}} </td>
+                </ng-container>
                 <ng-container matColumnDef="type">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Application </th>
-                    <td mat-cell *matCellDef="let entry"> {{entry.type}} </td>
+                    <td mat-cell *matCellDef="let entry" [matTooltip]="entry.type"> {{ (entry.type.length>50)? (entry.type | slice:0:50)+'...':(entry.type) }} </td> <!--Very proud of this KEKW-->
                 </ng-container>
-                <ng-container matColumnDef="creatorMail">
+                <ng-container matColumnDef="creatorName">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Creator </th>
-                    <td mat-cell *matCellDef="let entry"> {{entry.creatorMail}} </td>
+                    <td mat-cell *matCellDef="let entry"> {{entry.creatorName}} </td>
                 </ng-container>
                 <ng-container matColumnDef="creationDate">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Date created </th>

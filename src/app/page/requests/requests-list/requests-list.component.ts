@@ -8,6 +8,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { AuthService } from '../../../services/auth.service';
 import { Subscription } from 'rxjs';
+import { MiniRequest } from '../../../models/MiniRequest';
 
 @Component({
   selector: 'app-requests-list',
@@ -16,7 +17,9 @@ import { Subscription } from 'rxjs';
 })
 export class RequestsListComponent implements OnInit {
 
-  dataSource: MatTableDataSource<any>;
+  dataSource: MatTableDataSource<MiniRequest>;
+
+  allRequests: MiniRequest[];
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -27,13 +30,17 @@ export class RequestsListComponent implements OnInit {
 
   creatorFilter = '';
 
+  lastFieldFilter = '';
+
   subscription: Subscription;
 
   isInternal: boolean;
 
-  columnsToDisplay = ['type', 'creatorMail', 'creationDate', 'status'];
+  columnsToDisplay = ['code', 'type', 'creatorName', 'creationDate', 'status'];
 
   filteredValues = {};
+
+  showAll = true;
 
 
 
@@ -66,8 +73,12 @@ export class RequestsListComponent implements OnInit {
         value: filterValue
       },
       {
-        id: 'creatorMail',
+        id: 'creatorName',
         value: this.creatorFilter
+      },
+      {
+        id: 'lastField',
+        value: this.lastFieldFilter
       }
     );
     this.dataSource.filter = JSON.stringify(tableFilters);
@@ -85,8 +96,12 @@ export class RequestsListComponent implements OnInit {
         value: this.statusFilter
       },
       {
-        id: 'creatorMail',
+        id: 'creatorName',
         value: this.creatorFilter
+      },
+      {
+        id: 'lastField',
+        value: this.lastFieldFilter
       }
     );
     this.dataSource.filter = JSON.stringify(tableFilters);
@@ -104,10 +119,39 @@ export class RequestsListComponent implements OnInit {
         value: this.statusFilter
       },
       {
-        id: 'creatorMail',
+        id: 'creatorName',
+        value: filterValue
+      },
+      {
+        id: 'lastField',
+        value: this.lastFieldFilter
+      }
+    );
+    this.dataSource.filter = JSON.stringify(tableFilters);
+  }
+
+
+  applyFilterCode(filterValue: string) {
+    const tableFilters = [];
+    tableFilters.push(
+      {
+        id: 'type',
+        value: this.classFilter
+      },
+      {
+        id: 'status',
+        value: this.statusFilter
+      },
+      {
+        id: 'creatorName',
+        value: this.creatorFilter
+      },
+      {
+        id: 'lastField',
         value: filterValue
       }
     );
+    // console.log(tableFilters);
     this.dataSource.filter = JSON.stringify(tableFilters);
   }
 
@@ -136,9 +180,14 @@ export class RequestsListComponent implements OnInit {
   /**
    *
    */
-  private getAllRequestsInternal(): void {
-    this.requestService.getAllRequestsInternal().subscribe(
+  public getAllRequestsInternal(): void {
+    this.requestService.getAllRequestsInternal(this.showAll).subscribe(
       res => {
+        this.allRequests = res;
+        for (let request of this.allRequests) {
+          request.lastField = this.getRequestCodeFromRequest(request.lastField);
+        }
+
         this.dataSource = new MatTableDataSource(res);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -148,6 +197,16 @@ export class RequestsListComponent implements OnInit {
         console.error(err);
       }
     );
+  }
+
+
+  private getRequestCodeFromRequest(request: any): string {
+    try {
+      const cac = JSON.parse(request);
+      return cac[0][0].value.split('|')[0];
+    } catch (error) {
+      return 'none';
+    }
   }
 
   private getAllRequestsExternal(): void {
