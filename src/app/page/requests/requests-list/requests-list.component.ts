@@ -62,6 +62,13 @@ export class RequestsListComponent implements OnInit {
     }
   }
 
+  private resetAllFilters(): any {
+    this.classFilter = '';
+    this.statusFilter = '';
+    this.creatorFilter = '';
+    this.lastFieldFilter = '';
+  }
+
   applyFilterStatus(filterValue: string) {
     const tableFilters = [];
     tableFilters.push({
@@ -221,6 +228,11 @@ export class RequestsListComponent implements OnInit {
         console.error(err);
       }
     );
+  }
+
+  public getAllCheckBoxChange(): void {
+    this.getAllRequestsInternal();
+    this.resetAllFilters();
   }
 
 }
