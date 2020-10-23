@@ -493,15 +493,15 @@ export class RequestQueueGeneratorComponent implements OnInit {
     console.log(this.dataSource);
     const separator = ';';
     // tslint:disable-next-line:max-line-length
-    const header = `Sample Type${separator}File Name${separator}Inst Meth${separator}Position${separator}Inj Vol${separator}Path${separator}Client${separator}Comment${separator}AgendoId${separator}TaxonomyId\n`;
+    const header = `Sample Type${separator}File Name${separator}Inst Meth${separator}Position${separator}Inj Vol${separator}Path${separator}Client${separator}AgendoId${separator}TaxonomyId${separator}Comment\n`;
     let csvString: string = header;
     for (const item of this.dataSource) {
       if (item.sampleType === 'Unknown') {
         // tslint:disable-next-line:max-line-length
-        csvString = `${csvString}${item.sampleType}${separator}${item.filename}${separator}${this.methodPath}${item.method}${separator}${item.position}${separator}${item.volume}${separator}${this.path}${separator}${item.client}${separator}${item.comment}${separator}${item.agendoId}${separator}${item.taxonomyId}\n`;
+        csvString = `${csvString}${item.sampleType}${separator}${item.filename}${separator}${this.methodPath}${item.method}${separator}${item.position}${separator}${item.volume}${separator}${this.path}${separator}${item.client}${separator}${item.agendoId}${separator}${item.taxonomyId}${separator}${item.comment}\n`;
       } else {
         // tslint:disable-next-line:max-line-length
-        csvString = `${csvString}${item.sampleType}${separator}${item.filename}${separator}${this.methodPath}${item.method}${separator}${item.position}${separator}${item.volume}${separator}${this.path}${separator}${item.client}${separator}${item.comment}${separator}${separator} \n`;
+        csvString = `${csvString}${item.sampleType}${separator}${item.filename}${separator}${this.methodPath}${item.method}${separator}${item.position}${separator}${item.volume}${separator}${this.path}${separator}${item.client}${separator}${separator}${item.comment} \n`;
       }
     }
     const blob = new Blob([csvString], { type: 'text/csv' });
