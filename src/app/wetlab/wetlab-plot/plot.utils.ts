@@ -9,7 +9,7 @@ export const LAYOUTDARK = {
   paper_bgcolor: '#424242',
   barmode: 'group',
   xaxis: {
-    nticks: 10,
+    // nticks: 10,
     linecolor: '#FFFFFF',
     tickcolor: '#FFFFFF'
   },
@@ -36,7 +36,6 @@ export const LAYOUTLIGHT = {
   paper_bgcolor: 'white',
   barmode: 'group',
   xaxis: {
-    nticks: 10,
     linecolor: '#FFFFFF',
     tickcolor: '#FFFFFF'
   },
