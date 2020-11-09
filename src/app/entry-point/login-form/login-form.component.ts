@@ -40,6 +40,8 @@ export class LoginFormComponent implements OnInit {
   public logIn(): void {
     this.authService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe(
       res => {
+        console.log(res);
+
         this.tokenService.saveToken(res.accessToken);
         this.tokenService.saveUser(res);
         this.isLoggedIn = true;
@@ -47,8 +49,8 @@ export class LoginFormComponent implements OnInit {
         this.navigate();
       },
       err => {
-        console.error(err);
-        switch (err.error.status) {
+        console.error(err.status);
+        switch (err.status) {
           case 401:
             this.error = 'Bad credentials';
             break;

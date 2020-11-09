@@ -88,7 +88,7 @@ export class RequestQcloud2FilesComponent implements OnInit, OnDestroy {
   }
 
   public goToQCloud2(file: QCloud2File): void {
-    const win = window.open(`http://localhost:4201/application/view/instrument/${file.lsApiKey}?checksum=${file.checksum}`, '_blank');
+    const win = window.open(`https://qcloud2.crg.eu/application/view/instrument/${file.lsApiKey}?checksum=${file.checksum}`, '_blank');
     win.focus();
   }
 

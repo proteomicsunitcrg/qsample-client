@@ -15,11 +15,13 @@ export class TopBarComponent implements OnInit {
 
   isAdmin = false;
 
-  constructor(private tokenService: TokenStorageService, private router: Router, private authService: AuthService) {
+  constructor(private tokenService: TokenStorageService, private router: Router,
+    private authService: AuthService, private tokenStorageService: TokenStorageService) {
     this.subscription = authService.getIsAdmin().subscribe(res => this.isAdmin = res);
   }
 
   ngOnInit(): void {
+    this.authService.updateIsAdmin(this.tokenStorageService.isAdminUser());
   }
 
   public goToHomePage(): void {
