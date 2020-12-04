@@ -195,7 +195,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
               // tslint:disable-next-line:max-line-length
               this.getMethodAndVolumeQC(this.selectedInstrument, type).method, this.getVialPositionByQCType(type),
               // tslint:disable-next-line:max-line-length
-              this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, '', '', this.dataSource[0].agendoId, undefined, type, undefined, true));
+              this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, this.clientCode, '', this.dataSource[0].agendoId, undefined, type, undefined, true));
             break;
           case false:
             this.dataSource.splice(this.getNextSampleIndexGivenActualIndex(index), 0, new Itemerino('QC',
@@ -204,7 +204,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
               // tslint:disable-next-line:max-line-length
               this.getMethodAndVolumeQC(this.selectedInstrument, type).method, this.getVialPositionByQCType(type),
               // tslint:disable-next-line:max-line-length
-              this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, '', '', this.dataSource[0].agendoId, undefined, type, undefined, false));
+              this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, 'QC01', '', '', undefined, type, undefined, false));
             this.qc1Counter = this.qc1Counter + 1;
             break;
         }
@@ -217,7 +217,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
           // tslint:disable-next-line:max-line-length
           this.getMethodAndVolumeQC(this.selectedInstrument, type).method, this.getVialPositionByQCType(type),
           // tslint:disable-next-line:max-line-length
-          this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, '', '', this.dataSource[0].agendoId, undefined, type, undefined, false));
+          this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, 'QC02', '', '', undefined, type, undefined, false));
         this.qc2Counter = this.qc2Counter + 1;
         break;
       case 'QC03':
@@ -227,7 +227,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
           // tslint:disable-next-line:max-line-length
           this.getMethodAndVolumeQC(this.selectedInstrument, type).method, this.getVialPositionByQCType(type),
           // tslint:disable-next-line:max-line-length
-          this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, '', '', this.dataSource[0].agendoId, undefined, type, undefined, false));
+          this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, 'QC03', '', '', undefined, type, undefined, false));
         this.qc3Counter = this.qc3Counter + 1;
         break;
       case 'QBSA':
@@ -241,7 +241,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
               // tslint:disable-next-line:max-line-length
               this.getMethodAndVolumeQC(this.selectedInstrument, type).method, this.getVialPositionByQCType(type),
               // tslint:disable-next-line:max-line-length
-              this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, '', '', this.dataSource[0].agendoId, undefined, type, undefined, true));
+              this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, this.clientCode, '', this.dataSource[0].agendoId, undefined, type, undefined, true));
             break;
           case false:
             this.dataSource.splice(this.getNextSampleIndexGivenActualIndex(index), 0, new Itemerino('QC',
@@ -250,7 +250,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
               // tslint:disable-next-line:max-line-length
               this.getMethodAndVolumeQC(this.selectedInstrument, type).method, this.getVialPositionByQCType(type),
               // tslint:disable-next-line:max-line-length
-              this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, '', '', this.dataSource[0].agendoId, undefined, type, undefined, false));
+              this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, 'QBSA', '', '', undefined, type, undefined, false));
             this.qBSACounter = this.qBSACounter + 1;
 
             break;
@@ -264,7 +264,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
           // tslint:disable-next-line:max-line-length
           this.getMethodAndVolumeQC(this.selectedInstrument, type).method, this.getVialPositionByQCType(type),
           // tslint:disable-next-line:max-line-length
-          this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, '', '', this.dataSource[0].agendoId, undefined, type, undefined, false));
+          this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, 'QHELA', '', '', undefined, type, undefined, false));
         this.qHELACounter = this.qHELACounter + 1;
         break;
 
@@ -326,7 +326,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
           // tslint:disable-next-line:max-line-length
           this.getMethodAndVolumeQC(this.selectedInstrument, 'QBSA').method, this.getVialPositionByQCType('QBSA'),
           // tslint:disable-next-line:max-line-length
-          this.getMethodAndVolumeQC(this.selectedInstrument, 'QBSA').volume, '', '', this.dataSource[0].agendoId, undefined, 'QBSA', undefined, true));
+          this.getMethodAndVolumeQC(this.selectedInstrument, 'QBSA').volume, this.clientCode, '', this.dataSource[0].agendoId, undefined, 'QBSA', undefined, true));
 
         this.dataSource.push(new Itemerino('QC',
           // tslint:disable-next-line:max-line-length
@@ -334,7 +334,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
           // tslint:disable-next-line:max-line-length
           this.getMethodAndVolumeQC(this.selectedInstrument, 'QC01').method, this.getVialPositionByQCType('QC01'),
           // tslint:disable-next-line:max-line-length
-          this.getMethodAndVolumeQC(this.selectedInstrument, 'QC01').volume, '', '', this.dataSource[0].agendoId, undefined, 'QC01', undefined, true));
+          this.getMethodAndVolumeQC(this.selectedInstrument, 'QC01').volume, this.clientCode, '', this.dataSource[0].agendoId, undefined, 'QC01', undefined, true));
 
 
 
@@ -493,15 +493,15 @@ export class RequestQueueGeneratorComponent implements OnInit {
     console.log(this.dataSource);
     const separator = ',';
     // tslint:disable-next-line:max-line-length
-    const header = `Sample Type${separator}File Name${separator}Path${separator}Instrument Method${separator}Position${separator}Inj Vol${separator}L2 Client${separator}L4 AgendoId${separator}L5 TaxonomyId${separator}Comment\n`;
+    const header = `Bracket Type=4\nSample Type${separator}File Name${separator}Path${separator}Instrument Method${separator}Position${separator}Inj Vol${separator}L2 Client${separator}L4 AgendoId${separator}L5 TaxonomyId${separator}Comment\n`;
     let csvString: string = header;
     for (const item of this.dataSource) {
       if (item.sampleType === 'Unknown') {
         // tslint:disable-next-line:max-line-length
-        csvString = `${csvString}${item.sampleType}${separator}${item.filename}${separator}${this.path}${separator}${item.method}${separator}${item.position}${separator}${item.volume}${separator}${item.client}${separator}${item.agendoId}${separator}${this.taxonomyCode}${separator}${item.comment}${separator}\n`;
+        csvString = `${csvString}${item.sampleType}${separator}${item.filename}${separator}${this.path}${separator}${this.methodPath}${item.method}${separator}${item.position}${separator}${item.volume}${separator}${item.client}${separator}${item.agendoId}${separator}${this.taxonomyCode}${separator}${item.comment}${separator}\n`;
       } else {
         // tslint:disable-next-line:max-line-length
-        csvString = `${csvString}${item.sampleType}${separator}${item.filename}${separator}${this.path}${separator}${item.method}${separator}${item.position}${separator}${item.volume}${separator}${item.client}${separator}${item.agendoId}${separator}${separator}${item.comment} \n`;
+        csvString = `${csvString}${item.sampleType}${separator}${item.filename}${separator}${this.path}${separator}${this.methodPath}${item.method}${separator}${item.position}${separator}${item.volume}${separator}${item.client}${separator}${item.agendoId}${separator}${separator}${item.comment}${separator}\n`;
       }
     }
     const blob = new Blob([csvString], { type: 'text/csv' });
@@ -527,14 +527,14 @@ export class Itemerino {
   volume: number;
   client: string;
   comment: string;
-  agendoId: number;
+  agendoId: string;
   taxonomyId: number;
   qcType: string;
   sampleNumber: number;
   associated: boolean;
 
   constructor(sampleType: string, filename: string, method: string, position: string, volume: number, client: string, comment: string,
-    agendoId: number, taxonomyId: number, qcType: string, sampleNumber: number, associated: boolean) {
+    agendoId: string, taxonomyId: number, qcType: string, sampleNumber: number, associated: boolean) {
     this.sampleType = sampleType;
     this.filename = filename;
     this.method = method;
