@@ -1,28 +1,37 @@
-<section class="mat-typography title-group">
+<div fxLayout="column">
+  <section class="mat-typography title-group">
     <h1 style="margin: 20px;">
-        <div *ngIf="request != undefined">
-            <span class="material-icons cursor" (click)="goBack()">
-                arrow_back_ios
-            </span>
-            {{requestCode}}<button style="float: right;" mat-raised-button
-                (click)="goToQGenerator()">QGenerator</button>
-        </div>
+      <div *ngIf="request != undefined">
+        <span class="material-icons cursor" (click)="goBack()">
+          arrow_back_ios
+        </span>
+        {{requestCode}}<button style="float: right;" mat-raised-button (click)="goToQGenerator()">QGenerator</button>
+      </div>
     </h1>
-    <mat-divider></mat-divider>
-</section>
-<mat-grid-list cols="10" rowHeight="150px">
-    <mat-grid-tile [colspan]="3" [rowspan]="2">
-        <app-request-details-panel [request]="request" style="margin-left: 50px;"></app-request-details-panel>
-    </mat-grid-tile>
-    <mat-grid-tile [colspan]="7" [rowspan]="8">
-        <app-request-plot-request style="margin-top: 0px;"></app-request-plot-request>
-    </mat-grid-tile>
-    <mat-grid-tile [colspan]="3" [rowspan]="3">
-        <app-request-qcloud2-files style="margin-left: 50px;" [request]="requestCode">
-        </app-request-qcloud2-files>
-    </mat-grid-tile>
-</mat-grid-list>
 
-<div fxLayout="row" *ngIf="isInternal">
+  </section>
+  <div fxLayout="row">
+    <div fxLayout="column" fxLayoutGap="2vw">
+      <div>
+        <app-request-details-panel [request]="request" style=""></app-request-details-panel>
+      </div>
+      <div>
+        <app-request-qcloud2-files style="" [request]="requestCode">
+        </app-request-qcloud2-files>
+      </div>
+    </div>
+    <div fxFlex>
+      <mat-card>
+        <mat-card-title>
+          Request plots
+        </mat-card-title>
+        <mat-card-content>
+          <app-request-plot-request style="margin-top: 0px;"></app-request-plot-request>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+  <div fxLayout="row" *ngIf="isInternal">
     <app-request-wetlab-main style="width: 100%; margin-top: 3%;"></app-request-wetlab-main>
+  </div>
 </div>

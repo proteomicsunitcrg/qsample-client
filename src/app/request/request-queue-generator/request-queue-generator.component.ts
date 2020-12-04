@@ -491,7 +491,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
 
   public generateCSV(): void {
     console.log(this.dataSource);
-    const separator = ';';
+    const separator = ',';
     // tslint:disable-next-line:max-line-length
     const header = `Sample Type${separator}File Name${separator}Path${separator}Instrument Method${separator}Position${separator}Inj Vol${separator}L2 Client${separator}L4 AgendoId${separator}L5 TaxonomyId${separator}Comment\n`;
     let csvString: string = header;
