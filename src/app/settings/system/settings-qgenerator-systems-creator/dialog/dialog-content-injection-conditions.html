@@ -1,36 +1,39 @@
 <h2 mat-dialog-title>
-    Injection conditions
+  Injection conditions
 </h2>
 <mat-dialog-content>
-    <h3>
-        {{instrument.name}}
-    </h3>
-    <h3>
-        {{application.name}}
-    </h3>
-    <div>
-        <form [formGroup]="injCondForm">
-            <mat-form-field appearance="standard">
-                <mat-label>Volume</mat-label>
-                <input matInput formControlName="volume" type="number">
-            </mat-form-field>
-            <!-- <br> -->
-            <p *ngFor="let method of injectionCondition.methods">
-              {{method.name}}
-            </p>
-            <mat-form-field appearance="fill" style="width: 90%;">
-                <mat-label>Method</mat-label>
-                <mat-select formControlName="method">
-                  <mat-option *ngFor = "let method of allMethods" [value]="method">
-                    {{method.name}}
-                  </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </form>
-    </div>
+  <h3>
+    {{instrument.name}}
+  </h3>
+  <h3>
+    {{application.name}}
+  </h3>
+  <div>
+    <form [formGroup]="injCondForm">
+      <mat-form-field appearance="standard">
+        <mat-label>Volume</mat-label>
+        <input matInput formControlName="volume" type="number">
+      </mat-form-field>
+      <!-- <br> -->
+      <p *ngFor="let method of injectionCondition.methods">
+        {{method.name}}
+        <span class="material-icons" style="cursor: pointer;" (click)="removeFromMethodFromInjectionCondition(method)">
+          delete
+        </span>
+      </p>
+      <mat-form-field appearance="fill" style="width: 90%;">
+        <mat-label>Method</mat-label>
+        <mat-select formControlName="method">
+          <mat-option *ngFor="let method of methodsToDisplay" [value]="method" (click)="methodClick(method)">
+            {{method.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Cancel</button>
-    <button mat-button (click)="delete()" *ngIf="isUpdate">Delete</button>
-    <button mat-button (click)="save()" [disabled]="!injCondForm.valid">Save</button>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button (click)="delete()" *ngIf="isUpdate">Delete</button>
+  <button mat-button (click)="save()">Save</button>
 </mat-dialog-actions>

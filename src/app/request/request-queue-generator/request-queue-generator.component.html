@@ -36,6 +36,15 @@
             </mat-select>
         </mat-form-field>
     </mat-grid-tile>
+
+    <mat-grid-tile *ngIf="injectionCondition">
+      <mat-form-field appearance="fill">
+        <mat-label>Method</mat-label>
+        <mat-select [(value)]="selectedMethod" (selectionChange)="applyInjectionConditions()">
+            <mat-option [value]="method" *ngFor="let method of injectionCondition.methods" >{{method.name}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    </mat-grid-tile>
 </mat-grid-list>
 <mat-divider></mat-divider>
 

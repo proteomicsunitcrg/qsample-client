@@ -20,27 +20,27 @@ export class InjectionConditionsDialogComponent implements OnInit {
   application: Application;
   instrument: Instrument;
   isUpdate = false;
+  methodsToDisplay: Method[] = [];
 
-    injCondForm = new FormGroup({
-      method: new FormControl(this.injectionCondition.methods, [
-        Validators.required,
-      ]),
-      volume: new FormControl('', [
-        Validators.required,
-        Validators.min(0)
-      ]),
-    });
+  injCondForm = new FormGroup({
+    method: new FormControl(this.injectionCondition.methods, [
+      Validators.required,
+    ]),
+    volume: new FormControl('', [
+      Validators.required,
+      Validators.min(0)
+    ]),
+  });
 
   constructor(
     public dialogRef: MatDialogRef<InjectionConditionsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public itemC: any, private qGeneratorService: QGeneratorService, private snackBar: MatSnackBar, private methodService: MethodService) {
-      this.application = itemC.application;
-      this.instrument = itemC.instrument;
-    }
+    this.application = itemC.application;
+    this.instrument = itemC.instrument;
+  }
 
-    ngOnInit() {
-      this.getAllMethods();
-      this.getMethodsByAppNameAndInstrumentId();
+  ngOnInit() {
+    this.getMethodsByAppNameAndInstrumentId();
   }
 
   public onYesClick(): void {
@@ -57,20 +57,27 @@ export class InjectionConditionsDialogComponent implements OnInit {
           // this.injCondForm.get('method').setValue(this.injectionCondition.method);
           this.injCondForm.get('volume').setValue(this.injectionCondition.volume);
           this.isUpdate = true;
+        } else {
+          this.injectionCondition.methods = [];
         }
+        this.getAllMethods();
       }
     );
   }
 
   private getAllMethods(): void {
     this.methodService.getAll().subscribe(
-      res => this.allMethods = res,
+      res => {
+        this.allMethods = res;
+        this.checkIfMethodSelected();
+        console.log(this.methodsToDisplay);
+
+      },
       err => console.error(err)
     );
   }
 
   public save(): void {
-    this.injectionCondition.methods = this.injCondForm.get('method').value;
     this.injectionCondition.volume = this.injCondForm.get('volume').value;
     this.injectionCondition.application = this.application;
     this.injectionCondition.instrument = this.instrument;
@@ -106,6 +113,38 @@ export class InjectionConditionsDialogComponent implements OnInit {
     this.snackBar.open(message, action, {
       duration: 2000,
     });
+  }
+
+  private checkIfMethodSelected(): void {
+    this.methodsToDisplay = [];
+    console.log(this.injectionCondition);
+
+    if (this.injectionCondition.methods.length === 0) {
+      this.methodsToDisplay = this.allMethods;
+      return;
+    }
+
+    for (let item of this.allMethods) {
+      let index = this.injectionCondition.methods.findIndex(i => i.id === item.id);
+      if (index === -1) {
+        this.methodsToDisplay.push(item);
+      }
+    }
+    if (this.methodsToDisplay.length === 0) {
+      this.injCondForm.get('method').disable();
+    }
+  }
+
+  public methodClick(method: Method): void {
+    console.log(method);
+    this.injectionCondition.methods.push(method);
+    this.checkIfMethodSelected();
+  }
+
+  public removeFromMethodFromInjectionCondition(method: Method): void {
+    let index = this.injectionCondition.methods.findIndex(i => i.id === method.id);
+    this.injectionCondition.methods.splice(index, 1);
+    this.checkIfMethodSelected();
   }
 
 }

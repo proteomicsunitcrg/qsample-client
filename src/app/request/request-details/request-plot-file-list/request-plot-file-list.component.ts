@@ -30,9 +30,11 @@ export class RequestPlotFileListComponent implements OnInit {
       res => {
         this.files = res;
         this.selectedSamples = res;
-        this.dataSource = new MatTableDataSource(this.files);
-        this.dataSource.paginator = this.paginator;
-        this.plotService.sendselectedSamples(this.selectedSamples);
+        if (this.files !== null) {
+          this.dataSource = new MatTableDataSource(this.files);
+          this.dataSource.paginator = this.paginator;
+          this.plotService.sendselectedSamples(this.selectedSamples);
+        }
       },
       err => {
         console.error(err);

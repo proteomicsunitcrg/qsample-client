@@ -10,6 +10,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dial
 import { QGeneratorDialogComponent } from './dialog/QGeneratorDialog.component';
 import { saveAs } from 'file-saver';
 import { MatGridList } from '@angular/material/grid-list';
+import { Method } from '../../models/Method';
 
 
 
@@ -71,6 +72,8 @@ export class RequestQueueGeneratorComponent implements OnInit {
 
   selectedInstrument: Instrument;
 
+  selectedMethod: Method;
+
   injectionCondition: InjectionCondition;
 
   path = 'C:\\Xcalibur\\Data';
@@ -110,6 +113,8 @@ export class RequestQueueGeneratorComponent implements OnInit {
   private getMethodsByAppNameAndInstrumentId(): void {
     this.qGeneratorService.getMethodsByAppNameAndInstrumentId(this.request.classs, this.selectedInstrument).subscribe(
       res => {
+        console.log(res);
+
         this.injectionCondition = res;
         if (this.injectionCondition !== undefined) {
           this.applyInjectionConditions();
@@ -120,10 +125,12 @@ export class RequestQueueGeneratorComponent implements OnInit {
     );
   }
 
-  private applyInjectionConditions(): void {
+  public applyInjectionConditions(): void {
     for (const item of this.dataSource) {
       if (item.sampleType === 'Unknown') {
-        // item.method = this.injectionCondition.method;
+        if (this.selectedMethod) {
+          item.method = this.selectedMethod.name;
+        }
         item.volume = this.injectionCondition.volume;
       } else {
         item.method = this.getMethodAndVolumeQC(this.selectedInstrument, item.qcType).method;
