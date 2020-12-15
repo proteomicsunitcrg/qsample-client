@@ -58,8 +58,6 @@ export class RequestQcloud2FilesComponent implements OnInit, OnDestroy {
     // console.log(this.requestCode);
     this.fileService.getQCloud2Files(this.requestCode).subscribe(
       res => {
-        console.log(res);
-
         this.qCloud2Files = res;
         this.dataSource = new MatTableDataSource(res);
         this.dataSource.paginator = this.paginator;

@@ -22,7 +22,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
             console.log(res);
             this.request = res;
             this.requestCode = this.getRequestCodeFromRequest(this.request);
-            console.log(this.request);
+            console.log(this.requestCode);
 
             this.requestService.changeRequestCode(this.requestCode);
           },
@@ -51,7 +51,6 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
 
   private getRequestCodeFromRequest(request: any): string {
     const cac = JSON.parse(request.fields[request.fields.length - 1].value);
-    console.log(cac[0][0].value.split('|')[0]);
     return cac[0][0].value.split('|')[0];
   }
 
@@ -64,8 +63,6 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
   }
 
   public goToQGenerator(): void {
-    console.log('caca');
-
     this.router.navigate(['/request/QGenerator', this.requestId]);
   }
 

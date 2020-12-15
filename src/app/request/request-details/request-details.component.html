@@ -26,7 +26,11 @@
           Request plots
         </mat-card-title>
         <mat-card-content>
-          <app-request-plot-request style="margin-top: 0px;"></app-request-plot-request>
+          <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="2vw" >
+            <app-request-plot-file-list [requestCode]="requestCode" *ngIf="requestCode"></app-request-plot-file-list>
+            <app-request-plot-request></app-request-plot-request>
+          </div>
+
         </mat-card-content>
       </mat-card>
     </div>

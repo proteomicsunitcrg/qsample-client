@@ -6,6 +6,7 @@ import { LAYOUTDARK, LAYOUTLIGHT } from '../../wetlab/wetlab-plot/plot.utils';
 import { Subscription } from 'rxjs';
 import { RequestService } from '../../services/request.service';
 import { LoginFormComponent } from '../../entry-point/login-form/login-form.component';
+import { PlotService } from '../../services/plot.service';
 declare var Plotly: any;
 
 @Component({
@@ -44,14 +45,19 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy {
   // Subscription to update the plot on theme change
   themeChangesSubscription$: Subscription;
 
+  // Subscription to update the plot on list change
+  fileListChangesSubscription$: Subscription;
+
   // Flag to know if the plot has data
   noDataFound = false;
 
   // Message error
   msgError = '';
 
+  selectedSamples = [];
 
-  constructor(private dataService: DataService, private themeService: ThemeService, private requestService: RequestService) {
+
+  constructor(private dataService: DataService, private themeService: ThemeService, private requestService: RequestService, private plotService: PlotService) {
   }
 
   ngOnInit(): void {
@@ -60,12 +66,14 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy {
     this.themeColor = this.themeService.currentTheme;
     this.getData();
     this.subscribeToThemeChanges();
+    this.subscribeToListChanges();
     this.getName();
 
   }
 
   ngOnDestroy(): void {
     this.themeChangesSubscription$.unsubscribe();
+    this.fileListChangesSubscription$.unsubscribe();
     Plotly.purge(`Graph${this.randString}`);
   }
 
@@ -74,8 +82,6 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy {
     this.dataService.getDataForPlotRequest(this.cs, this.param, this.requestCode).subscribe(
       res => {
         this.plotTrace = res;
-        console.log(this.plotTrace.length);
-
         if (this.plotTrace.length !== 0) {
           this.getName();
           this.plotGraph();
@@ -104,6 +110,9 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy {
 
   private plotGraph(): void {
     const dataForPlot = [];
+    if (this.plotTrace == undefined) {
+      return;
+    }
     this.plotTrace.forEach(
       plotTrace => {
         const values = [];
@@ -112,10 +121,12 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy {
         const color = [];
         plotTrace.plotTracePoints.forEach(
           plotTracePoint => {
-            values.push(plotTracePoint.value);
-            filenames.push(plotTracePoint.file.filename);
-            dates.push(plotTracePoint.file.creationDate);
-            color.push('red');
+            if (this.checkFileInList(plotTracePoint.file)) {
+              values.push(plotTracePoint.value);
+              filenames.push(plotTracePoint.file.filename);
+              dates.push(plotTracePoint.file.creationDate);
+              color.push('red');
+            }
           }
         );
         const trace = {
@@ -184,6 +195,27 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy {
         this.reLayout();
       }
     );
+  }
+
+    /**
+   * Subscribes to list display changes
+   */
+  private subscribeToListChanges(): void {
+    this.fileListChangesSubscription$ = this.plotService.selectedSamples.subscribe(
+      list => {
+        this.selectedSamples = list;
+        this.plotGraph();
+      }
+    );
+  }
+
+  private checkFileInList(file: any): boolean {
+    for (let item of this.selectedSamples) {
+      if (item.checksum == file.checksum) {
+        return true;
+      }
+    }
+    return false;
   }
 
 }

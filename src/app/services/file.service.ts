@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment';
 import { WetLab } from '../models/WetLab';
 import { File } from '../models/File';
 import { QCloud2File } from '../models/QCloud2File';
+import { RequestFile } from '../models/RequestFile';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,10 @@ export class FileService {
 
   public getQCloud2Files(requestCode: string): Observable<QCloud2File[]> {
     return this.httpClient.get<QCloud2File[]>(`${this.apiPrefix}qcloud2/${requestCode}`);
+  }
+
+  public getFilesByRequestCode(requestCode: string): Observable<RequestFile[]> {
+    return this.httpClient.get<RequestFile[]>(`${this.apiPrefix}getByRequestCode/${requestCode}`);
   }
 
 

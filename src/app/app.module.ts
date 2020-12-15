@@ -23,6 +23,7 @@ import { QGeneratorService } from './services/qGenerator.service';
 import { InstrumentService } from './services/instrument.service';
 import { ApplicationService } from './services/application.service';
 import { MethodService } from './services/method.service';
+import { PlotService } from './services/plot.service';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { MethodService } from './services/method.service';
     TestService,
     RoleGuardService,
     ThemeSelectorComponent,
-    ThemeService
+    ThemeService,
+    PlotService
   ],
   bootstrap: [AppComponent]
 })
