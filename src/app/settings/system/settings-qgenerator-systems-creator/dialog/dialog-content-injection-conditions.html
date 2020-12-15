@@ -15,9 +15,16 @@
                 <input matInput formControlName="volume" type="number">
             </mat-form-field>
             <!-- <br> -->
-            <mat-form-field appearance="standard" style="width: 90%;">
+            <p *ngFor="let method of injectionCondition.methods">
+              {{method.name}}
+            </p>
+            <mat-form-field appearance="fill" style="width: 90%;">
                 <mat-label>Method</mat-label>
-                <input matInput formControlName="method">
+                <mat-select formControlName="method">
+                  <mat-option *ngFor = "let method of allMethods" [value]="method">
+                    {{method.name}}
+                  </mat-option>
+                </mat-select>
             </mat-form-field>
         </form>
     </div>

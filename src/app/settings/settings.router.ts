@@ -11,6 +11,8 @@ import { SettingsQgeneratorApplicationsComponent } from './application/settings-
 import { SettingsQgeneratorSystemsCreatorComponent } from './system/settings-qgenerator-systems-creator/settings-qgenerator-systems-creator.component';
 // tslint:disable-next-line:max-line-length
 import { SettingsQgeneratorApplicationsCreatorComponent } from './application/settings-qgenerator-applications-creator/settings-qgenerator-applications-creator.component';
+import { SettingsQgeneratorMethodsComponent } from './method/settings-qgenerator-methods/settings-qgenerator-methods.component';
+import { SettingsQgeneratorMethodsCreatorComponent } from './method/settings-qgenerator-methods-creator/settings-qgenerator-methods-creator.component';
 
 const routes: Routes = [
   {
@@ -21,6 +23,8 @@ const routes: Routes = [
       { path: 'QGenerator/systems/editor/:id', component: SettingsQgeneratorSystemsCreatorComponent },
       { path: 'QGenerator/applications', component: SettingsQgeneratorApplicationsComponent },
       { path: 'QGenerator/applications/editor/:id', component: SettingsQgeneratorApplicationsCreatorComponent },
+      { path: 'QGenerator/methods', component: SettingsQgeneratorMethodsComponent },
+      { path: 'QGenerator/methods/editor/:id', component: SettingsQgeneratorMethodsCreatorComponent },
     ]
   },
 ];

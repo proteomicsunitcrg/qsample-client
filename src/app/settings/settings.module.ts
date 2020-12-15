@@ -18,6 +18,8 @@ import { SettingsQgeneratorSystemsCreatorComponent } from './system/settings-qge
 import { SettingsQgeneratorApplicationsCreatorComponent } from './application/settings-qgenerator-applications-creator/settings-qgenerator-applications-creator.component';
 // tslint:disable-next-line:max-line-length
 import { InjectionConditionsDialogComponent } from './system/settings-qgenerator-systems-creator/dialog/injection-conditions-dialog.component';
+import { SettingsQgeneratorMethodsComponent } from './method/settings-qgenerator-methods/settings-qgenerator-methods.component';
+import { SettingsQgeneratorMethodsCreatorComponent } from './method/settings-qgenerator-methods-creator/settings-qgenerator-methods-creator.component';
 
 
 @NgModule({
@@ -30,7 +32,9 @@ import { InjectionConditionsDialogComponent } from './system/settings-qgenerator
         SettingsQgeneratorApplicationsComponent,
         SettingsQgeneratorSystemsCreatorComponent,
         SettingsQgeneratorApplicationsCreatorComponent,
-        InjectionConditionsDialogComponent
+        InjectionConditionsDialogComponent,
+        SettingsQgeneratorMethodsComponent,
+        SettingsQgeneratorMethodsCreatorComponent
     ],
     imports: [
         FlexLayoutModule,

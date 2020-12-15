@@ -123,7 +123,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
   private applyInjectionConditions(): void {
     for (const item of this.dataSource) {
       if (item.sampleType === 'Unknown') {
-        item.method = this.injectionCondition.method;
+        // item.method = this.injectionCondition.method;
         item.volume = this.injectionCondition.volume;
       } else {
         item.method = this.getMethodAndVolumeQC(this.selectedInstrument, item.qcType).method;

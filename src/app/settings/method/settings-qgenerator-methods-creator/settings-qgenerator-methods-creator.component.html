@@ -1,0 +1,23 @@
+<div style=" margin-left: 20px;">
+  <mat-card>
+      <mat-card-title *ngIf="isEdit">
+          Edit {{oldName}}
+      </mat-card-title>
+      <mat-card-title *ngIf="!isEdit">
+          New method
+      </mat-card-title>
+      <mat-card-content>
+          <form [formGroup]="methodForm">
+              <mat-form-field appearance="standard" style="width: 95%;">
+                  <mat-label>Name</mat-label>
+                  <input matInput formControlName="name" name="methodNaem">
+              </mat-form-field>
+          </form>
+          <br>
+          <button mat-raised-button color="primary" (click)="save()" [disabled]="!methodForm.valid">Save</button>
+          <button mat-raised-button color="accent" (click)="delete()" style="margin-left: 10px;"
+              [disabled]="!isEdit">Delete</button>
+          <button mat-raised-button color="basic" (click)="goBack()" style="margin-left: 10px;">Go back</button>
+      </mat-card-content>
+  </mat-card>
+</div>

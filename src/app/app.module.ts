@@ -22,6 +22,7 @@ import { DataService } from './services/data.service';
 import { QGeneratorService } from './services/qGenerator.service';
 import { InstrumentService } from './services/instrument.service';
 import { ApplicationService } from './services/application.service';
+import { MethodService } from './services/method.service';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { ApplicationService } from './services/application.service';
     QGeneratorService,
     InstrumentService,
     ApplicationService,
+    MethodService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
