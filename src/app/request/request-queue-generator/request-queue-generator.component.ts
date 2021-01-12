@@ -29,11 +29,12 @@ export class RequestQueueGeneratorComponent implements OnInit {
         this.requestService.getRequestDetails(params.apiKey).subscribe(
           res => {
             console.log(res);
-
             this.request = res;
             this.requestCode = this.getRequestCodeFromRequest(this.request);
             this.getSamplesFromRequests(this.request);
             this.taxonomyCode = this.getTaxonomyCodeFromName(this.getTaxonomyFromRequest());
+            this.databaseCode = this.getDatabaseFromRequest();
+            console.log(this.databaseCode);
             this.requestService.changeRequestCode(this.requestCode);
             this.getAvailableInstruments();
           },
@@ -79,6 +80,8 @@ export class RequestQueueGeneratorComponent implements OnInit {
   path = 'C:\\Xcalibur\\Data';
 
   methodPath = 'C:\\Xcalibur\\methods\\current\\';
+
+  databaseCode: string;
 
   qc1Counter = 1;
 
@@ -147,19 +150,29 @@ export class RequestQueueGeneratorComponent implements OnInit {
     return cac[0][0].value.split('|')[0];
   }
 
+
   private getSamplesFromRequests(request: any): void {
     this.samples = [];
     const cac = JSON.parse(request.fields[request.fields.length - 1].value);
     let sampleNumber = 1;
     for (const val of cac) {
       const pedete = new Itemerino('Unknown', val[0].value.replace(/\|/g, '_') + '_01', 'none', 'none', 0,
-        this.clientCode, '', this.request.id, this.taxonomyCode, 'Unknown', sampleNumber, false);
+      this.clientCode, '', this.request.id, this.taxonomyCode, 'Unknown', sampleNumber, false);
       this.samples.push(pedete);
       sampleNumber = sampleNumber + 1;
       // this.samples.push(val[0].value.replace(/\|/g, '_'));
     }
     this.dataSource = this.samples;
     this.cloneGlobal = this.samples;
+  }
+
+  private getDatabaseFromRequest(): string {
+    for (const item of this.request.fields) {
+      if (item.name === 'Database') {
+        return item.value;
+      }
+    }
+    return '';
   }
 
   private getTaxonomyFromRequest(): string {
@@ -315,8 +328,6 @@ export class RequestQueueGeneratorComponent implements OnInit {
     this.table.renderRows();
   }
 
-
-
   public autoQC(): void { // TODO repair this
     if (confirm('All QCs will be removed')) {
       this.dataSource = this.removeQCsFromList(this.dataSource);
@@ -342,14 +353,6 @@ export class RequestQueueGeneratorComponent implements OnInit {
           this.getMethodAndVolumeQC(this.selectedInstrument, 'QC01').method, this.getVialPositionByQCType('QC01'),
           // tslint:disable-next-line:max-line-length
           this.getMethodAndVolumeQC(this.selectedInstrument, 'QC01').volume, this.clientCode, '', this.dataSource[0].agendoId, undefined, 'QC01', undefined, true));
-
-
-
-        //   this.addQC('QBSA', this.dataSource.length, true);
-        // this.addQC('QC01', this.dataSource.length, true);
-        // this.publicAddQ('bsa', true, this.dataSource.length);
-        // this.publicAddQCloud2('bsa', true, this.dataSource.length);
-
       }
     }
     this.table.renderRows();
@@ -500,15 +503,15 @@ export class RequestQueueGeneratorComponent implements OnInit {
     console.log(this.dataSource);
     const separator = ',';
     // tslint:disable-next-line:max-line-length
-    const header = `Bracket Type=4\nSample Type${separator}File Name${separator}Path${separator}Instrument Method${separator}Position${separator}Inj Vol${separator}L2 Client${separator}L4 AgendoId${separator}L5 TaxonomyId${separator}Comment\n`;
+    const header = `Bracket Type=4\nSample Type${separator}File Name${separator}Path${separator}Instrument Method${separator}Position${separator}Inj Vol${separator}L2 Client${separator}L4 AgendoId${separator}L5 TaxonomyId${separator}Comment${separator}Database\n`;
     let csvString: string = header;
     for (const item of this.dataSource) {
       if (item.sampleType === 'Unknown') {
         // tslint:disable-next-line:max-line-length
-        csvString = `${csvString}${item.sampleType}${separator}${item.filename}${separator}${this.path}${separator}${this.methodPath}${item.method}${separator}${item.position}${separator}${item.volume}${separator}${item.client}${separator}${item.agendoId}${separator}${this.taxonomyCode}${separator}${item.comment}${separator}\n`;
+        csvString = `${csvString}${item.sampleType}${separator}${item.filename}${separator}${this.path}${separator}${this.methodPath}${item.method}${separator}${item.position}${separator}${item.volume}${separator}${item.client}${separator}${item.agendoId}${separator}${this.taxonomyCode}${separator}${item.comment}${separator}${this.databaseCode}\n`;
       } else {
         // tslint:disable-next-line:max-line-length
-        csvString = `${csvString}${item.sampleType}${separator}${item.filename}${separator}${this.path}${separator}${this.methodPath}${item.method}${separator}${item.position}${separator}${item.volume}${separator}${item.client}${separator}${item.agendoId}${separator}${separator}${item.comment}${separator}\n`;
+        csvString = `${csvString}${item.sampleType}${separator}${item.filename}${separator}${this.path}${separator}${this.methodPath}${item.method}${separator}${item.position}${separator}${item.volume}${separator}${item.client}${separator}${item.agendoId}${separator}${separator}${item.comment}${separator}${this.databaseCode}\n`;
       }
     }
     const blob = new Blob([csvString], { type: 'text/csv' });
