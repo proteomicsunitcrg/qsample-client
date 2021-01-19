@@ -503,15 +503,15 @@ export class RequestQueueGeneratorComponent implements OnInit {
     console.log(this.dataSource);
     const separator = ',';
     // tslint:disable-next-line:max-line-length
-    const header = `Bracket Type=4\nSample Type${separator}File Name${separator}Path${separator}Instrument Method${separator}Position${separator}Inj Vol${separator}L2 Client${separator}L4 AgendoId${separator}L5 TaxonomyId${separator}Comment${separator}Database\n`;
+    const header = `Bracket Type=4\nSample Type${separator}File Name${separator}Path${separator}Instrument Method${separator}Position${separator}Inj Vol${separator}L2 Client${separator}L4 AgendoId${separator}L5 TaxonomyId${separator}L5 Database${separator}Comment\n`;
     let csvString: string = header;
     for (const item of this.dataSource) {
       if (item.sampleType === 'Unknown') {
         // tslint:disable-next-line:max-line-length
-        csvString = `${csvString}${item.sampleType}${separator}${item.filename}${separator}${this.path}${separator}${this.methodPath}${item.method}${separator}${item.position}${separator}${item.volume}${separator}${item.client}${separator}${item.agendoId}${separator}${this.taxonomyCode}${separator}${item.comment}${separator}${this.databaseCode}\n`;
+        csvString = `${csvString}${item.sampleType}${separator}${item.filename}${separator}${this.path}${separator}${this.methodPath}${item.method}${separator}${item.position}${separator}${item.volume}${separator}${item.client}${separator}${item.agendoId}${separator}${this.taxonomyCode}${separator}${this.databaseCode}${separator}${item.comment}\n`;
       } else {
         // tslint:disable-next-line:max-line-length
-        csvString = `${csvString}${item.sampleType}${separator}${item.filename}${separator}${this.path}${separator}${this.methodPath}${item.method}${separator}${item.position}${separator}${item.volume}${separator}${item.client}${separator}${item.agendoId}${separator}${separator}${item.comment}${separator}${this.databaseCode}\n`;
+        csvString = `${csvString}${item.sampleType}${separator}${item.filename}${separator}${this.path}${separator}${this.methodPath}${item.method}${separator}${item.position}${separator}${item.volume}${separator}${item.client}${separator}${item.agendoId}${separator}${separator}${this.databaseCode}${separator}${item.comment}\n`;
       }
     }
     const blob = new Blob([csvString], { type: 'text/csv' });

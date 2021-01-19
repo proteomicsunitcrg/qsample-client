@@ -32,6 +32,8 @@ export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
   columnsToDisplay = ['name'];
   dataSource: MatTableDataSource<any>;
 
+  dataSourceQC: MatTableDataSource<any>;
+
 
   oldName: string;
   instrument = new Instrument(null, null);
@@ -52,6 +54,7 @@ export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
       }
     );
     this.getAllApplications();
+    this.getAllQC();
   }
 
   private getByid(id: number): void {
@@ -116,6 +119,11 @@ export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
         console.error(err);
       }
     );
+  }
+
+  private getAllQC(): void {
+    const allQC = ['QC01', 'QC02', 'QC03', 'QBSA', 'QHELA'];
+    this.dataSourceQC = new MatTableDataSource(allQC);
   }
 
 
