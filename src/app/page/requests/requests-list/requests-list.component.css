@@ -9,3 +9,9 @@ tr {
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
 }
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
