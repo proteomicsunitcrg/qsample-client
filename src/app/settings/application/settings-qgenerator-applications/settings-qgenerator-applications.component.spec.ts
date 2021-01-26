@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { SettingsQgeneratorApplicationsComponent } from './settings-qgenerator-applications.component';
 
@@ -6,7 +6,7 @@ describe('SettingsQgeneratorApplicationsComponent', () => {
   let component: SettingsQgeneratorApplicationsComponent;
   let fixture: ComponentFixture<SettingsQgeneratorApplicationsComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [SettingsQgeneratorApplicationsComponent]
     })

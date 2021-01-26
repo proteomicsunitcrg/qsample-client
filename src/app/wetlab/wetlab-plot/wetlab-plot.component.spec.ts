@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { WetlabPlotComponent } from './wetlab-plot.component';
 
@@ -6,7 +6,7 @@ describe('WetlabPlotComponent', () => {
   let component: WetlabPlotComponent;
   let fixture: ComponentFixture<WetlabPlotComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [WetlabPlotComponent]
     })

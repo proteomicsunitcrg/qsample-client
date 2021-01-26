@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { SettingsQgeneratorSystemsCreatorComponent } from './settings-qgenerator-systems-creator.component';
 
@@ -6,7 +6,7 @@ describe('SettingsQgeneratorSystemsCreatorComponent', () => {
   let component: SettingsQgeneratorSystemsCreatorComponent;
   let fixture: ComponentFixture<SettingsQgeneratorSystemsCreatorComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [SettingsQgeneratorSystemsCreatorComponent]
     })
