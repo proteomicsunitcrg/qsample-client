@@ -22,8 +22,10 @@ export class RequestService {
 
 
 
-  public getAllRequestsInternal(showAll: boolean): Observable<MiniRequest[]> {
+  public getAllRequestsInternal(showAll: boolean, startDate: Date, endDate: Date): Observable<MiniRequest[]> {
     this.params = this.params.set('showAll', showAll ? 'true' : 'false');
+    this.params = this.params.set('start_date', startDate.toISOString());
+    this.params = this.params.set('end_date', endDate.toISOString());
     return this.http.get<MiniRequest[]>(`${this.apiPrefix}api/request`, { params: this.params });
   }
 

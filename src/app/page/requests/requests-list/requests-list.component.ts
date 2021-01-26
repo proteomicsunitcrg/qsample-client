@@ -42,9 +42,13 @@ export class RequestsListComponent implements OnInit {
 
   showAll = true;
 
+  today = new Date();
+
+  monthAgo = new Date(new Date().setMonth(this.today.getMonth() - 1));
+
   range = new FormGroup({
-    start: new FormControl(),
-    end: new FormControl()
+    start: new FormControl(this.monthAgo),
+    end: new FormControl(this.today)
   });
 
 
@@ -60,11 +64,7 @@ export class RequestsListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.isInternal) {
-      this.getAllRequestsInternal();
-    } else {
-      this.getAllRequestsExternal();
-    }
+    this.getAllRequests();
   }
 
   private resetAllFilters(): any {
@@ -189,11 +189,19 @@ export class RequestsListComponent implements OnInit {
       };
   }
 
+  public getAllRequests(): void {
+    if (this.isInternal) {
+      this.getAllRequestsInternal();
+    } else {
+      this.getAllRequestsExternal();
+    }
+  }
+
   /**
    *
    */
   public getAllRequestsInternal(): void {
-    this.requestService.getAllRequestsInternal(this.showAll).subscribe(
+    this.requestService.getAllRequestsInternal(this.showAll, this.range.controls.start.value, this.range.controls.end.value).subscribe(
       res => {
         this.allRequests = res;
         for (const request of this.allRequests) {
