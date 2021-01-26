@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { RequestService } from '../../../services/request.service';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { RequestStatus } from '../../../models/RequestStatus';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -41,6 +41,11 @@ export class RequestsListComponent implements OnInit {
   filteredValues = {};
 
   showAll = true;
+
+  range = new FormGroup({
+    start: new FormControl(),
+    end: new FormControl()
+  });
 
 
 
