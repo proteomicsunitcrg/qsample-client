@@ -54,7 +54,6 @@ export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
       }
     );
     this.getAllApplications();
-    this.getAllQC();
   }
 
   private getByid(id: number): void {
@@ -110,6 +109,12 @@ export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
     this.router.navigate(['/settings/QGenerator/systems']);
   }
 
+  public goToQC(): void {
+    console.log(this.instrument);
+
+    this.router.navigate(['settings/QGenerator/systems/qc/', this.instrument.id])
+  }
+
   private getAllApplications(): void {
     this.applicationService.getAll().subscribe(
       res => {
@@ -120,12 +125,6 @@ export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
       }
     );
   }
-
-  private getAllQC(): void {
-    const allQC = ['QC01', 'QC02', 'QC03', 'QBSA', 'QHELA'];
-    this.dataSourceQC = new MatTableDataSource(allQC);
-  }
-
 
   public openDialog(application: Application, instrument: Instrument): void {
     const dialogRef = this.dialog.open(InjectionConditionsDialogComponent, {

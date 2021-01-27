@@ -24,6 +24,7 @@ import { InstrumentService } from './services/instrument.service';
 import { ApplicationService } from './services/application.service';
 import { MethodService } from './services/method.service';
 import { PlotService } from './services/plot.service';
+import { InjectionConditionQCService } from './services/injectionConditionsQC.service';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { PlotService } from './services/plot.service';
     InstrumentService,
     ApplicationService,
     MethodService,
+    InjectionConditionQCService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

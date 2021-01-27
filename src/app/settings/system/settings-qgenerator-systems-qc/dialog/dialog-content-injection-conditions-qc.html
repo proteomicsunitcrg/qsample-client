@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>
+  Injection conditions QC
+</h2>
+<mat-dialog-content>
+  <h3>
+    {{instrument.name}}
+  </h3>
+  <h3>
+    {{qcType}}
+  </h3>
+  <div>
+  </div>
+  <form [formGroup]="injCondForm">
+    <mat-form-field appearance="standard">
+      <mat-label>Volume</mat-label>
+      <input matInput formControlName="volume" type="number">
+    </mat-form-field>
+    <br>
+    <mat-form-field appearance="standard">
+      <mat-label>Method</mat-label>
+      <input matInput formControlName="method" type="text">
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button *ngIf="isUpdate" (click)="delete()">Delete</button>
+  <button mat-button (click)="save()" [disabled]="injCondForm.invalid">Save</button>
+</mat-dialog-actions>

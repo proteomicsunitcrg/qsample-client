@@ -13,6 +13,7 @@ import { SettingsQgeneratorSystemsCreatorComponent } from './system/settings-qge
 import { SettingsQgeneratorApplicationsCreatorComponent } from './application/settings-qgenerator-applications-creator/settings-qgenerator-applications-creator.component';
 import { SettingsQgeneratorMethodsComponent } from './method/settings-qgenerator-methods/settings-qgenerator-methods.component';
 import { SettingsQgeneratorMethodsCreatorComponent } from './method/settings-qgenerator-methods-creator/settings-qgenerator-methods-creator.component';
+import { SettingsQgeneratorSystemsQcComponent } from './system/settings-qgenerator-systems-qc/settings-qgenerator-systems-qc.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,7 @@ const routes: Routes = [
       { path: 'user', component: SettingsUserComponent },
       { path: 'QGenerator/systems', component: SettingsQgeneratorSystemsComponent },
       { path: 'QGenerator/systems/editor/:id', component: SettingsQgeneratorSystemsCreatorComponent },
+      { path: 'QGenerator/systems/qc/:id', component: SettingsQgeneratorSystemsQcComponent },
       { path: 'QGenerator/applications', component: SettingsQgeneratorApplicationsComponent },
       { path: 'QGenerator/applications/editor/:id', component: SettingsQgeneratorApplicationsCreatorComponent },
       { path: 'QGenerator/methods', component: SettingsQgeneratorMethodsComponent },

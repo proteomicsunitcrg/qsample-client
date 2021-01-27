@@ -20,6 +20,8 @@ import { SettingsQgeneratorApplicationsCreatorComponent } from './application/se
 import { InjectionConditionsDialogComponent } from './system/settings-qgenerator-systems-creator/dialog/injection-conditions-dialog.component';
 import { SettingsQgeneratorMethodsComponent } from './method/settings-qgenerator-methods/settings-qgenerator-methods.component';
 import { SettingsQgeneratorMethodsCreatorComponent } from './method/settings-qgenerator-methods-creator/settings-qgenerator-methods-creator.component';
+import { SettingsQgeneratorSystemsQcComponent } from './system/settings-qgenerator-systems-qc/settings-qgenerator-systems-qc.component';
+import { InjectionConditionsQCDialogComponent } from './system/settings-qgenerator-systems-qc/dialog/injection-conditions-dialog-qc.component';
 
 
 @NgModule({
@@ -33,8 +35,10 @@ import { SettingsQgeneratorMethodsCreatorComponent } from './method/settings-qge
         SettingsQgeneratorSystemsCreatorComponent,
         SettingsQgeneratorApplicationsCreatorComponent,
         InjectionConditionsDialogComponent,
+        InjectionConditionsQCDialogComponent,
         SettingsQgeneratorMethodsComponent,
-        SettingsQgeneratorMethodsCreatorComponent
+        SettingsQgeneratorMethodsCreatorComponent,
+        SettingsQgeneratorSystemsQcComponent
     ],
     imports: [
         FlexLayoutModule,
