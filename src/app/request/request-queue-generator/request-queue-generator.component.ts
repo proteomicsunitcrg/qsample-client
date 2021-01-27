@@ -11,6 +11,8 @@ import { QGeneratorDialogComponent } from './dialog/QGeneratorDialog.component';
 import { saveAs } from 'file-saver';
 import { MatGridList } from '@angular/material/grid-list';
 import { Method } from '../../models/Method';
+import { InjectionConditionQCService } from '../../services/injectionConditionsQC.service';
+import { InjectionConditionQC } from '../../models/InjectionConditionQC';
 
 
 
@@ -22,7 +24,7 @@ import { Method } from '../../models/Method';
 export class RequestQueueGeneratorComponent implements OnInit {
 
   constructor(private activeRouter: ActivatedRoute, private requestService: RequestService, private router: Router,
-    private qGeneratorService: QGeneratorService, public dialog: MatDialog) {
+    private qGeneratorService: QGeneratorService, public dialog: MatDialog, private injectionConditionQCService: InjectionConditionQCService) {
     this.activeRouter.params.subscribe(
       params => {
         this.requestId = params.apiKey;
@@ -76,6 +78,8 @@ export class RequestQueueGeneratorComponent implements OnInit {
   selectedMethod: Method;
 
   injectionCondition: InjectionCondition;
+
+  injectionConditionsQC: InjectionConditionQC[];
 
   path = 'C:\\Xcalibur\\Data';
 
@@ -133,14 +137,13 @@ export class RequestQueueGeneratorComponent implements OnInit {
       if (item.sampleType === 'Unknown') {
         if (this.selectedMethod) {
           item.method = this.selectedMethod.name;
+          item.volume = this.injectionCondition.volume;
         }
-        item.volume = this.injectionCondition.volume;
       } else {
         item.method = this.getMethodAndVolumeQC(this.selectedInstrument, item.qcType).method;
         item.volume = this.getMethodAndVolumeQC(this.selectedInstrument, item.qcType).volume;
       }
     }
-
   }
 
   private getRequestCodeFromRequest(request: any): string {
@@ -417,85 +420,10 @@ export class RequestQueueGeneratorComponent implements OnInit {
     if (instrument === undefined) {
       return { method: 'none', volume: 1 };
     }
-    switch (instrument.name) {
-      case 'Lumos1':
-        switch (qcType) {
-          case 'QBSA':
-          case 'QC01':
-          case 'QC':
-            return { method: 'STD-L1-BSA-8min-T3-HCD-IT', volume: 0.5 };
-            break;
-          case 'QC02':
-          case 'QHELA':
-            return { method: 'STD-L1-QC02-60min-TSP-HCD-IT_max2ul', volume: 1 };
-            break;
-          case 'QC03':
-            return { method: 'QC4L-Fusion-Lumos', volume: 1 };
-            break;
-          default:
-            return { method: 'none', volume: 1 };
-            break;
-        }
-        break;
-      case 'Velos':
-        switch (qcType) {
-          case 'QBSA':
-          case 'QC01':
-          case 'QC':
-            return { method: 'STD-VL-BSA-8min-T3-CID-IT', volume: 0.5 };
-            break;
-          case 'QC02':
-          case 'QHELA':
-            return { method: 'STD-VL-QC02-60min-T20-CID-IT', volume: 1 };
-            break;
-          case 'QC03':
-            return { method: 'STD-VL-DDA-60min-T4-CID-IT-HCD-FT-QC4L', volume: 1 };
-            break;
-          default:
-            return { method: 'none', volume: 1 };
-            break;
-        }
-        break;
-      case 'Eclipse1':
-        switch (qcType) {
-          case 'QBSA':
-          case 'QC01':
-          case 'QC':
-            return { method: 'STD-EU-BSA-8min-T3-HCD-IT', volume: 0.5 };
-            break;
-          case 'QC02':
-          case 'QHELA':
-            return { method: 'STD-EU-QC02-60min-TSP-HCD-IT_max2ul', volume: 1 };
-            break;
-          case 'QC03':
-            return { method: 'QC4L-Eclipse', volume: 1 };
-            break;
-          default:
-            return { method: 'none', volume: 1 };
-            break;
-        }
-        break;
-      case 'XL':
-        switch (qcType) {
-          case 'QBSA':
-          case 'QC01':
-          case 'QC':
-            return { method: 'STD-XL-BSA-8min-T3-CID-IT', volume: 0.5 };
-            break;
-          case 'QC02':
-          case 'QHELA':
-            return { method: 'STD-XL-60min-T10-CID-IT', volume: 1 };
-            break;
-          case 'QC03':
-            return { method: 'STD-XL-DDA-60min-T4-CID-IT-HCD-FT-QC4L', volume: 1 };
-            break;
-          default:
-            return { method: 'none', volume: 1 };
-            break;
-        }
-      default:
-        return { method: 'none', volume: 1 };
-        break;
+    for (let injCond of this.injectionConditionsQC) {
+      if (qcType === injCond.qctype) {
+        return { method: injCond.method, volume: injCond.volume };
+      }
     }
   }
 
@@ -520,6 +448,20 @@ export class RequestQueueGeneratorComponent implements OnInit {
 
   public changeInstrument(): void {
     this.getMethodsByAppNameAndInstrumentId();
+    this.getInstrumentInjectionConditionsQC();
+  }
+
+  private getInstrumentInjectionConditionsQC(): void {
+    this.injectionConditionQCService.findByInstrumentId(this.selectedInstrument).subscribe(
+      res => {
+        this.injectionConditionsQC = res;
+        this.applyInjectionConditions();
+
+      },
+      err => {
+        console.error(err);
+      }
+    );
   }
 
   private getPositionFromSampleName(name: string): string {

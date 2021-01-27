@@ -32,6 +32,10 @@ export class InjectionConditionQCService {
     return this.httpClient.delete<boolean>(`${this.apiPrefix}${id}`);
   }
 
+  public findByInstrumentId(instrument: Instrument): Observable<InjectionConditionQC[]>{
+    return this.httpClient.get<InjectionConditionQC[]>(`${this.apiPrefix}findByInstrumentId/${instrument.id}`);
+  }
+
   // errorHandler(error: HttpErrorResponse) {
   //   // console.log(error);
   //   return throwError(error || 'Server Error');
