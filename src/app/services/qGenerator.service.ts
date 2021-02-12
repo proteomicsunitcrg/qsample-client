@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { Observable, Subject, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Instrument } from '../models/Instrument';
 import { InjectionCondition } from '../models/InjectionCondition';
@@ -17,6 +17,15 @@ export class QGeneratorService {
 
   headers = new HttpHeaders().set('Content-type', 'application/json');
 
+  public orderCSV = new Subject<any[]>();
+
+  public sendCSV(list: any[]) {
+    this.orderCSV.next(list);
+  }
+
+  public getCSV(): Observable<any> {
+    return this.orderCSV.asObservable();
+  }
 
   public getAvailableInstruments(appName: string): Observable<Instrument[]> {
     return this.httpClient.get<Instrument[]>(`${this.apiPrefix}available/${appName}`);

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RequestService } from '../../services/request.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
@@ -13,6 +13,8 @@ import { MatGridList } from '@angular/material/grid-list';
 import { Method } from '../../models/Method';
 import { InjectionConditionQCService } from '../../services/injectionConditionsQC.service';
 import { InjectionConditionQC } from '../../models/InjectionConditionQC';
+import { Subscription } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 
@@ -21,10 +23,11 @@ import { InjectionConditionQC } from '../../models/InjectionConditionQC';
   templateUrl: './request-queue-generator.component.html',
   styleUrls: ['./request-queue-generator.component.css']
 })
-export class RequestQueueGeneratorComponent implements OnInit {
+export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
 
   constructor(private activeRouter: ActivatedRoute, private requestService: RequestService, private router: Router,
-    private qGeneratorService: QGeneratorService, public dialog: MatDialog, private injectionConditionQCService: InjectionConditionQCService) {
+    private qGeneratorService: QGeneratorService, public dialog: MatDialog, private injectionConditionQCService: InjectionConditionQCService,
+    private snackBar: MatSnackBar) {
     this.activeRouter.params.subscribe(
       params => {
         this.requestId = params.apiKey;
@@ -57,7 +60,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
 
   requestCode: string;
 
-  samples: any[] = [];
+  samples: Itemerino[] = [];
 
   year = new Date().getFullYear();
 
@@ -97,9 +100,15 @@ export class RequestQueueGeneratorComponent implements OnInit {
 
   qHELACounter = 1;
 
-
+  csvSubscription: Subscription; // Subscription to the CSV uploaded by the user in the other component
 
   ngOnInit(): void {
+    this.subscribeToSelectedPeptidesList();
+  }
+
+  ngOnDestroy(): void {
+    this.csvSubscription.unsubscribe();
+
   }
 
   private getAvailableInstruments(): void {
@@ -109,6 +118,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
         if (this.availableInstruments.length === 1) {
           this.selectedInstrument = this.availableInstruments[0];
           this.getMethodsByAppNameAndInstrumentId();
+          this.getInstrumentInjectionConditionsQC();
         }
       },
       err => {
@@ -160,7 +170,7 @@ export class RequestQueueGeneratorComponent implements OnInit {
     let sampleNumber = 1;
     for (const val of cac) {
       const pedete = new Itemerino('Unknown', val[0].value.replace(/\|/g, '_') + '_01', 'none', 'none', 0,
-      this.clientCode, '', this.request.id, this.taxonomyCode, 'Unknown', sampleNumber, false);
+        this.clientCode, '', this.request.id, this.taxonomyCode, 'Unknown', sampleNumber, false);
       this.samples.push(pedete);
       sampleNumber = sampleNumber + 1;
       // this.samples.push(val[0].value.replace(/\|/g, '_'));
@@ -332,34 +342,31 @@ export class RequestQueueGeneratorComponent implements OnInit {
   }
 
   public autoQC(): void { // TODO repair this
-    if (confirm('All QCs will be removed')) {
-      this.dataSource = this.removeQCsFromList(this.dataSource);
-      const clone: Itemerino[] = [];
-      const clone2 = [];
-      this.dataSource.forEach(val => clone.push(Object.assign({}, val)));
-      this.dataSource.forEach(val => clone2.push(Object.assign({}, val)));
-      this.dataSource = [];
-      for (const sample of clone) {
-        this.dataSource.push(sample);
-        this.dataSource.push(new Itemerino('QC',
-          // tslint:disable-next-line:max-line-length
-          `${this.requestCode}_${this.clientCode}_${this.getPositionFromSampleName(sample.filename)}_${this.year}${this.month}${this.day}_QBSA_001_01`,
-          // tslint:disable-next-line:max-line-length
-          this.getMethodAndVolumeQC(this.selectedInstrument, 'QBSA').method, this.getVialPositionByQCType('QBSA'),
-          // tslint:disable-next-line:max-line-length
-          this.getMethodAndVolumeQC(this.selectedInstrument, 'QBSA').volume, this.clientCode, '', this.dataSource[0].agendoId, undefined, 'QBSA', undefined, true));
+    this.dataSource = this.removeQCsFromList(this.dataSource);
+    const clone: Itemerino[] = [];
+    const clone2 = [];
+    this.dataSource.forEach(val => clone.push(Object.assign({}, val)));
+    this.dataSource.forEach(val => clone2.push(Object.assign({}, val)));
+    this.dataSource = [];
+    for (const sample of clone) {
+      this.dataSource.push(sample);
+      this.dataSource.push(new Itemerino('QC',
+        // tslint:disable-next-line:max-line-length
+        `${this.requestCode}_${this.clientCode}_${this.getPositionFromSampleName(sample.filename)}_${this.year}${this.month}${this.day}_QBSA_001_01`,
+        // tslint:disable-next-line:max-line-length
+        this.getMethodAndVolumeQC(this.selectedInstrument, 'QBSA').method, this.getVialPositionByQCType('QBSA'),
+        // tslint:disable-next-line:max-line-length
+        this.getMethodAndVolumeQC(this.selectedInstrument, 'QBSA').volume, this.clientCode, '', this.dataSource[0].agendoId, undefined, 'QBSA', undefined, true));
 
-        this.dataSource.push(new Itemerino('QC',
-          // tslint:disable-next-line:max-line-length
-          `${this.requestCode}_${this.clientCode}_${this.getPositionFromSampleName(sample.filename)}_${this.year}${this.month}${this.day}_QC01_001_01`,
-          // tslint:disable-next-line:max-line-length
-          this.getMethodAndVolumeQC(this.selectedInstrument, 'QC01').method, this.getVialPositionByQCType('QC01'),
-          // tslint:disable-next-line:max-line-length
-          this.getMethodAndVolumeQC(this.selectedInstrument, 'QC01').volume, this.clientCode, '', this.dataSource[0].agendoId, undefined, 'QC01', undefined, true));
-      }
+      this.dataSource.push(new Itemerino('QC',
+        // tslint:disable-next-line:max-line-length
+        `${this.requestCode}_${this.clientCode}_${this.getPositionFromSampleName(sample.filename)}_${this.year}${this.month}${this.day}_QC01_001_01`,
+        // tslint:disable-next-line:max-line-length
+        this.getMethodAndVolumeQC(this.selectedInstrument, 'QC01').method, this.getVialPositionByQCType('QC01'),
+        // tslint:disable-next-line:max-line-length
+        this.getMethodAndVolumeQC(this.selectedInstrument, 'QC01').volume, this.clientCode, '', this.dataSource[0].agendoId, undefined, 'QC01', undefined, true));
     }
     this.table.renderRows();
-
   }
 
   private removeQCsFromList(list: Itemerino[]): Itemerino[] {
@@ -456,7 +463,6 @@ export class RequestQueueGeneratorComponent implements OnInit {
       res => {
         this.injectionConditionsQC = res;
         this.applyInjectionConditions();
-
       },
       err => {
         console.error(err);
@@ -467,6 +473,74 @@ export class RequestQueueGeneratorComponent implements OnInit {
   private getPositionFromSampleName(name: string): string {
     const splited = name.split('_');
     return splited[splited.length - 2];
+  }
+
+
+  private subscribeToSelectedPeptidesList(): void {
+    this.csvSubscription = this.qGeneratorService.getCSV().subscribe(
+      csv => {
+        this.processCSV(csv);
+      }
+    );
+  }
+
+  private processCSV(csv: string[]): void {
+    if (this.dataSource.length != this.samples.length) {
+      if (!confirm('All QCs will be removed')) {
+        return;
+      }
+    }
+    const result = [];
+    if (this.checkCorrectCSV(csv)) {
+      for (let line of csv.slice(1)) { // we dont need the headers
+        const lineName = line.split(';')[0];
+        const lineSamplePosition = line.split(';')[1];
+        for (let sample of this.samples) {
+          if (lineName == sample.filename) {
+            sample.position = lineSamplePosition;
+            result.push(sample);
+            console.log(sample);
+          }
+        }
+      }
+      this.dataSource = result;
+      this.table.renderRows();
+      this.openSnackBar('CSV positions applied', 'Close');
+    }
+
+  }
+
+  private checkCorrectCSV(csv: string[]): boolean {
+    const header = csv[0].split(';');
+    if (csv.length -1 != this.samples.length) {
+      this.openSnackBar('The CSV lines do not match the number of samples', 'Close');
+      return false;
+    }
+    if (header.length == 2 && header[0].trim() === 'sample name' && header[1].trim() == 'position') {
+      for (let line of csv.slice(1)) { // slice to skip the header (the first line)
+        let line_splitted = line.split(';');
+        if(line_splitted.length != 2) {
+          this.openSnackBar('One or more lines with bad length', 'Close');
+          return false;
+        }
+        for (let item of line_splitted) {
+          if (item.trim() == '') {
+            this.openSnackBar('Some CSV item blank', 'Close');
+            return false;
+          }
+        }
+      }
+    } else {
+      this.openSnackBar('Bad headers', 'Close');
+      return false;
+    }
+    return true;
+  }
+
+  private openSnackBar(message: string, action: string): void {
+    this.snackBar.open(message, action, {
+      duration: 2000,
+    });
   }
 
 }

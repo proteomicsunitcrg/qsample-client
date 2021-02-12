@@ -19,6 +19,7 @@ import { RequestPanelDialogComponent } from './request-details-panel/dialog/requ
 import { RequestDetailsPanelComponent } from './request-details-panel/request-details-panel.component';
 import { NonConformitiesDialogComponent } from './request-qcloud2-files/dialog/non-conformities-dialog.component';
 import { RequestPlotFileListComponent } from './request-details/request-plot-file-list/request-plot-file-list.component';
+import { RequestFileUploaderComponent } from './request-file-uploader/request-file-uploader.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { RequestPlotFileListComponent } from './request-details/request-plot-fil
     RequestPanelDialogComponent,
     RequestDetailsPanelComponent,
     NonConformitiesDialogComponent,
-    RequestPlotFileListComponent
+    RequestPlotFileListComponent,
+    RequestFileUploaderComponent
   ],
   imports: [
     FlexLayoutModule,
