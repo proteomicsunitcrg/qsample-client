@@ -41,4 +41,8 @@ export class TopBarComponent implements OnInit {
     this.router.navigate(['/settings']);
   }
 
+  public goToHelp(): void {
+    this.router.navigate(['/help']);
+  }
+
 }
