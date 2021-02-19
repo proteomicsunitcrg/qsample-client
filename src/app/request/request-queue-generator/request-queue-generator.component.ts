@@ -33,13 +33,11 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
         this.requestId = params.apiKey;
         this.requestService.getRequestDetails(params.apiKey).subscribe(
           res => {
-            console.log(res);
             this.request = res;
             this.requestCode = this.getRequestCodeFromRequest(this.request);
             this.getSamplesFromRequests(this.request);
             this.taxonomyCode = this.getTaxonomyCodeFromName(this.getTaxonomyFromRequest());
             this.databaseCode = this.getDatabaseFromRequest();
-            console.log(this.databaseCode);
             this.requestService.changeRequestCode(this.requestCode);
             this.getAvailableInstruments();
           },
@@ -130,8 +128,6 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
   private getMethodsByAppNameAndInstrumentId(): void {
     this.qGeneratorService.getMethodsByAppNameAndInstrumentId(this.request.classs, this.selectedInstrument).subscribe(
       res => {
-        console.log(res);
-
         this.injectionCondition = res;
         if (this.injectionCondition !== undefined) {
           this.applyInjectionConditions();
@@ -221,7 +217,6 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
           case true:
             const sampleNumber = this.getPositionFromSampleName(this.dataSource[index].filename);
             const qcNumber = this.getQCsByTypeBetweenIndexs(index, this.getNextSampleIndexGivenActualIndex(index), type);
-            console.log(qcNumber);
             this.dataSource.splice(this.getNextSampleIndexGivenActualIndex(index), 0, new Itemerino('QC',
               // tslint:disable-next-line:max-line-length
               `${this.requestCode}_${this.clientCode}_${sampleNumber}_${this.year}${this.month}${this.day}_${type}_001_${('0' + qcNumber).slice(-2)}`,
@@ -326,7 +321,6 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
 
     while (i < this.dataSource.length) {
       if (this.dataSource[i].sampleType === 'Unknown') {
-        console.log(this.dataSource[i].filename);
         return i;
       }
       i++;
@@ -435,7 +429,6 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
   }
 
   public generateCSV(): void {
-    console.log(this.dataSource);
     const separator = ',';
     // tslint:disable-next-line:max-line-length
     const header = `Bracket Type=4\nSample Type${separator}File Name${separator}Path${separator}Instrument Method${separator}Position${separator}Inj Vol${separator}L2 Client${separator}L4 AgendoId${separator}L5 Database${separator}Comment\n`;
@@ -499,7 +492,6 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
           if (lineName == sample.filename) {
             sample.position = lineSamplePosition;
             result.push(sample);
-            console.log(sample);
           }
         }
       }
@@ -511,6 +503,9 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
   }
 
   private checkCorrectCSV(csv: string[]): boolean {
+    if (csv[csv.length - 1] === ''.trim()) { // We check if the last line is empty
+      csv.pop();
+    }
     const header = csv[0].split(';');
     if (csv.length -1 != this.samples.length) {
       this.openSnackBar('The CSV lines do not match the number of samples', 'Close');
@@ -539,9 +534,18 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
 
   private openSnackBar(message: string, action: string): void {
     this.snackBar.open(message, action, {
-      duration: 2000,
+      duration: 6000,
     });
   }
+
+  private hasDuplicates<T>(array: Array<T>): boolean {
+    const asSet: Set<T> = new Set();
+    for(let x of array) {
+        if(asSet.has(x)) { return true; }
+        asSet.add(x);
+    }
+    return false;
+}
 
 }
 
