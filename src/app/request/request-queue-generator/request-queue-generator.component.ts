@@ -486,11 +486,11 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
     const result = [];
     if (this.checkCorrectCSV(csv)) {
       for (let line of csv.slice(1)) { // we dont need the headers
-        const lineName = line.split(';')[0];
+        const lineName = line.split(';')[0].replace(/(\r\n|\n|\r)/gm,''); // Open Office calc and MS Excel puts a new line char at the end of every line
         const lineSamplePosition = line.split(';')[1];
         for (let sample of this.samples) {
           if (lineName == sample.filename) {
-            sample.position = lineSamplePosition;
+            sample.position = lineSamplePosition.replace(/(\r\n|\n|\r)/gm,'');
             result.push(sample);
           }
         }
