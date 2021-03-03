@@ -1,42 +1,42 @@
 <div style=" margin-left: 20px;">
-    <mat-card>
-        <mat-card-title *ngIf="isEdit">
-            Edit {{oldName}}
-            <a mat-flat-button color="primary" style="float: right;" (click)="goToQC()">QC</a>
-        </mat-card-title>
-        <mat-card-title *ngIf="!isEdit">
-            New instrument
-        </mat-card-title>
-        <mat-card-content>
-            <form [formGroup]="systemFrom">
-                <mat-form-field appearance="standard">
-                    <mat-label>Name</mat-label>
-                    <input matInput formControlName="name">
-                </mat-form-field>
-            </form>
-            <br>
-            <button mat-raised-button color="primary" (click)="save()" [disabled]="!systemFrom.valid">Save</button>
-            <button mat-raised-button color="accent" (click)="delete()" style="margin-left: 10px;"
-                [disabled]="!isEdit">Delete</button>
-            <a mat-raised-button color="basic" (click)="goBack()" style="margin-left: 10px;">Go back</a>
-        </mat-card-content>
-    </mat-card>
+  <mat-card>
+    <mat-card-title *ngIf="isEdit">
+      Edit {{oldName}}
+      <a mat-flat-button color="primary" style="float: right;" (click)="goToQC()">QC</a>
+    </mat-card-title>
+    <mat-card-title *ngIf="!isEdit">
+      New instrument
+    </mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="systemFrom">
+        <mat-form-field appearance="standard">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name">
+        </mat-form-field>
+      </form>
+      <br>
+      <button mat-raised-button color="primary" (click)="save()" [disabled]="!systemFrom.valid">Save</button>
+      <button mat-raised-button color="accent" (click)="delete()" style="margin-left: 10px;"
+        [disabled]="!isEdit">Delete</button>
+      <a mat-raised-button color="basic" (click)="goBack()" style="margin-left: 10px;">Go back</a>
+    </mat-card-content>
+  </mat-card>
 </div>
 <div style=" margin-left: 20px; margin-top: 20px;" *ngIf="isEdit">
-    <mat-card>
-        <mat-card-title>
-            Applications
-        </mat-card-title>
-        <mat-card-content>
-            <table style="width: 100%;" mat-table [dataSource]="dataSource">
-                <ng-container matColumnDef="name">
-                    <th mat-header-cell *matHeaderCellDef> Name </th>
-                    <td mat-cell *matCellDef="let entry"> {{entry.name}} </td>
-                </ng-container>
-                <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-                <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay"
-                    (click)="openDialog(myRowData, instrument)"></tr>
-            </table>
-        </mat-card-content>
-    </mat-card>
+  <mat-card>
+    <mat-card-title>
+      Applications
+    </mat-card-title>
+    <mat-card-content>
+      <table style="width: 100%;" mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Name </th>
+          <td mat-cell *matCellDef="let entry"> {{entry.name}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay" (click)="openDialog(myRowData, instrument)">
+        </tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
 </div>

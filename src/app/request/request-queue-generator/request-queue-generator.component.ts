@@ -26,7 +26,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
 
   constructor(private activeRouter: ActivatedRoute, private requestService: RequestService, private router: Router,
-    private qGeneratorService: QGeneratorService, public dialog: MatDialog, private injectionConditionQCService: InjectionConditionQCService,
+    private qGeneratorService: QGeneratorService, public dialog: MatDialog,
+    private injectionConditionQCService: InjectionConditionQCService,
     private snackBar: MatSnackBar) {
     this.activeRouter.params.subscribe(
       params => {
@@ -421,7 +422,7 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
     if (instrument === undefined) {
       return { method: 'none', volume: 1 };
     }
-    for (let injCond of this.injectionConditionsQC) {
+    for (const injCond of this.injectionConditionsQC) {
       if (qcType === injCond.qctype) {
         return { method: injCond.method, volume: injCond.volume };
       }
@@ -478,19 +479,20 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
   }
 
   private processCSV(csv: string[]): void {
-    if (this.dataSource.length != this.samples.length) {
+    if (this.dataSource.length !== this.samples.length) {
       if (!confirm('All QCs will be removed')) {
         return;
       }
     }
     const result = [];
     if (this.checkCorrectCSV(csv)) {
-      for (let line of csv.slice(1)) { // we dont need the headers
-        const lineName = line.split(';')[0].replace(/(\r\n|\n|\r)/gm,''); // Open Office calc and MS Excel puts a new line char at the end of every line
+      for (const line of csv.slice(1)) { // we dont need the headers
+        const lineName = line.split(';')[0].replace(/(\r\n|\n|\r)/gm, '');
+        // Open Office calc and MS Excel puts a new line char at the end of every line
         const lineSamplePosition = line.split(';')[1];
-        for (let sample of this.samples) {
-          if (lineName == sample.filename) {
-            sample.position = lineSamplePosition.replace(/(\r\n|\n|\r)/gm,'');
+        for (const sample of this.samples) {
+          if (lineName === sample.filename) {
+            sample.position = lineSamplePosition.replace(/(\r\n|\n|\r)/gm, '');
             result.push(sample);
           }
         }
@@ -507,19 +509,19 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
       csv.pop();
     }
     const header = csv[0].split(';');
-    if (csv.length -1 != this.samples.length) {
+    if (csv.length - 1 !== this.samples.length) {
       this.openSnackBar('The CSV lines do not match the number of samples', 'Close');
       return false;
     }
-    if (header.length == 2 && header[0].trim() === 'sample name' && header[1].trim() == 'position') {
-      for (let line of csv.slice(1)) { // slice to skip the header (the first line)
-        let line_splitted = line.split(';');
-        if(line_splitted.length != 2) {
+    if (header.length === 2 && header[0].trim() === 'sample name' && header[1].trim() === 'position') {
+      for (const line of csv.slice(1)) { // slice to skip the header (the first line)
+        const lineSplitted = line.split(';');
+        if (lineSplitted.length !== 2) {
           this.openSnackBar('One or more lines with bad length', 'Close');
           return false;
         }
-        for (let item of line_splitted) {
-          if (item.trim() == '') {
+        for (const item of lineSplitted) {
+          if (item.trim() === '') {
             this.openSnackBar('Some CSV item blank', 'Close');
             return false;
           }
@@ -540,12 +542,12 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
 
   private hasDuplicates<T>(array: Array<T>): boolean {
     const asSet: Set<T> = new Set();
-    for(let x of array) {
-        if(asSet.has(x)) { return true; }
-        asSet.add(x);
+    for (const x of array) {
+      if (asSet.has(x)) { return true; }
+      asSet.add(x);
     }
     return false;
-}
+  }
 
 }
 

@@ -8,9 +8,9 @@ describe('SettingsQgeneratorMethodsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SettingsQgeneratorMethodsComponent ]
+      declarations: [SettingsQgeneratorMethodsComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

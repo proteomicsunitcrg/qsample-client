@@ -14,23 +14,23 @@ import { QgeneratorCsvHelpComponent } from './qgenerator/qgenerator-csv-help/qge
 
 
 @NgModule({
-    declarations: [
+  declarations: [
     HelpMainComponent,
     HelpSidebarComponent,
     QgeneratorCsvHelpComponent
   ],
-    imports: [
-        FlexLayoutModule,
-        CommonModule,
-        RouterModule,
-        FormsModule,
-        ReactiveFormsModule,
-        AngularMaterialModule,
-        SharedModule,
-        HelpRouter
-    ],
-    providers: [
-    ],
-    bootstrap: []
+  imports: [
+    FlexLayoutModule,
+    CommonModule,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    AngularMaterialModule,
+    SharedModule,
+    HelpRouter
+  ],
+  providers: [
+  ],
+  bootstrap: []
 })
 export class HelpModule { }

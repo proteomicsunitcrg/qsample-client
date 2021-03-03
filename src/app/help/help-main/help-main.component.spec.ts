@@ -8,9 +8,9 @@ describe('HelpMainComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HelpMainComponent ]
+      declarations: [HelpMainComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

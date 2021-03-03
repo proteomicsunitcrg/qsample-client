@@ -25,33 +25,33 @@ import { InjectionConditionsQCDialogComponent } from './system/settings-qgenerat
 
 
 @NgModule({
-    declarations: [
-        SettingsMainComponent,
-        SettingsSidebarComponent,
-        SettingsUserComponent,
-        UserSettingDialogComponent,
-        SettingsQgeneratorSystemsComponent,
-        SettingsQgeneratorApplicationsComponent,
-        SettingsQgeneratorSystemsCreatorComponent,
-        SettingsQgeneratorApplicationsCreatorComponent,
-        InjectionConditionsDialogComponent,
-        InjectionConditionsQCDialogComponent,
-        SettingsQgeneratorMethodsComponent,
-        SettingsQgeneratorMethodsCreatorComponent,
-        SettingsQgeneratorSystemsQcComponent
-    ],
-    imports: [
-        FlexLayoutModule,
-        CommonModule,
-        RouterModule,
-        FormsModule,
-        ReactiveFormsModule,
-        AngularMaterialModule,
-        SharedModule,
-        SettingsRouter
-    ],
-    providers: [
-    ],
-    bootstrap: []
+  declarations: [
+    SettingsMainComponent,
+    SettingsSidebarComponent,
+    SettingsUserComponent,
+    UserSettingDialogComponent,
+    SettingsQgeneratorSystemsComponent,
+    SettingsQgeneratorApplicationsComponent,
+    SettingsQgeneratorSystemsCreatorComponent,
+    SettingsQgeneratorApplicationsCreatorComponent,
+    InjectionConditionsDialogComponent,
+    InjectionConditionsQCDialogComponent,
+    SettingsQgeneratorMethodsComponent,
+    SettingsQgeneratorMethodsCreatorComponent,
+    SettingsQgeneratorSystemsQcComponent
+  ],
+  imports: [
+    FlexLayoutModule,
+    CommonModule,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    AngularMaterialModule,
+    SharedModule,
+    SettingsRouter
+  ],
+  providers: [
+  ],
+  bootstrap: []
 })
 export class SettingsModule { }

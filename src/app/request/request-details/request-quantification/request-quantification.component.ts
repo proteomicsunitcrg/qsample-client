@@ -35,7 +35,7 @@ export class RequestQuantificationComponent implements OnInit, OnDestroy {
   constructor(private quantificationService: QuantificationService, private plotService: PlotService, private fileService: FileService) { }
 
   ngOnInit(): void {
-    this.subscribeToChecksumChanges()
+    this.subscribeToChecksumChanges();
   }
 
   ngOnDestroy(): void {
@@ -61,7 +61,7 @@ export class RequestQuantificationComponent implements OnInit, OnDestroy {
   private getQuantificationByFileChecksum() {
     this.quantificationService.getQuantificationByFileChecksumAndContaminant(this.selectedChecksum, false).subscribe(
       res => {
-        if (res.length == 0) {
+        if (res.length === 0) {
           this.proteinsEmpty = true;
         } else {
           this.proteinsEmpty = false;
@@ -78,7 +78,7 @@ export class RequestQuantificationComponent implements OnInit, OnDestroy {
   private getQuantificationContaminantByFileChecksum() {
     this.quantificationService.getQuantificationByFileChecksumAndContaminant(this.selectedChecksum, true).subscribe(
       res => {
-        if (res.length == 0) {
+        if (res.length === 0) {
           this.contaminantsEmpty = true;
         } else {
           this.contaminantsEmpty = false;

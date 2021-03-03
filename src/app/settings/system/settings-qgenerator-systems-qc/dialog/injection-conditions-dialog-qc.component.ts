@@ -36,7 +36,8 @@ export class InjectionConditionsQCDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<InjectionConditionsQCDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public itemC: any, private injCondQCService: InjectionConditionQCService, private snackBar: MatSnackBar, private methodService: MethodService) {
+    @Inject(MAT_DIALOG_DATA) public itemC: any, private injCondQCService: InjectionConditionQCService,
+    private snackBar: MatSnackBar, private methodService: MethodService) {
     this.qcType = itemC.qcType;
     this.instrument = itemC.instrument;
   }
@@ -64,7 +65,8 @@ export class InjectionConditionsQCDialogComponent implements OnInit {
   }
 
   public save(): void {
-    const injCond = new InjectionConditionQC(this.injCondId, this.qcType, this.instrument, this.injCondForm.controls.method.value, this.injCondForm.controls.volume.value);
+    const injCond = new InjectionConditionQC(this.injCondId, this.qcType, this.instrument,
+      this.injCondForm.controls.method.value, this.injCondForm.controls.volume.value);
     this.injCondQCService.saveInjectionCondition(injCond).subscribe(
       res => {
         this.openSnackBar('Injection condition saved', 'Close');
@@ -83,7 +85,7 @@ export class InjectionConditionsQCDialogComponent implements OnInit {
     this.injCondQCService.deleteInjectionConditionQC(this.injCondId).subscribe(
       res => {
         if (res) {
-        this.openSnackBar('Injection condition deleted', 'Close');
+          this.openSnackBar('Injection condition deleted', 'Close');
         } else {
           this.openSnackBar('Something went wrong, contact the administrator', 'Close');
         }

@@ -8,9 +8,9 @@ describe('QgeneratorCsvHelpComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ QgeneratorCsvHelpComponent ]
+      declarations: [QgeneratorCsvHelpComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

@@ -61,7 +61,8 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
   counter = 0;
 
 
-  constructor(private dataService: DataService, private themeService: ThemeService, private requestService: RequestService, private plotService: PlotService) {
+  constructor(private dataService: DataService, private themeService: ThemeService, private requestService: RequestService,
+    private plotService: PlotService) {
   }
 
   ngOnInit(): void {
@@ -82,7 +83,7 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   ngAfterViewInit(): void {
-    this.plotElement = <any>document.getElementById('Graph' + this.randString);
+    this.plotElement = document.getElementById('Graph' + this.randString) as any;
   }
 
 
@@ -118,7 +119,7 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
 
   private plotGraph(): void {
     const dataForPlot = [];
-    if (this.plotTrace == undefined) {
+    if (this.plotTrace === undefined) {
       return;
     }
     this.plotTrace.forEach(
@@ -168,7 +169,7 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
       }
     }, 100);
     if (this.counter === 0) { // Only link the listener the first time the plot is created
-      const plot = <any>document.getElementById('Graph' + this.randString);
+      const plot = document.getElementById('Graph' + this.randString) as any;
       plot.on('plotly_click', (data) => {
         this.plotService.getChecksumFromPlotlyClickEvent(data);
       });
@@ -178,8 +179,8 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   /**
-   * Relayouts the plot
-   */
+  * Relayouts the plot
+  */
   private reLayout(): void {
     let update = {};
     switch (this.themeColor) {
@@ -206,8 +207,8 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   /**
-   * Subscribes to theme changes
-   */
+  * Subscribes to theme changes
+  */
   private subscribeToThemeChanges(): void {
     this.themeChangesSubscription$ = this.themeService.selectedTheme$.subscribe(
       theme => {
@@ -218,8 +219,8 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   /**
- * Subscribes to list display changes
- */
+  * Subscribes to list display changes
+  */
   private subscribeToListChanges(): void {
     this.fileListChangesSubscription$ = this.plotService.selectedSamples.subscribe(
       list => {
@@ -230,8 +231,8 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   private checkFileInList(file: any): boolean {
-    for (let item of this.selectedSamples) {
-      if (item.checksum == file.checksum) {
+    for (const item of this.selectedSamples) {
+      if (item.checksum === file.checksum) {
         return true;
       }
     }

@@ -1,15 +1,15 @@
 <!-- <mat-form-field> -->
 <div>
-    <!-- Display files names -->
-    <!-- <input matInput [(ngModel)]="fileAttr" readonly name="name" /> -->
+  <!-- Display files names -->
+  <!-- <input matInput [(ngModel)]="fileAttr" readonly name="name" /> -->
 
-    <!-- Browse Button -->
-    <button mat-raised-button (click)="fileInput.click()">
-      Upload CSV
-    </button>
+  <!-- Browse Button -->
+  <button mat-raised-button (click)="fileInput.click()">
+    Upload CSV
+  </button>
 
   <!-- Hidden file input triggered by the other button -->
-  <input type="file" #fileInput id="uploadFile" (change)="uploadFileEvt($event)" (click)="$event.target.value = null" name="uploadFile"
-    accept=".csv" style="display: none;">
+  <input type="file" #fileInput id="uploadFile" (change)="uploadFileEvt($event)" (click)="$event.target.value = null"
+    name="uploadFile" accept=".csv" style="display: none;">
 </div>
 <!-- </mat-form-field> -->

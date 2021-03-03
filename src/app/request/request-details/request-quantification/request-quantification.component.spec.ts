@@ -8,9 +8,9 @@ describe('RequestQuantificationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RequestQuantificationComponent ]
+      declarations: [RequestQuantificationComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

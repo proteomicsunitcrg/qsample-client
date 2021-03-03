@@ -18,26 +18,26 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 
 
 @NgModule({
-    imports: [
-        CommonModule,
-        LayoutRouterModule,
-        AngularMaterialModule,
-        FormsModule,
-        ReactiveFormsModule,
-        FlexLayoutModule
-    ],
-    declarations: [
-        MainWindowComponent,
-        TopBarComponent,
-        HomePageComponent,
-        MainRequestsComponent,
-        RequestsListComponent,
-        MainWetlabComponent,
-        WetlabListComponent,
-        ThemeSelectorComponent
-    ],
-    providers: [
-        RequestService
-    ]
+  imports: [
+    CommonModule,
+    LayoutRouterModule,
+    AngularMaterialModule,
+    FormsModule,
+    ReactiveFormsModule,
+    FlexLayoutModule
+  ],
+  declarations: [
+    MainWindowComponent,
+    TopBarComponent,
+    HomePageComponent,
+    MainRequestsComponent,
+    RequestsListComponent,
+    MainWetlabComponent,
+    WetlabListComponent,
+    ThemeSelectorComponent
+  ],
+  providers: [
+    RequestService
+  ]
 })
 export class LayoutModule { }

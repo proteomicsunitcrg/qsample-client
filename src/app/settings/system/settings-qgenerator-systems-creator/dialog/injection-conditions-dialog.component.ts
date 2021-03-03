@@ -34,7 +34,8 @@ export class InjectionConditionsDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<InjectionConditionsDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public itemC: any, private qGeneratorService: QGeneratorService, private snackBar: MatSnackBar, private methodService: MethodService) {
+    @Inject(MAT_DIALOG_DATA) public itemC: any, private qGeneratorService: QGeneratorService,
+    private snackBar: MatSnackBar, private methodService: MethodService) {
     this.application = itemC.application;
     this.instrument = itemC.instrument;
   }
@@ -124,8 +125,8 @@ export class InjectionConditionsDialogComponent implements OnInit {
       return;
     }
 
-    for (let item of this.allMethods) {
-      let index = this.injectionCondition.methods.findIndex(i => i.id === item.id);
+    for (const item of this.allMethods) {
+      const index = this.injectionCondition.methods.findIndex(i => i.id === item.id);
       if (index === -1) {
         this.methodsToDisplay.push(item);
       }
@@ -142,7 +143,7 @@ export class InjectionConditionsDialogComponent implements OnInit {
   }
 
   public removeFromMethodFromInjectionCondition(method: Method): void {
-    let index = this.injectionCondition.methods.findIndex(i => i.id === method.id);
+    const index = this.injectionCondition.methods.findIndex(i => i.id === method.id);
     this.injectionCondition.methods.splice(index, 1);
     this.checkIfMethodSelected();
   }

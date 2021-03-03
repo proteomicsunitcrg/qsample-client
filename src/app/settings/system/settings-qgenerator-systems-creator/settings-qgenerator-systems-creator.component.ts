@@ -19,7 +19,7 @@ import { Application } from '../../../models/Application';
 export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
 
   constructor(private activeRouter: ActivatedRoute, private instrumentService: InstrumentService, private snackBar: MatSnackBar,
-              private router: Router, private applicationService: ApplicationService, private dialog: MatDialog) {
+    private router: Router, private applicationService: ApplicationService, private dialog: MatDialog) {
 
   }
 
@@ -112,7 +112,7 @@ export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
   public goToQC(): void {
     console.log(this.instrument);
 
-    this.router.navigate(['settings/QGenerator/systems/qc/', this.instrument.id])
+    this.router.navigate(['settings/QGenerator/systems/qc/', this.instrument.id]);
   }
 
   private getAllApplications(): void {

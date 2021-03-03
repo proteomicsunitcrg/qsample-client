@@ -1,31 +1,31 @@
 <h2 mat-dialog-title>Edit</h2>
 <mat-dialog-content class="mat-typography">
-    <mat-form-field class="example-full-width">
-        <mat-label>Filename</mat-label>
-        <input matInput [(ngModel)]="item.filename">
-    </mat-form-field>
-    <br>
-    <mat-form-field class="example-full-width">
-        <mat-label>Method</mat-label>
-        <input matInput [(ngModel)]="item.method">
-    </mat-form-field>
-    <br>
-    <mat-form-field class="example-full-width">
-        <mat-label>Position</mat-label>
-        <input matInput [(ngModel)]="item.position">
-    </mat-form-field>
-    <br>
-    <mat-form-field class="example-full-width">
-        <mat-label>Volume</mat-label>
-        <input matInput type="number" [(ngModel)]="item.volume">
-    </mat-form-field>
-    <br>
-    <mat-form-field class="example-full-width">
-        <mat-label>Comment</mat-label>
-        <input matInput type="text" [(ngModel)]="item.comment">
-    </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <mat-label>Filename</mat-label>
+    <input matInput [(ngModel)]="item.filename">
+  </mat-form-field>
+  <br>
+  <mat-form-field class="example-full-width">
+    <mat-label>Method</mat-label>
+    <input matInput [(ngModel)]="item.method">
+  </mat-form-field>
+  <br>
+  <mat-form-field class="example-full-width">
+    <mat-label>Position</mat-label>
+    <input matInput [(ngModel)]="item.position">
+  </mat-form-field>
+  <br>
+  <mat-form-field class="example-full-width">
+    <mat-label>Volume</mat-label>
+    <input matInput type="number" [(ngModel)]="item.volume">
+  </mat-form-field>
+  <br>
+  <mat-form-field class="example-full-width">
+    <mat-label>Comment</mat-label>
+    <input matInput type="text" [(ngModel)]="item.comment">
+  </mat-form-field>
 
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-button (click)="onYesClick()">Exit</button>
+  <button mat-button (click)="onYesClick()">Exit</button>
 </mat-dialog-actions>

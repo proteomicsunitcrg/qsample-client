@@ -1,12 +1,12 @@
 <mat-tab-group dynamicHeight>
-    <mat-tab [label]="wetlab.name" *ngFor="let wetlab of allWetlabs">
-        <ng-template matTabContent>
-            <div style="margin-top: 3%;" fxFlex="100%" fxLayout="column" fxLayoutGap="32px"
-                fxLayoutAlign="space-around center">
-                <ng-container *ngFor="let plot of wetlab.plot">
-                    <app-wetlab-plot [plot]="plot" [wetlab]="wetlab"></app-wetlab-plot>
-                </ng-container>
-            </div>
-        </ng-template>
-    </mat-tab>
+  <mat-tab [label]="wetlab.name" *ngFor="let wetlab of allWetlabs">
+    <ng-template matTabContent>
+      <div style="margin-top: 3%;" fxFlex="100%" fxLayout="column" fxLayoutGap="32px"
+        fxLayoutAlign="space-around center">
+        <ng-container *ngFor="let plot of wetlab.plot">
+          <app-wetlab-plot [plot]="plot" [wetlab]="wetlab"></app-wetlab-plot>
+        </ng-container>
+      </div>
+    </ng-template>
+  </mat-tab>
 </mat-tab-group>

@@ -32,7 +32,7 @@ export class InjectionConditionQCService {
     return this.httpClient.delete<boolean>(`${this.apiPrefix}${id}`);
   }
 
-  public findByInstrumentId(instrument: Instrument): Observable<InjectionConditionQC[]>{
+  public findByInstrumentId(instrument: Instrument): Observable<InjectionConditionQC[]> {
     return this.httpClient.get<InjectionConditionQC[]>(`${this.apiPrefix}findByInstrumentId/${instrument.id}`);
   }
 

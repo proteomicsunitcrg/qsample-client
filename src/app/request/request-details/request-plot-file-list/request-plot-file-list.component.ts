@@ -18,7 +18,7 @@ export class RequestPlotFileListComponent implements OnInit {
   }
 
   files: RequestFile[] = [];
-  @Input('requestCode') requestCode: string;
+  @Input() requestCode: string;
   dataSource: MatTableDataSource<any>;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   columnsToDisplay = ['show'];

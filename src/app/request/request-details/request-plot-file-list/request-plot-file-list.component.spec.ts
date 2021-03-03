@@ -8,9 +8,9 @@ describe('RequestPlotFileListComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ RequestPlotFileListComponent ]
+      declarations: [RequestPlotFileListComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

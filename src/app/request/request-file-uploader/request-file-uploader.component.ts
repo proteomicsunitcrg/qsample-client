@@ -18,10 +18,10 @@ export class RequestFileUploaderComponent {
   uploadFileEvt(file: any) {
     if (file.target.files && file.target.files[0]) {
       // HTML5 FileReader API
-      let reader = new FileReader();
+      const reader = new FileReader();
       reader.onload = (e: any) => {
         this.csvString = reader.result;
-        let rows = this.csvString.split('\n');
+        const rows = this.csvString.split('\n');
         this.sendCSVToService(rows);
       };
       reader.readAsText(file.target.files[0]);

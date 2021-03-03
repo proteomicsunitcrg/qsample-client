@@ -1,26 +1,26 @@
 <mat-card style="margin-left: 20px;">
-    <mat-card-title>
-        Date Selector
-    </mat-card-title>
-    <mat-card-content>
-        <div fxLayout="row" fxLayoutAlign="center center">
-            <mat-form-field>
-                <mat-label>Start date</mat-label>
-                <input matInput [matDatepicker]="dateFrom" placeholder="date" [formControl]="dateStart" [max]="today">
-                <mat-datepicker-toggle matSuffix [for]="dateFrom"></mat-datepicker-toggle>
-                <mat-datepicker #dateFrom></mat-datepicker>
-            </mat-form-field>
-        </div>
-        <div fxLayout="row" fxLayoutAlign="center center">
+  <mat-card-title>
+    Date Selector
+  </mat-card-title>
+  <mat-card-content>
+    <div fxLayout="row" fxLayoutAlign="center center">
+      <mat-form-field>
+        <mat-label>Start date</mat-label>
+        <input matInput [matDatepicker]="dateFrom" placeholder="date" [formControl]="dateStart" [max]="today">
+        <mat-datepicker-toggle matSuffix [for]="dateFrom"></mat-datepicker-toggle>
+        <mat-datepicker #dateFrom></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="center center">
 
-            <mat-form-field>
-                <mat-label>End date</mat-label>
-                <input matInput [matDatepicker]="dateTo" placeholder="date" [formControl]="dateEnd" [max]="today"
-                    [min]="dateStart.value">
-                <mat-datepicker-toggle matSuffix [for]="dateTo"></mat-datepicker-toggle>
-                <mat-datepicker #dateTo></mat-datepicker>
-            </mat-form-field>
-        </div>
-        <button mat-raised-button color="primary" (click)="submitDates()">Search</button>
-    </mat-card-content>
+      <mat-form-field>
+        <mat-label>End date</mat-label>
+        <input matInput [matDatepicker]="dateTo" placeholder="date" [formControl]="dateEnd" [max]="today"
+          [min]="dateStart.value">
+        <mat-datepicker-toggle matSuffix [for]="dateTo"></mat-datepicker-toggle>
+        <mat-datepicker #dateTo></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <button mat-raised-button color="primary" (click)="submitDates()">Search</button>
+  </mat-card-content>
 </mat-card>

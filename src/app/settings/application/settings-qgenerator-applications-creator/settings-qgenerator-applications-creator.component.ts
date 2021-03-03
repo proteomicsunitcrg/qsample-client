@@ -14,7 +14,7 @@ import { ApplicationService } from '../../../services/application.service';
 export class SettingsQgeneratorApplicationsCreatorComponent implements OnInit {
 
   constructor(private activeRouter: ActivatedRoute, private applicationService: ApplicationService,
-              private snackBar: MatSnackBar, private router: Router) { }
+    private snackBar: MatSnackBar, private router: Router) { }
 
   systemFrom = new FormGroup({
     name: new FormControl('', [

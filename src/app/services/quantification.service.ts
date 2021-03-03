@@ -18,7 +18,7 @@ export class QuantificationService {
 
   public getQuantificationByFileChecksumAndContaminant(checksum: string, contaminant: boolean): Observable<any> {
     this.params = this.params.set('contaminant', String(contaminant));
-    return this.http.get<any>(`${this.apiPrefix}/getByChecksum/${checksum}`, {params: this.params});
+    return this.http.get<any>(`${this.apiPrefix}/getByChecksum/${checksum}`, { params: this.params });
   }
 
 }
