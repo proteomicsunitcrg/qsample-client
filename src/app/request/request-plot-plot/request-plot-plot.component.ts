@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, OnDestroy, AfterViewInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { PlotTrace } from '../../models/PlotTrace';
 import { ThemeService } from '../../services/theme.service';
@@ -14,7 +14,7 @@ declare var Plotly: any;
   templateUrl: './request-plot-plot.component.html',
   styleUrls: ['./request-plot-plot.component.css']
 })
-export class RequestPlotPlotComponent implements OnInit, OnDestroy {
+export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // tslint:disable-next-line:no-input-rename
   @ViewChild('Graph', { static: true })
@@ -56,6 +56,10 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy {
 
   selectedSamples = [];
 
+  plotElement;
+
+  counter = 0;
+
 
   constructor(private dataService: DataService, private themeService: ThemeService, private requestService: RequestService, private plotService: PlotService) {
   }
@@ -75,6 +79,10 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy {
     this.themeChangesSubscription$.unsubscribe();
     this.fileListChangesSubscription$.unsubscribe();
     Plotly.purge(`Graph${this.randString}`);
+  }
+
+  ngAfterViewInit(): void {
+    this.plotElement = <any>document.getElementById('Graph' + this.randString);
   }
 
 
@@ -119,6 +127,7 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy {
         const filenames = [];
         const dates = [];
         const color = [];
+        const checksum = [];
         plotTrace.plotTracePoints.forEach(
           plotTracePoint => {
             if (this.checkFileInList(plotTracePoint.file)) {
@@ -126,6 +135,7 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy {
               filenames.push(plotTracePoint.file.filename);
               dates.push(plotTracePoint.file.creationDate);
               color.push('red');
+              checksum.push(`${plotTracePoint.value}<br>${plotTracePoint.file.creationDate}<br>${plotTracePoint.file.checksum}`);
             }
           }
         );
@@ -135,6 +145,8 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy {
           type: 'bar',
           name: plotTrace.abbreviated,
           filenames,
+          checksum,
+          hovertemplate: checksum
         };
         dataForPlot.push(trace);
       }
@@ -155,6 +167,14 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy {
         ploterino.style['border-radius'] = '4px';
       }
     }, 100);
+    if (this.counter === 0) { // Only link the listener the first time the plot is created
+      const plot = <any>document.getElementById('Graph' + this.randString);
+      plot.on('plotly_click', (data) => {
+        this.plotService.getChecksumFromPlotlyClickEvent(data);
+      });
+    }
+    this.counter++;
+
   }
 
   /**
@@ -197,9 +217,9 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy {
     );
   }
 
-    /**
-   * Subscribes to list display changes
-   */
+  /**
+ * Subscribes to list display changes
+ */
   private subscribeToListChanges(): void {
     this.fileListChangesSubscription$ = this.plotService.selectedSamples.subscribe(
       list => {

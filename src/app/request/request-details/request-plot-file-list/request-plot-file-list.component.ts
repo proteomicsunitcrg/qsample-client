@@ -25,7 +25,6 @@ export class RequestPlotFileListComponent implements OnInit {
   selectedSamples: File[] = [];
 
   ngOnInit(): void {
-    console.log(this.requestCode);
     this.fileService.getFilesByRequestCode(this.requestCode).subscribe(
       res => {
         this.files = res;

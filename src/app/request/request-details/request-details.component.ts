@@ -19,11 +19,8 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
         this.requestId = params.apiKey;
         this.requestService.getRequestDetails(params.apiKey).subscribe(
           res => {
-            console.log(res);
             this.request = res;
             this.requestCode = this.getRequestCodeFromRequest(this.request);
-            console.log(this.requestCode);
-
             this.requestService.changeRequestCode(this.requestCode);
           },
           err => {

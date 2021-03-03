@@ -25,6 +25,7 @@ import { ApplicationService } from './services/application.service';
 import { MethodService } from './services/method.service';
 import { PlotService } from './services/plot.service';
 import { InjectionConditionQCService } from './services/injectionConditionsQC.service';
+import { QuantificationService } from './services/quantification.service';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import { InjectionConditionQCService } from './services/injectionConditionsQC.se
     RoleGuardService,
     ThemeSelectorComponent,
     ThemeService,
-    PlotService
+    PlotService,
+    QuantificationService
   ],
   bootstrap: [AppComponent]
 })

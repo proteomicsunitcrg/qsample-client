@@ -32,5 +32,9 @@ export class FileService {
     return this.httpClient.get<RequestFile[]>(`${this.apiPrefix}getByRequestCode/${requestCode}`);
   }
 
+  public getRequestFileByChecksum(checksum: string): Observable<RequestFile> {
+    return this.httpClient.get<RequestFile>(`${this.apiPrefix}getRequestFileByChecksum/${checksum}`);
+  }
+
 
 }

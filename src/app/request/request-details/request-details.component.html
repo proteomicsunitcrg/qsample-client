@@ -26,11 +26,13 @@
           Request plots
         </mat-card-title>
         <mat-card-content>
-          <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="2vw" >
-            <app-request-plot-file-list [requestCode]="requestCode" *ngIf="requestCode"></app-request-plot-file-list>
-            <app-request-plot-request></app-request-plot-request>
-          </div>
-
+            <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="2vw" >
+              <div fxLayout="column">
+                <app-request-plot-file-list [requestCode]="requestCode" *ngIf="requestCode"></app-request-plot-file-list>
+                <app-request-quantification></app-request-quantification>
+              </div>
+              <app-request-plot-request></app-request-plot-request>
+            </div>
         </mat-card-content>
       </mat-card>
     </div>
