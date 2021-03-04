@@ -21,6 +21,7 @@ import { NonConformitiesDialogComponent } from './request-qcloud2-files/dialog/n
 import { RequestPlotFileListComponent } from './request-details/request-plot-file-list/request-plot-file-list.component';
 import { RequestFileUploaderComponent } from './request-file-uploader/request-file-uploader.component';
 import { RequestQuantificationComponent } from './request-details/request-quantification/request-quantification.component';
+import { RequestHeatmapComponent } from './request-details/request-heatmap/request-heatmap.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { RequestQuantificationComponent } from './request-details/request-quanti
     NonConformitiesDialogComponent,
     RequestPlotFileListComponent,
     RequestFileUploaderComponent,
-    RequestQuantificationComponent
+    RequestQuantificationComponent,
+    RequestHeatmapComponent
   ],
   imports: [
     FlexLayoutModule,
