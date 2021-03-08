@@ -190,6 +190,7 @@ export class RequestsListComponent implements OnInit {
   }
 
   public getAllRequests(): void {
+    this.resetAllFilters();
     if (this.isInternal) {
       this.getAllRequestsInternal();
     } else {

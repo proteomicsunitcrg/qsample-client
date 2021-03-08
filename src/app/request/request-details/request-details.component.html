@@ -10,8 +10,8 @@
     </h1>
 
   </section>
-  <div fxLayout="row">
-    <div fxLayout="column" fxLayoutGap="2vw">
+  <div fxLayout="row" fxLayout.lt-lg="column">
+    <div fxLayout="column" fxLayoutGap="2vw" style="margin-top: 10px;">
       <div>
         <app-request-details-panel [request]="request" style=""></app-request-details-panel>
       </div>
@@ -21,17 +21,23 @@
       </div>
     </div>
     <div fxFlex>
-      <mat-card>
+      <mat-card style="margin-left: 10px; margin-right: 10px; margin-top: 10px;">
         <mat-card-title>
           Request plots
         </mat-card-title>
         <mat-card-content>
-          <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="2vw">
-            <div fxLayout="column">
-              <app-request-plot-file-list [requestCode]="requestCode" *ngIf="requestCode"></app-request-plot-file-list>
-              <app-request-quantification></app-request-quantification>
+          <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutAlign="start start" fxLayoutGap="2vw">
+            <div fxLayout="column" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxFlex.lt-lg="100">
+              <div fxFlex.sm="100" fxFlex.xs="100" fxFlex.lt-lg="100" [ngStyle.sm]="{'width.%': 200}">
+                <app-request-plot-file-list [requestCode]="requestCode" *ngIf="requestCode"></app-request-plot-file-list>
+              </div>
+              <div ffxFlex.sm="100" fxFlex.xs="100" fxFlex.lt-lg="100" [ngStyle.sm]="{'width.%': 200}">
+                <app-request-quantification></app-request-quantification>
+              </div>
             </div>
-            <app-request-plot-request></app-request-plot-request>
+            <div>
+              <app-request-plot-request></app-request-plot-request>
+            </div>
           </div>
         </mat-card-content>
       </mat-card>

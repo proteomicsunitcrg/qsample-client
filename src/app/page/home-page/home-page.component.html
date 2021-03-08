@@ -1,8 +1,8 @@
-<div fxLayout fxLayout.lt-md="column" fxLayoutAlign="center" fxLayoutGap="3px" fxLayoutGap.xs="0!" *ngIf="isInternal">
-    <div fxFlex="50%">
+<div fxLayout="row" fxLayout.lt="row" fxLayout.md="column" fxLayout.sm="column"  fxLayout.xs="column"  fxLayoutAlign="center" fxLayoutGap="3px" fxLayoutGap.xs="0!"  *ngIf="isInternal">
+    <div fxFlex.gt-md = "50">
         <app-main-requests></app-main-requests>
     </div>
-    <div fxFlex="48%">
+    <div fxFlex.gt-md = "50">
         <app-main-wetlab></app-main-wetlab>
     </div>
 </div>
