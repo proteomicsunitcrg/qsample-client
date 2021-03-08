@@ -44,7 +44,7 @@ export class RequestsListComponent implements OnInit {
 
   today = new Date();
 
-  monthAgo = new Date(new Date().setMonth(this.today.getMonth() - 1));
+  monthAgo = new Date(new Date().setMonth(this.today.getMonth() - 3));
 
   range = new FormGroup({
     start: new FormControl(this.monthAgo),
