@@ -1,2 +1,7 @@
 <h3>Correlation</h3>
-<div id="heatMap" #Graph class="graph mat-elevation-z1" style="margin-bottom: 10px; width: 40px;"></div>
+<p *ngIf="nothingFound">
+    Nothing found
+</p>
+<!-- <div fxLayout="row" fxLayoutAlign="center center"> -->
+    <div [class.hide]="nothingFound === true" id="heatMap" #Graph class="graph mat-elevation-z1" style="margin-bottom: 10px; width: 40px;"></div>
+<!-- </div> -->

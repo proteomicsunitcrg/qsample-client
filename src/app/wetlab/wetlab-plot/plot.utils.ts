@@ -53,6 +53,28 @@ export const LAYOUTLIGHT = {
 
 };
 
+export const LAYOUTDARKHEATMAP = {
+  autosize: false,
+  width: 700,
+  height: 700,
+  margin: {
+    l: 100,
+    b: 100,
+    pad: 4
+  },
+}
+
+export const LAYOUTLIGHTHEATMAP = {
+  autosize: false,
+  width: 700,
+  height: 700,
+  margin: {
+    l: 100,
+    b: 100,
+    pad: 4
+  },
+}
+
 /**
  * To generate the threshold UP lines for the plot layout
  *

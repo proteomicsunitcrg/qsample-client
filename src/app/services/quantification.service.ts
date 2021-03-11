@@ -21,4 +21,12 @@ export class QuantificationService {
     return this.http.get<any>(`${this.apiPrefix}/getByChecksum/${checksum}`, { params: this.params });
   }
 
+  public getHeatMap(requestCode: string, listOfChecksums: string[]): Observable<any> {
+    this.params = new HttpParams();
+    listOfChecksums.forEach((item) => {
+      this.params = this.params.append(`checksums[]`, item);
+    })
+    return this.http.get<any>(`${this.apiPrefix}/heatMap/${requestCode}`, { params: this.params });
+  }
+
 }

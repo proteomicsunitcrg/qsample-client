@@ -11,8 +11,6 @@ export class PlotService {
 
   public selectedChecksum = new Subject<string>();
 
-  caca = 'dawda';
-
   public sendselectedSamples(list: any[]) {
     this.selectedSamples.next(list);
   }
