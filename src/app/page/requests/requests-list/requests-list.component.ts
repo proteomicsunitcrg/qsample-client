@@ -46,6 +46,8 @@ export class RequestsListComponent implements OnInit {
 
   monthAgo = new Date(new Date().setMonth(this.today.getMonth() - 3));
 
+  finding = false;
+
   range = new FormGroup({
     start: new FormControl(this.monthAgo),
     end: new FormControl(this.today)
@@ -202,8 +204,10 @@ export class RequestsListComponent implements OnInit {
    *
    */
   public getAllRequestsInternal(): void {
+    this.finding = true;
     this.requestService.getAllRequestsInternal(this.showAll, this.range.controls.start.value, this.range.controls.end.value).subscribe(
       res => {
+        this.finding = false;
         this.allRequests = res;
         for (const request of this.allRequests) {
           request.lastField = this.getRequestCodeFromRequest(request.lastField);

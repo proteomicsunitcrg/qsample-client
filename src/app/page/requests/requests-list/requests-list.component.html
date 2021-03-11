@@ -52,7 +52,7 @@
         </span>
       </mat-checkbox>
       <table mat-table [dataSource]="dataSource" style="width: 100%;" matSort matSortActive="creationDate"
-        matSortDirection="desc">
+        matSortDirection="desc" *ngIf="!finding">
         <ng-container matColumnDef="code">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Code </th>
           <td mat-cell *matCellDef="let entry"> {{entry.lastField}} </td>
@@ -80,6 +80,7 @@
         <tr mat-row (click)="goTo(myRowData)" *matRowDef="let myRowData; columns: columnsToDisplay"></tr>
       </table>
       <mat-progress-spinner [mode]="'indeterminate'" *ngIf="!allRequests" class="center"></mat-progress-spinner>
+      <mat-progress-spinner [mode]="'indeterminate'" *ngIf="finding &&  allRequests" class="center"></mat-progress-spinner>
       <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
     </mat-card-content>
   </mat-card>
