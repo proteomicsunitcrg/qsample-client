@@ -26,6 +26,7 @@ import { MethodService } from './services/method.service';
 import { PlotService } from './services/plot.service';
 import { InjectionConditionQCService } from './services/injectionConditionsQC.service';
 import { QuantificationService } from './services/quantification.service';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,9 @@ import { QuantificationService } from './services/quantification.service';
     ThemeSelectorComponent,
     ThemeService,
     PlotService,
-    QuantificationService
+    QuantificationService,
+    { provide: MAT_DATE_LOCALE, useValue: 'es' },
+
   ],
   bootstrap: [AppComponent]
 })

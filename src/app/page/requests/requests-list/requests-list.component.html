@@ -52,7 +52,7 @@
         </span>
       </mat-checkbox>
       <table mat-table [dataSource]="dataSource" style="width: 100%;" matSort matSortActive="creationDate"
-        matSortDirection="desc" *ngIf="!finding">
+        matSortDirection="desc" [class.hide]="finding">
         <ng-container matColumnDef="code">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Code </th>
           <td mat-cell *matCellDef="let entry"> {{entry.lastField}} </td>
