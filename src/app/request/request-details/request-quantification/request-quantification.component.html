@@ -9,10 +9,10 @@
     <mat-tab-group>
       <mat-tab label="Proteins">
         <table mat-table [dataSource]="dataSource" style="width: 100%;" *ngIf="!proteinsEmpty">
-          <ng-container matColumnDef="accession">
-            <th mat-header-cell *matHeaderCellDef> Accession </th>
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef> Gene name </th>
             <td mat-cell *matCellDef="let entry">
-              {{entry.accession}}
+              {{entry.description}}
             </td>
           </ng-container>
           <ng-container matColumnDef="abundance">
@@ -30,10 +30,10 @@
       </mat-tab>
       <mat-tab label="Contaminants">
         <table mat-table [dataSource]="dataSourceContaminants" style="width: 100%;" *ngIf="!contaminantsEmpty">
-          <ng-container matColumnDef="accession">
-            <th mat-header-cell *matHeaderCellDef> Accession </th>
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef> Gene name </th>
             <td mat-cell *matCellDef="let entry">
-              {{entry.accession}}
+              {{entry.description}}
             </td>
           </ng-container>
           <ng-container matColumnDef="abundance">

@@ -24,7 +24,7 @@ export class RequestQuantificationComponent implements OnInit, OnDestroy {
 
   dataSourceContaminants: MatTableDataSource<any>;
 
-  columnsToDisplay = ['accession', 'abundance'];
+  columnsToDisplay = ['description', 'abundance'];
 
   nothingSelected = true;
 
@@ -49,7 +49,6 @@ export class RequestQuantificationComponent implements OnInit, OnDestroy {
   private subscribeToChecksumChanges(): void {
     this.selectedChecksumSubscription$ = this.plotService.selectedChecksum.subscribe(
       checksum => {
-        console.log(checksum);
         this.selectedChecksum = checksum;
         this.getFileInfo();
         this.getQuantificationByFileChecksum();
