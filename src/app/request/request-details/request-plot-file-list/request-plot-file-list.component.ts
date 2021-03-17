@@ -49,8 +49,6 @@ export class RequestPlotFileListComponent implements OnInit {
     } else {
       this.selectedSamples.splice(this.selectedSamples.findIndex(i => i.id === file.id), 1);
     }
-    console.log(this.selectedSamples);
-
     this.plotService.sendselectedSamples(this.selectedSamples);
   }
 
