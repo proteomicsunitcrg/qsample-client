@@ -7,7 +7,7 @@
     <ng-container matColumnDef="show">
       <th mat-header-cell *matHeaderCellDef> Filename </th>
       <td mat-cell *matCellDef="let entry">
-        <mat-checkbox (change)="listChange(entry,  $event)" [checked]="true">
+        <mat-checkbox (change)="listChange(entry, $event)" [checked]="checkIfElementSelected(entry)">
           {{entry.filename}}
         </mat-checkbox>
       </td>

@@ -28,7 +28,7 @@ export class RequestPlotFileListComponent implements OnInit {
     this.fileService.getFilesByRequestCode(this.requestCode).subscribe(
       res => {
         this.files = res;
-        this.selectedSamples = res;
+        this.files.forEach(val => this.selectedSamples.push(Object.assign({}, val))); // we need to clone
         if (this.files !== null) {
           this.dataSource = new MatTableDataSource(this.files);
           this.dataSource.paginator = this.paginator;
@@ -45,18 +45,28 @@ export class RequestPlotFileListComponent implements OnInit {
   public listChange(file: File, $event: MatCheckboxChange): void {
     if ($event.checked) {
       this.selectedSamples.push(file);
+      this.selectedSamples.sort((a, b) => a.filename.localeCompare(b.filename));
     } else {
-      this.selectedSamples.splice(this.selectedSamples.indexOf(file), 1);
+      this.selectedSamples.splice(this.selectedSamples.findIndex(i => i.id === file.id), 1);
     }
+    console.log(this.selectedSamples);
+
     this.plotService.sendselectedSamples(this.selectedSamples);
   }
 
   public applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
+    }
+  }
+
+  public checkIfElementSelected(element: RequestFile): boolean { //TODO. This function is called everytime the DOM updates so is inneficient
+    if (this.selectedSamples.find(e => e.id === element.id)) {
+      return true;
+    } else {
+      return false;
     }
   }
 }
