@@ -34,9 +34,12 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
 
   nothingFound = true;
 
+  sliderValue = 20;
+
+  loading = false;
+
   ngOnInit(): void {
     this.subscribeToListChanges();
-    // this.getHeatMapData();
     this.randString = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
   }
 
@@ -58,6 +61,7 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
     //     hoverongaps: false
     //   }
     // ];
+    this.loading = false;
     let data = [
       {
         z: this.data,
@@ -66,7 +70,16 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
         w: 'cac',
         type: 'heatmap',
         hoverongaps: false,
-        colorscale: 'Bluered',
+        // colorscale: [
+        //   ['0.0', 'rgb(0,0,0)'],
+        //   ['0.2', 'rgb(0,0,250)'],
+        //   ['0.4', 'rgb(118, 186, 255)'],
+        //   ['0.5', 'rgb(255, 254, 232)'],
+        //   ['0.6', 'rgb(255, 131, 127)'],
+        //   ['0.8', 'rgb(254, 39, 0)'],
+        //   ['1', 'rgb(255,0,0)'],
+        // ]
+        colorscale: 'RdGy',
       }
     ];
     Plotly.newPlot(`heatMap`, data, LAYOUTLIGHTHEATMAP, { responsive: true });
@@ -74,7 +87,8 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
   }
 
   private getHeatMapData() {
-    this.quantificationService.getHeatMap(this.requestCode, this.listOfChecksum).subscribe(
+    this.loading = true;
+    this.quantificationService.getHeatMap(this.requestCode, this.listOfChecksum, this.sliderValue).subscribe(
       res => {
         if (res == null) {
           this.nothingFound = true;
@@ -97,13 +111,14 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
     this.fileListChangesSubscription$ = this.plotService.selectedSamples.subscribe(
       list => {
         this.selectedSamples = list;
-        console.log(this.selectedSamples);
-
         this.listOfChecksum = this.selectedSamples.map(item => item.checksum);
         this.getHeatMapData();
-
       }
     );
+  }
+
+  public sliderChange(): void {
+    this.getHeatMapData();
   }
 
 }

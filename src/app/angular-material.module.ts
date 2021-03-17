@@ -23,7 +23,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-
+import { MatSliderModule } from '@angular/material/slider';
 
 
 
@@ -56,6 +56,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatSnackBarModule,
     MatFormFieldModule,
     MatProgressSpinnerModule,
+    MatSliderModule
   ],
   exports: [
     MatInputModule,
@@ -79,7 +80,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatMenuModule,
     MatSnackBarModule,
     MatFormFieldModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatSliderModule
   ]
 })
 
