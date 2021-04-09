@@ -70,16 +70,16 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
         w: 'cac',
         type: 'heatmap',
         hoverongaps: false,
-        // colorscale: [
-        //   ['0.0', 'rgb(0,0,0)'],
-        //   ['0.2', 'rgb(0,0,250)'],
-        //   ['0.4', 'rgb(118, 186, 255)'],
-        //   ['0.5', 'rgb(255, 254, 232)'],
-        //   ['0.6', 'rgb(255, 131, 127)'],
-        //   ['0.8', 'rgb(254, 39, 0)'],
-        //   ['1', 'rgb(255,0,0)'],
-        // ]
-        colorscale: 'RdGy',
+        colorscale: [
+          ['0.0', 'rgb(0,0,0)'],
+          ['0.2', 'rgb(0,0,250)'],
+          ['0.4', 'rgb(118, 186, 255)'],
+          ['0.5', 'rgb(255, 254, 232)'],
+          ['0.6', 'rgb(255, 131, 127)'],
+          ['0.8', 'rgb(254, 39, 0)'],
+          ['1', 'rgb(255,0,0)'],
+        ]
+        // colorscale: 'RdGy',
       }
     ];
     Plotly.newPlot(`heatMap`, data, LAYOUTLIGHTHEATMAP, { responsive: true });
