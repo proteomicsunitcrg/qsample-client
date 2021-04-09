@@ -178,7 +178,7 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
 
   private getDatabaseFromRequest(): string {
     for (const item of this.request.fields) {
-      if (item.name === 'Database') {
+      if (item.name === 'QSample-DB') {
         return item.value;
       }
     }
