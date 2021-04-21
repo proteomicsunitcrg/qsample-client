@@ -57,6 +57,21 @@ export const LAYOUTDARKHEATMAP = {
   autosize: false,
   width: 700,
   height: 700,
+  plot_bgcolor: '#424242',
+  paper_bgcolor: '#424242',
+  xaxis: {
+    // nticks: 10,
+    linecolor: '#FFFFFF',
+    tickcolor: '#FFFFFF'
+  },
+  yaxis: {
+    linecolor: '#FFFFFF',
+    tickcolor: '#FFFFFF',
+  },
+  font: {
+    family: 'Roboto, monospace',
+    color: '#FFFFFF'
+  },
   margin: {
     l: 100,
     b: 100,
@@ -68,6 +83,22 @@ export const LAYOUTLIGHTHEATMAP = {
   autosize: false,
   width: 700,
   height: 700,
+  plot_bgcolor: 'white',
+  paper_bgcolor: 'white',
+  xaxis: {
+    // nticks: 10,
+    linecolor: 'black',
+    tickcolor: 'black'
+  },
+  yaxis: {
+    linecolor: 'black',
+    tickcolor: 'black',
+  },
+  font: {
+    family: 'Roboto, monospace',
+    color: 'black'
+  },
+
   margin: {
     l: 100,
     b: 100,
