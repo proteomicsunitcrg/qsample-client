@@ -18,7 +18,7 @@
           <ng-container matColumnDef="abundance">
             <th mat-header-cell *matHeaderCellDef> Abundance </th>
             <td mat-cell *matCellDef="let entry">
-              {{entry.abundance}}
+              {{entry.abundance.toPrecision(3)}}
             </td>
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
@@ -39,7 +39,7 @@
           <ng-container matColumnDef="abundance">
             <th mat-header-cell *matHeaderCellDef> Abundance </th>
             <td mat-cell *matCellDef="let entry">
-              {{entry.abundance}}
+              {{entry.abundance.toPrecision(3)}}
             </td>
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
