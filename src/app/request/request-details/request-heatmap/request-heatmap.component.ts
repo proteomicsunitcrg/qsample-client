@@ -96,16 +96,12 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
       }
     ];
     if (this.themeColor === 'dark-theme') {
-      console.log('dark');
-
       this.layout = LAYOUTDARKHEATMAP;
     } else if (this.themeColor === 'light-theme') {
       this.layout = LAYOUTLIGHTHEATMAP;
     } else {
       this.layout = LAYOUTLIGHTHEATMAP;
     }
-    console.log(this.layout);
-
     Plotly.newPlot(`heatMap`, data, this.layout, { responsive: true });
 
   }
@@ -165,7 +161,6 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
     let update = {};
     switch (this.themeColor) {
       case 'dark-theme':
-        console.log('case dark');
         update = {
           plot_bgcolor: '#424242',
           paper_bgcolor: '#424242',
