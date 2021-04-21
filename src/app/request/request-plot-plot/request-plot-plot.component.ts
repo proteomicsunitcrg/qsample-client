@@ -157,6 +157,8 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
       this.layout = LAYOUTDARK;
     } else if (this.themeColor === 'light-theme') {
       this.layout = LAYOUTLIGHT;
+    } else {
+      this.layout = LAYOUTLIGHT;
     }
     this.layout.shapes = [];
     this.layout.title = '';

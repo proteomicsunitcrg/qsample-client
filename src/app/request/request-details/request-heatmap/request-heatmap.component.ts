@@ -101,6 +101,8 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
       this.layout = LAYOUTDARKHEATMAP;
     } else if (this.themeColor === 'light-theme') {
       this.layout = LAYOUTLIGHTHEATMAP;
+    } else {
+      this.layout = LAYOUTLIGHTHEATMAP;
     }
     console.log(this.layout);
 
@@ -147,7 +149,7 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
   /**
   * Subscribes to theme changes
   */
-   private subscribeToThemeChanges(): void {
+  private subscribeToThemeChanges(): void {
     this.themeChangesSubscription$ = this.themeService.selectedTheme$.subscribe(
       theme => {
         this.themeColor = theme;
@@ -156,34 +158,34 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
     );
   }
 
-    /**
-  * Relayouts the plot
-  */
-     private reLayout(): void {
-      let update = {};
-      switch (this.themeColor) {
-        case 'dark-theme':
-          console.log('case dark');
-          update = {
-            plot_bgcolor: '#424242',
-            paper_bgcolor: '#424242',
-            font: {
-              color: '#FFFFFF'
-            }
-          };
-          break;
-        case 'light-theme':
-          update = {
-            plot_bgcolor: 'white',
-            paper_bgcolor: 'white',
-            font: {
-              color: 'black'
-            }
-          };
-          break;
-      }
-      this.getHeatMapData();
+  /**
+* Relayouts the plot
+*/
+  private reLayout(): void {
+    let update = {};
+    switch (this.themeColor) {
+      case 'dark-theme':
+        console.log('case dark');
+        update = {
+          plot_bgcolor: '#424242',
+          paper_bgcolor: '#424242',
+          font: {
+            color: '#FFFFFF'
+          }
+        };
+        break;
+      case 'light-theme':
+        update = {
+          plot_bgcolor: 'white',
+          paper_bgcolor: 'white',
+          font: {
+            color: 'black'
+          }
+        };
+        break;
     }
+    this.getHeatMapData();
+  }
 
 
 }
