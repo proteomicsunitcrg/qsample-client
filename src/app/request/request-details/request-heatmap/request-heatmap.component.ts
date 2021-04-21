@@ -61,25 +61,14 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
   }
 
   private drawHeatMap(): void {
-    // let data = [
-    //   {
-    //     z: [
-    //       [1, null, 30, 50, 1],
-    //       [20, 1, 60, 80, 30],
-    //       [30, 60, 1, -10, 20]
-    //       ],
-    //     x: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-    //     y: ['Morning', 'Afternoon', 'Evening'],
-    //     type: 'heatmap',
-    //     hoverongaps: false
-    //   }
-    // ];
     this.loading = false;
     let data = [
       {
         z: this.data,
-        x: this.selectedSamples.map(item => `sample ${item.filename.split('_')[2]}`),
-        y: this.selectedSamples.map(item => `sample ${item.filename.split('_')[2]}`),
+        // x: this.selectedSamples.map(item => `sample ${item.filename.split('_')[2]}`),
+        x: this.selectedSamples.map(item => item.filename.split('_').splice(2).join('_')),
+        // y: this.selectedSamples.map(item => `sample ${item.filename.split('_')[2]}`),
+        y:this.selectedSamples.map(item => item.filename.split('_').splice(2).join('_')),
         w: 'cac',
         type: 'heatmap',
         hoverongaps: false,
