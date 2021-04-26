@@ -45,6 +45,8 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
 
   loading = false;
 
+  filenames: string[] = [];
+
   // Var to handle the plot layout
   layout: any = {};
 
@@ -66,9 +68,9 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
       {
         z: this.data,
         // x: this.selectedSamples.map(item => `sample ${item.filename.split('_')[2]}`),
-        x: this.selectedSamples.map(item => item.filename.split('_').splice(2).join('_')),
+        x: this.filenames.map(item => item.split('_').splice(2).join('_')),
         // y: this.selectedSamples.map(item => `sample ${item.filename.split('_')[2]}`),
-        y:this.selectedSamples.map(item => item.filename.split('_').splice(2).join('_')),
+        y:this.filenames.map(item => item.split('_').splice(2).join('_')),
         w: 'cac',
         type: 'heatmap',
         hoverongaps: false,
@@ -104,7 +106,8 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
         } else {
           this.nothingFound = false;
         }
-        this.data = res;
+        this.data = res.data;
+        this.filenames = res.names;
         this.drawHeatMap();
       },
       err => {
