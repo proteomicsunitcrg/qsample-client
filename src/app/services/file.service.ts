@@ -31,9 +31,7 @@ export class FileService {
   }
 
   public getFilesByRequestCode(requestCode: string, order: string): Observable<RequestFile[]> {
-    console.log(order);
     this.params = this.params.set('order', order);
-
     return this.httpClient.get<RequestFile[]>(`${this.apiPrefix}getByRequestCode/${requestCode}`, {params: this.params});
   }
 
