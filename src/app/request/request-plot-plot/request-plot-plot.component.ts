@@ -48,6 +48,12 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
   // Subscription to update the plot on list change
   fileListChangesSubscription$: Subscription;
 
+  // Subscription to know the order
+  orderSubscription$: Subscription;
+
+  order: string;
+
+
   // Flag to know if the plot has data
   noDataFound = false;
 
@@ -69,7 +75,7 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
     this.layout.shapes = [];
     this.randString = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     this.themeColor = this.themeService.currentTheme;
-    this.getData();
+    this.subscribeToOrder(); // this method retrieves the data
     this.subscribeToThemeChanges();
     this.subscribeToListChanges();
     this.getName();
@@ -79,6 +85,7 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
   ngOnDestroy(): void {
     this.themeChangesSubscription$.unsubscribe();
     this.fileListChangesSubscription$.unsubscribe();
+    this.orderSubscription$.unsubscribe();
     Plotly.purge(`Graph${this.randString}`);
   }
 
@@ -88,7 +95,7 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
 
 
   private getData(): void {
-    this.dataService.getDataForPlotRequest(this.cs, this.param, this.requestCode).subscribe(
+    this.dataService.getDataForPlotRequest(this.cs, this.param, this.requestCode, this.order).subscribe(
       res => {
         this.plotTrace = res;
         if (this.plotTrace.length !== 0) {
@@ -228,6 +235,15 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
       list => {
         this.selectedSamples = list;
         this.plotGraph();
+      }
+    );
+  }
+
+  private subscribeToOrder(): void {
+    this.orderSubscription$ = this.plotService.selectedOrder.subscribe(
+      order => {
+        this.order = order;
+        this.getData();
       }
     );
   }

@@ -21,13 +21,24 @@ export class QuantificationService {
     return this.http.get<any>(`${this.apiPrefix}/getByChecksum/${checksum}`, { params: this.params });
   }
 
-  public getHeatMap(requestCode: string, listOfChecksums: string[], consensus: number): Observable<any> {
+  public getHeatMap(requestCode: string, listOfChecksums: string[], consensus: number, order: string): Observable<any> {
     this.params = new HttpParams();
     listOfChecksums.forEach((item) => {
       this.params = this.params.append(`checksums[]`, item);
     });
     this.params = this.params.set('consensus', consensus.toString());
+    this.params = this.params.set('order', order);
     return this.http.get<any>(`${this.apiPrefix}/heatMap/${requestCode}`, { params: this.params });
+  }
+
+  public getPCA(requestCode: string, listOfChecksums: string[]): Observable<any> {
+    this.params = new HttpParams();
+    listOfChecksums.forEach((item) => {
+      this.params = this.params.append(`checksums[]`, item);
+    });
+    console.log(listOfChecksums);
+
+    return this.http.get<any>(`${this.apiPrefix}/PCA/${requestCode}`, {params: this.params});
   }
 
 }

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -16,6 +16,8 @@ export class FileService {
 
   apiPrefix: string = environment.apiPrefix + 'api/file/';
 
+  params = new HttpParams();
+
   public getWetlabLists(): Observable<WetLab> {
     return this.httpClient.get<WetLab>(`${this.apiPrefix}getAllWetlabsType`);
   }
@@ -28,8 +30,11 @@ export class FileService {
     return this.httpClient.get<QCloud2File[]>(`${this.apiPrefix}qcloud2/${requestCode}`);
   }
 
-  public getFilesByRequestCode(requestCode: string): Observable<RequestFile[]> {
-    return this.httpClient.get<RequestFile[]>(`${this.apiPrefix}getByRequestCode/${requestCode}`);
+  public getFilesByRequestCode(requestCode: string, order: string): Observable<RequestFile[]> {
+    console.log(order);
+    this.params = this.params.set('order', order);
+
+    return this.httpClient.get<RequestFile[]>(`${this.apiPrefix}getByRequestCode/${requestCode}`, {params: this.params});
   }
 
   public getRequestFileByChecksum(checksum: string): Observable<RequestFile> {

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -13,6 +13,9 @@ export class DataService {
   constructor(private httpClient: HttpClient) { }
 
   apiPrefix: string = environment.apiPrefix;
+
+  params = new HttpParams();
+
 
   private selectedDates = new Subject<Date[]>();
   selectedDates$ = this.selectedDates.asObservable();
@@ -33,8 +36,9 @@ export class DataService {
   }
 
 
-  public getDataForPlotRequest(contextSourceId: number, paramId: number, requestCode: string): Observable<PlotTrace[]> {
-    return this.httpClient.get<PlotTrace[]>(`${this.apiPrefix}api/data/tracesRequest/${contextSourceId}/${paramId}/${requestCode}`);
+  public getDataForPlotRequest(contextSourceId: number, paramId: number, requestCode: string, order: string): Observable<PlotTrace[]> {
+    this.params = this.params.set('order', order);
+    return this.httpClient.get<PlotTrace[]>(`${this.apiPrefix}api/data/tracesRequest/${contextSourceId}/${paramId}/${requestCode}`, {params: this.params});
   }
 
 }

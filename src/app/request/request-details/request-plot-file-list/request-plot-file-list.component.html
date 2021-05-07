@@ -1,3 +1,6 @@
+<p>Order by:</p>
+<button mat-button (click)="changeOrder('date')" [disabled]="order === 'date'">Date</button>
+<button mat-button (click)="changeOrder('filename')" [disabled]="order === 'filename'">Name</button>
 <mat-card style="margin-top: 1vh; margin-bottom: 1vh; margin-left: 1vw;">
   <mat-form-field style="width: 100%;">
     <input matInput (keyup)="applyFilter($event)">

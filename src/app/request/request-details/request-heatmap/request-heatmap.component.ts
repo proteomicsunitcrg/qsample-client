@@ -32,8 +32,13 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
   // Subscription to update the plot on theme change
   themeChangesSubscription$: Subscription;
 
+  // Subscription to update order
+  orderSubscription$: Subscription
+
   // The current colot schema
   themeColor: string;
+
+  order: string;
 
   selectedSamples = [];
 
@@ -52,6 +57,7 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.themeColor = this.themeService.currentTheme;
+    this.subscribeToOrderChanges();
     this.subscribeToListChanges();
     this.subscribeToThemeChanges();
     this.randString = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -60,6 +66,7 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.fileListChangesSubscription$.unsubscribe();
     this.themeChangesSubscription$.unsubscribe();
+    this.orderSubscription$.unsubscribe();
   }
 
   private drawHeatMap(): void {
@@ -99,7 +106,7 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
 
   private getHeatMapData() {
     this.loading = true;
-    this.quantificationService.getHeatMap(this.requestCode, this.listOfChecksum, this.sliderValue).subscribe(
+    this.quantificationService.getHeatMap(this.requestCode, this.listOfChecksum, this.sliderValue, this.order).subscribe(
       res => {
         if (res == null) {
           this.nothingFound = true;
@@ -143,6 +150,12 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
         this.themeColor = theme;
         this.reLayout();
       }
+    );
+  }
+
+  private subscribeToOrderChanges(): void {
+    this.orderSubscription$ = this.plotService.selectedOrder.subscribe(
+      order => this.order = order
     );
   }
 

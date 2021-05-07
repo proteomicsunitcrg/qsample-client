@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -10,6 +10,9 @@ export class PlotService {
   public selectedSamples = new Subject<any[]>();
 
   public selectedChecksum = new Subject<string>();
+
+  public selectedOrder = new BehaviorSubject<string>('filename');
+
 
   public sendselectedSamples(list: any[]) {
     this.selectedSamples.next(list);
@@ -31,5 +34,13 @@ export class PlotService {
 
   public getselectedChecksum(): Observable<string> {
     return this.selectedChecksum.asObservable();
+  }
+
+  public sendselectedOrder(order: string) {
+    this.selectedOrder.next(order);
+  }
+
+  public getselectedOrder(): Observable<string> {
+    return this.selectedOrder.asObservable();
   }
 }
