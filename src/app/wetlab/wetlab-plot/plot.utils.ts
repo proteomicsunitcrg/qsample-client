@@ -70,12 +70,13 @@ export const LAYOUTDARKHEATMAP = {
   },
   font: {
     family: 'Roboto, monospace',
-    color: '#FFFFFF'
+    color: '#FFFFFF',
+    size: 10
   },
   margin: {
-    l: 100,
-    b: 100,
-    pad: 4
+    l: 170,
+    b: 170,
+    pad: 2
   },
 }
 
@@ -96,13 +97,15 @@ export const LAYOUTLIGHTHEATMAP = {
   },
   font: {
     family: 'Roboto, monospace',
-    color: 'black'
+    color: 'black',
+    size: 10
+
   },
 
   margin: {
-    l: 100,
-    b: 100,
-    pad: 4
+    l: 170,
+    b: 170,
+    pad: 2
   },
 }
 
