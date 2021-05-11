@@ -55,8 +55,8 @@ export const LAYOUTLIGHT = {
 
 export const LAYOUTDARKHEATMAP = {
   autosize: false,
-  width: 700,
-  height: 700,
+  width: 600,
+  height: 600,
   plot_bgcolor: '#424242',
   paper_bgcolor: '#424242',
   xaxis: {
