@@ -44,7 +44,7 @@ export class WetlabPlotComponent implements OnInit, OnDestroy {
   themeColor: string;
 
   // The selected dates
-  currentDates: Date[];
+  currentDates: String[];
 
   // Random string to generate de div and plot
   randString = '';

@@ -17,11 +17,11 @@ export class DataService {
   params = new HttpParams();
 
 
-  private selectedDates = new Subject<Date[]>();
+  private selectedDates = new Subject<String[]>();
   selectedDates$ = this.selectedDates.asObservable();
-  currentDates: Date[];
+  currentDates: String[];
 
-  public selectDates(datesArray: Date[]): void {
+  public selectDates(datesArray: String[]): void {
     this.currentDates = datesArray;
     this.selectedDates.next(datesArray);
   }
