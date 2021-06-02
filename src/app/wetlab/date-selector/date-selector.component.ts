@@ -39,7 +39,11 @@ export class DateSelectorComponent implements OnInit {
     if (this.weekPickerStart == null || this.weekPickerEnd == null) {
       this.dataService.selectDates([this.dateStart.value.toISOString(), this.dateEnd.value.toISOString()]);
     } else {
-      this.dataService.selectDates([this.getDateOfISOWeek(this.weekPickerStart.split('-')[1].substring(1), this.weekPickerStart.split('-')[0]).toISOString(), this.getDateOfISOWeek(this.weekPickerEnd.split('-')[1].substring(1), this.weekPickerEnd.split('-')[0]).toISOString()]);
+      this.getDateOfISOWeek(this.weekPickerStart.split('-')[1].substring(1), this.weekPickerStart.split('-')[0]);
+      this.getLastWeekDateByDate(this.getDateOfISOWeek(this.weekPickerStart.split('-')[1].substring(1), this.weekPickerStart.split('-')[0]));
+
+      this.dataService.selectDates([this.getDateOfISOWeek(this.weekPickerStart.split('-')[1].substring(1), this.weekPickerStart.split('-')[0]).toISOString(),
+      this.getLastWeekDateByDate(this.getDateOfISOWeek(this.weekPickerEnd.split('-')[1].substring(1), this.weekPickerEnd.split('-')[0])).toISOString()]);
     }
   }
 
@@ -47,11 +51,20 @@ export class DateSelectorComponent implements OnInit {
     let simple = new Date(y, 0, 1 + (w - 1) * 7);
     let dow = simple.getDay();
     let ISOweekStart = simple;
-    if (dow <= 4)
+    if (dow <= 4) {
       ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
-    else
+    }
+    else {
       ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
+    }
     return ISOweekStart;
+  }
+
+  private getLastWeekDateByDate(date: Date): Date {
+    var lastday = date.getDate() - (date.getDay() - 1) + 6;
+    let lastDayDate = new Date(date)
+    lastDayDate.setDate(lastday);
+    return lastDayDate;
   }
 
 
