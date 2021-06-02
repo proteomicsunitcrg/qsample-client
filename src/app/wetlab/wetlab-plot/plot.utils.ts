@@ -62,11 +62,13 @@ export const LAYOUTDARKHEATMAP = {
   xaxis: {
     // nticks: 10,
     linecolor: '#FFFFFF',
-    tickcolor: '#FFFFFF'
+    tickcolor: '#FFFFFF',
+    dtick: 1
   },
   yaxis: {
     linecolor: '#FFFFFF',
     tickcolor: '#FFFFFF',
+    dtick: 1
   },
   font: {
     family: 'Roboto, monospace',
@@ -89,11 +91,14 @@ export const LAYOUTLIGHTHEATMAP = {
   xaxis: {
     // nticks: 10,
     linecolor: 'black',
-    tickcolor: 'black'
+    tickcolor: 'black',
+    dtick: 1
   },
   yaxis: {
     linecolor: 'black',
     tickcolor: 'black',
+    dtick: 1
+
   },
   font: {
     family: 'Roboto, monospace',
