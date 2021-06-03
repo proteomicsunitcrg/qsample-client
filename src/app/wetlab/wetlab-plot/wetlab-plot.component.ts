@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, OnDestroy } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { WetLab } from '../../models/WetLab';
-import { PlotTrace } from '../../models/PlotTrace';
 import { Subscription } from 'rxjs';
 import { ThemeService } from '../../services/theme.service';
 import { LAYOUTDARK, LAYOUTLIGHT, thresholdShapesDOWN, thresholdShapesUP, thresholdShapesUPDOWN } from './plot.utils';
 import { ThresholdService } from '../../services/threshold.service';
 import { Threshold } from '../../models/Threshold';
 import { ThresholdForPlot } from '../../models/ThresholdForPlot';
+import { PlotTraceWetlab } from 'src/app/models/PlotTraceWetlab';
 declare var Plotly: any;
 
 @Component({
@@ -56,7 +56,7 @@ export class WetlabPlotComponent implements OnInit, OnDestroy {
   hasThreshold = false;
 
   // To store the plot data from server
-  plotTrace: PlotTrace[];
+  plotTrace: PlotTraceWetlab[];
 
   ngOnInit(): void {
     this.layout.shapes = [];
@@ -105,13 +105,11 @@ export class WetlabPlotComponent implements OnInit, OnDestroy {
         const errorBar = [];
         const values = [];
         const filenames = [];
-        const dates = [];
         const color = [];
         plotTrace.plotTracePoints.forEach(
           plotTracePoint => {
             values.push(plotTracePoint.value);
-            filenames.push(plotTracePoint.file.filename);
-            dates.push(plotTracePoint.file.creationDate);
+            filenames.push(plotTracePoint.name);
             color.push('red');
             errorBar.push(plotTracePoint.std);
           }
