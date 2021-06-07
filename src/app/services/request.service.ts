@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { MiniRequest } from '../models/MiniRequest';
+import { Application } from '../models/Application';
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +15,16 @@ export class RequestService {
   apiPrefix: string = environment.apiPrefix;
   public currentRequestCode = new Subject<string>();
 
+  public currentApplication = new Subject<Application>();
+
   params = new HttpParams();
 
   public changeRequestCode(value: string) {
     this.currentRequestCode.next(value);
+  }
+
+  public changeCurrentApplication(value: Application) {
+    this.currentApplication.next(value);
   }
 
 

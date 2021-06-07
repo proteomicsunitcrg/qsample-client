@@ -29,9 +29,9 @@
           <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutAlign="start start" fxLayoutGap="2vw">
             <div fxLayout="column" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxFlex.lt-lg="100">
               <div fxFlex.sm="100" fxFlex.xs="100" fxFlex.lt-lg="100" [ngStyle.sm]="{'width.%': 200}">
-                <app-request-plot-file-list [requestCode]="requestCode" *ngIf="requestCode"></app-request-plot-file-list>
+                <app-request-plot-file-list [requestCode]="requestCode" *ngIf="requestCode" ></app-request-plot-file-list>
               </div>
-              <div ffxFlex.sm="100" fxFlex.xs="100" fxFlex.lt-lg="100" [ngStyle.sm]="{'width.%': 200}">
+              <div ffxFlex.sm="100" fxFlex.xs="100" fxFlex.lt-lg="100" [ngStyle.sm]="{'width.%': 200}" *ngIf="application && application.applicationConstraint.showQuantificationAndContaminantList">
                 <app-request-quantification></app-request-quantification>
               </div>
             </div>

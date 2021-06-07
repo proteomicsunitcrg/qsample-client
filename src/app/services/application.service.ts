@@ -25,6 +25,10 @@ export class ApplicationService {
     return this.httpClient.get<Application>(`${this.apiPrefix}${id}`);
   }
 
+  public getByName(name: string): Observable<Application> {
+    return this.httpClient.get<Application>(`${this.apiPrefix}name/${name}`);
+  }
+
   public save(instrument: Application): Observable<Application> {
     const params = JSON.stringify(instrument);
     return this.httpClient.post<Application>(`${this.apiPrefix}`, params, { headers: this.headers });

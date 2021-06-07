@@ -23,7 +23,7 @@ export class SettingsQgeneratorApplicationsCreatorComponent implements OnInit {
   });
 
   oldName: string;
-  application = new Application(null, null);
+  application = new Application(null, null, null);
   isEdit: boolean;
 
   ngOnInit(): void {
