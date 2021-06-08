@@ -11,7 +11,9 @@ export const LAYOUTDARK = {
   xaxis: {
     // nticks: 10,
     linecolor: '#FFFFFF',
-    tickcolor: '#FFFFFF'
+    tickcolor: '#FFFFFF',
+    dtick: 1
+
   },
   yaxis: {
     type: 'linear',
@@ -37,13 +39,14 @@ export const LAYOUTLIGHT = {
   barmode: 'group',
   xaxis: {
     linecolor: '#FFFFFF',
-    tickcolor: '#FFFFFF'
+    tickcolor: '#FFFFFF',
+    dtick: 1
+
   },
   yaxis: {
     type: 'linear',
     linecolor: '#FFFFFF',
     tickcolor: '#FFFFFF',
-
     // range: rangeArray
   },
   font: {
@@ -127,7 +130,8 @@ export const LAYOUTDARKOVERLAY = {
   xaxis: {
     // nticks: 10,
     linecolor: '#FFFFFF',
-    tickcolor: '#FFFFFF'
+    tickcolor: '#FFFFFF',
+    dtick: 1
   },
   yaxis: {
     type: 'linear',
@@ -153,13 +157,13 @@ export const LAYOUTLIGHTOVERLAY = {
   barmode: 'overlay',
   xaxis: {
     linecolor: '#FFFFFF',
-    tickcolor: '#FFFFFF'
+    tickcolor: '#FFFFFF',
+    dtick: 1
   },
   yaxis: {
     type: 'linear',
     linecolor: '#FFFFFF',
     tickcolor: '#FFFFFF',
-
     // range: rangeArray
   },
   font: {
