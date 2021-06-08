@@ -22,8 +22,6 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
         this.requestService.getRequestDetails(params.apiKey).subscribe(
           res => {
             this.request = res;
-            console.log(this.request);
-
             this.requestCode = this.getRequestCodeFromRequest(this.request);
             this.requestService.changeRequestCode(this.requestCode);
             this.getApplicationInformation();
@@ -73,7 +71,6 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
   private getApplicationInformation(): void {
     this.applicationService.getByName(this.request['classs']).subscribe(
       res => {
-        console.log(res);
         this.application = res;
         this.requestService.changeCurrentApplication(this.application);
       },

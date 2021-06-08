@@ -11,8 +11,6 @@ export class WetLabFile extends File {
 
   week: number;
 
-  fileInfo: FileInfo
-
 
   constructor(id: number, checksum: string, creationDate: Date, filename: string, wetlab: WetLab, replicate: number, year: number, week: number) {
     super(id, checksum, creationDate, filename);

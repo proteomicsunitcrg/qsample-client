@@ -5,6 +5,7 @@ import { WetLabFile } from '../../../app/models/WetLabFile';
 import { FileService } from '../../../app/services/file.service';
 import { LAYOUTDARKOVERLAY, LAYOUTLIGHTOVERLAY } from '../../wetlab/wetlab-plot/plot.utils';
 import { PlotService } from '../../../app/services/plot.service';
+import { RequestFile } from 'src/app/models/RequestFile';
 
 declare var Plotly: any;
 
@@ -18,7 +19,7 @@ export class RequestPlotFileinfoComponent implements OnInit, OnDestroy {
   // tslint:disable-next-line:no-input-rename
   @Input('requestCode') requestCode: string;
 
-  allFiles: WetLabFile[];
+  allFiles: RequestFile[];
 
   randString = '';
 
@@ -67,7 +68,6 @@ export class RequestPlotFileinfoComponent implements OnInit, OnDestroy {
   private getData(): void {
     this.fileService.getFilesByRequestCode(this.requestCode, this.order).subscribe(
       res => {
-        console.log(res);
         if (res.length === 0) {
           this.noDataFound = true;
         } else {
