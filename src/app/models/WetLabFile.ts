@@ -1,4 +1,5 @@
 import { File } from './File';
+import { FileInfo } from './FileInfo';
 import { WetLab } from './WetLab';
 export class WetLabFile extends File {
 
@@ -9,6 +10,8 @@ export class WetLabFile extends File {
   year: number;
 
   week: number;
+
+  fileInfo: FileInfo
 
 
   constructor(id: number, checksum: string, creationDate: Date, filename: string, wetlab: WetLab, replicate: number, year: number, week: number) {
