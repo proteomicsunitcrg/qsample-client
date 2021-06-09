@@ -113,7 +113,7 @@ export class RequestPlotFileinfoComponent implements OnInit, OnDestroy {
       x: filenames,
       y: valuesPeptideModified,
       type: 'bar',
-      name: 'Peptides modifieds',
+      name: 'Peptides modified',
       filenames
     };
     // Check current theme

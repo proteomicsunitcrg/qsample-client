@@ -4,7 +4,7 @@ import { RequestFile } from '../../../app/models/RequestFile';
 import { FileService } from '../../../app/services/file.service';
 import { PlotService } from '../../../app/services/plot.service';
 import { ThemeService } from '../../../app/services/theme.service';
-import { LAYOUTDARKOVERLAY, LAYOUTLIGHTOVERLAY } from '../../wetlab/wetlab-plot/plot.utils';
+import { LAYOUTDARKGROUP, LAYOUTDARKOVERLAY, LAYOUTLIGHTGROUP, LAYOUTLIGHTOVERLAY } from '../../wetlab/wetlab-plot/plot.utils';
 
 declare var Plotly: any;
 
@@ -131,11 +131,11 @@ export class RequestPlotModificationsComponent implements OnInit, OnDestroy {
       );
     // // Check current theme
     if (this.themeColor === 'dark-theme') {
-      this.layout = LAYOUTDARKOVERLAY;
+      this.layout = LAYOUTDARKGROUP;
     } else if (this.themeColor === 'light-theme') {
-      this.layout = LAYOUTLIGHTOVERLAY;
+      this.layout = LAYOUTLIGHTGROUP;
     } else {
-      this.layout = LAYOUTLIGHTOVERLAY;
+      this.layout = LAYOUTLIGHTGROUP;
     }
     const config = { responsive: true };
     Plotly.react(`Graph${this.randString}`, traces, this.layout, config);

@@ -173,6 +173,62 @@ export const LAYOUTLIGHTOVERLAY = {
 
 };
 
+
+export const LAYOUTDARKGROUP = {
+  autosize: false,
+  width: 700,
+  height: 450,
+  shapes: [],
+  hovermode: 'closest',
+  plot_bgcolor: '#424242',
+  paper_bgcolor: '#424242',
+  barmode: 'group',
+  xaxis: {
+    // nticks: 10,
+    linecolor: '#FFFFFF',
+    tickcolor: '#FFFFFF',
+    dtick: 1
+  },
+  yaxis: {
+    type: 'linear',
+    linecolor: '#FFFFFF',
+    tickcolor: '#FFFFFF',
+    // gridcolor: '#FFFFFF',
+
+    // range: rangeArray
+  },
+  font: {
+    family: 'Roboto, monospace',
+    color: '#FFFFFF'
+  }
+};
+export const LAYOUTLIGHTGROUP = {
+  autosize: false,
+  width: 700,
+  height: 450,
+  shapes: [],
+  hovermode: 'closest',
+  plot_bgcolor: 'white',
+  paper_bgcolor: 'white',
+  barmode: 'group',
+  xaxis: {
+    linecolor: '#FFFFFF',
+    tickcolor: '#FFFFFF',
+    dtick: 1
+  },
+  yaxis: {
+    type: 'linear',
+    linecolor: '#FFFFFF',
+    tickcolor: '#FFFFFF',
+    // range: rangeArray
+  },
+  font: {
+    family: 'Roboto, monospace',
+    color: 'black'
+  }
+
+};
+
 /**
  * To generate the threshold UP lines for the plot layout
  *
