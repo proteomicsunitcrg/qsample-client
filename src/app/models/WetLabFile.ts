@@ -1,4 +1,5 @@
 import { File } from './File';
+import { FileInfo } from './FileInfo';
 import { WetLab } from './WetLab';
 export class WetLabFile extends File {
 

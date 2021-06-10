@@ -23,6 +23,8 @@ import { RequestFileUploaderComponent } from './request-file-uploader/request-fi
 import { RequestQuantificationComponent } from './request-details/request-quantification/request-quantification.component';
 import { RequestHeatmapComponent } from './request-details/request-heatmap/request-heatmap.component';
 import { RequestPcaComponent } from './request-pca/request-pca.component';
+import { RequestPlotFileinfoComponent } from './request-plot-fileinfo/request-plot-fileinfo.component';
+import { RequestPlotModificationsComponent } from './request-plot-modifications/request-plot-modifications.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,9 @@ import { RequestPcaComponent } from './request-pca/request-pca.component';
     RequestFileUploaderComponent,
     RequestQuantificationComponent,
     RequestHeatmapComponent,
-    RequestPcaComponent
+    RequestPcaComponent,
+    RequestPlotFileinfoComponent,
+    RequestPlotModificationsComponent
   ],
   imports: [
     FlexLayoutModule,

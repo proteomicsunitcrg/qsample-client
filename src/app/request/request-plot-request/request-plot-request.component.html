@@ -1,7 +1,9 @@
 <div *ngIf="requestCode != undefined" fxLayout="column">
-  <app-request-plot-plot [cs]="'1'" [param]="'1'" [requestCode]="requestCode"></app-request-plot-plot>
-  <app-request-plot-plot [cs]="'2'" [param]="'1'" [requestCode]="requestCode"></app-request-plot-plot>
+  <app-request-plot-plot [cs]="'1'" [param]="'1'" [requestCode]="requestCode" *ngIf="application && application.applicationConstraint.showIdentifiedProteinsPlot"></app-request-plot-plot>
+  <app-request-plot-plot [cs]="'2'" [param]="'1'" [requestCode]="requestCode" *ngIf="application && application.applicationConstraint.showIdentifiedPeptidesPlot"></app-request-plot-plot>
+  <app-request-plot-fileinfo [requestCode]="requestCode" *ngIf="application && application.applicationConstraint.showFileInfoPlot"></app-request-plot-fileinfo>
+  <app-request-plot-modifications [requestCode]="requestCode" *ngIf="application && application.applicationConstraint.showModificationsPlot"></app-request-plot-modifications>
 </div>
-<app-request-heatmap [requestCode]="requestCode" *ngIf="requestCode" style="margin-top: 100px;"></app-request-heatmap>
+<app-request-heatmap [requestCode]="requestCode" *ngIf="requestCode && application && application.applicationConstraint.showQuantificationHeatMap" style="margin-top: 100px;"></app-request-heatmap>
 
-<app-request-pca [requestCode]="requestCode"></app-request-pca>
+<!-- <app-request-pca [requestCode]="requestCode"></app-request-pca> -->

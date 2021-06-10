@@ -3,6 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { Subscription, Observable } from 'rxjs';
 import { RequestService } from '../../services/request.service';
+import { ApplicationService } from '../../services/application.service';
+import { Application } from '../../models/Application';
 
 @Component({
   selector: 'app-request-details',
@@ -12,7 +14,7 @@ import { RequestService } from '../../services/request.service';
 export class RequestDetailsComponent implements OnInit, OnDestroy {
 
   constructor(private router: Router, private authService: AuthService, private activeRouter: ActivatedRoute,
-    private requestService: RequestService) {
+    private requestService: RequestService, private applicationService: ApplicationService) {
     this.subscription = this.authService.getIsInternal().subscribe(res => this.isInternal = res);
     this.activeRouter.params.subscribe(
       params => {
@@ -22,6 +24,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
             this.request = res;
             this.requestCode = this.getRequestCodeFromRequest(this.request);
             this.requestService.changeRequestCode(this.requestCode);
+            this.getApplicationInformation();
           },
           err => {
             console.error(err);
@@ -39,6 +42,8 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
   request: any;
 
   requestCode: string;
+
+  application: Application;
 
   ngOnInit(): void {
 
@@ -61,6 +66,24 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
 
   public goToQGenerator(): void {
     this.router.navigate(['/request/QGenerator', this.requestId]);
+  }
+
+  private getApplicationInformation(): void {
+    this.applicationService.getByName(this.request['classs']).subscribe(
+      res => {
+        this.application = res;
+        console.log(this.application);
+
+        if (!this.application.applicationConstraint) {
+          alert("Constraint not setted ATM");
+        } else {
+          this.requestService.changeCurrentApplication(this.application);
+        }
+      },
+      err => {
+        console.error(err);
+      }
+    )
   }
 
   // private getRequestDetails()

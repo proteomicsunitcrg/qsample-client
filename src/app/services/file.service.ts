@@ -30,7 +30,7 @@ export class FileService {
     return this.httpClient.get<QCloud2File[]>(`${this.apiPrefix}qcloud2/${requestCode}`);
   }
 
-  public getFilesByRequestCode(requestCode: string, order: string): Observable<RequestFile[]> {
+  public getFilesByRequestCode(requestCode: string, order: string): Observable<any[]> {
     this.params = this.params.set('order', order);
     return this.httpClient.get<RequestFile[]>(`${this.apiPrefix}getByRequestCode/${requestCode}`, {params: this.params});
   }

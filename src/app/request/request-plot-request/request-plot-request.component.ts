@@ -1,5 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Application } from '../../models/Application';
 import { RequestService } from '../../services/request.service';
 
 @Component({
@@ -11,7 +12,12 @@ export class RequestPlotRequestComponent implements OnInit, OnDestroy {
 
   myEventSubscription: Subscription;
 
+  applicationSubcription: Subscription;
+
   requestCode: any;
+
+  application: Application;
+
 
   constructor(private requestService: RequestService) {
     this.myEventSubscription = this.requestService.currentRequestCode.subscribe(value => {
@@ -20,9 +26,16 @@ export class RequestPlotRequestComponent implements OnInit, OnDestroy {
       }
     }
     );
+
+    this.applicationSubcription = this.requestService.currentApplication.subscribe(
+      value => {
+        this.application = value;
+      }
+    )
   }
 
   ngOnInit(): void {
+
   }
 
   ngOnDestroy(): void {
