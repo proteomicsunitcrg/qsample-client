@@ -5,7 +5,10 @@
         <span class="material-icons cursor" (click)="goBack()">
           arrow_back_ios
         </span>
-        {{requestCode}}<button style="float: right;" mat-raised-button (click)="goToQGenerator()">QGenerator</button>
+        {{requestCode}} 
+        <mat-icon class="cursor" (click)="addToFavorites()" *ngIf="!isFav">star_border_round</mat-icon>
+        <mat-icon class="cursor" (click)="removeFromFavorites()" *ngIf="isFav" style="color: gold;">star</mat-icon>
+        <button style="float: right;" mat-raised-button (click)="goToQGenerator()">QGenerator</button>
       </div>
     </h1>
 

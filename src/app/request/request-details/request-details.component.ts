@@ -5,6 +5,8 @@ import { Subscription, Observable } from 'rxjs';
 import { RequestService } from '../../services/request.service';
 import { ApplicationService } from '../../services/application.service';
 import { Application } from '../../models/Application';
+import { FavoriteRequestService } from '../../services/favoriteRequest.service';
+import { FavoriteRequest } from 'src/app/models/FavoriteRequest';
 
 @Component({
   selector: 'app-request-details',
@@ -14,11 +16,13 @@ import { Application } from '../../models/Application';
 export class RequestDetailsComponent implements OnInit, OnDestroy {
 
   constructor(private router: Router, private authService: AuthService, private activeRouter: ActivatedRoute,
-    private requestService: RequestService, private applicationService: ApplicationService) {
+    private requestService: RequestService, private applicationService: ApplicationService,
+    private favRequestService: FavoriteRequestService) {
     this.subscription = this.authService.getIsInternal().subscribe(res => this.isInternal = res);
     this.activeRouter.params.subscribe(
       params => {
         this.requestId = params.apiKey;
+        this.checkIfRequestIsFavorite();
         this.requestService.getRequestDetails(params.apiKey).subscribe(
           res => {
             this.request = res;
@@ -44,6 +48,9 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
   requestCode: string;
 
   application: Application;
+
+  // var to handle if the request is fav or not
+  isFav = false;
 
   ngOnInit(): void {
 
@@ -84,6 +91,41 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
         console.error(err);
       }
     )
+  }
+
+  public addToFavorites(): void {
+    const favRequest = new FavoriteRequest(null, this.requestId, this.requestCode);
+    this.favRequestService.setFavRequest(favRequest).subscribe(
+      res => {
+        this.checkIfRequestIsFavorite();
+      },
+      err => {
+        console.error(err);
+      }
+    );
+  }
+
+  private checkIfRequestIsFavorite(): void {
+    this.favRequestService.checkIfRequestIsFav(this.requestId).subscribe(
+      res => {
+        this.isFav = res;
+      },
+      err => {
+        console.error(err);
+      }
+    );
+  }
+
+  public removeFromFavorites(): void {
+    const favRequest = new FavoriteRequest(null, this.requestId, this.requestCode);
+    this.favRequestService.deleteFavRequest(favRequest).subscribe(
+      res => {
+        this.checkIfRequestIsFavorite();
+      },
+      err => {
+        console.error(err);
+      } 
+    );
   }
 
   // private getRequestDetails()
