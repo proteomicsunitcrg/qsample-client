@@ -46,7 +46,7 @@ export class SettingsQgeneratorApplicationsCreatorComponent implements OnInit {
     this.application.name = this.systemFrom.get('name').value;
     this.applicationService.save(this.application).subscribe(
       res => {
-        this.openSnackBar('Instrument saved', 'Close');
+        this.openSnackBar('Application saved', 'Close');
       },
       err => {
         this.openSnackBar('Error, contact the administrators', 'Close');
@@ -58,7 +58,7 @@ export class SettingsQgeneratorApplicationsCreatorComponent implements OnInit {
     this.applicationService.delete(this.application).subscribe(
       res => {
         if (res) {
-          this.openSnackBar('Instrument deleted', 'Close');
+          this.openSnackBar('Application deleted', 'Close');
           this.goBack();
         } else {
           this.openSnackBar('Not deleted. Remember to delete all injection conditions before deleting an application', 'Close');
