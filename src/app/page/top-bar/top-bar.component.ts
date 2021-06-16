@@ -45,4 +45,8 @@ export class TopBarComponent implements OnInit {
     this.router.navigate(['/help']);
   }
 
+  public goToFavorites(): void {
+    this.router.navigate(['/favorite']);
+  }
+
 }

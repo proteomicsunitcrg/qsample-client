@@ -23,6 +23,10 @@ const routes: Routes = [
       {
         path: 'help', loadChildren: () => import('../help/help.module')
           .then(m => m.HelpModule)
+      },
+      {
+        path: 'favorite', loadChildren: () => import('../favorite/favorite.module')
+          .then(m => m.FavoriteModule)
       }
     ]
   },

@@ -2,6 +2,9 @@
   <mat-toolbar-row class="mat-elevation-z5">
     <span class="pointer" (click)="goToHomePage()">QSample</span>
     <span class="spacer"></span>
+    <button mat-icon-button (click)="goToFavorites()">
+      <mat-icon>star</mat-icon>
+    </button>
     <app-theme-selector></app-theme-selector>
     <button mat-icon-button (click)="goToSettings()" *ngIf="isAdmin">
       <mat-icon>settings</mat-icon>

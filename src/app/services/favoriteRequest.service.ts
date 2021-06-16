@@ -33,4 +33,8 @@ export class FavoriteRequestService {
     return this.http.get<any>(`${this.apiPrefix}/check/${agendoId}`);
   }
 
+  public getFavoriteRequestsAgendo(): Observable<MiniRequest[]> {
+    return this.http.get<MiniRequest[]>(`${this.apiPrefix}/favAgendo`);
+  }
+
 }

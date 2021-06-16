@@ -172,8 +172,6 @@ export class RequestsListComponent implements OnInit {
 
 
   public goTo(request): void {
-    console.log(request);
-
     this.router.navigate(['/request', request.id]);
   }
 
