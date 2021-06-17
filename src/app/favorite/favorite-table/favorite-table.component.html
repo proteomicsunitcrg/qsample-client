@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card style="margin-left: 10px; margin-right: 10px; margin-top: 10px;">
     <mat-card-title>
         Favorite requests
     </mat-card-title>
@@ -40,12 +40,12 @@
               <ng-container matColumnDef="type">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Application </th>
                 <td mat-cell *matCellDef="let entry" [matTooltip]="entry.type">
-                  {{ (entry.type.length>50)? (entry.type | slice:0:50)+'...':(entry.type) }} </td> 
+                  {{ (entry.type.length>50)? (entry.type | slice:0:350)+'...':(entry.type) }} </td>
                 <!--Very proud of this KEKW-->
               </ng-container>
               <ng-container matColumnDef="creatorName">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Creator </th>
-                <td mat-cell *matCellDef="let entry" [innerHTML]="entry.creatorName"> </td> 
+                <td mat-cell *matCellDef="let entry" [innerHTML]="entry.creatorName"> </td>
                 <!--Because agendo returns the accetns encoded-->
                </ng-container>
               <ng-container matColumnDef="creationDate">
@@ -58,6 +58,6 @@
               </ng-container>
               <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
               <tr mat-row (click)="goTo(myRowData)" *matRowDef="let myRowData; columns: columnsToDisplay"></tr>
-        </table> 
+        </table>
     </mat-card-content>
 </mat-card>

@@ -41,8 +41,8 @@ export class RequestPlotFileListComponent implements OnInit, OnDestroy {
       res => {
         this.selectedSamples = [];
         this.files = res;
-        this.files.forEach(val => this.selectedSamples.push(Object.assign({}, val))); // we need to clone
         if (this.files !== null) {
+          this.files.forEach(val => this.selectedSamples.push(Object.assign({}, val))); // we need to clone
           this.dataSource = new MatTableDataSource(this.files);
           this.dataSource.paginator = this.paginator;
           this.plotService.sendselectedSamples(this.selectedSamples);
