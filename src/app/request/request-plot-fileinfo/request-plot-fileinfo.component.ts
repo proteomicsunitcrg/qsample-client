@@ -68,8 +68,9 @@ export class RequestPlotFileinfoComponent implements OnInit, OnDestroy {
   private getData(): void {
     this.fileService.getFilesByRequestCode(this.requestCode, this.order).subscribe(
       res => {
-        if (res.length === 0) {
+        if (!res) {
           this.noDataFound = true;
+          this.msgError = "No data found";
         } else {
           this.allFiles = res;
           this.plotGraph();
