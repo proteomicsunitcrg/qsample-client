@@ -21,7 +21,6 @@ export class WetlabListComponent implements OnInit {
   private getAllWetlabs() {
     this.wetLabService.getWetlabLists().subscribe(
       res => {
-        console.log(res);
         this.WetLabs = res;
       },
       err => {

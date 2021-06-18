@@ -79,8 +79,6 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
     this.applicationService.getByName(this.request['classs']).subscribe(
       res => {
         this.application = res;
-        console.log(this.application);
-
         if (!this.application.applicationConstraint) {
           alert("Constraint not setted ATM");
         } else {
@@ -124,7 +122,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
       },
       err => {
         console.error(err);
-      } 
+      }
     );
   }
 
