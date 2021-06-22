@@ -202,8 +202,9 @@ export class RequestsListComponent implements OnInit {
    *
    */
   public getAllRequestsInternal(): void {
+    const datePlusOne = new Date(this.range.controls.end.value.getTime() + (1000 * 60 * 60 * 24));
     this.finding = true;
-    this.requestService.getAllRequestsInternal(this.showAll, this.range.controls.start.value, this.range.controls.end.value).subscribe(
+    this.requestService.getAllRequestsInternal(this.showAll, this.range.controls.start.value, datePlusOne).subscribe(
       res => {
         this.finding = false;
         this.allRequests = res;
