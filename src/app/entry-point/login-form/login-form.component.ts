@@ -40,8 +40,6 @@ export class LoginFormComponent implements OnInit {
   public logIn(): void {
     this.authService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe(
       res => {
-        console.log(res);
-
         this.tokenService.saveToken(res.accessToken);
         this.tokenService.saveUser(res);
         this.isLoggedIn = true;
