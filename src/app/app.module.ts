@@ -27,6 +27,7 @@ import { PlotService } from './services/plot.service';
 import { InjectionConditionQCService } from './services/injectionConditionsQC.service';
 import { QuantificationService } from './services/quantification.service';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { UnauthorizedInterceptor } from './interceptors/unauthorized.interceptor';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,11 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: UnauthorizedInterceptor,
       multi: true
     },
     TestService,
