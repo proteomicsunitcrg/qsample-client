@@ -54,4 +54,12 @@ export class AuthService {
   public login(username: string, password: string): Observable<any> {
     return this.http.post<any>(`${this.apiPrefix}api/auth/signin`, { username, password }, this.httpOptions);
   }
+
+  public resetPassword(username: string): Observable<any> {
+    return this.http.post<any>(`${this.apiPrefix}api/auth/recovery`, {username}, this.httpOptions);
+  }
+
+  public checkResetPasswordToken(token: string): Observable<any> {
+    return this.http.post<any>(`${this.apiPrefix}api/auth/checkToken`, {token}, this.httpOptions);
+  }
 }

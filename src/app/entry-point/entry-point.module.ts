@@ -5,6 +5,7 @@ import { LoginFormComponent } from './login-form/login-form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EntryPointRouterModule } from './entry-point-router/entry-point-router.module';
 import { AngularMaterialModule } from '../angular-material.module';
+import { PasswordRecoveryComponent } from './password-recovery/password-recovery.component';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import { AngularMaterialModule } from '../angular-material.module';
   ],
   declarations: [
     LoginFormComponent,
+    PasswordRecoveryComponent,
   ],
   providers: [
   ],

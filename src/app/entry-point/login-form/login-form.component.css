@@ -24,6 +24,11 @@ mat-card-header {
     margin: auto;
     width: 80%;
 }
+
+.btn-block-small {
+  margin: auto;
+  width: 40%;
+}
 mat-card-footer {
     margin: auto;
     text-align: center;
