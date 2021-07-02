@@ -86,9 +86,10 @@ export class LoginFormComponent implements OnInit {
 
     this.authService.resetPassword(username).subscribe(
       res => {
-        console.log(res);
+        this.openSnackBar('Email sent', 'Close', 5000);
       },
       err => {
+        this.openSnackBar('Error, contact the admins', 'Close', 5000);
         console.error(err)
       }
     );

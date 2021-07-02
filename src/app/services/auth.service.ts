@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
+import { PasswordResetToken } from '../models/PasswordResetToken';
+import { User } from '../models/User';
 
 
 
@@ -56,10 +58,14 @@ export class AuthService {
   }
 
   public resetPassword(username: string): Observable<any> {
-    return this.http.post<any>(`${this.apiPrefix}api/auth/recovery`, {username}, this.httpOptions);
+    return this.http.post<any>(`${this.apiPrefix}api/auth/recovery`, { username }, this.httpOptions);
   }
 
-  public checkResetPasswordToken(token: string): Observable<any> {
-    return this.http.post<any>(`${this.apiPrefix}api/auth/checkToken`, {token}, this.httpOptions);
+  public getResetToken(token: string): Observable<PasswordResetToken> {
+    return this.http.post<PasswordResetToken>(`${this.apiPrefix}api/auth/getToken`, token, this.httpOptions);
+  }
+
+  public changePassword(username, password): Observable <User> {
+    return this.http.post<User>(`${this.apiPrefix}api/auth/changePassword`, { username, password });
   }
 }
