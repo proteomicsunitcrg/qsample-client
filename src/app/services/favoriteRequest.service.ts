@@ -33,8 +33,18 @@ export class FavoriteRequestService {
     return this.http.get<any>(`${this.apiPrefix}/check/${agendoId}`);
   }
 
+  public getFavRequestByAgendoId(agendoId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiPrefix}/get/${agendoId}`);
+  }
+
   public getFavoriteRequestsAgendo(): Observable<MiniRequest[]> {
     return this.http.get<MiniRequest[]>(`${this.apiPrefix}/favAgendo`);
+  }
+
+  // action = true means add and action = false means delete
+  public setNotify(favRequest: FavoriteRequest, action): Observable<FavoriteRequest> {
+    const params = JSON.stringify(favRequest);
+    return this.http.post<FavoriteRequest>(`${this.apiPrefix}/notify/${action}`, params, {headers: this.headers});
   }
 
 }

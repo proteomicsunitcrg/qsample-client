@@ -7,6 +7,7 @@ import { ApplicationService } from '../../services/application.service';
 import { Application } from '../../models/Application';
 import { FavoriteRequestService } from '../../services/favoriteRequest.service';
 import { FavoriteRequest } from 'src/app/models/FavoriteRequest';
+import { FavoriteRequestUser } from 'src/app/models/FavoriteRequestUser';
 
 @Component({
   selector: 'app-request-details',
@@ -49,8 +50,13 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
 
   application: Application;
 
+  favoriteRequestRelation: FavoriteRequestUser;
+
   // var to handle if the request is fav or not
   isFav = false;
+
+  // var to handle if the request is notify or not
+  isNotify = false;
 
   ngOnInit(): void {
 
@@ -91,7 +97,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
     )
   }
 
-  public addToFavorites(): void {
+  private addToFavorites(): void {
     const favRequest = new FavoriteRequest(null, this.requestId, this.requestCode);
     this.favRequestService.setFavRequest(favRequest).subscribe(
       res => {
@@ -104,9 +110,15 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
   }
 
   private checkIfRequestIsFavorite(): void {
-    this.favRequestService.checkIfRequestIsFav(this.requestId).subscribe(
+    this.favRequestService.getFavRequestByAgendoId(this.requestId).subscribe(
       res => {
-        this.isFav = res;
+        this.favoriteRequestRelation = res;
+        if (this.favoriteRequestRelation !== null) {
+          this.isFav = true;
+          this.isNotify = this.favoriteRequestRelation.notify;
+        } else {
+          this.isFav = false;
+        }
       },
       err => {
         console.error(err);
@@ -114,7 +126,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
     );
   }
 
-  public removeFromFavorites(): void {
+  private removeFromFavorites(): void {
     const favRequest = new FavoriteRequest(null, this.requestId, this.requestCode);
     this.favRequestService.deleteFavRequest(favRequest).subscribe(
       res => {
@@ -126,6 +138,29 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
     );
   }
 
-  // private getRequestDetails()
+  public removeOrAddToFavorites(): void {
+    if (this.isFav) {
+      this.removeFromFavorites();
+    } else {
+      this.addToFavorites();
+    }
+  }
+
+  public removeOrAddToNotify(): void {
+    let action: boolean;
+    if (this.isNotify) {
+      action = false;
+    } else {
+      action = true;
+    }
+    this.favRequestService.setNotify(this.favoriteRequestRelation.favoriteRequest, action).subscribe(
+      res => {
+        this.checkIfRequestIsFavorite();
+      },
+      err => {
+        console.error(err);
+      }
+    );
+  }
 
 }

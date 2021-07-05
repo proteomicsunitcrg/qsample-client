@@ -5,9 +5,15 @@
         <span class="material-icons cursor" (click)="goBack()">
           arrow_back_ios
         </span>
-        {{requestCode}} 
-        <mat-icon class="cursor" (click)="addToFavorites()" *ngIf="!isFav">star_border_round</mat-icon>
-        <mat-icon class="cursor" (click)="removeFromFavorites()" *ngIf="isFav" style="color: gold;">star</mat-icon>
+        {{requestCode}}
+        <button mat-icon-button (click)="removeOrAddToFavorites()">
+          <mat-icon class="cursor" *ngIf="!isFav">star_border_round</mat-icon>
+          <mat-icon class="cursor" *ngIf="isFav" style="color: gold;">star</mat-icon>
+        </button>
+        <button mat-icon-button [disabled] = "!isFav" (click)="removeOrAddToNotify()" matTooltip="Send an email when a file enters">
+          <mat-icon class="cursor" *ngIf="!isNotify">notifications_outlined</mat-icon>
+          <mat-icon class="cursor" *ngIf="isNotify">notifications_active</mat-icon>
+        </button>
         <button style="float: right;" mat-raised-button (click)="goToQGenerator()">QGenerator</button>
       </div>
     </h1>
