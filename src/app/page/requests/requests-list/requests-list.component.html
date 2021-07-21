@@ -16,15 +16,15 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field>
-          <input matInput (keyup)="applyFilterClass($event.target.value)" placeholder="Filter"
+          <input matInput (keyup)="applyFilterClass($event.target.value.trim())" placeholder="Filter"
             [(ngModel)]="classFilter">
         </mat-form-field>
         <mat-form-field>
-          <input matInput (keyup)="applyFilterCode($event.target.value)" placeholder="Request code"
+          <input matInput (keyup)="applyFilterCode($event.target.value.trim())" placeholder="Request code"
             [(ngModel)]="lastFieldFilter">
         </mat-form-field>
         <mat-form-field>
-          <input matInput (keyup)="applyFilterCreator($event.target.value)" placeholder="Creator"
+          <input matInput (keyup)="applyFilterCreator($event.target.value.trim())" placeholder="Creator"
             [(ngModel)]="creatorFilter">
         </mat-form-field>
         <!-- <mat-form-field> -->
