@@ -6,4 +6,4 @@
 </div>
 <app-request-heatmap [requestCode]="requestCode" *ngIf="requestCode && application && application.applicationConstraint.showQuantificationHeatMap" style="margin-top: 100px;"></app-request-heatmap>
 
-<!-- <app-request-pca [requestCode]="requestCode"></app-request-pca> -->
+<app-request-pca [requestCode]="requestCode" *ngIf="requestCode"></app-request-pca>

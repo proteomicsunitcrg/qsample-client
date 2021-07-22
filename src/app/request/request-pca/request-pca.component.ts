@@ -22,14 +22,18 @@ export class RequestPcaComponent implements OnInit {
     selectedSamples = [];
 
   ngOnInit(): void {
-    // this.getPCAData();
+    this.getPCAData();
     this.subscribeToListChanges();
   }
 
   private getPCAData(): void {
+    console.log('getting data');
+
     this.quantificationService.getPCA(this.requestCode, this.listOfChecksum).subscribe(
       res => {
         console.log(res);
+        let arrayNew = res.map((elem,i) => `${i!==0?', ':''}${elem[0]}:${elem[1]}`).join("");
+        console.log(arrayNew);
       },
       err => {
         console.log(err);
@@ -46,7 +50,7 @@ private subscribeToListChanges(): void {
       this.selectedSamples = list;
       this.listOfChecksum = this.selectedSamples.map(item => item.checksum);
       // console.log(this.listOfChecksum);
-      // this.getPCAData();
+      this.getPCAData();
 
     }
   );
