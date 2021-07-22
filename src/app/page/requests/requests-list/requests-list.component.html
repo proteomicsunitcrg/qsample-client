@@ -16,15 +16,15 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field>
-          <input matInput (keyup)="applyFilterClass($event.target.value)" placeholder="Filter"
+          <input matInput (keyup)="applyFilterClass($event.target.value.trim())" placeholder="Filter"
             [(ngModel)]="classFilter">
         </mat-form-field>
         <mat-form-field>
-          <input matInput (keyup)="applyFilterCode($event.target.value)" placeholder="Request code"
+          <input matInput (keyup)="applyFilterCode($event.target.value.trim())" placeholder="Request code"
             [(ngModel)]="lastFieldFilter">
         </mat-form-field>
         <mat-form-field>
-          <input matInput (keyup)="applyFilterCreator($event.target.value)" placeholder="Creator"
+          <input matInput (keyup)="applyFilterCreator($event.target.value.trim())" placeholder="Creator"
             [(ngModel)]="creatorFilter">
         </mat-form-field>
         <!-- <mat-form-field> -->
@@ -42,6 +42,7 @@
         <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
         <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
       </mat-form-field>
+      <button mat-stroked-button style="margin-left: 20px;" (click)="openDialog()">Years</button>
       <button mat-mini-fab color="primary" aria-label="find by date range"
         style="margin-left: 20px; margin-right: 20px;" [disabled]="range.invalid" (click)="getAllRequests()">
         <mat-icon>search</mat-icon>

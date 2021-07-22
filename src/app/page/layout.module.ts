@@ -13,6 +13,7 @@ import { RequestService } from '../services/request.service';
 import { ThemeSelectorComponent } from './top-bar/theme-selector/theme-selector.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { RequestListYearSelectorDialog } from './requests/requests-list/dialog/request-list-year-selector-dialog';
 
 
 
@@ -34,7 +35,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     RequestsListComponent,
     MainWetlabComponent,
     WetlabListComponent,
-    ThemeSelectorComponent
+    ThemeSelectorComponent,
+    RequestListYearSelectorDialog
   ],
   providers: [
     RequestService

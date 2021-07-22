@@ -9,6 +9,8 @@ import { MatSort } from '@angular/material/sort';
 import { AuthService } from '../../../services/auth.service';
 import { Subscription } from 'rxjs';
 import { MiniRequest } from '../../../models/MiniRequest';
+import { MatDialog } from '@angular/material/dialog';
+import { RequestListYearSelectorDialog } from './dialog/request-list-year-selector-dialog';
 
 @Component({
   selector: 'app-requests-list',
@@ -53,9 +55,10 @@ export class RequestsListComponent implements OnInit {
     end: new FormControl(this.today)
   });
 
+  year: number;
 
-
-  constructor(private requestService: RequestService, private router: Router, private authService: AuthService) {
+  constructor(private requestService: RequestService, private router: Router, private authService: AuthService,
+    private dialog: MatDialog) {
     this.subscription = this.authService.getIsInternal().subscribe(res => this.isInternal = res);
   }
 
@@ -250,6 +253,26 @@ export class RequestsListComponent implements OnInit {
   public getAllCheckBoxChange(): void {
     this.getAllRequestsInternal();
     this.resetAllFilters();
+  }
+
+  public openDialog(): void {
+    const dialogRef = this.dialog.open(RequestListYearSelectorDialog, {
+      data: {
+      },
+      width: '35%'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.year = result;
+      this.setYear(result);
+    });
+  }
+
+  private setYear(year: number) {
+    let starDate = new Date(new Date().setFullYear(year,0,1));
+    let endDate = new Date(new Date().setFullYear(year,11,31));    
+    this.range.controls.start.setValue(starDate);
+    this.range.controls.end.setValue(endDate);
+
   }
 
 }
