@@ -8,7 +8,7 @@
         fxLayoutAlign="flex-start">
         <mat-form-field appearance="fill">
           <mat-label>Status</mat-label>
-          <mat-select (selectionChange)="applyFilterStatus($event.value)" [(ngModel)]="statusFilter">
+          <mat-select (selectionChange)="applyFilterStatus($event.value)" [(ngModel)]="statusFilter" [disabled]="finding">
             <mat-option value="">None</mat-option>
             <mat-option *ngFor="let status of requestStatusValuesKeys()" [value]="status">
               {{status}}
@@ -16,23 +16,23 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field>
-          <input matInput (keyup)="applyFilterClass($event.target.value.trim())" placeholder="Filter"
-            [(ngModel)]="classFilter">
+          <input matInput (keyup)="applyFilterClass($event.target.value.trim())" placeholder="Application"
+            [(ngModel)]="classFilter" [disabled]="finding">
         </mat-form-field>
         <mat-form-field>
           <input matInput (keyup)="applyFilterCode($event.target.value.trim())" placeholder="Request code"
-            [(ngModel)]="lastFieldFilter">
+            [(ngModel)]="lastFieldFilter" [disabled]="finding">
         </mat-form-field>
         <mat-form-field>
           <input matInput (keyup)="applyFilterCreator($event.target.value.trim())" placeholder="Creator"
-            [(ngModel)]="creatorFilter">
+            [(ngModel)]="creatorFilter" [disabled]="finding">
         </mat-form-field>
         <!-- <mat-form-field> -->
         <!-- </mat-form-field> -->
       </div>
       <mat-form-field appearance="fill">
         <mat-label>Enter a date range</mat-label>
-        <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+        <mat-date-range-input [formGroup]="range" [rangePicker]="picker" [disabled]="finding">
           <input matStartDate formControlName="start" placeholder="Start date">
           <input matEndDate formControlName="end" placeholder="End date">
         </mat-date-range-input>
@@ -42,12 +42,12 @@
         <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
         <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
       </mat-form-field>
-      <button mat-stroked-button style="margin-left: 20px;" (click)="openDialog()">Years</button>
-      <button mat-mini-fab color="primary" aria-label="find by date range"
+      <button mat-stroked-button style="margin-left: 20px;" (click)="openDialog()" [disabled]="finding">Years</button>
+      <button mat-mini-fab color="primary" aria-label="find by date range" [disabled]="finding"
         style="margin-left: 20px; margin-right: 20px;" [disabled]="range.invalid" (click)="getAllRequests()">
         <mat-icon>search</mat-icon>
       </button>
-      <mat-checkbox (change)="getAllCheckBoxChange()" matInput [(ngModel)]="showAll">Show all
+      <mat-checkbox (change)="getAllCheckBoxChange()" matInput [(ngModel)]="showAll" [disabled]="finding">Show all
         <span class="material-icons" matTooltip="Hide rejected/completed/created/cancelled/created as draft requests">
           help
         </span>

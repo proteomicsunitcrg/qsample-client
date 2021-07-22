@@ -46,7 +46,7 @@ export class RequestsListComponent implements OnInit {
 
   today = new Date();
 
-  monthAgo = new Date(new Date().setMonth(this.today.getMonth() - 3));
+  monthAgo = new Date(new Date().setMonth(this.today.getMonth() - 6));
 
   finding = false;
 
@@ -268,11 +268,11 @@ export class RequestsListComponent implements OnInit {
   }
 
   private setYear(year: number) {
-    let starDate = new Date(new Date().setFullYear(year,0,1));
-    let endDate = new Date(new Date().setFullYear(year,11,31));    
+    const starDate = new Date(new Date().setFullYear(year,0,1));
+    const endDate = new Date(new Date().setFullYear(year,11,31));
     this.range.controls.start.setValue(starDate);
     this.range.controls.end.setValue(endDate);
-
+    this.getAllRequests();
   }
 
 }
