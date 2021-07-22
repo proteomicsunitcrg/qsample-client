@@ -8,9 +8,10 @@ export class MiniRequest {
   status: RequestStatus;
   type: string;
   lastField: string;
+  hasData: boolean;
 
   constructor(id: number, creationDate: string, creatorMail: string, creatorName: string,
-    status: RequestStatus, type: string, lastField: string) {
+    status: RequestStatus, type: string, lastField: string, hasData: boolean) {
     this.id = id;
     this.creationDate = creationDate;
     this.creatorMail = creatorMail;
@@ -18,5 +19,6 @@ export class MiniRequest {
     this.status = status;
     this.type = type;
     this.lastField = lastField;
+    this.hasData = hasData;
   }
 }

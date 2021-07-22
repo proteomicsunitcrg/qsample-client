@@ -38,6 +38,8 @@ export class RequestsListComponent implements OnInit {
 
   isInternal: boolean;
 
+  // columnsToDisplay = ['code', 'type', 'creatorName', 'creationDate', 'status', 'hasData'];
+
   columnsToDisplay = ['code', 'type', 'creatorName', 'creationDate', 'status'];
 
   filteredValues = {};
@@ -262,8 +264,10 @@ export class RequestsListComponent implements OnInit {
       width: '35%'
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.year = result;
-      this.setYear(result);
+      if (result != undefined) {
+        this.year = result;
+        this.setYear(result);
+      }
     });
   }
 

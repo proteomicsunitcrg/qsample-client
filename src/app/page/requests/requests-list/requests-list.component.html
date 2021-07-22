@@ -77,6 +77,17 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
           <td mat-cell *matCellDef="let entry"> {{entry.status}} </td>
         </ng-container>
+        <!-- <ng-container matColumnDef="hasData">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Data </th>
+          <td mat-cell *matCellDef="let entry">
+            <span class="material-icons" *ngIf="entry.hasData">
+              done
+            </span>
+            <span class="material-icons" *ngIf="!entry.hasData">
+              clear
+            </span>
+          </td>
+        </ng-container> -->
         <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
         <tr mat-row (click)="goTo(myRowData)" *matRowDef="let myRowData; columns: columnsToDisplay"></tr>
       </table>
