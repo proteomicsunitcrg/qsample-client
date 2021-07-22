@@ -157,7 +157,7 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
     const cac = JSON.parse(request.fields[request.fields.length - 1].value);
     this.clientCode = cac[0][0].value.split('|')[1];
     console.log(cac[0][0].value.split('|')[0]);
-    return cac[0][0].value.split('|')[0];
+    return cac[0][0].value.split('|')[0].replace('/','');
   }
 
 
