@@ -44,15 +44,15 @@ export class RequestPcaComponent implements OnInit {
     /**
 * Subscribes to list display changes
 */
-private subscribeToListChanges(): void {
-  this.fileListChangesSubscription$ = this.plotService.selectedSamples.subscribe(
-    list => {
-      this.selectedSamples = list;
-      this.listOfChecksum = this.selectedSamples.map(item => item.checksum);
-      // console.log(this.listOfChecksum);
-      this.getPCAData();
+  private subscribeToListChanges(): void {
+    this.fileListChangesSubscription$ = this.plotService.selectedSamples.subscribe(
+      list => {
+        this.selectedSamples = list;
+        this.listOfChecksum = this.selectedSamples.map(item => item.checksum);
+        // console.log(this.listOfChecksum);
+        this.getPCAData();
 
-    }
-  );
-}
+      }
+    );
+  }
 }

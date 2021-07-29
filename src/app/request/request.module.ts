@@ -25,6 +25,7 @@ import { RequestHeatmapComponent } from './request-details/request-heatmap/reque
 import { RequestPcaComponent } from './request-pca/request-pca.component';
 import { RequestPlotFileinfoComponent } from './request-plot-fileinfo/request-plot-fileinfo.component';
 import { RequestPlotModificationsComponent } from './request-plot-modifications/request-plot-modifications.component';
+import { RequestDendogramComponent } from './request-dendogram/request-dendogram.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { RequestPlotModificationsComponent } from './request-plot-modifications/
     RequestHeatmapComponent,
     RequestPcaComponent,
     RequestPlotFileinfoComponent,
-    RequestPlotModificationsComponent
+    RequestPlotModificationsComponent,
+    RequestDendogramComponent
   ],
   imports: [
     FlexLayoutModule,
