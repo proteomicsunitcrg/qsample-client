@@ -41,11 +41,12 @@ export class QuantificationService {
     return this.http.get<any>(`${this.apiPrefix}/PCA/${requestCode}`, {params: this.params});
   }
 
-  public getDendogram(requestCode: string, listOfChecksums: string[]): Observable<Blob> {
+  public getDendogram(requestCode: string, listOfChecksums: string[], themeColor: string): Observable<Blob> {
     this.params = new HttpParams();
     listOfChecksums.forEach((item) => {
       this.params = this.params.append(`checksums[]`, item);
     });
+    this.params = this.params.append('theme', themeColor);
     return this.http.get<Blob>(`${this.apiPrefix}/dendogram/${requestCode}`, {params: this.params, responseType: 'blob' as 'json'});
 
   }
