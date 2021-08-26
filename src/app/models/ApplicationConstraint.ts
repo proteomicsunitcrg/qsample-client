@@ -8,8 +8,11 @@ export class ApplicationConstraint {
   showModificationsPlot: boolean;
   showQuantificationAndContaminantList: boolean;
   showQuantificationHeatMap: boolean;
+  showDendogram: boolean;
 
-  constructor(id: number, name: string, showFileInfoPlot: boolean, showIdentifiedPeptidesPlot: boolean, showIdentifiedProteinsPlot: boolean, showModificationsPlot: boolean, showQuantificationAndContaminantList: boolean, showQuantificationHeatMap: boolean) {
+  constructor(id: number, name: string, showFileInfoPlot: boolean, showIdentifiedPeptidesPlot: boolean,
+    showIdentifiedProteinsPlot: boolean, showModificationsPlot: boolean, showQuantificationAndContaminantList: boolean,
+    showQuantificationHeatMap: boolean, showDendogram: boolean) {
     this.id = id;
     this.name = name;
     this.showFileInfoPlot = showFileInfoPlot;
@@ -17,6 +20,7 @@ export class ApplicationConstraint {
     this.showIdentifiedProteinsPlot = showIdentifiedProteinsPlot;
     this.showModificationsPlot = showModificationsPlot;
     this.showQuantificationAndContaminantList = showQuantificationAndContaminantList;
-    this.showQuantificationHeatMap = showQuantificationHeatMap
+    this.showQuantificationHeatMap = showQuantificationHeatMap;
+    this.showDendogram = showDendogram;
   }
 }
