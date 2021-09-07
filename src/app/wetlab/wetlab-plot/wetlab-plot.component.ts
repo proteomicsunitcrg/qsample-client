@@ -106,6 +106,15 @@ export class WetlabPlotComponent implements OnInit, OnDestroy {
         const values = [];
         const filenames = [];
         const color = [];
+        plotTrace.plotTracePoints.sort((obj1, obj2) => {
+          if (obj1.order > obj2.order) {
+            return 1;
+          }
+          if (obj1.order < obj2.order) {
+            return -1;
+          }
+          return 0;
+        });
         plotTrace.plotTracePoints.forEach(
           plotTracePoint => {
             values.push(plotTracePoint.value);
