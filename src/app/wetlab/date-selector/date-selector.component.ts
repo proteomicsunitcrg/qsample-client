@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { DataService } from '../../services/data.service';
+import { getNavigator } from '../wetlab-plot/plot.utils';
+import { Platform } from '@angular/cdk/platform';
 
 @Component({
   selector: 'app-date-selector',
@@ -22,9 +24,48 @@ export class DateSelectorComponent implements OnInit {
   dateStart = new FormControl(new Date(this.lastMonth.setMonth(this.today.getMonth() - 1)));
   dateEnd = new FormControl(new Date(this.today));
 
+  // true if the navigator supports the input week
+  supportsWeekInput: boolean;
+
+
+  // FROM HERE VARS TO HANDLE THE ALTER SELECTOR
+  // array to store all the weeks from 1 to 52
+  allWeeks = [];
+
+  // array to store all supported years
+  allYears = [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023];
+
+  weekStartAlter: number;
+  weekEndAlter: number;
+  yearStartAlter: number;
+  yearEndAlter: number;
+
+
   ngOnInit(): void {
+    this.supportsWeekInput = this.handleBrowser(getNavigator());
+    this.allWeeks = Array.from(Array(53).keys()) // yes, I know some years have 53 weeks
+    this.allWeeks.shift(); // remove the firts element 0
     this.setDefaultDates();
     this.submitDates();
+  }
+
+  /**
+   * 
+   * @param navigator returns false if the navigator
+   * doesnt supports input type week
+   * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/week
+   */
+  private handleBrowser(navigator: string): boolean {
+    switch (navigator) {
+      case `Mozilla Firefox`:
+      case `Apple Safari`:
+      case `unknown`:
+      case `Microsoft Internet Explorer`:
+      case `Microsoft Edge (Legacy)`:
+        return false
+      default:
+        return true
+    }
   }
 
   private setDefaultDates(): void {
@@ -39,12 +80,16 @@ export class DateSelectorComponent implements OnInit {
     if (this.weekPickerStart == null || this.weekPickerEnd == null) {
       this.dataService.selectDates([this.dateStart.value.toISOString(), this.dateEnd.value.toISOString()]);
     } else {
-      this.getDateOfISOWeek(this.weekPickerStart.split('-')[1].substring(1), this.weekPickerStart.split('-')[0]);
-      this.getLastWeekDateByDate(this.getDateOfISOWeek(this.weekPickerStart.split('-')[1].substring(1), this.weekPickerStart.split('-')[0]));
-
       this.dataService.selectDates([this.getDateOfISOWeek(this.weekPickerStart.split('-')[1].substring(1), this.weekPickerStart.split('-')[0]).toISOString(),
       this.getLastWeekDateByDate(this.getDateOfISOWeek(this.weekPickerEnd.split('-')[1].substring(1), this.weekPickerEnd.split('-')[0])).toISOString()]);
     }
+  }
+
+  /**
+   * Method to handle the alter selector
+   */
+  public submitDatesAlter(): void {
+    this.dataService.selectDates([this.getDateOfISOWeek(this.weekStartAlter, this.yearStartAlter).toISOString(), this.getDateOfISOWeek(this.weekEndAlter, this.yearEndAlter).toISOString()])
   }
 
   getDateOfISOWeek(w, y): Date {
@@ -66,7 +111,6 @@ export class DateSelectorComponent implements OnInit {
     lastDayDate.setDate(lastday);
     return lastDayDate;
   }
-
 
 
 }

@@ -109,8 +109,6 @@ export class WetlabPlotComponent implements OnInit, OnDestroy {
         const color = [];
         const text = [];
         plotTrace.plotTracePoints.sort((a, b) => a.year - b.year || a.week - b.week); //order by year and week
-        console.log(plotTrace);
-
         plotTrace.plotTracePoints.forEach(
           plotTracePoint => {
             values.push(plotTracePoint.value);
