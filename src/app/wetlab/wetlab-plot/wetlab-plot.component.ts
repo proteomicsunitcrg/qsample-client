@@ -100,27 +100,24 @@ export class WetlabPlotComponent implements OnInit, OnDestroy {
    */
   plotGraph() {
     const dataForPlot = [];
+
     this.plotTrace.forEach(
       plotTrace => {
         const errorBar = [];
         const values = [];
         const filenames = [];
         const color = [];
-        plotTrace.plotTracePoints.sort((obj1, obj2) => {
-          if (obj1.order > obj2.order) {
-            return 1;
-          }
-          if (obj1.order < obj2.order) {
-            return -1;
-          }
-          return 0;
-        });
+        const text = [];
+        plotTrace.plotTracePoints.sort((a, b) => a.year - b.year || a.week - b.week); //order by year and week
+        console.log(plotTrace);
+
         plotTrace.plotTracePoints.forEach(
           plotTracePoint => {
             values.push(plotTracePoint.value);
             filenames.push(plotTracePoint.name);
             color.push('red');
             errorBar.push(plotTracePoint.std);
+            text.push(`${plotTracePoint.value}<br>±${plotTracePoint.std}<br>W${plotTracePoint.week}Y${plotTracePoint.year}<br>${plotTracePoint.triplicats.map(e => `${e.filename}<br>`)}`);
           }
         );
         const trace = {
@@ -129,6 +126,7 @@ export class WetlabPlotComponent implements OnInit, OnDestroy {
           type: 'bar',
           name: plotTrace.abbreviated,
           filenames, // same as filenames: filenames
+          hovertemplate: text,
           error_y: {
             type: 'data',
             array: errorBar,

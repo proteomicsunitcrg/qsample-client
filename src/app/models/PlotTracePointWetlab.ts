@@ -5,7 +5,9 @@ export class PlotTracePointWetlab {
   name: string;
   value: number;
   std: number;
-  order: number;
+  week: number;
+  year: number;
+  triplicats: WetLabFile[];
 
 
   constructor(name: string, value: number, std: number, ) {
