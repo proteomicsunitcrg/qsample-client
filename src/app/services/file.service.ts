@@ -32,11 +32,25 @@ export class FileService {
 
   public getFilesByRequestCode(requestCode: string, order: string): Observable<any[]> {
     this.params = this.params.set('order', order);
-    return this.httpClient.get<RequestFile[]>(`${this.apiPrefix}getByRequestCode/${requestCode}`, {params: this.params});
+    return this.httpClient.get<RequestFile[]>(`${this.apiPrefix}getByRequestCode/${requestCode}`, { params: this.params });
   }
 
   public getRequestFileByChecksum(checksum: string): Observable<RequestFile> {
     return this.httpClient.get<RequestFile>(`${this.apiPrefix}getRequestFileByChecksum/${checksum}`);
+  }
+
+  public getRequestFilesDashboard(startDate: Date, endDate: Date, filename: string, code: string): Observable<any> {
+    let params = new HttpParams();
+    params = params.set('startDate', startDate.toISOString()).set('endDate', endDate.toISOString()); // Date params
+    params = params.set('filename', filename).set('code', code); // filter params
+    return this.httpClient.get<any>(`${this.apiPrefix}getRequestFilesDashboard`, { params });
+  }
+
+  public getWetlabFilesDashboard(startDate: Date, endDate: Date, filename: string, wetlabId: number): Observable<any> {
+    let params = new HttpParams();
+    params = params.set('startDate', startDate.toISOString()).set('endDate', endDate.toISOString()); // Date params
+    params = params.set('filename', filename).set('wetlabId', wetlabId); // filter params
+    return this.httpClient.get<any>(`${this.apiPrefix}getWetlabFilesDashboard`, { params });
   }
 
 

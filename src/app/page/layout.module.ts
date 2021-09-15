@@ -14,6 +14,9 @@ import { ThemeSelectorComponent } from './top-bar/theme-selector/theme-selector.
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { RequestListYearSelectorDialog } from './requests/requests-list/dialog/request-list-year-selector-dialog';
+import { DashboardRequestComponent } from './dashboard/dashboard-request/dashboard-request.component';
+import { DashboardWetlabComponent } from './dashboard/dashboard-wetlab/dashboard-wetlab.component';
+import { DashboardMainComponent } from './dashboard/dashboard-main/dashboard-main.component';
 
 
 
@@ -36,7 +39,10 @@ import { RequestListYearSelectorDialog } from './requests/requests-list/dialog/r
     MainWetlabComponent,
     WetlabListComponent,
     ThemeSelectorComponent,
-    RequestListYearSelectorDialog
+    RequestListYearSelectorDialog,
+    DashboardRequestComponent,
+    DashboardWetlabComponent,
+    DashboardMainComponent,
   ],
   providers: [
     RequestService
