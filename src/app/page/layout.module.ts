@@ -17,6 +17,7 @@ import { RequestListYearSelectorDialog } from './requests/requests-list/dialog/r
 import { DashboardRequestComponent } from './dashboard/dashboard-request/dashboard-request.component';
 import { DashboardWetlabComponent } from './dashboard/dashboard-wetlab/dashboard-wetlab.component';
 import { DashboardMainComponent } from './dashboard/dashboard-main/dashboard-main.component';
+import { DashboardRequestNextflowComponent } from './dashboard/dashboard-request-nextflow/dashboard-request-nextflow.component';
 
 
 
@@ -43,6 +44,7 @@ import { DashboardMainComponent } from './dashboard/dashboard-main/dashboard-mai
     DashboardRequestComponent,
     DashboardWetlabComponent,
     DashboardMainComponent,
+    DashboardRequestNextflowComponent,
   ],
   providers: [
     RequestService

@@ -44,8 +44,6 @@ export class DashboardWetlabComponent implements OnInit {
   }
 
   public getAllWetlabFiles(): void {
-    console.log(this.filename);
-    console.log(this.wetlab);
     if (this.wetlab === undefined) {
       this.wetlab.id = 0;
     }
@@ -53,7 +51,6 @@ export class DashboardWetlabComponent implements OnInit {
       res => {
         this.datasource = new MatTableDataSource(res);
         this.datasource.paginator = this.paginator;
-        console.log(res);
       },
       err => {
         console.error(err);

@@ -53,5 +53,9 @@ export class FileService {
     return this.httpClient.get<any>(`${this.apiPrefix}getWetlabFilesDashboard`, { params });
   }
 
+  public getWorkflows(): Observable<any> {
+    return this.httpClient.get<any>(`${this.apiPrefix}workflow`);
+  }
+
 
 }

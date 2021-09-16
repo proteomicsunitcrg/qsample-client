@@ -1,0 +1,27 @@
+<mat-card style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+  <mat-card-title>
+    Pipeline
+  </mat-card-title>
+  <mat-card-content>
+    <table mat-table [dataSource]="datasource" style="width: 100%;">
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef > Status </th>
+        <td mat-cell *matCellDef="let entry"> {{entry.status}} </td>
+      </ng-container>
+      <ng-container matColumnDef="filename">
+        <th mat-header-cell *matHeaderCellDef> Filename </th>
+        <td mat-cell *matCellDef="let entry"> {{entry.filename}} </td>
+      </ng-container>
+      <ng-container matColumnDef="duration">
+        <th mat-header-cell *matHeaderCellDef > Duration </th>
+        <td mat-cell *matCellDef="let entry"> {{entry.duration | date:'HH:mm:ss'}} </td>
+      </ng-container>
+      <ng-container matColumnDef="database">
+        <th mat-header-cell *matHeaderCellDef> Database </th>
+        <td mat-cell *matCellDef="let entry"> {{entry.database}} </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+      <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay"></tr>
+    </table>
+  </mat-card-content>
+</mat-card>

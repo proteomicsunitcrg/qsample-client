@@ -18,8 +18,6 @@ export class HomePageComponent implements OnInit {
   isInternal = false;
   ngOnInit(): void {
     this.authService.updateIsInternal(this.tokenStorageService.isInternalUser());
-    console.log(this.isInternal);
-
   }
 
 }

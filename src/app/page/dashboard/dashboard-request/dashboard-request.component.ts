@@ -39,13 +39,10 @@ export class DashboardRequestComponent implements OnInit {
   }
 
   public getAllRequestFiles(): void {
-    console.log(this.filename);
-
     this.fileService.getRequestFilesDashboard(this.today, this.monthAgo, this.filename, this.code).subscribe(
       res => {
         this.datasource = new MatTableDataSource(res);
         this.datasource.paginator = this.paginator;
-        console.log(res);
       },
       err => {
         console.error(err);
