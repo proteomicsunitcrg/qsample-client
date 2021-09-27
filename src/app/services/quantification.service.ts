@@ -51,4 +51,8 @@ export class QuantificationService {
 
   }
 
+  public getIsNeonStatsEnabled(): Observable <any> {
+    return this.http.get<any>(`${this.apiPrefix}/showNeonStats`);
+  }
+
 }
