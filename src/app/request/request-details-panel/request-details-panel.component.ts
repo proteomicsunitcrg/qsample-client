@@ -14,11 +14,22 @@ export class RequestDetailsPanelComponent implements OnInit {
   // tslint:disable-next-line:no-input-rename
   @Input('request') request: any;
 
+  local: boolean;
+
   ngOnInit(): void {
     setTimeout(() => {  // The timeout is necessary because the PLOT isnt instant
-      if (this.request.localCode !== null) { // means that a local code is setted so we dont have to use the agendo response and we avoid the "parser"
-        this.request.created_by.email = this.request.localCreator;
+      if (this.request) {
+        if (this.request.localCode !== null) { // means that a local code is setted so we dont have to use the agendo response and we avoid the "parser"
+        // this.request.created_by.name = this.request.localCreator;
+        this.local = true;
+        
+      } else {
+        this.local = false;
       }
+      console.log(this.local);
+    } else {
+      this.local = false;
+    }
   }, 100)
 }
 
