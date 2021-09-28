@@ -26,10 +26,12 @@ export class DashboardRequestNextflowComponent implements OnInit {
   private getWorkflows(): void {
     this.fileService.getWorkflows().subscribe(
       res => {
+        console.log(res);
+        
         for (let flow of res.workflows) {
-          if (flow.progress != null) {
+          if (flow.workflow.status === "RUNNING") {
             // do things, means that is not completed
-            this.allWorkflowsParsed.push(new WorkflowParsed(flow.workflow.duration, this.parseFilenameFromPath(flow.workflow.params.rawfile), this.parseDatabaseFromFilename(this.parseFilenameFromPath(flow.workflow.params.rawfile)), flow.workflow.status));
+            this.allWorkflowsParsed.push(new WorkflowParsed(flow.workflow.start, this.parseFilenameFromPath(flow.workflow.params.rawfile), this.parseDatabaseFromFilename(this.parseFilenameFromPath(flow.workflow.params.rawfile)), flow.workflow.status));
           }
         }
         this.datasource = new MatTableDataSource(this.allWorkflowsParsed);

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { RequestPanelDialogComponent } from './dialog/request-panel-dialog.component';
 
@@ -15,8 +15,12 @@ export class RequestDetailsPanelComponent implements OnInit {
   @Input('request') request: any;
 
   ngOnInit(): void {
-  }
-
+    setTimeout(() => {  // The timeout is necessary because the PLOT isnt instant
+      if (this.request.localCode !== null) { // means that a local code is setted so we dont have to use the agendo response and we avoid the "parser"
+        this.request.created_by.email = this.request.localCreator;
+      }
+  }, 100)
+}
 
   public openDialog(request: any): void {
     const dialogRef = this.dialog.open(RequestPanelDialogComponent, {

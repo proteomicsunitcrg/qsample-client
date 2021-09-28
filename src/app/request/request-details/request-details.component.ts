@@ -26,10 +26,16 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
         this.checkIfRequestIsFavorite();
         this.requestService.getRequestDetails(params.apiKey).subscribe(
           res => {
+            console.log(res);
+            
             this.request = res;
-            this.requestCode = this.getRequestCodeFromRequest(this.request);
-            this.requestService.changeRequestCode(this.requestCode);
-            this.getApplicationInformation();
+            if (this.request.localCode !== null) { // means that a local code is setted so we dont have to use the agendo response and we avoid the "parser"
+              this.requestCode = this.request.localCode;
+            } else {
+              this.requestCode = this.getRequestCodeFromRequest(this.request);
+              this.requestService.changeRequestCode(this.requestCode);
+              this.getApplicationInformation();
+            }
           },
           err => {
             console.error(err);

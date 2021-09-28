@@ -214,7 +214,9 @@ export class RequestsListComponent implements OnInit {
         this.finding = false;
         this.allRequests = res;
         for (const request of this.allRequests) {
-          request.lastField = this.getRequestCodeFromRequest(request.lastField);
+          if (!request.local) {
+            request.lastField = this.getRequestCodeFromRequest(request.lastField);
+          }
         }
 
         this.dataSource = new MatTableDataSource(res);
