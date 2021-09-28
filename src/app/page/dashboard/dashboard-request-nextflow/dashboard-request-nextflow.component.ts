@@ -29,7 +29,7 @@ export class DashboardRequestNextflowComponent implements OnInit {
         console.log(res);
         
         for (let flow of res.workflows) {
-          if (flow.workflow.status === "RUNNING") {
+          if (flow.workflow.status === 'RUNNING') {
             // do things, means that is not completed
             this.allWorkflowsParsed.push(new WorkflowParsed(flow.workflow.start, this.parseFilenameFromPath(flow.workflow.params.rawfile), this.parseDatabaseFromFilename(this.parseFilenameFromPath(flow.workflow.params.rawfile)), flow.workflow.status));
           }

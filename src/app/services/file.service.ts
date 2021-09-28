@@ -57,5 +57,9 @@ export class FileService {
     return this.httpClient.get<any>(`${this.apiPrefix}workflow`);
   }
 
+  public getIsNextflowModuleEnabled(): Observable<any> {
+    return this.httpClient.get<any>(`${this.apiPrefix}isWorkflowEnabled`);
+  }
+
 
 }

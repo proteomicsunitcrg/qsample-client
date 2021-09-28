@@ -6,4 +6,4 @@
 </div>
 <app-request-heatmap [requestCode]="requestCode" *ngIf="requestCode && application && application.applicationConstraint.showQuantificationHeatMap" style="margin-top: 100px;"></app-request-heatmap>
 
-<app-request-dendogram [requestCode]="requestCode" *ngIf="requestCode && application && application.applicationConstraint.showDendogram"></app-request-dendogram>
+<app-request-dendogram [requestCode]="requestCode" *ngIf="requestCode && application && application.applicationConstraint.showDendogram && !isNeonDisabled"></app-request-dendogram>

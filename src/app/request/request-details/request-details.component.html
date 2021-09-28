@@ -24,7 +24,7 @@
       <div>
         <app-request-details-panel [request]="request" style=""></app-request-details-panel>
       </div>
-      <div>
+      <div *ngIf="!isQcloud2FilesDisabled">
         <app-request-qcloud2-files style="" [request]="requestCode">
         </app-request-qcloud2-files>
       </div>

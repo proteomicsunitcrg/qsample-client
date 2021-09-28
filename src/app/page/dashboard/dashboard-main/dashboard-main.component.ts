@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FileService } from '../../../services/file.service';
 
 @Component({
   selector: 'app-dashboard-main',
@@ -7,9 +8,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardMainComponent implements OnInit {
 
-  constructor() { }
+  constructor(private fileService: FileService) { }
 
   ngOnInit(): void {
+    this.checkEnabledNextflowModule();
+  }
+
+  isNexFlowDisabled = true;
+
+
+  private checkEnabledNextflowModule(): void {
+    this.fileService.getIsNextflowModuleEnabled().subscribe(
+      res => {
+        this.isNexFlowDisabled = res;
+      },
+      err => {
+        console.error(err);
+      }
+    );
   }
 
 }

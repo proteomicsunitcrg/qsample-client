@@ -64,8 +64,10 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
   // var to handle if the request is notify or not
   isNotify = false;
 
-  ngOnInit(): void {
+  isQcloud2FilesDisabled = true;
 
+  ngOnInit(): void {
+    this.getIsQCloud2FilesEnabled();
   }
 
   // TODO: Improve the parser. RN is a piece of shit but the AGENDO response is crap
@@ -167,6 +169,17 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
         console.error(err);
       }
     );
+  }
+
+  private getIsQCloud2FilesEnabled(): void {
+    this.requestService.isQcloud2FilesEnabled().subscribe(
+      res => {
+        this.isQcloud2FilesDisabled = res;
+      },
+      err => {
+        console.error(err)
+      }
+    )
   }
 
 }

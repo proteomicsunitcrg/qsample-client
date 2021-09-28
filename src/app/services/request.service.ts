@@ -51,4 +51,8 @@ export class RequestService {
     };
     return this.http.get<string>(`${this.apiPrefix}api/request/getPlotName/${csId}/${paramId}`, requestOptions);
   }
+
+  public isQcloud2FilesEnabled(): Observable<any> {
+    return this.http.get<any>(`${this.apiPrefix}api/request/isQCloud2FilesEnabled`);
+  }
 }
