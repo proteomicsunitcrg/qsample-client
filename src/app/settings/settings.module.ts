@@ -22,6 +22,8 @@ import { SettingsQgeneratorMethodsComponent } from './method/settings-qgenerator
 import { SettingsQgeneratorMethodsCreatorComponent } from './method/settings-qgenerator-methods-creator/settings-qgenerator-methods-creator.component';
 import { SettingsQgeneratorSystemsQcComponent } from './system/settings-qgenerator-systems-qc/settings-qgenerator-systems-qc.component';
 import { InjectionConditionsQCDialogComponent } from './system/settings-qgenerator-systems-qc/dialog/injection-conditions-dialog-qc.component';
+import { SettingsLocalRequestComponent } from './local/settings-local-request/settings-local-request.component';
+import { SettingsLocalRequestCreatorComponent } from './local/settings-local-request-creator/settings-local-request-creator.component';
 
 
 @NgModule({
@@ -38,7 +40,9 @@ import { InjectionConditionsQCDialogComponent } from './system/settings-qgenerat
     InjectionConditionsQCDialogComponent,
     SettingsQgeneratorMethodsComponent,
     SettingsQgeneratorMethodsCreatorComponent,
-    SettingsQgeneratorSystemsQcComponent
+    SettingsQgeneratorSystemsQcComponent,
+    SettingsLocalRequestComponent,
+    SettingsLocalRequestCreatorComponent
   ],
   imports: [
     FlexLayoutModule,

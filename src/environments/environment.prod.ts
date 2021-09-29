@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiPrefix: "http://localhost:8081/"
+  apiPrefix: 'http://qsample.crg.eu/',
 };

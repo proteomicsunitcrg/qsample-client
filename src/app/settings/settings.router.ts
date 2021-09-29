@@ -14,6 +14,8 @@ import { SettingsQgeneratorApplicationsCreatorComponent } from './application/se
 import { SettingsQgeneratorMethodsComponent } from './method/settings-qgenerator-methods/settings-qgenerator-methods.component';
 import { SettingsQgeneratorMethodsCreatorComponent } from './method/settings-qgenerator-methods-creator/settings-qgenerator-methods-creator.component';
 import { SettingsQgeneratorSystemsQcComponent } from './system/settings-qgenerator-systems-qc/settings-qgenerator-systems-qc.component';
+import { SettingsLocalRequestComponent } from './local/settings-local-request/settings-local-request.component';
+import { SettingsLocalRequestCreatorComponent } from './local/settings-local-request-creator/settings-local-request-creator.component';
 
 const routes: Routes = [
   {
@@ -27,6 +29,9 @@ const routes: Routes = [
       { path: 'QGenerator/applications/editor/:id', component: SettingsQgeneratorApplicationsCreatorComponent },
       { path: 'QGenerator/methods', component: SettingsQgeneratorMethodsComponent },
       { path: 'QGenerator/methods/editor/:id', component: SettingsQgeneratorMethodsCreatorComponent },
+      { path: 'local/request', component: SettingsLocalRequestComponent },
+      { path: 'local/request/editor/:id', component: SettingsLocalRequestCreatorComponent },
+
     ]
   },
 ];

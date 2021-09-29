@@ -18,6 +18,7 @@ import { DashboardRequestComponent } from './dashboard/dashboard-request/dashboa
 import { DashboardWetlabComponent } from './dashboard/dashboard-wetlab/dashboard-wetlab.component';
 import { DashboardMainComponent } from './dashboard/dashboard-main/dashboard-main.component';
 import { DashboardRequestNextflowComponent } from './dashboard/dashboard-request-nextflow/dashboard-request-nextflow.component';
+import { SharedModule } from '../shared.module';
 
 
 
@@ -29,14 +30,15 @@ import { DashboardRequestNextflowComponent } from './dashboard/dashboard-request
     AngularMaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    SharedModule
   ],
   declarations: [
     MainWindowComponent,
     TopBarComponent,
     HomePageComponent,
     MainRequestsComponent,
-    RequestsListComponent,
+    
     MainWetlabComponent,
     WetlabListComponent,
     ThemeSelectorComponent,

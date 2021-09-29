@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { RequestService } from '../../../services/request.service';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
@@ -59,6 +59,8 @@ export class RequestsListComponent implements OnInit {
 
   year: number;
 
+  @Input("settingsMode") settingsMode: boolean;
+
   constructor(private requestService: RequestService, private router: Router, private authService: AuthService,
     private dialog: MatDialog) {
     this.subscription = this.authService.getIsInternal().subscribe(res => this.isInternal = res);
@@ -71,6 +73,7 @@ export class RequestsListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.settingsMode);
     this.getAllRequests();
   }
 
@@ -176,8 +179,20 @@ export class RequestsListComponent implements OnInit {
 
 
 
-  public goTo(request): void {
+  private goTo(request): void {
     this.router.navigate(['/request', request.id]);
+  }
+
+  private goToRequestEditor(request): void {
+    this.router.navigate(['/settings/local/request/editor', request.id]);
+  }
+
+  public handleClick(request): void {
+    if (!this.settingsMode) {
+      this.goTo(request);
+    } else {
+      this.goToRequestEditor(request);
+    }
   }
 
   private predicate() {

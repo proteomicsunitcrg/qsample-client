@@ -1,0 +1,57 @@
+<div style="margin-left: 20px;">
+    <mat-card>
+        <mat-card-title>
+            Local requests editor
+        </mat-card-title>
+        <mat-card-content>
+          <div fxLayout="row">
+            <div fxFlex.gt-md = "50">
+              <form [formGroup]="leForm">
+                  <mat-form-field appearance="standard" style="width: 95%;">
+                      <mat-label>Request code</mat-label>
+                      <input matInput formControlName="code">
+                    </mat-form-field>
+                    <mat-form-field appearance="standard" style="width: 95%;">
+                      <mat-select formControlName="application">
+                          <mat-option *ngFor="let app of allApplications" [value]="app">
+                              {{app.name}}
+                          </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="standard" style="width: 95%;">
+                      <mat-label>Group</mat-label>
+                      <input matInput formControlName="group">
+                    </mat-form-field>
+                    <mat-form-field appearance="standard" style="width: 95%;">
+                      <mat-label>Creator</mat-label>
+                      <input matInput formControlName="creator">
+                    </mat-form-field>
+                    <mat-form-field appearance="standard" style="width: 95%;">
+                      <mat-label>Taxonomy</mat-label>
+                      <input matInput formControlName="taxonomy">
+                    </mat-form-field>
+                    <mat-form-field appearance="standard" style="width: 95%;">
+                      <mat-label>Request code</mat-label>
+                      <input matInput formControlName="code">
+                    </mat-form-field>
+                    <mat-form-field appearance="standard" style="width: 95%;">
+                      <mat-select formControlName="status">
+                          <mat-option *ngFor="let status of requestStatusValuesKeys()" [value]="status">
+                              {{status}}
+                          </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+              </form>
+            </div>
+            <div fxFlex.gt-md = "50">
+              <mat-form-field appearance="standard" style="width: 95%;" *ngFor="let sample of totalSamples">
+                <mat-label>Sample</mat-label>
+                <input matInput (blur)="onFocusEvent($event, sample)" class="lmao">
+              </mat-form-field>
+            </div>
+          </div>
+          <button (click)="submit()">Save</button>
+        </mat-card-content>
+    </mat-card>
+
+</div>

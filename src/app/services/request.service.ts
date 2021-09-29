@@ -55,4 +55,8 @@ export class RequestService {
   public isQcloud2FilesEnabled(): Observable<any> {
     return this.http.get<any>(`${this.apiPrefix}api/request/isQCloud2FilesEnabled`);
   }
+
+  public getLocalRequestById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiPrefix}api/request/getLocalById/${id}`);
+  }
 }

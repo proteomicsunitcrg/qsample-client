@@ -1,9 +1,3 @@
-<div>
-  <mat-card style="margin-top: 10px; margin-left: 10px;">
-    <mat-card-title style="margin-bottom: 20px;">
-      Request
-    </mat-card-title>
-    <mat-card-content>
       <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutAlign="space-around center" fxLayoutGap="32px"
         fxLayoutAlign="flex-start">
         <mat-form-field appearance="fill">
@@ -89,11 +83,8 @@
           </td>
         </ng-container> -->
         <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-        <tr mat-row (click)="goTo(myRowData)" *matRowDef="let myRowData; columns: columnsToDisplay"></tr>
+        <tr mat-row (click)="handleClick(myRowData)" *matRowDef="let myRowData; columns: columnsToDisplay"></tr>
       </table>
       <mat-progress-spinner [mode]="'indeterminate'" *ngIf="!allRequests" class="center"></mat-progress-spinner>
       <mat-progress-spinner [mode]="'indeterminate'" *ngIf="finding &&  allRequests" class="center"></mat-progress-spinner>
       <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-    </mat-card-content>
-  </mat-card>
-</div>
