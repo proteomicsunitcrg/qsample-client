@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { MiniRequest } from '../models/MiniRequest';
 import { Application } from '../models/Application';
+import { RequestLocal } from '../models/RequestLocal';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,10 @@ export class RequestService {
   public currentApplication = new Subject<Application>();
 
   params = new HttpParams();
+
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
 
   public changeRequestCode(value: string) {
     this.currentRequestCode.next(value);
@@ -58,5 +63,10 @@ export class RequestService {
 
   public getLocalRequestById(id: number): Observable<any> {
     return this.http.get<any>(`${this.apiPrefix}api/request/getLocalById/${id}`);
+  }
+
+  public saveLocalRequest(requestLocal: RequestLocal): Observable<RequestLocal> {
+    const params = JSON.stringify(requestLocal);
+    return this.http.post<any>(`${this.apiPrefix}api/request/saveLocal`, params, this.httpOptions);
   }
 }

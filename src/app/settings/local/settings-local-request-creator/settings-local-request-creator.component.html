@@ -5,18 +5,25 @@
         </mat-card-title>
         <mat-card-content>
           <div fxLayout="row">
+            <form [formGroup]="leForm">
             <div fxFlex.gt-md = "50">
-              <form [formGroup]="leForm">
                   <mat-form-field appearance="standard" style="width: 95%;">
                       <mat-label>Request code</mat-label>
                       <input matInput formControlName="code">
                     </mat-form-field>
-                    <mat-form-field appearance="standard" style="width: 95%;">
+                    <mat-form-field appearance="standard" style="width: 95%;" *ngIf="isEdit && requestFromServer.id != undefined">
+                      <input matInput [value]="requestFromServer.application.name" [disabled]="true">
+                    </mat-form-field>
+                    <mat-form-field appearance="standard" style="width: 95%;" [class.hide]="isEdit">
                       <mat-select formControlName="application">
                           <mat-option *ngFor="let app of allApplications" [value]="app">
                               {{app.name}}
                           </mat-option>
                       </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="standard" style="width: 95%;">
+                      <mat-label>Creation date</mat-label>
+                      <input matInput formControlName="date" type="date">
                     </mat-form-field>
                     <mat-form-field appearance="standard" style="width: 95%;">
                       <mat-label>Group</mat-label>
@@ -31,26 +38,29 @@
                       <input matInput formControlName="taxonomy">
                     </mat-form-field>
                     <mat-form-field appearance="standard" style="width: 95%;">
-                      <mat-label>Request code</mat-label>
-                      <input matInput formControlName="code">
-                    </mat-form-field>
-                    <mat-form-field appearance="standard" style="width: 95%;">
                       <mat-select formControlName="status">
                           <mat-option *ngFor="let status of requestStatusValuesKeys()" [value]="status">
                               {{status}}
                           </mat-option>
                       </mat-select>
                     </mat-form-field>
-              </form>
-            </div>
-            <div fxFlex.gt-md = "50">
-              <mat-form-field appearance="standard" style="width: 95%;" *ngFor="let sample of totalSamples">
-                <mat-label>Sample</mat-label>
-                <input matInput (blur)="onFocusEvent($event, sample)" class="lmao">
-              </mat-form-field>
-            </div>
+                  </div>
+                  <div fxFlex.gt-md = "50">
+                    <mat-form-field appearance="standard" style="width: 95%;">
+                      <mat-label>Sample</mat-label>
+                      <input matInput class="lmao" formControlName="sample">
+                    </mat-form-field>
+                    <button mat-raised-button color="primary" (click)="addSample()" style="margin-bottom: 20px;">Add sample</button>
+                    <p *ngFor="let sample of allSamples">
+                      {{sample}}
+                      <span class="material-icons" style="cursor: pointer;" (click)="removeSample(sample)">
+                        delete
+                      </span>
+                    </p>
+                  </div>
+                </form>
           </div>
-          <button (click)="submit()">Save</button>
+          <button mat-raised-button color="accent" (click)="submit()">Save</button>
         </mat-card-content>
     </mat-card>
 

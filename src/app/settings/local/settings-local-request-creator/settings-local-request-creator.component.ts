@@ -6,6 +6,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ApplicationService } from 'src/app/services/application.service';
 import { Application } from 'src/app/models/Application';
 import { RequestLocal } from 'src/app/models/RequestLocal';
+import { sample } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-settings-local-request-creator',
@@ -14,13 +16,14 @@ import { RequestLocal } from 'src/app/models/RequestLocal';
 })
 export class SettingsLocalRequestCreatorComponent implements OnInit {
 
-  constructor(private activeRouter: ActivatedRoute, private router: Router, private localRequestService: RequestService, private applicationService: ApplicationService) { }
+  constructor(private activeRouter: ActivatedRoute, private router: Router, private localRequestService: RequestService, private applicationService: ApplicationService,
+    private snackBar: MatSnackBar) { }
 
   isEdit: boolean;
 
   allApplications: Application[] = []
 
-  totalSamples = [11111];
+  allSamples = [];
 
   requestStatusValues = RequestStatus;
   requestStatusValuesKeys(): Array<string> {
@@ -40,7 +43,10 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
     status: new FormControl('',
       Validators.required),
     application: new FormControl('',
-      Validators.required)
+      Validators.required),
+    sample: new FormControl(''),
+    date: new FormControl('',
+    Validators.required)
   });
 
   requestFromServer = new RequestLocal();
@@ -55,6 +61,8 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
         } else {
           this.isEdit = false;
         }
+        console.log(this.isEdit);
+
       },
       err => {
         console.error(err);
@@ -69,18 +77,33 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
         this.mountForm(res);
       },
       err => {
+        this.openSnackBar('Error getting the request', 'Close');
+        this.router.navigate(['/settings/local/request'])
         console.error(err);
       }
     );
   }
 
   private mountForm(request: any) {
+    console.log(request);
+    this.leForm.controls.date.setValue(request.creationDate.split('T')[0]);
+    this.leForm.controls.date.disable();
     this.leForm.controls.code.setValue(request.requestCode);
+    this.leForm.controls.code.disable();
     this.leForm.controls.group.setValue(request.group);
     this.leForm.controls.creator.setValue(request.creator);
     this.leForm.controls.taxonomy.setValue(request.taxonomy);
     this.leForm.controls.status.setValue(request.status);
     this.leForm.controls.application.setValue(request.application);
+    this.leForm.controls.application.disable();
+    this.parseSamples(request.samples);
+  }
+
+  private parseSamples(samples: string): void {
+    if (samples == '') {
+      return;
+    }
+    this.allSamples = samples.split('---');
   }
 
   private getAllAplications(): void {
@@ -89,45 +112,55 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
         this.allApplications = res;
       },
       err => {
+        this.openSnackBar('Error getting the applications', 'Close');
         console.error(err);
       }
     );
   }
 
-  public onFocusEvent(event, sampleNumber) {
-    if (event.target.value !== '' && sampleNumber === this.totalSamples[this.totalSamples.length - 1]) {
-      this.totalSamples.push(this.totalSamples[this.totalSamples.length - 1] + 1);
-    } else if (event.target.value === '' && !(sampleNumber === this.totalSamples[this.totalSamples.length - 1])) {
-      this.totalSamples.splice(sampleNumber - 1, 1);
-      // for (let i = sampleNumber -1; i < this.totalSamples.length ;i++) {
-      //   console.log(this.totalSamples[i]);
-      //   this.totalSamples[i] = this.totalSamples[i] - 1;
-      // }
-    }
+  public addSample(): void {
+    this.allSamples.push(this.leForm.controls.sample.value);
+    this.leForm.controls.sample.setValue('');
+  }
+
+  public removeSample(sample: string): void {
+    const index = this.allSamples.findIndex(i => i === sample);
+    this.allSamples.splice(index, 1);
   }
 
   public submit(): void {
     let allSamples = '';
-    const inputs = document.getElementsByClassName('lmao');
-    for (var i = 0; i < inputs.length; i++) {
-      if (inputs[i]['value'] !== '') {
-        allSamples += `${inputs[i]['value']}---`
-      }
+    for (const sample of this.allSamples) {
+      allSamples += `${sample}---`
     }
+    allSamples = allSamples.slice(0, -3);
     const localRequestToSend = new RequestLocal();
     localRequestToSend.id = this.requestFromServer.id;
     localRequestToSend.requestCode = this.leForm.controls.code.value;
     localRequestToSend.application = this.leForm.controls.application.value;
-    localRequestToSend.creationDate = this.leForm.controls.creationDate.value;
+    localRequestToSend.creationDate = this.leForm.controls.date.value;
     localRequestToSend.creator = this.leForm.controls.creator.value;
     localRequestToSend.group = this.leForm.controls.group.value;
     localRequestToSend.status = this.leForm.controls.status.value;
     localRequestToSend.taxonomy = this.leForm.controls.taxonomy.value;
     localRequestToSend.samples = allSamples;
     console.log(localRequestToSend);
-    
+    this.localRequestService.saveLocalRequest(localRequestToSend).subscribe(
+      res => {
+        this.openSnackBar('Request saved', 'Close');
+        console.log(res);
+      },
+      err => {
+        this.openSnackBar('Error saving the request', 'Close');
+        console.error(err);
+      }
+    );
+  }
 
-
-  } 
+  private openSnackBar(message: string, action: string): void {
+    this.snackBar.open(message, action, {
+      duration: 2000,
+    });
+  }
 
 }
