@@ -73,4 +73,8 @@ export class RequestService {
   public deleteLocalRequest(requestLocal: RequestLocal): Observable<RequestLocal> {
     return this.http.delete<any>(`${this.apiPrefix}api/request/deleteLocal/${requestLocal.id}`, this.httpOptions);
   }
+
+  public getIsLocalModeEnabled(): Observable<any> {
+    return this.http.get<any>(`${this.apiPrefix}api/request/localMode`);
+  }
 }
