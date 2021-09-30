@@ -69,4 +69,8 @@ export class RequestService {
     const params = JSON.stringify(requestLocal);
     return this.http.post<any>(`${this.apiPrefix}api/request/saveLocal`, params, this.httpOptions);
   }
+
+  public deleteLocalRequest(requestLocal: RequestLocal): Observable<RequestLocal> {
+    return this.http.delete<any>(`${this.apiPrefix}api/request/deleteLocal/${requestLocal.id}`, this.httpOptions);
+  }
 }

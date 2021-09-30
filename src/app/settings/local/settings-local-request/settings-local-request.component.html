@@ -2,6 +2,9 @@
     <mat-card>
         <mat-card-title>
             Local requests edit mode
+            <button mat-fab color="primary" aria-label="New local request" style="float: right;" (click)="newRequest()">
+              <mat-icon>add</mat-icon>
+            </button>
         </mat-card-title>
         <mat-card-content>
             <app-requests-list [settingsMode]="true"></app-requests-list>

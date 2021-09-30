@@ -2,7 +2,7 @@ import { Application } from './Application';
 
 export class RequestLocal {
     id: number;
-    requestCode: number;
+    requestCode: string;
     application: Application;
     creationDate: Date;
     status: string;
@@ -12,6 +12,6 @@ export class RequestLocal {
     taxonomy: string;
 
     constructor() {
-        
+
     }
 }

@@ -8,6 +8,7 @@ import { Application } from 'src/app/models/Application';
 import { RequestLocal } from 'src/app/models/RequestLocal';
 import { sample } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FileService } from 'src/app/services/file.service';
 
 @Component({
   selector: 'app-settings-local-request-creator',
@@ -17,13 +18,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class SettingsLocalRequestCreatorComponent implements OnInit {
 
   constructor(private activeRouter: ActivatedRoute, private router: Router, private localRequestService: RequestService, private applicationService: ApplicationService,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar, private fileService: FileService) { }
 
   isEdit: boolean;
 
   allApplications: Application[] = []
 
   allSamples = [];
+
+  deleteable = false;
 
   requestStatusValues = RequestStatus;
   requestStatusValuesKeys(): Array<string> {
@@ -61,8 +64,6 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
         } else {
           this.isEdit = false;
         }
-        console.log(this.isEdit);
-
       },
       err => {
         console.error(err);
@@ -74,6 +75,7 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
     this.localRequestService.getLocalRequestById(id).subscribe(
       res => {
         this.requestFromServer = res;
+        this.checkDeleteable();
         this.mountForm(res);
       },
       err => {
@@ -85,7 +87,6 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
   }
 
   private mountForm(request: any) {
-    console.log(request);
     this.leForm.controls.date.setValue(request.creationDate.split('T')[0]);
     this.leForm.controls.date.disable();
     this.leForm.controls.code.setValue(request.requestCode);
@@ -144,11 +145,9 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
     localRequestToSend.status = this.leForm.controls.status.value;
     localRequestToSend.taxonomy = this.leForm.controls.taxonomy.value;
     localRequestToSend.samples = allSamples;
-    console.log(localRequestToSend);
     this.localRequestService.saveLocalRequest(localRequestToSend).subscribe(
       res => {
         this.openSnackBar('Request saved', 'Close');
-        console.log(res);
       },
       err => {
         this.openSnackBar('Error saving the request', 'Close');
@@ -161,6 +160,38 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
     this.snackBar.open(message, action, {
       duration: 2000,
     });
+  }
+
+  public delete(): void {
+    this.localRequestService.deleteLocalRequest(this.requestFromServer).subscribe(
+      res => {
+        this.openSnackBar('Request deleted', 'Close');
+        this.router.navigate(['/settings/local/request']);
+      },
+      err => {
+        this.openSnackBar('Error deleting the request', 'Close');
+        console.error(err);
+      }
+    );
+  }
+
+  public goBack(): void {
+    this.router.navigate(['/settings/local/request']);
+  }
+
+  private checkDeleteable(): void {
+    this.fileService.getFilesByRequestCode(this.requestFromServer.requestCode, 'asc').subscribe(
+      res => {
+        if (res == null) {
+          this.deleteable = true;
+        } else {
+          this.deleteable = false;
+        }
+      },
+      err => {
+        console.error(err);
+      }
+    );
   }
 
 }

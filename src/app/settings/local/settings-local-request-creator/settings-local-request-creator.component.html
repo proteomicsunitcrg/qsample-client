@@ -61,6 +61,9 @@
                 </form>
           </div>
           <button mat-raised-button color="accent" (click)="submit()">Save</button>
+          <button mat-raised-button color="warn" (click)="delete()" style="margin-left: 15px;"[disabled] = "!deleteable">Delete</button>
+          <button mat-raised-button color="link" (click)="goBack()" style="margin-left: 15px;" >Go back</button>
+
         </mat-card-content>
     </mat-card>
 
