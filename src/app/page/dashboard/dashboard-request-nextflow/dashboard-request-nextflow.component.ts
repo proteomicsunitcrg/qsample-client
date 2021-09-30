@@ -26,8 +26,6 @@ export class DashboardRequestNextflowComponent implements OnInit {
   private getWorkflows(): void {
     this.fileService.getWorkflows().subscribe(
       res => {
-        console.log(res);
-        
         for (let flow of res.workflows) {
           if (flow.workflow.status === 'RUNNING') {
             // do things, means that is not completed

@@ -73,7 +73,6 @@ export class RequestsListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.settingsMode);
     this.getAllRequests();
   }
 

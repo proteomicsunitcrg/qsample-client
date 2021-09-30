@@ -4,7 +4,12 @@
       <span class="material-icons cursor" (click)="goBack()">
         arrow_back_ios
       </span>
-      {{request.classs}} by {{request.created_by.email}} ({{requestCode}})
+      <span *ngIf="!isLocal">
+        {{request.classs}} by {{request.created_by.email}} ({{requestCode}})
+      </span>
+      <span *ngIf="isLocal">
+        {{request.classs}} by {{request.localCreator}} ({{request.localCode}})
+      </span>
     </div>
   </h1>
   <mat-divider></mat-divider>

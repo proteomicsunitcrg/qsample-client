@@ -25,6 +25,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
 
+  isLocal = false;
+
   constructor(private activeRouter: ActivatedRoute, private requestService: RequestService, private router: Router,
     private qGeneratorService: QGeneratorService, public dialog: MatDialog,
     private injectionConditionQCService: InjectionConditionQCService,
@@ -34,6 +36,9 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
         this.requestId = params.apiKey;
         this.requestService.getRequestDetails(params.apiKey).subscribe(
           res => {
+            if (res.localCode) {
+              this.isLocal = true;
+            }
             this.request = res;
             this.requestCode = this.getRequestCodeFromRequest(this.request);
             this.getSamplesFromRequests(this.request);
@@ -154,21 +159,41 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
   }
 
   private getRequestCodeFromRequest(request: any): string {
+    if (this.isLocal) {
+      return request.localCode
+    }
     const cac = JSON.parse(request.fields[request.fields.length - 1].value);
     this.clientCode = cac[0][0].value.split('|')[1];
-    console.log(cac[0][0].value.split('|')[0]);
     return cac[0][0].value.split('|')[0].replace('/','');
+  }
+
+  private parseLocalSamples(samples: string): any {
+    if (samples == '') {
+      return;
+    }
+    return samples.split('---');
   }
 
 
   private getSamplesFromRequests(request: any): void {
-    this.samples = [];
-    const cac = JSON.parse(request.fields[request.fields.length - 1].value);
+    let cac = [];
+    if (this.isLocal) {
+      cac = this.parseLocalSamples(request.samples);
+    } else {
+      this.samples = [];
+      cac = JSON.parse(request.fields[request.fields.length - 1].value);
+    }
     let sampleNumber = 1;
     for (const val of cac) {
+    if (this.isLocal) {
+      const pedete = new Itemerino('Unknown', val, 'none', 'none', 0,
+      this.clientCode, '', this.request.id, this.taxonomyCode, 'Unknown', sampleNumber, false);
+    this.samples.push(pedete);
+    } else {
       const pedete = new Itemerino('Unknown', val[0].value.replace(/\|/g, '_') + '_01', 'none', 'none', 0,
-        this.clientCode, '', this.request.id, this.taxonomyCode, 'Unknown', sampleNumber, false);
+      this.clientCode, '', this.request.id, this.taxonomyCode, 'Unknown', sampleNumber, false);
       this.samples.push(pedete);
+    }
       sampleNumber = sampleNumber + 1;
       // this.samples.push(val[0].value.replace(/\|/g, '_'));
     }
@@ -177,6 +202,9 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
   }
 
   private getDatabaseFromRequest(): string {
+    if (this.isLocal) {
+      return 'none';
+    }
     for (const item of this.request.fields) {
       if (item.name === 'QSample-DB') {
         return item.value;
@@ -186,9 +214,13 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
   }
 
   private getTaxonomyFromRequest(): string {
-    for (const item of this.request.fields) {
-      if (item.name === 'Taxonomy') {
-        return item.value;
+    if (this.isLocal) {
+      return this.request.localTaxonomy;
+    } else {
+      for (const item of this.request.fields) {
+        if (item.name === 'Taxonomy') {
+          return item.value;
+        }
       }
     }
   }
