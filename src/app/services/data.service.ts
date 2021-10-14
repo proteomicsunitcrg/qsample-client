@@ -37,9 +37,11 @@ export class DataService {
   }
 
 
-  public getDataForPlotRequest(contextSourceId: number, paramId: number, requestCode: string, order: string): Observable<PlotTrace[]> {
+  public getDataForPlotRequest(contextSourceIds: number[], paramId: number, requestCode: string, order: string): Observable<PlotTrace[]> {
+    this.params = this.params.delete('csIds');
+    this.params = this.params.append('csIds', contextSourceIds.join(', '));
     this.params = this.params.set('order', order);
-    return this.httpClient.get<PlotTrace[]>(`${this.apiPrefix}api/data/tracesRequest/${contextSourceId}/${paramId}/${requestCode}`, {params: this.params});
+    return this.httpClient.get<PlotTrace[]>(`${this.apiPrefix}api/data/tracesRequest/${paramId}/${requestCode}`, {params: this.params});
   }
 
 }

@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
   templateUrl: './favorite-table.component.html',
   styleUrls: ['./favorite-table.component.css']
 })
-export class FavoriteTableComponent implements OnInit {  
+export class FavoriteTableComponent implements OnInit {
 
   constructor(private favoriteRequestService: FavoriteRequestService, private router: Router) { }
   allRequests: MiniRequest[] = [];

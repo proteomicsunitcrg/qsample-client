@@ -29,6 +29,9 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
   // tslint:disable-next-line:no-input-rename
   @Input('requestCode') requestCode;
 
+  // tslint:disable-next-line:no-input-rename
+  @Input('name') name;
+
   randString = '';
 
   title = '';
@@ -72,13 +75,15 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   ngOnInit(): void {
+    console.log(this.cs);
+
     this.layout.shapes = [];
     this.randString = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     this.themeColor = this.themeService.currentTheme;
     this.subscribeToOrder(); // this method retrieves the data
     this.subscribeToThemeChanges();
     this.subscribeToListChanges();
-    this.getName();
+    this.title = this.name
 
   }
 
@@ -99,7 +104,6 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
       res => {
         this.plotTrace = res;
         if (this.plotTrace.length !== 0) {
-          this.getName();
           this.plotGraph();
           this.noDataFound = false;
         }
@@ -107,19 +111,6 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
       err => {
         this.noDataFound = true;
         this.msgError = err.error.message;
-      }
-    );
-  }
-
-  private getName(): void {
-    this.requestService.getRequestPlotName(this.cs, this.param).subscribe(
-      res => {
-        // this.layout.title = res;
-        this.title = res;
-
-      },
-      err => {
-        console.error(err);
       }
     );
   }

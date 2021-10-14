@@ -19,6 +19,12 @@ export class RequestPlotModificationsComponent implements OnInit, OnDestroy {
   // tslint:disable-next-line:no-input-rename
   @Input('requestCode') requestCode: string;
 
+  // tslint:disable-next-line:no-input-rename
+  @Input('type') type: string;
+
+  // tslint:disable-next-line:no-input-rename
+  @Input('name') title: string;
+
   // Subscription to know the order
   orderSubscription$: Subscription;
 
@@ -32,7 +38,7 @@ export class RequestPlotModificationsComponent implements OnInit, OnDestroy {
   msgError = '';
 
 
-  allFiles: RequestFile[];
+  allFiles: RequestFile[] = [];
 
   // The current colot schema
   themeColor: string;
@@ -73,12 +79,22 @@ export class RequestPlotModificationsComponent implements OnInit, OnDestroy {
 
 
   private getData(): void {
+    this.allFiles = [];
     this.fileService.getFilesByRequestCode(this.requestCode, this.order).subscribe(
       res => {
         if (!res) {
           this.noDataFound = true;
           this.msgError = "No data found";
         } else {
+          // for (let file of res) {
+          //   for (let relation of file.modificationRelation) {
+          //     console.log(relation);
+
+          //     if (relation.modification.type != this.type) {
+          //       console.log(relation.modification.type, this.type);
+          //     }
+          //   }
+          // }
           this.allFiles = res;
           this.plotGraph();
           this.noDataFound = false;
@@ -109,22 +125,22 @@ export class RequestPlotModificationsComponent implements OnInit, OnDestroy {
           orderedCopy.sort((a, b) => (a.id > b.id) ? 1 : -1); // we need the copy because it came unordered from the backend
           orderedCopy.forEach(
             modRel => {
-              orderedCopy.sort()
-              let found = false;
-              for (let mod of traces) {
-                if (mod.name == modRel.modification.name) {
-                  mod.y.push(modRel.value);
-                  found = true;
+                orderedCopy.sort();
+                let found = false;
+                for (let mod of traces) {
+                  if (mod.name == modRel.modification.name) {
+                    mod.y.push(modRel.value);
+                    found = true;
+                  }
                 }
-              }
-              if (!found) {
-                traces.push({
-                  name: modRel.modification.name,
-                  y: [modRel.value],
-                  x: filenames,
-                  type: 'bar'
-                })
-              }
+                if (!found && modRel.modification.type == this.type) {
+                  traces.push({
+                    name: modRel.modification.name,
+                    y: [modRel.value],
+                    x: filenames,
+                    type: 'bar'
+                  })
+                }
             }
             );
         }
