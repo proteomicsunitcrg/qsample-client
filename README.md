@@ -1,32 +1,77 @@
-# QsampleClient
+# QSample Client
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.6.
+## Install and launch the development environment
 
-## Development server
+### Requirements
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+First of all install the latest stable version of **[Node.js](https://nodejs.org/en/about/releases/)**
 
-## Code scaffolding
+Install **[NPM (Node Packet Manager)](https://docs.npmjs.com/cli/v7/commands/npm-install)**. Node.js installs it, check your version with `npm -v`
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Install **[Angular CLI](https://angular.io/cli)** with the following command:
 
-## Build
+`npm install -g @angular/cli`
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+### Environments
 
-## Running unit tests
+Angular works with environments to separate prod, dev and test, by default the development server starts with the dev environment. The environments have important variables like the backend URL.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### Sarting dev server
 
-## Running end-to-end tests
+Install the needed node modules with `npm install`. This command install all the modules and dependencies that the project needs to work. It can take a while to complete.
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Then run the project with `ng serve` to start the development server with the dev environment active.
 
-## Further help
+## Compile the project
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Compile the project clicking at the play button in transpile:prod (or transpile:test, depending on the desired environment).
 
+![Compile Angular](images/compileAngular.png)
 
-## Compodoc documentation
+You can also use:
 
-To generate the docs just run `compodoc -p tsconfig.app.json -s` (Before this install compodoc)
+`node --max_old_space_size=8196 node_modules/@angular/cli/bin/ng build --configuration=production`
+
+To achieve the same result.
+
+Both methods will create a `dist` folder with the compiled files.
+
+## Deploy the project
+
+Compile: `node --max_old_space_size=8196 node_modules/@angular/cli/bin/ng build --configuration=production`
+
+Send the compiled files to the server:
+
+`scp -r dist/* admin@10.102.1.26:/home/admin/temp`
+
+Make a backup of the actual prod files:
+
+`cp -r /var/www/html/qsample/* /home/admin/backup`
+
+And then delete the old prod files and send the new files to the Apache2 folder
+
+`rm -rf /var/www/html/qsample/*`
+
+`cp -r /home/admin/temp/qsample-client/* /var/www/html/qsample/`
+
+Sometimes the `.htaccess` file is deleted. In this case just use the one in QCloud2 folder:
+
+`cp /var/www/html/qcloud2/.htaccess /var/www/html/qsample/`
+
+Go to your favorite web browser and test if it works (Remember to clear the cache `Ctrl + shift + r`).
+
+*Obviously everthing works*
+
+## Errors
+
+Be sure that the front end is pointing to the correct back end. Check it using the dev tools -> network.
+
+## References
+
+[Getting started with Angular](https://angular.io/start)
+
+---
+
+Document created by *[Marc](mailto:vesperon51@gmail.com)* with [love](https://i.imgur.com/cvWpdOP.jpg).
+
+4/10/2021
