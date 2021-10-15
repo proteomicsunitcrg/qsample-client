@@ -1,6 +1,6 @@
 <div *ngIf="requestCode != undefined" fxLayout="column">
-  <app-request-plot-plot [cs]="[1]" [param]="'1'" [requestCode]="requestCode" [name]="'Total number of identified grouped proteins'" *ngIf="application && application.applicationConstraint.showIdentifiedProteinsPlot"></app-request-plot-plot>
-  <app-request-plot-plot [cs]="[2]" [param]="'1'" [requestCode]="requestCode" [name]="'Total number of identified grouped peptides'" *ngIf="application && application.applicationConstraint.showIdentifiedPeptidesPlot"></app-request-plot-plot>
+  <app-request-plot-plot [cs]="[1]" [param]="'1'" [requestCode]="requestCode" [name]="'Total number of grouped proteins'" *ngIf="application && application.applicationConstraint.showIdentifiedProteinsPlot"></app-request-plot-plot>
+  <app-request-plot-plot [cs]="[2,6]" [param]="'1'" [requestCode]="requestCode" [name]="'Total number of peptides and missed cleavages'" *ngIf="application && application.applicationConstraint.showIdentifiedPeptidesPlot"></app-request-plot-plot>
   <app-request-plot-plot [cs]="[3, 4, 5]" [param]="'1'" [requestCode]="requestCode" [name]="'Charges distribution'" *ngIf="application && application.applicationConstraint.showChargesPlot"></app-request-plot-plot>
 
   <app-request-plot-fileinfo [requestCode]="requestCode" *ngIf="application && application.applicationConstraint.showFileInfoPlot"></app-request-plot-fileinfo>

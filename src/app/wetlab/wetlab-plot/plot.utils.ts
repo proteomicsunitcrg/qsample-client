@@ -7,7 +7,7 @@ export const LAYOUTDARK = {
   hovermode: 'closest',
   plot_bgcolor: '#424242',
   paper_bgcolor: '#424242',
-  barmode: 'group',
+  barmode: 'stack',
   xaxis: {
     // nticks: 10,
     linecolor: '#FFFFFF',
@@ -36,7 +36,7 @@ export const LAYOUTLIGHT = {
   hovermode: 'closest',
   plot_bgcolor: 'white',
   paper_bgcolor: 'white',
-  barmode: 'group',
+  barmode: 'stack',
   xaxis: {
     linecolor: '#FFFFFF',
     tickcolor: '#FFFFFF',
