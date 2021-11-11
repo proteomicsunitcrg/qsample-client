@@ -7,8 +7,8 @@
   <app-request-plot-fileinfo [requestCode]="requestCode" *ngIf="application && application.applicationConstraint.showFileInfoPlot"></app-request-plot-fileinfo>
 
   <app-request-plot-modifications [requestCode]="requestCode" *ngIf="application && application.applicationConstraint.showModificationsPlot" [name]="'Total number of identified grouped proteins'" [type]="'total-numbers'"></app-request-plot-modifications>
-  <!-- <app-request-plot-modifications [requestCode]="requestCode" *ngIf="application && application.applicationConstraint.showModificationsPlot" [name]="'Lab tailored reaction'" [type]="'histones-tailored'"></app-request-plot-modifications>
-  <app-request-plot-modifications [requestCode]="requestCode" *ngIf="application && application.applicationConstraint.showModificationsPlot" [name]="'Biological reaction'" [type]="'histones-biological'"></app-request-plot-modifications>-->
+  <app-request-plot-modifications [requestCode]="requestCode" *ngIf="application && application.applicationConstraint.showHistonesTailored" [name]="'Lab tailored reaction'" [type]="'histones-tailored'"></app-request-plot-modifications>
+  <app-request-plot-modifications [requestCode]="requestCode" *ngIf="application && application.applicationConstraint.showHistonesBiological" [name]="'Biological reaction'" [type]="'histones-biological'"></app-request-plot-modifications>
 
 </div>
 <app-request-heatmap [requestCode]="requestCode" *ngIf="requestCode && application && application.applicationConstraint.showQuantificationHeatMap" style="margin-top: 100px;"></app-request-heatmap>
