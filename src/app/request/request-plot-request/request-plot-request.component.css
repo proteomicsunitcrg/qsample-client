@@ -1,0 +1,19 @@
+.notFound {
+    /* background-color: #424242; */
+    width: 560px;
+    height: 480px;
+    line-height: 480px;
+    text-align: center;
+    /* color: #fff; */
+    border-radius: 5px;
+  }
+  
+  .notFound p {
+    line-height: 1.5;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  
+  .hide {
+    display: none;
+  }
