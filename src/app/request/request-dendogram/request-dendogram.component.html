@@ -6,6 +6,11 @@
     </div>
 
     <div [class.hide]="nothingFound === true">
+      <mat-slider [max] = "100" [min] = "0" [(ngModel)]="sliderValue" [thumbLabel]="true" style="width: 95%;" (change)="sliderChange()">
+      </mat-slider>
+      <span class="material-icons cursor" style="margin-left: 5px;" matTooltip="Needed proteins to perform consensus">
+        help
+      </span>
     </div>
       <img [src]=imageUrl id="dendogram" *ngIf="showImg" class="graph mat-elevation-z1">
       <h3>

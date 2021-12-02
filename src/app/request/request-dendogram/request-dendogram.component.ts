@@ -16,6 +16,8 @@ export class RequestDendogramComponent implements OnInit, OnDestroy {
 
   nothingFound = false;
 
+  sliderValue = 20;
+
   loading = false;
 
   showImg = false;
@@ -33,6 +35,9 @@ export class RequestDendogramComponent implements OnInit, OnDestroy {
 
   // The current colot schema
   themeColor: string;
+
+  // Consensus number: 
+
 
   // Subscription to update the plot on list change
   fileListChangesSubscription$: Subscription;
@@ -59,7 +64,7 @@ export class RequestDendogramComponent implements OnInit, OnDestroy {
       return;
     }
     this.loading = true;
-    this.quantificationService.getDendogram(this.requestCode, this.listOfChecksum, this.themeColor).subscribe(
+    this.quantificationService.getDendogram(this.requestCode, this.listOfChecksum ,this.sliderValue, this.themeColor).subscribe(
       res => {
         let unsafeImageUrl = URL.createObjectURL(res);
         this.imageUrl = this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
@@ -91,6 +96,10 @@ export class RequestDendogramComponent implements OnInit, OnDestroy {
     );
   }
 
+  public sliderChange(): void {
+    this.getDendogramData();
+  }
+
   /**
   * Subsc ribes to theme changes
   */
@@ -99,8 +108,38 @@ export class RequestDendogramComponent implements OnInit, OnDestroy {
       theme => {
         this.themeColor = theme;
         this.getDendogramData();
+        this.reLayout();
       }
     );
   }
+
+
+    /**
+* Relayouts the plot
+*/
+private reLayout(): void {
+  let update = {};
+  switch (this.themeColor) {
+    case 'dark-theme':
+      update = {
+        plot_bgcolor: '#424242',
+        paper_bgcolor: '#424242',
+        font: {
+          color: '#FFFFFF'
+        }
+      };
+      break;
+    case 'light-theme':
+      update = {
+        plot_bgcolor: 'white',
+        paper_bgcolor: 'white',
+        font: {
+          color: 'black'
+        }
+      };
+      break;
+  }
+  this.getDendogramData();
+}
 
 }
