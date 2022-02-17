@@ -13,7 +13,6 @@ export const LAYOUTDARK = {
     linecolor: '#FFFFFF',
     tickcolor: '#FFFFFF',
     dtick: 1
-
   },
   yaxis: {
     type: 'linear',
@@ -182,7 +181,7 @@ export const LAYOUTDARKGROUP = {
   hovermode: 'closest',
   plot_bgcolor: '#424242',
   paper_bgcolor: '#424242',
-  barmode: 'group',
+  barmode: 'stack',
   xaxis: {
     // nticks: 10,
     linecolor: '#FFFFFF',
@@ -193,8 +192,8 @@ export const LAYOUTDARKGROUP = {
     type: 'linear',
     linecolor: '#FFFFFF',
     tickcolor: '#FFFFFF',
+    exponentformat: 'power'
     // gridcolor: '#FFFFFF',
-
     // range: rangeArray
   },
   font: {
@@ -210,7 +209,7 @@ export const LAYOUTLIGHTGROUP = {
   hovermode: 'closest',
   plot_bgcolor: 'white',
   paper_bgcolor: 'white',
-  barmode: 'group',
+  barmode: 'stack',
   xaxis: {
     linecolor: '#FFFFFF',
     tickcolor: '#FFFFFF',
@@ -220,13 +219,14 @@ export const LAYOUTLIGHTGROUP = {
     type: 'linear',
     linecolor: '#FFFFFF',
     tickcolor: '#FFFFFF',
+    exponentformat: 'power',
+    
     // range: rangeArray
   },
   font: {
     family: 'Roboto, monospace',
     color: 'black'
   }
-
 };
 
 /**
