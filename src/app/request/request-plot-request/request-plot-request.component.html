@@ -2,6 +2,7 @@
 
   <app-request-plot-plot [cs]="[1]" [param]="'1'" [requestCode]="requestCode" [name]="'Total number of grouped proteins'" *ngIf="application && application.applicationConstraint.showIdentifiedProteinsPlot"></app-request-plot-plot>
   <app-request-plot-plot [cs]="[2]" [param]="'1'" [requestCode]="requestCode" [name]="'Total number of peptides'" *ngIf="application && application.applicationConstraint.showIdentifiedPeptidesPlot"></app-request-plot-plot>
+  <app-request-plot-plot [cs]="[7]" [param]="'1'" [requestCode]="requestCode" [name]="'Total TIC (log10)'" *ngIf="application && application.applicationConstraint.showIdentifiedPeptidesPlot"></app-request-plot-plot>
   <app-request-plot-plot [cs]="[6]" [param]="'1'" [requestCode]="requestCode" [name]="'Missed cleavages'" *ngIf="application && application.applicationConstraint.showIdentifiedPeptidesPlot"></app-request-plot-plot>
   <app-request-plot-plot [cs]="[3, 4, 5]" [param]="'1'" [requestCode]="requestCode" [name]="'Charges distribution'" *ngIf="application && application.applicationConstraint.showChargesPlot"></app-request-plot-plot>
 
