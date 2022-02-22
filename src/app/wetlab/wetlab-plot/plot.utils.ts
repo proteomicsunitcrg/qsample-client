@@ -18,8 +18,8 @@ export const LAYOUTDARK = {
     type: 'linear',
     linecolor: '#FFFFFF',
     tickcolor: '#FFFFFF',
+    exponentformat: 'power'
     // gridcolor: '#FFFFFF',
-
     // range: rangeArray
   },
   font: {
@@ -46,6 +46,7 @@ export const LAYOUTLIGHT = {
     type: 'linear',
     linecolor: '#FFFFFF',
     tickcolor: '#FFFFFF',
+    exponentformat: 'power'
     // range: rangeArray
   },
   font: {
@@ -70,7 +71,8 @@ export const LAYOUTDARKHEATMAP = {
   yaxis: {
     linecolor: '#FFFFFF',
     tickcolor: '#FFFFFF',
-    dtick: 1
+    dtick: 1,
+    exponentformat: 'power'
   },
   font: {
     family: 'Roboto, monospace',
@@ -99,8 +101,8 @@ export const LAYOUTLIGHTHEATMAP = {
   yaxis: {
     linecolor: 'black',
     tickcolor: 'black',
-    dtick: 1
-
+    dtick: 1,
+    exponentformat: 'power'
   },
   font: {
     family: 'Roboto, monospace',
@@ -136,8 +138,8 @@ export const LAYOUTDARKOVERLAY = {
     type: 'linear',
     linecolor: '#FFFFFF',
     tickcolor: '#FFFFFF',
+    exponentformat: 'power'
     // gridcolor: '#FFFFFF',
-
     // range: rangeArray
   },
   font: {
@@ -163,6 +165,7 @@ export const LAYOUTLIGHTOVERLAY = {
     type: 'linear',
     linecolor: '#FFFFFF',
     tickcolor: '#FFFFFF',
+    exponentformat: 'power'
     // range: rangeArray
   },
   font: {
