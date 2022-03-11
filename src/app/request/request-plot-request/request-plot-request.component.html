@@ -1,12 +1,13 @@
 <div *ngIf="requestCode != undefined" fxLayout="column">
 
   <!-- 1. General plots for applications without specific modifications-->
-  <app-request-plot-plot [cs]="[1]" [param]="'1'" [requestCode]="requestCode" [name]="'Total number of grouped proteins'" *ngIf="application && application.applicationConstraint.showIdentifiedProteinsPlot"></app-request-plot-plot>
-  <app-request-plot-plot [cs]="[2]" [param]="'1'" [requestCode]="requestCode" [name]="'Total number of peptides'" *ngIf="application && application.applicationConstraint.showIdentifiedPeptidesPlot"></app-request-plot-plot>
-  <app-request-plot-plot [cs]="[7]" [param]="'1'" [requestCode]="requestCode" [name]="'Total TIC (log10)'" *ngIf="application && application.applicationConstraint.showIdentifiedPeptidesPlot"></app-request-plot-plot>
-  <app-request-plot-plot [cs]="[6]" [param]="'1'" [requestCode]="requestCode" [name]="'Missed cleavages'" *ngIf="application && application.applicationConstraint.showIdentifiedPeptidesPlot"></app-request-plot-plot>
-  <app-request-plot-plot [cs]="[3, 4, 5]" [param]="'1'" [requestCode]="requestCode" [name]="'Charges distribution'" *ngIf="application && application.applicationConstraint.showChargesPlot"></app-request-plot-plot>
-
+  <app-request-plot-plot [cs]="[1]" [param]="'1'" [requestCode]="requestCode" [name]="'Total number of protein groups'" *ngIf="application && application.applicationConstraint.showIdentifiedProteinsPlot"></app-request-plot-plot>
+  <app-request-plot-plot [cs]="[2]" [param]="'1'" [requestCode]="requestCode" [name]="'Total number of precursors (peptides with different charges)'" *ngIf="application && application.applicationConstraint.showIdentifiedPeptidesPlot"></app-request-plot-plot>
+  <app-request-plot-plot [cs]="[7]" [param]="'1'" [requestCode]="requestCode" [name]="'Sum of TIC (log10 TIC)'" *ngIf="application && application.applicationConstraint.showIdentifiedPeptidesPlot"></app-request-plot-plot>
+  <app-request-plot-plot [cs]="[6]" [param]="'1'" [requestCode]="requestCode" [name]="'Number of missed cleavages'" *ngIf="application && application.applicationConstraint.showIdentifiedPeptidesPlot"></app-request-plot-plot>
+  <app-request-plot-plot [cs]="[3, 4, 5]" [param]="'1'" [requestCode]="requestCode" [name]="'Peptide charge distribution'" *ngIf="application && application.applicationConstraint.showChargesPlot"></app-request-plot-plot>
+  <app-request-plot-plot [cs]="[10, 11, 12, 13, 14, 15, 16, 17, 18]" [param]="'1'" [requestCode]="requestCode" [name]="'Secondary reactions (percentage from total number of precursors)'" *ngIf="application && application.applicationConstraint.showChargesPlot"></app-request-plot-plot> 
+    
   <!-- 2. Plots for applications with specific modifications-->
   <!-- 2.1. Totals plot with data coming from FileInfo -->    
   <app-request-plot-fileinfo [requestCode]="requestCode" *ngIf="application && application.applicationConstraint.showFileInfoPlot"></app-request-plot-fileinfo>
