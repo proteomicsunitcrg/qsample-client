@@ -107,14 +107,14 @@ export class RequestPlotFileinfoComponent implements OnInit, OnDestroy {
       x: filenames,
       y: valuesPeptideHits,
       type: 'bar',
-      name: 'Peptide hits',
+      name: 'All peptides',
       filenames
     };
     const tracePeptideModified = {
       x: filenames,
       y: valuesPeptideModified,
       type: 'bar',
-      name: 'Peptides modified',
+      name: 'Modified peptides',
       filenames
     };
     // Check current theme
