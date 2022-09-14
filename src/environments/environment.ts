@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiPrefix: 'http://localhost:8081/'
+  apiPrefix: window['env']['apiPrefix'] || 'http://localhost:8081/'
 };
 
 /*

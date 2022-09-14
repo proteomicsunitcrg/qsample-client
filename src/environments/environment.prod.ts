@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiPrefix: 'http://qsample.crg.eu/',
+  apiPrefix: window['env']['apiPrefix'] || 'http://qsample.crg.eu/'
 };
