@@ -20,7 +20,7 @@ Angular works with environments to separate prod, dev and test, by default the d
 
 Install the needed node modules with `npm install`. This command install all the modules and dependencies that the project needs to work. It can take a while to complete.
 
-Then run the project with `ng serve` to start the development server with the dev environment active.
+Then run the project with `npm start` (which triggers `ng serve`) to start the development server with the dev environment active.
 
 ## Compile the project
 
