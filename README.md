@@ -22,6 +22,13 @@ Install the needed node modules with `npm install`. This command install all the
 
 Then run the project with `npm start` (which triggers `ng serve`) to start the development server with the dev environment active.
 
+#### Using Docker
+
+```
+docker build -t qsample-client -f Dockerfile.dev .
+docker run -d -P 4200:4200 qsample-client
+```
+
 ## Compile the project
 
 Compile the project clicking at the play button in transpile:prod (or transpile:test, depending on the desired environment).

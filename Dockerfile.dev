@@ -1,0 +1,17 @@
+FROM node:14-buster as nodeclient
+ARG QSAMPLE_API_PREFIX=http://localhost:8099/
+
+RUN apt update && apt upgrade -y && apt -y install gettext-base
+RUN mkdir -p /app
+WORKDIR /app
+COPY src/ /app/src/
+COPY e2e/ /app/e2e/
+COPY *json /app/
+COPY *js /app/
+
+RUN bash -c envsubst < /app/src/assets/env.sample.js > /app/src/assets/env.js
+RUN npm install
+RUN apt clean
+EXPOSE 4200
+ENTRYPOINT ["npm", "start"]
+
