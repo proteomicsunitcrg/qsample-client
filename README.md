@@ -26,7 +26,7 @@ Then run the project with `npm start` (which triggers `ng serve`) to start the d
 
 ```
 docker build -t qsample-client -f Dockerfile.dev .
-docker run -d -P 4200:4200 qsample-client
+docker run -d -p 4200:4200 qsample-client
 ```
 
 ## Compile the project
