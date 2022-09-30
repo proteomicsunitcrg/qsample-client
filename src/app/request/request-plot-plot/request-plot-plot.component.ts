@@ -99,8 +99,8 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
 
 
   private getData(): void {
-    console.log( "DAAALE");
-    console.log(this.requestCode);
+    // console.log( "DAAALE");
+    // console.log(this.requestCode);
     this.dataService.getDataForPlotRequest(this.cs, this.param, this.requestCode, this.order).subscribe(
       res => {
         this.plotTrace = res;
