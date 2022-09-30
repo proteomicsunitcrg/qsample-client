@@ -33,6 +33,7 @@ export class RequestPlotRequestComponent implements OnInit, OnDestroy {
     this.applicationSubcription = this.requestService.currentApplication.subscribe(
       value => {
         this.application = value;
+        console.log(this.application);
       }
     )
   }

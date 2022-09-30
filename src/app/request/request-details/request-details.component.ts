@@ -24,21 +24,26 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
       params => {
         this.requestId = params.apiKey;
         this.checkIfRequestIsFavorite();
-        console.log( this.requestId );
+        // console.log( this.requestId );
         this.requestService.getRequestDetails(params.apiKey).subscribe(
           res => {
             this.request = res;
-            console.log( this.request ); 
+            // console.log( this.request );
             if (this.request.localCode !== null) { // means that a local code is setted so we dont have to use the agendo response and we avoid the "parser"
               this.requestCode = this.request.localCode;
-              console.log(this.requestCode);
+              // console.log(this.requestCode);
               // TODO: Rethink if a better way
               if ( this.request.created_by === null && this.request.localCreator !== null ) {
-                console.log("HACK!");
-              	this.request.created_by = {};
-              	this.request.created_by.name = this.request.localCreator;
-              	this.request.created_by.email = "";
+                // console.log("Hack on local creator!");
+                this.request.created_by = {};
+                this.request.created_by.name = this.request.localCreator;
+                this.request.created_by.email = "";
+                // console.log(this);
               }
+              // console.log( "We trigger info retrieval as well" );
+              this.requestService.changeRequestCode(this.requestCode);
+              this.getApplicationInformation();
+
             } else {
               this.requestCode = this.getRequestCodeFromRequest(this.request);
               this.requestService.changeRequestCode(this.requestCode);

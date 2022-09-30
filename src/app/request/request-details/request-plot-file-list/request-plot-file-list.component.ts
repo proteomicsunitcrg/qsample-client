@@ -37,10 +37,14 @@ export class RequestPlotFileListComponent implements OnInit, OnDestroy {
   }
 
   public getFilesByRequestCode(): void {
+    // console.log( "FILE BY REQUEST ");
+    // console.log( this.requestCode );
+    // console.log( this.order );
     this.fileService.getFilesByRequestCode(this.requestCode, this.order).subscribe(
       res => {
         this.selectedSamples = [];
         this.files = res;
+        // console.log( this.files );
         if (this.files !== null) {
           this.files.forEach(val => this.selectedSamples.push(Object.assign({}, val))); // we need to clone
           this.dataSource = new MatTableDataSource(this.files);

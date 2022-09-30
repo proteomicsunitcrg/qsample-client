@@ -92,6 +92,7 @@ export class RequestPlotFileinfoComponent implements OnInit, OnDestroy {
     if (!this.allFiles) {
       return;
     }
+
     this.allFiles.forEach(
       file => {
         if (file.fileInfo) {
