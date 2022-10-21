@@ -13,8 +13,16 @@ export class WetlabListComponent implements OnInit {
   constructor(private wetLabService: WetLabService, private router: Router) { }
 
   WetLabs: WetLab[];
+  additional: string;
 
   ngOnInit(): void {
+
+    this.additional = '';
+    // TODO: This should be changed to something cleaner
+    if ( this.wetLabService.apiPrefix.includes('qsample.crg.eu')  ) {
+      this.additional = '(New 30 min gradient starting from 14/02/2022)';
+    }
+
     this.getAllWetlabs();
   }
 
