@@ -6,3 +6,43 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
 .allow-cr {
     white-space: pre-line !important;
 }
+
+
+/** Override colors of material Angular theme **/
+
+.mat-toolbar.mat-primary {
+  background-color: #BEE0FF !important;
+}
+
+.mat-toolbar .mat-icon  {
+  color: #1143A8 !important;
+}
+
+.mat-flat-button.mat-primary, .mat-raised-button.mat-primary, .mat-fab.mat-primary, .mat-mini-fab.mat-primary {
+  background-color: #1143A8 !important;
+}
+
+.mat-tooltip-trigger {
+  color: #1143A8 !important;
+}
+
+.dark-theme .mat-tooltip-trigger {
+  color: #FFF !important;
+  font-weight: bold;
+}
+
+
+/** Top logo style **/
+.top-logo img {
+  height: 55px;
+  padding-top: 1em;
+}
+
+.main-logo {
+  margin: 0.5em !important;
+  display: block;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 99% !important;
+}
+
