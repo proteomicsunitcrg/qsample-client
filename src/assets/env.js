@@ -20,4 +20,14 @@
       }
     }
   ).catch(err => { throw err });
+
+  // Retrieval of messages
+  fetch('assets/messages.json').then(response => {
+    return response.json();
+  }).then(data => {
+    window['env']['messages'] = data;
+  }).catch(err => {
+    // Do something for an error here
+  });
+
 })(this)
