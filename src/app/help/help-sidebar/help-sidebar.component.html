@@ -1,5 +1,5 @@
 <mat-accordion>
-  <mat-expansion-panel hideToggle>
+  <mat-expansion-panel hideToggle *ngIf="!isLocalMode">
     <mat-expansion-panel-header>
       <mat-panel-title>
         QGenerator

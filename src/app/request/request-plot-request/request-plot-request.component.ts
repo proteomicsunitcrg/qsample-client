@@ -19,6 +19,8 @@ export class RequestPlotRequestComponent implements OnInit, OnDestroy {
 
   application: Application;
 
+  isLocalMode = false;
+
   isNeonDisabled = true;
 
 
@@ -33,6 +35,7 @@ export class RequestPlotRequestComponent implements OnInit, OnDestroy {
     this.applicationSubcription = this.requestService.currentApplication.subscribe(
       value => {
         this.application = value;
+        console.log("APPLICATION");
         console.log(this.application);
       }
     )
@@ -40,6 +43,15 @@ export class RequestPlotRequestComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getShowNeonStats();
+    
+    this.requestService.getIsLocalModeEnabled().subscribe(
+      res => {
+        this.isLocalMode = res;
+      },
+      err => {
+        console.error(err);
+      }
+    );
   }
 
   ngOnDestroy(): void {

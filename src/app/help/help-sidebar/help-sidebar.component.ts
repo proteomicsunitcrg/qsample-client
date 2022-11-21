@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { RequestService } from 'src/app/services/request.service';
+
 @Component({
   selector: 'app-help-sidebar',
   templateUrl: './help-sidebar.component.html',
@@ -6,9 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HelpSidebarComponent implements OnInit {
 
-  constructor() { }
+  constructor(private requestService: RequestService) { }
+
+  isLocalMode = false;
 
   ngOnInit(): void {
+    this.requestService.getIsLocalModeEnabled().subscribe(
+      res => {
+        this.isLocalMode = res;
+      },
+      err => {
+        console.error(err);
+      }
+    );
   }
 
 }
