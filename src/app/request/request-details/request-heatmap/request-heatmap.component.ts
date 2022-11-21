@@ -5,6 +5,7 @@ import { ThemeService } from '../../../services/theme.service';
 import { PlotService } from '../../../services/plot.service';
 import { QuantificationService } from '../../../services/quantification.service';
 import { LAYOUTDARKHEATMAP, LAYOUTLIGHTHEATMAP } from '../../../wetlab/wetlab-plot/plot.utils';
+import { ApplicationService } from '../../../services/application.service';
 
 declare var Plotly: any;
 
@@ -15,7 +16,7 @@ declare var Plotly: any;
 })
 export class RequestHeatmapComponent implements OnInit, OnDestroy {
 
-  constructor(private quantificationService: QuantificationService, private plotService: PlotService, private themeService: ThemeService) { }
+  constructor(private quantificationService: QuantificationService, private plotService: PlotService, private themeService: ThemeService, private applicationService: ApplicationService) { }
 
   // tslint:disable-next-line:no-input-rename
   @ViewChild('Graph', { static: true })
@@ -40,6 +41,8 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
 
   order: string;
 
+  help: string;
+
   selectedSamples = [];
 
   listOfChecksum: string[] = [];
@@ -61,6 +64,8 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
     this.subscribeToListChanges();
     this.subscribeToThemeChanges();
     this.randString = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    this.help = this.applicationService.getAppMessage( 'correlation-protein-abundances' ); // TODO: This might get removed
+
   }
 
   ngOnDestroy(): void {

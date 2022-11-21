@@ -8,7 +8,7 @@
     <div [class.hide]="nothingFound === true">
       <mat-slider [max] = "100" [min] = "0" [(ngModel)]="sliderValue" [thumbLabel]="true" style="width: 95%;" (change)="sliderChange()">
       </mat-slider>
-      <span class="material-icons cursor" style="margin-left: 5px;" matTooltip="Needed proteins to perform consensus">
+      <span class="material-icons cursor" style="margin-left: 5px;" matTooltip="{{help}}">
         help
       </span>
     </div>
