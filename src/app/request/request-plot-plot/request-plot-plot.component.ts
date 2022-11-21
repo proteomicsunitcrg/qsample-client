@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { RequestService } from '../../services/request.service';
 import { LoginFormComponent } from '../../entry-point/login-form/login-form.component';
 import { PlotService } from '../../services/plot.service';
+import { ApplicationService } from '../../services/application.service';
 declare var Plotly: any;
 
 @Component({
@@ -32,9 +33,16 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
   // tslint:disable-next-line:no-input-rename
   @Input('name') name;
 
+  // tslint:disable-next-line:no-input-rename
+  @Input('tooltip') tooltip;
+
   randString = '';
 
+  // Title of the component
   title = '';
+
+  // Help element
+  help = '';
 
   // To store the plot data from server
   plotTrace: PlotTrace[];
@@ -71,7 +79,7 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
 
 
   constructor(private dataService: DataService, private themeService: ThemeService, private requestService: RequestService,
-    private plotService: PlotService) {
+    private plotService: PlotService, private applicationService: ApplicationService) {
   }
 
   ngOnInit(): void {
@@ -83,6 +91,7 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
     this.subscribeToThemeChanges();
     this.subscribeToListChanges();
     this.title = this.name
+    this.help = this.applicationService.getAppMessage( this.tooltip );
 
   }
 

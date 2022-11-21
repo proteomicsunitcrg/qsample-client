@@ -39,4 +39,12 @@ export class ApplicationService {
   }
 
 
+  public getAppMessage(msg: String) {
+    let output = "";
+    if ( window['env']['messages'].hasOwnProperty(msg) ) {
+      output = window['env']['messages'][msg];
+    }
+    return output;
+  }
+
 }
