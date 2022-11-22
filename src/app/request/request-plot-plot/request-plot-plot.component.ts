@@ -113,6 +113,7 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
     this.dataService.getDataForPlotRequest(this.cs, this.param, this.requestCode, this.order).subscribe(
       res => {
         this.plotTrace = res;
+
         if (this.plotTrace.length !== 0) {
           this.plotGraph();
           this.noDataFound = false;
@@ -144,7 +145,7 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
               filenames.push(plotTracePoint.file.filename);
               dates.push(plotTracePoint.file.creationDate);
               color.push('red');
-              checksum.push(`${plotTracePoint.value}<br>${plotTracePoint.file.creation_date}<br>${plotTracePoint.file.checksum}`);
+              checksum.push(`${plotTracePoint.file.filename}<br>${plotTracePoint.value}<br>${plotTracePoint.file.creation_date}<br>${plotTracePoint.file.checksum}`);
             }
           }
         );
