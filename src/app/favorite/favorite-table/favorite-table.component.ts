@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FavoriteRequestService } from '../../../app/services/favoriteRequest.service';
 import { MiniRequest } from '../../../app/models/MiniRequest';
 import { RequestStatus } from '../../../app/models/RequestStatus';
+import { FavoriteRequestService } from '../../../app/services/favoriteRequest.service';
 
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -34,7 +34,7 @@ export class FavoriteTableComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.favoriteRequestService.getFavoriteRequestsAgendo().subscribe(
+    this.favoriteRequestService.getFavoriteRequests().subscribe(
       res => {
         this.allRequests = res;
         for (const request of this.allRequests) {

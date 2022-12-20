@@ -1,9 +1,9 @@
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Observable, BehaviorSubject, Subject } from 'rxjs';
-import { MiniRequest } from '../models/MiniRequest';
 import { FavoriteRequest } from '../models/FavoriteRequest';
+import { MiniRequest } from '../models/MiniRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -37,8 +37,12 @@ export class FavoriteRequestService {
     return this.http.get<any>(`${this.apiPrefix}/get/${agendoId}`);
   }
 
-  public getFavoriteRequestsAgendo(): Observable<MiniRequest[]> {
-    return this.http.get<MiniRequest[]>(`${this.apiPrefix}/favAgendo`);
+  public getFavoriteRequests(): Observable<MiniRequest[]> {
+    if ( window['env']['local_requests'] ) {
+      return this.http.get<MiniRequest[]>(`${this.apiPrefix}/favLocal`);
+    } else {
+      return this.http.get<MiniRequest[]>(`${this.apiPrefix}/favAgendo`);
+    }
   }
 
   // action = true means add and action = false means delete
