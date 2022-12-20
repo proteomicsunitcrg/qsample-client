@@ -38,7 +38,11 @@ export class FavoriteTableComponent implements OnInit {
       res => {
         this.allRequests = res;
         for (const request of this.allRequests) {
-          request.lastField = this.getRequestCodeFromRequest(request.lastField);
+          if ( window['env']['local_requests'] ) {
+            request.lastField = request.lastField;
+          } else {
+            request.lastField = this.getRequestCodeFromRequest(request.lastField);
+          }
         }
         this.dataSource = new MatTableDataSource(res);
         this.predicate();
