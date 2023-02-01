@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MessagesService } from '../../../services/messages.service'
 import { WetLab } from '../../../models/WetLab';
 import { WetLabService } from '../../../services/wetlab.service';
 import { Router } from '@angular/router';
@@ -18,11 +19,13 @@ export class WetlabListComponent implements OnInit {
 
   ngOnInit(): void {
 
+    // this.title = window['env']['general-wetlab-home']; #TODO: Migrate
     this.title = 'Sample preparation QC';
     this.additional = '';
-    // TODO: This should be changed to something cleaner
-    if ( this.wetLabService.apiPrefix.includes('qsample.crg.eu')  ) {
+    // if ( ! window['env']['local_requests']  ) { # TODO: Migrate
+    if ( this.wetLabService.apiPrefix.includes('qsample.crg.eu') ) {
       this.additional = '(New 30 min gradient starting from 14/02/2022)';
+      // this.title = window['env']['general-wetlab-production']; #TODO: Migrate
       this.title = 'Wetlab';
     }
 
