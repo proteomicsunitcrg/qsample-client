@@ -41,6 +41,10 @@ export class TopBarComponent implements OnInit {
     this.router.navigate(['/settings']);
   }
 
+  public goToUserPage(): void {
+    this.router.navigate(['/settings/user']);
+  }
+
   public goToHelp(): void {
     this.router.navigate(['/help']);
   }

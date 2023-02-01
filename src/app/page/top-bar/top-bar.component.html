@@ -7,7 +7,10 @@
     </button>
     <app-theme-selector></app-theme-selector>
     <button mat-icon-button (click)="goToSettings()" *ngIf="isAdmin">
-      <mat-icon>settings</mat-icon>
+      <mat-icon>science</mat-icon>
+    </button>
+    <button mat-icon-button (click)="goToUserPage()" *ngIf="isAdmin">
+      <mat-icon>group</mat-icon>
     </button>
     <button mat-icon-button (click)="goToHelp()">
       <mat-icon>help</mat-icon>
