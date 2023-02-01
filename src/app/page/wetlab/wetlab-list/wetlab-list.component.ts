@@ -14,13 +14,16 @@ export class WetlabListComponent implements OnInit {
 
   WetLabs: WetLab[];
   additional: string;
+  title: string;
 
   ngOnInit(): void {
 
+    this.title = 'Sample preparation QC';
     this.additional = '';
     // TODO: This should be changed to something cleaner
     if ( this.wetLabService.apiPrefix.includes('qsample.crg.eu')  ) {
       this.additional = '(New 30 min gradient starting from 14/02/2022)';
+      this.title = 'Wetlab';
     }
 
     this.getAllWetlabs();
