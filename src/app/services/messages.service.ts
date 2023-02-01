@@ -12,14 +12,8 @@ export class MessagesService {
 
   public getMessages() {
 
-    // Retrieval of messages
-    fetch('assets/messages.json').then(response => {
-      return response.json();
-    }).then(data => {
-      return data;
-    }).catch(err => {
-      return {};
-    });
+
+    return this.httpClient.get(`assets/messages.json`);
 
   }
 
