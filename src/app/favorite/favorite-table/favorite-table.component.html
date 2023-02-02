@@ -34,7 +34,7 @@
          <table mat-table [dataSource]="dataSource" matSort matSortActive="creationDate"
          matSortDirection="desc" style="width: 100%;"style="width: 100%;">
             <ng-container matColumnDef="code">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Code </th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Request code </th>
                 <td mat-cell *matCellDef="let entry"> {{entry.lastField}} </td>
               </ng-container>
               <ng-container matColumnDef="type">
@@ -49,7 +49,7 @@
                 <!--Because agendo returns the accetns encoded-->
                </ng-container>
               <ng-container matColumnDef="creationDate">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Date created </th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Request date </th>
                 <td mat-cell *matCellDef="let entry"> {{entry.creationDate}} </td>
               </ng-container>
               <ng-container matColumnDef="status">

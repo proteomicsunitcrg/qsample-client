@@ -15,7 +15,7 @@ export class DashboardWetlabComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  constructor(private fileService: FileService, private wetlabService: WetLabService) { }
+  constructor(private wetLabService: WetLabService, private fileService: FileService, private wetlabService: WetLabService) { }
 
 
   datasource: MatTableDataSource<any>;
@@ -25,6 +25,8 @@ export class DashboardWetlabComponent implements OnInit {
   allWetlabs: WetLab[] = []
 
   today = new Date();
+
+  title: string;
 
   monthAgo = new Date(new Date().setMonth(this.today.getMonth() - 6));
 
@@ -39,6 +41,15 @@ export class DashboardWetlabComponent implements OnInit {
   wetlab = new WetLab(0, null, null, null);
 
   ngOnInit(): void {
+
+    this.title = 'Last processed sample QC files';
+
+  // if ( ! window['env']['local_requests']  ) { # TODO: Migrate
+    if ( this.wetLabService.apiPrefix.includes('qsample.crg.eu') ) {
+      // this.title = window['env']['general-wetlab-production']; # TODO: Migrate
+      this.title = 'Last processed wetlab files';
+    }
+
     this.getAllWetlabs()
     this.getAllWetlabFiles();
   }
