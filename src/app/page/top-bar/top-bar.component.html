@@ -6,13 +6,13 @@
       <mat-icon>star</mat-icon>
     </button>
     <app-theme-selector></app-theme-selector>
-    <button mat-icon-button (click)="goToSettings()" *ngIf="isAdmin">
+    <button mat-icon-button (click)="goToRequestSettings()" *ngIf="isAdmin && isLocalMode">
       <mat-icon>science</mat-icon>
     </button>
     <button mat-icon-button (click)="goToUserPage()" *ngIf="isAdmin">
       <mat-icon>group</mat-icon>
     </button>
-    <button mat-icon-button (click)="goToHelp()">
+    <button mat-icon-button (click)="goToHelp()" *ngIf="!isLocalMode">
       <mat-icon>help</mat-icon>
     </button>
     <button mat-icon-button (click)="logout()">

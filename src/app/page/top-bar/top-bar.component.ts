@@ -3,6 +3,7 @@ import { TokenStorageService } from '../../services/token-storage.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { Subscription } from 'rxjs';
+import { RequestService } from '../../services/request.service';
 
 @Component({
   selector: 'app-top-bar',
@@ -14,13 +15,24 @@ export class TopBarComponent implements OnInit {
   subscription: Subscription;
 
   isAdmin = false;
+  isLocalMode = false;
 
-  constructor(private tokenService: TokenStorageService, private router: Router,
+  constructor(private requestService: RequestService, private tokenService: TokenStorageService, private router: Router,
     private authService: AuthService, private tokenStorageService: TokenStorageService) {
     this.subscription = authService.getIsAdmin().subscribe(res => this.isAdmin = res);
   }
 
   ngOnInit(): void {
+
+    this.requestService.getIsLocalModeEnabled().subscribe(
+      res => {
+        this.isLocalMode = res;
+      },
+      err => {
+        console.error(err);
+      }
+    );
+ 
     this.authService.updateIsAdmin(this.tokenStorageService.isAdminUser());
   }
 
@@ -37,8 +49,8 @@ export class TopBarComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
-  public goToSettings(): void {
-    this.router.navigate(['/settings']);
+  public goToRequestSettings(): void {
+    this.router.navigate(['/settings/local/request']);
   }
 
   public goToUserPage(): void {
