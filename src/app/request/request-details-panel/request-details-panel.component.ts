@@ -19,7 +19,6 @@ export class RequestDetailsPanelComponent implements OnInit {
   ngOnInit(): void {
     setTimeout(() => {  // The timeout is necessary because the PLOT isnt instant
 
-      console.log( "KK REQUEST" );
       console.log( this.request );
 
       if (this.request) {
@@ -37,7 +36,6 @@ export class RequestDetailsPanelComponent implements OnInit {
       console.log(this.local);
     } else {
       this.local = false;
-      console.log("NOPE");
     }
   }, 100)
 }
