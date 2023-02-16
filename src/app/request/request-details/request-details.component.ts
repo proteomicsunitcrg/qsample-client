@@ -19,6 +19,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private authService: AuthService, private activeRouter: ActivatedRoute,
     private requestService: RequestService, private applicationService: ApplicationService,
     private favRequestService: FavoriteRequestService) {
+
     this.subscription = this.authService.getIsInternal().subscribe(res => this.isInternal = res);
     this.activeRouter.params.subscribe(
       params => {
@@ -31,6 +32,8 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
             // console.log( this.request );
             if (this.request.localCode !== null) { // means that a local code is setted so we dont have to use the agendo response and we avoid the "parser"
               this.requestCode = this.request.localCode;
+              this.local = true;
+
               // console.log(this.requestCode);
               // TODO: Rethink if a better way
               if ( this.request.created_by === null && this.request.localCreator !== null ) {
@@ -45,6 +48,8 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
               this.getApplicationInformation();
 
             } else {
+
+              this.local = false;
               this.requestCode = this.getRequestCodeFromRequest(this.request);
               this.requestService.changeRequestCode(this.requestCode);
               this.getApplicationInformation();
@@ -62,6 +67,8 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
 
   subscription: Subscription;
   isInternal = false;
+  
+  local: boolean;
 
   request: any;
 
