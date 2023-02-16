@@ -42,7 +42,7 @@ export class DashboardWetlabComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.title = 'Last processed sample QC files';
+    this.title = 'Last processed sample preparation QC files';
 
   // if ( ! window['env']['local_requests']  ) { # TODO: Migrate
     if ( this.wetLabService.apiPrefix.includes('qsample.crg.eu') ) {
