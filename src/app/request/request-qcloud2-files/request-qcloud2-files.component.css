@@ -1,13 +1,13 @@
 .warning {
-    color: yellow;
+    color: yellow !important;
 }
 
 .danger {
-    color: red;
+    color: red !important;
 }
 
 .ok {
-    color: green;
+    color: green !important;
 }
 
 .align {
