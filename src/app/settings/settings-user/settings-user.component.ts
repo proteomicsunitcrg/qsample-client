@@ -13,7 +13,7 @@ export class SettingsUserComponent implements OnInit {
 
   dataSource: MatTableDataSource<any>;
 
-  columnsToDisplay = ['username', 'firstname', 'lastname', 'agendoId'];
+  columnsToDisplay = ['username', 'firstname', 'lastname'];
 
 
   constructor(private userService: UserService, public dialog: MatDialog) {
