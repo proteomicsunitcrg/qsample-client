@@ -20,7 +20,7 @@ export class DashboardWetlabComponent implements OnInit {
 
   datasource: MatTableDataSource<any>;
 
-  columnsToDisplay = ['creation_date', 'filename', 'requestCode', 'checksum'];
+  columnsToDisplay = ['creation_date', 'filename'];
 
   allWetlabs: WetLab[] = []
 

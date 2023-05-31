@@ -17,7 +17,7 @@ export class DashboardRequestComponent implements OnInit {
 
   datasource: MatTableDataSource<any>;
 
-  columnsToDisplay = ['creation_date', 'filename', 'requestCode', 'checksum'];
+  columnsToDisplay = ['creation_date', 'filename', 'requestCode'];
 
   today = new Date();
 
