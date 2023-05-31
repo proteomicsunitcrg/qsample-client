@@ -23,23 +23,24 @@
                       </mat-select>
                     </mat-form-field>
                     <mat-form-field appearance="standard" style="width: 95%;">
-                      <mat-label>Creation date</mat-label>
+                      <mat-label>Request creation date</mat-label>
                       <input matInput formControlName="date" type="date">
                     </mat-form-field>
                     <mat-form-field appearance="standard" style="width: 95%;">
-                      <mat-label>Group</mat-label>
+                      <mat-label>Lab name (e.g. Sabido Lab)</mat-label>
                       <input matInput formControlName="group">
                     </mat-form-field>
                     <mat-form-field appearance="standard" style="width: 95%;">
-                      <mat-label>Creator</mat-label>
+                      <mat-label>Creator name (e.g. Roger Olivella)</mat-label>
                       <input matInput formControlName="creator">
                     </mat-form-field>
                     <mat-form-field appearance="standard" style="width: 95%;">
-                      <mat-label>Taxonomy</mat-label>
+                      <mat-label>Sample organism (e.g. Human)</mat-label>
                       <input matInput formControlName="taxonomy">
                     </mat-form-field>
                     <mat-form-field appearance="standard" style="width: 95%;">
-                      <mat-select formControlName="status">
+                        <mat-label>Request status</mat-label>
+                        <mat-select formControlName="status">
                           <mat-option *ngFor="let status of requestStatusValuesKeys()" [value]="status">
                               {{status}}
                           </mat-option>
@@ -48,8 +49,8 @@
                   </div>
                   <div fxFlex.gt-md = "50">
                     <mat-form-field appearance="standard" style="width: 95%;">
-                      <mat-label>Sample</mat-label>
                       <input matInput class="lmao" formControlName="sample">
+                      <mat-label>Sample (Optional)</mat-label>
                     </mat-form-field>
                     <button mat-raised-button color="primary" (click)="addSample()" style="margin-bottom: 20px;">Add sample</button>
                     <p *ngFor="let sample of allSamples">
