@@ -1,20 +1,21 @@
 <div style="margin-left: 20px;">
     <mat-card>
         <mat-card-title>
-            Local requests editor
+            Requests Manager
         </mat-card-title>
         <mat-card-content>
           <div fxLayout="row">
             <form [formGroup]="leForm">
             <div fxFlex.gt-md = "50">
                   <mat-form-field appearance="standard" style="width: 95%;">
-                      <mat-label>Request code</mat-label>
+                      <mat-label>Request code. Must be exactly any of the "Patterns" column in the assets/default_methods.csv file</mat-label>
                       <input matInput formControlName="code">
                     </mat-form-field>
                     <mat-form-field appearance="standard" style="width: 95%;" *ngIf="isEdit && requestFromServer.id != undefined">
                       <input matInput [value]="requestFromServer.application.name" [disabled]="true">
                     </mat-form-field>
                     <mat-form-field appearance="standard" style="width: 95%;" [class.hide]="isEdit">
+                      <mat-label>App name. Must be exactly any of the "Name" column in the assets/default_methods.csv file</mat-label>
                       <mat-select formControlName="application">
                           <mat-option *ngFor="let app of allApplications" [value]="app">
                               {{app.name}}
