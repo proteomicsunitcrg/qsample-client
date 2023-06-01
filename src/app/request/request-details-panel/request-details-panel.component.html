@@ -5,25 +5,25 @@
   <mat-card-content>
     <mat-list>
       <mat-list-item>
-          <span class="bold">Application:</span> {{request.classs}}
+          <span class="bold">Application:&nbsp;</span> {{request.classs}}
       </mat-list-item>
       <mat-list-item *ngIf="local != undefined">
         <div *ngIf="!local">
-          <span class="bold">Creator: </span> <span [innerHTML]="request.created_by.name"></span>
+          <span class="bold">Creator:&nbsp;</span> <span [innerHTML]="request.created_by.name"></span>
           <span>
             ({{request.created_by.email}})
           </span>
         </div>
         <div *ngIf="local">
-          <span class="bold">Creator local: </span> <span [innerHTML]="request.localCreator"></span> <span>
+          <span class="bold">Creator: </span> <span [innerHTML]="request.localCreator"></span> <span>
             ({{request.localCreator}})</span>
           </div>
       </mat-list-item>
       <mat-list-item>
-          <span class="bold">Creation date: </span> {{request.date_created}}
+          <span class="bold">Creation date:&nbsp;</span> {{request.date_created}}
       </mat-list-item>
       <mat-list-item>
-          <span class="bold">Group: </span> <span [innerHTML]="request.group"></span>
+          <span class="bold">Lab name:&nbsp;</span> <span [innerHTML]="request.group"></span>
       </mat-list-item>
     </mat-list>
   </mat-card-content>
