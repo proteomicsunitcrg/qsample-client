@@ -87,7 +87,15 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
   }
 
   private mountForm(request: any) {
-    this.leForm.controls.date.setValue(request.creationDate.split('T')[0]);
+    // Handle creation_date different possible formats and adapt to the form
+    let creationDate = request.creation_date;
+    let formDate = null;
+    if (creationDate.includes('T')) {
+      formDate = creationDate.split('T')[0];
+    } else {
+      formDate = creationDate.split(' ')[0];
+    }
+    this.leForm.controls.date.setValue(formDate);
     this.leForm.controls.date.disable();
     this.leForm.controls.code.setValue(request.requestCode);
     this.leForm.controls.code.disable();
