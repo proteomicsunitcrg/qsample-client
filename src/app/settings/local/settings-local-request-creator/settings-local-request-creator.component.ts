@@ -139,7 +139,9 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
     localRequestToSend.id = this.requestFromServer.id;
     localRequestToSend.requestCode = this.leForm.controls.code.value;
     localRequestToSend.application = this.leForm.controls.application.value;
-    localRequestToSend.creationDate = this.leForm.controls.date.value;
+    let formDate = this.leForm.controls.date.value.toString();
+    formDate = formDate + " 00:00:00"; // Hack for adding HH:mm:ss
+    localRequestToSend.creation_date = formDate;
     localRequestToSend.creator = this.leForm.controls.creator.value;
     localRequestToSend.group = this.leForm.controls.group.value;
     localRequestToSend.status = this.leForm.controls.status.value;

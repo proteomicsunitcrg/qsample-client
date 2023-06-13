@@ -4,7 +4,7 @@ export class RequestLocal {
     id: number;
     requestCode: string;
     application: Application;
-    creationDate: Date;
+    creation_date: Date;
     status: string;
     group: string;
     creator: string;
