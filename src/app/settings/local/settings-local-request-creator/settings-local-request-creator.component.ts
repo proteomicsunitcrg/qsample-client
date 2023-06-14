@@ -6,7 +6,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ApplicationService } from 'src/app/services/application.service';
 import { Application } from 'src/app/models/Application';
 import { RequestLocal } from 'src/app/models/RequestLocal';
-import { sample } from 'rxjs/operators';
+// import { sample } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileService } from 'src/app/services/file.service';
 
@@ -89,13 +89,7 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
   private mountForm(request: any) {
     // Handle creation_date different possible formats and adapt to the form
     let creationDate = request.creation_date;
-    let formDate = null;
-    if (creationDate.includes('T')) {
-      formDate = creationDate.split('T')[0];
-    } else {
-      formDate = creationDate.split(' ')[0];
-    }
-    this.leForm.controls.date.setValue(formDate);
+    this.leForm.controls.date.setValue(creationDate);
     this.leForm.controls.date.disable();
     this.leForm.controls.code.setValue(request.requestCode);
     this.leForm.controls.code.disable();
@@ -147,8 +141,19 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
     localRequestToSend.id = this.requestFromServer.id;
     localRequestToSend.requestCode = this.leForm.controls.code.value;
     localRequestToSend.application = this.leForm.controls.application.value;
+    // Several hacks below to avoid problems with date format
     let formDate = this.leForm.controls.date.value.toString();
-    formDate = formDate + " 00:00:00"; // Hack for adding HH:mm:ss
+    if ( ! formDate.includes(":") ) {
+      formDate = formDate + " 00:00"; // Hack for adding HH:mm:ss
+    }
+    if ( formDate.includes("T") ) {
+      formDate = formDate.replace("T", " ");
+    }
+    if ( formDate.includes("Z") ) {
+      formDate = formDate.replace("Z", "");
+    }
+    formDate = formDate + ":00"; // Adding miliseconds
+
     localRequestToSend.creation_date = formDate;
     localRequestToSend.creator = this.leForm.controls.creator.value;
     localRequestToSend.group = this.leForm.controls.group.value;
