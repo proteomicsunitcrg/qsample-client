@@ -38,7 +38,7 @@ export class DashboardWetlabComponent implements OnInit {
   });
 
   filename = '';
-  wetlab = new WetLab(0, null, null, null);
+  wetlab = new WetLab(0, null, null, null, null);
 
   ngOnInit(): void {
 
