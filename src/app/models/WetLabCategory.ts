@@ -1,4 +1,4 @@
-export class WetlabCategory {
+export class WetLabCategory {
 
   id: number;
   name: string;

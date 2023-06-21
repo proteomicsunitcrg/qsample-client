@@ -4,11 +4,15 @@
           {{ title }}
         </mat-card-title>
         {{additional}}
-        <mat-card-content>
-            <mat-nav-list>
-                <a mat-list-item *ngFor="let item of WetLabs" (click)="navigate(item)">{{item.name}}</a>
-            </mat-nav-list>
-        </mat-card-content>
+        <div *ngFor="let block of Categories"><h2>{{block.name}}</h2> 
+          <mat-card-content>
+              <mat-nav-list>
+                <div *ngFor="let item of WetLabs">
+                <a mat-list-item (click)="navigate(item)" *ngIf="block.id === item.wetlabCategory.id">{{item.name}}</a>
+                </div>
+              </mat-nav-list>
+          </mat-card-content>
+        </div>
         <mat-card-actions>
             <button mat-raised-button color="primary" (click)="navigateToGuideset()">OPTIONS</button>
         </mat-card-actions>

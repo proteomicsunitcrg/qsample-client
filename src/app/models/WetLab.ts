@@ -1,6 +1,6 @@
 import { Plot } from './Plot';
 import { Guideset } from './Guideset';
-import { WetlabCategory } from './WetlabCategory';
+import { WetLabCategory } from './WetLabCategory';
 
 export class WetLab {
   id: number;
@@ -8,13 +8,13 @@ export class WetLab {
   name: string;
   plot: Plot[];
   guideset: Guideset;
-  category: WetlabCategory;
+  wetlabCategory: WetLabCategory;
 
-  constructor(id: number, apiKey: string, name: string, plot: Plot[], category: WetlabCategory) {
+  constructor(id: number, apiKey: string, name: string, plot: Plot[], wetlabCategory: WetLabCategory) {
     this.id = id;
     this.apiKey = apiKey;
     this.name = name;
     this.plot = plot;
-    this.category = category;
+    this.wetlabCategory = wetlabCategory;
   }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MessagesService } from '../../../services/messages.service'
 import { WetLab } from '../../../models/WetLab';
+import { WetLabCategory } from '../../../models/WetLabCategory';
 import { WetLabService } from '../../../services/wetlab.service';
 import { Router } from '@angular/router';
 
@@ -15,6 +16,7 @@ export class WetlabListComponent implements OnInit {
 
   messages = {};
   WetLabs: WetLab[];
+  Categories: WetLabCategory[];
   additional: string;
   title: string;
 
@@ -22,7 +24,6 @@ export class WetlabListComponent implements OnInit {
 
     // TODO: Part of the migration
     this.getMessages();
-
     console.log(this.messages);
 
     // this.title = window['env']['general-wetlab-home']; # TODO: Migrate
@@ -42,6 +43,10 @@ export class WetlabListComponent implements OnInit {
     this.wetLabService.getWetlabLists().subscribe(
       res => {
         this.WetLabs = res;
+        // Process wetlab categories below
+        this.Categories = this.processCategories(this.WetLabs);
+        console.log(res);
+        console.log(this.Categories);
       },
       err => {
         console.error(err);
@@ -69,6 +74,24 @@ export class WetlabListComponent implements OnInit {
   }
 
 
+  private processCategories(wetlab: WetLab[]) {
+    let wetlabArray = [];
+    for ( let item of wetlab ) {
+      let found = 0;
+      for ( let exist of wetlabArray ) {
+        if ( item.wetlabCategory.id === exist.id ) {
+          found = 1;
+        }
+      }
+      if ( found === 0 ) {
+        wetlabArray.push(item.wetlabCategory);
+      }
+    }
+    wetlabArray.sort(function(a, b) { 
+      return a.id - b.id;
+    });
+    return wetlabArray;
+  }
 
   public navigate(wetLab: WetLab) {
     this.router.navigate(['/wetlab/plot', wetLab.apiKey]);
