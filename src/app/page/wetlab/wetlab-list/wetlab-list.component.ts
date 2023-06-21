@@ -5,6 +5,7 @@ import { WetLabCategory } from '../../../models/WetLabCategory';
 import { WetLabService } from '../../../services/wetlab.service';
 import { Router } from '@angular/router';
 
+// TODO: Improve component handling of categories and items
 @Component({
   selector: 'app-wetlab-list',
   templateUrl: './wetlab-list.component.html',
@@ -45,8 +46,6 @@ export class WetlabListComponent implements OnInit {
         this.WetLabs = res;
         // Process wetlab categories below
         this.Categories = this.processCategories(this.WetLabs);
-        console.log(res);
-        console.log(this.Categories);
       },
       err => {
         console.error(err);
