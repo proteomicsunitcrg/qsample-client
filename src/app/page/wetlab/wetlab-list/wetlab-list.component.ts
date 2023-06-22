@@ -5,8 +5,8 @@ import { WetLabCategory } from '../../../models/WetLabCategory';
 import { WetLabService } from '../../../services/wetlab.service';
 import { Router } from '@angular/router';
 
-// TODO: Improve component handling of categories and items
-// Consider: https://stackoverflow.com/questions/48204477/passing-ngfor-variable-to-an-ngif-template
+// Considered: https://stackoverflow.com/questions/48204477/passing-ngfor-variable-to-an-ngif-template
+// plus: https://stackoverflow.com/questions/40718754/angular-2-ngfor-without-html-tag
 @Component({
   selector: 'app-wetlab-list',
   templateUrl: './wetlab-list.component.html',

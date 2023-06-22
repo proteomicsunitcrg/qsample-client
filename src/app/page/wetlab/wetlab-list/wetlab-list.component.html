@@ -5,16 +5,20 @@
         </mat-card-title>
         {{additional}}
         <div *ngFor="let block of Categories"><h2>{{block.name}}</h2> 
-          <mat-card-content>
-              <mat-nav-list>
-                <div *ngFor="let item of WetLabs">
-                <a mat-list-item (click)="navigate(item)" *ngIf="block.id === item.wetlabCategory.id">{{item.name}}</a>
-                </div>
-              </mat-nav-list>
-          </mat-card-content>
+           <ng-container [ngTemplateOutlet]='element' [ngTemplateOutletContext]="{block:block}"></ng-container>
         </div>
         <mat-card-actions>
             <button mat-raised-button color="primary" (click)="navigateToGuideset()">OPTIONS</button>
         </mat-card-actions>
     </mat-card>
 </div>
+
+<ng-template #element let-block='block'>
+  <mat-card-content>
+      <mat-nav-list>
+        <ng-container *ngFor="let item of WetLabs">
+          <a mat-list-item (click)="navigate(item)" *ngIf="block.id === item.wetlabCategory.id">{{item.name}}</a>
+        </ng-container>
+      </mat-nav-list>
+  </mat-card-content>
+</ng-template>
