@@ -1,0 +1,11 @@
+.wetlab-blocks {
+  margin-top: 2em;
+}
+
+.wetlab-blocks h2 {
+  margin-bottom: 0em;
+}
+
+.wetlab-blocks .mat-list-base .mat-list-item {
+  height: 36px;
+}
