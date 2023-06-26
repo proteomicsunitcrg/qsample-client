@@ -8,6 +8,7 @@ import { ThresholdService } from '../../services/threshold.service';
 import { Threshold } from '../../models/Threshold';
 import { ThresholdForPlot } from '../../models/ThresholdForPlot';
 import { PlotTraceWetlab } from 'src/app/models/PlotTraceWetlab';
+import { ApplicationService } from '../../services/application.service';
 declare var Plotly: any;
 
 @Component({
@@ -17,7 +18,7 @@ declare var Plotly: any;
 })
 export class WetlabPlotComponent implements OnInit, OnDestroy {
 
-  constructor(private dataService: DataService, private themeService: ThemeService, private threholdService: ThresholdService) { }
+  constructor(private dataService: DataService, private themeService: ThemeService, private threholdService: ThresholdService, private applicationService: ApplicationService) { }
 
   // The div element to draw the plot
   @ViewChild('Graph', { static: true })
@@ -30,6 +31,9 @@ export class WetlabPlotComponent implements OnInit, OnDestroy {
   // The current wetlab
   // tslint:disable-next-line:no-input-rename
   @Input('wetlab') wetlab: WetLab;
+
+  // Help message
+  @Input('help') help: string;
 
   // Var to handle the plot layout
   layout: any = {};
@@ -65,6 +69,7 @@ export class WetlabPlotComponent implements OnInit, OnDestroy {
     this.getData();
     this.subscribeToDateChanges();
     this.subscribeToThemeChanges();
+    this.help = this.applicationService.getAppMessage("wetlab-"+(this.plot.name).toLowerCase().replaceAll(" ", "_"));
   }
 
   ngOnDestroy(): void {
@@ -141,7 +146,7 @@ export class WetlabPlotComponent implements OnInit, OnDestroy {
     } else if (this.themeColor === 'light-theme') {
       this.layout = LAYOUTLIGHT;
     }
-    this.layout.title = this.plot.name;
+    //this.layout.title = this.plot.name; -> Title placed in the HTML
     if (!this.hasThreshold) {
       this.layout.shapes = [];
     }
