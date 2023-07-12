@@ -227,11 +227,12 @@ export class RequestsListComponent implements OnInit {
       res => {
         this.finding = false;
         this.allRequests = res;
-        for (const request of this.allRequests) {
-          if (!request.local) {
-            request.lastField = this.getRequestCodeFromRequest(request.lastField);
-          }
-        }
+        // Commented since lastField is already clean
+        // for (const request of this.allRequests) {
+        //   if (!request.local) {
+        //     request.lastField = this.getRequestCodeFromRequest(request.lastField);
+        //   }
+        // }
 
         this.dataSource = new MatTableDataSource(res);
         this.dataSource.paginator = this.paginator;
@@ -245,14 +246,14 @@ export class RequestsListComponent implements OnInit {
   }
 
 
-  private getRequestCodeFromRequest(request: any): string {
-    try {
-      const cac = JSON.parse(request);
-      return cac[0][0].value.split('|')[0];
-    } catch (error) {
-      return 'none';
-    }
-  }
+  // private getRequestCodeFromRequest(request: any): string {
+  //   try {
+  //     const cac = JSON.parse(request);
+  //     return cac[0][0].value.split('|')[0];
+  //   } catch (error) {
+  //     return 'none';
+  //   }
+  // }
 
   private getAllRequestsExternal(): void {
     this.requestService.getAllRequestsExternal().subscribe(

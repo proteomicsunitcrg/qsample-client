@@ -37,13 +37,13 @@ export class FavoriteTableComponent implements OnInit {
     this.favoriteRequestService.getFavoriteRequests().subscribe(
       res => {
         this.allRequests = res;
-        for (const request of this.allRequests) {
-          if ( window['env']['local_requests'] ) {
-            request.lastField = request.lastField;
-          } else {
-            request.lastField = this.getRequestCodeFromRequest(request.lastField);
-          }
-        }
+        // for (const request of this.allRequests) {
+        //   if ( window['env']['local_requests'] ) {
+        //     request.lastField = request.lastField;
+        //   } else {
+        //     request.lastField = this.getRequestCodeFromRequest(request.lastField);
+        //   }
+        // }
         this.dataSource = new MatTableDataSource(res);
         this.predicate();
 
@@ -54,14 +54,14 @@ export class FavoriteTableComponent implements OnInit {
     );
   }
 
-  private getRequestCodeFromRequest(request: any): string {
-    try {
-      const cac = JSON.parse(request);
-      return cac[0][0].value.split('|')[0];
-    } catch (error) {
-      return 'none';
-    }
-  }
+  // private getRequestCodeFromRequest(request: any): string {
+  //   try {
+  //     const cac = JSON.parse(request);
+  //     return cac[0][0].value.split('|')[0];
+  //   } catch (error) {
+  //     return 'none';
+  //   }
+  // }
 
   public goTo(request): void {
     this.router.navigate(['/request', request.id]);

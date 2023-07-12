@@ -11,6 +11,7 @@ export class MiniRequest {
   hasData: boolean;
   local: boolean
 
+  // TODO: lastField should be changed as requestCode or ref
   constructor(id: number, creationDate: string, creatorMail: string, creatorName: string,
     status: RequestStatus, type: string, lastField: string, hasData: boolean, local: boolean) {
     this.id = id;
