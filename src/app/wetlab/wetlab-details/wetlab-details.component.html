@@ -8,12 +8,12 @@
   <mat-divider></mat-divider>
 </section>
 
-<div style="margin-top: 20px;" fxLayout="row" fxLayoutAlign="space-between start">
+<div style="margin-top: 20px;" fxLayout="row" ffxLayoutGap="32px" fxLayoutAlign="space-between">
   <app-date-selector fxFlex="15%"></app-date-selector>
-  <div fxFlex="100%" fxLayout="column" fxLayoutGap="32px" fxLayoutAlign="space-around center">
+  <div fxFlex="100%" fxLayout="column" fxLayoutAlign="space-evenly" style="margin: 0 5em;">
     <ng-container *ngFor="let plot of wetlab.plot">
-      <app-wetlab-plot fxFlex="0 1 calc(33.3% - 32px)" fxFlex.lt-md="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%"
-        [plot]="plot" [wetlab]="wetlab"></app-wetlab-plot>
+      <app-wetlab-plot fxFlex="0 1 calc(100% - 32px)" fxFlex.lt-md="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%"
+        [plot]="plot" [wetlab]="wetlab" style="margin-bottom: 5em;"></app-wetlab-plot>
     </ng-container>
   </div>
 </div>

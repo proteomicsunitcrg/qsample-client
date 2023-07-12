@@ -126,6 +126,16 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
     );
   }
 
+  // Two initial parts of the filename are removed
+  private parseFilename(filename: string): string {
+
+    let fileParts = filename.split('_');
+    fileParts.shift();
+    fileParts.shift(); 
+    filename = fileParts.join('_');
+    return filename;
+  }
+
   private plotGraph(): void {
     const dataForPlot = [];
     if (this.plotTrace === undefined) {
@@ -142,7 +152,7 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
           plotTracePoint => {
             if (this.checkFileInList(plotTracePoint.file)) {
               values.push(plotTracePoint.value);
-              filenames.push(plotTracePoint.file.filename);
+              filenames.push(this.parseFilename(plotTracePoint.file.filename));
               dates.push(plotTracePoint.file.creationDate);
               color.push('red');
               checksum.push(`${plotTracePoint.file.filename}<br>${plotTracePoint.value}<br>${plotTracePoint.file.creation_date}<br>${plotTracePoint.file.checksum}`);
