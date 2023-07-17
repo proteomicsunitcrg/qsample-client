@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { DataService } from '../../services/data.service';
 import { getNavigator } from '../wetlab-plot/plot.utils';
-import { Platform } from '@angular/cdk/platform';
 
 @Component({
   selector: 'app-date-selector',
@@ -33,7 +32,7 @@ export class DateSelectorComponent implements OnInit {
   allWeeks = [];
 
   // array to store all supported years
-  allYears = [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023];
+  allYears = [];
 
   weekStartAlter: number;
   weekEndAlter: number;
@@ -45,6 +44,7 @@ export class DateSelectorComponent implements OnInit {
     this.supportsWeekInput = this.handleBrowser(getNavigator());
     this.allWeeks = Array.from(Array(53).keys()) // yes, I know some years have 53 weeks
     this.allWeeks.shift(); // remove the firts element 0
+    this.allYears = this.setAllYears();
     this.setDefaultDates();
     this.submitDates();
   }
@@ -69,12 +69,22 @@ export class DateSelectorComponent implements OnInit {
   }
 
   private setDefaultDates(): void {
-    let weekControl = document.getElementsByClassName('week');
-    for (let week of weekControl) {
-      week.setAttribute('value', `${this.todayYear}-W${this.fourWeeksAgo}`);
-    }
+    this.weekStartAlter = this.todayWeek;
+    this.yearStartAlter = this.todayYear - 1;
+    this.weekEndAlter = this.todayWeek;
+    this.yearEndAlter = this.todayYear;
   }
 
+  // This is hardcoded for 5 years
+  private setAllYears(): number[] {
+    let years = [];
+    let currentYear = new Date().getFullYear()
+    for (let i = currentYear -5 ; i <= currentYear; i++) {
+      years.push(i);
+    }
+    return years;
+
+  }
 
   public submitDates(): void {
     if (this.weekPickerStart == null || this.weekPickerEnd == null) {
