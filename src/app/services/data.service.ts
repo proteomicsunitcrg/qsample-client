@@ -2,7 +2,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { WetLab } from '../models/WetLab';
 import { PlotTrace } from '../models/PlotTrace';
 import { PlotTraceWetlab } from '../models/PlotTraceWetlab';
 

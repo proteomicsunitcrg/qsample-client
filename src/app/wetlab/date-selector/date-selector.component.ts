@@ -20,7 +20,8 @@ export class DateSelectorComponent implements OnInit {
   weekPickerEnd: string;
 
   lastMonth = new Date(this.today.getTime());
-  dateStart = new FormControl(new Date(this.lastMonth.setMonth(this.today.getMonth() - 1)));
+  // We set the dateStart to 1 year ago
+  dateStart = new FormControl(new Date(this.lastMonth.setMonth(this.today.getMonth() - 12)));
   dateEnd = new FormControl(new Date(this.today));
 
   // true if the navigator supports the input week
