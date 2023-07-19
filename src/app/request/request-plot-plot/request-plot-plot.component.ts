@@ -83,7 +83,6 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   ngOnInit(): void {
-    console.log(this.cs);
     this.layout.shapes = [];
     this.randString = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     this.themeColor = this.themeService.currentTheme;
@@ -108,8 +107,6 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
 
 
   private getData(): void {
-    // console.log( "DAAALE");
-    // console.log(this.requestCode);
     this.dataService.getDataForPlotRequest(this.cs, this.param, this.requestCode, this.order).subscribe(
       res => {
         this.plotTrace = res;
@@ -203,7 +200,6 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
   * Relayouts the plot
   */
   private reLayout(): void {
-    console.log("RELAYOUT");
     let update = {};
     switch (this.themeColor) {
       case 'dark-theme':

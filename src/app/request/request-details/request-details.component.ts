@@ -50,7 +50,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
             } else {
 
               this.local = false;
-              this.requestCode = this.getRequestCodeFromRequest(this.request);
+              this.requestCode = this.request.ref; // We directly get from ref response
               this.requestService.changeRequestCode(this.requestCode);
               this.getApplicationInformation();
             }
@@ -88,13 +88,6 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getIsQCloud2FilesEnabled();
-  }
-
-  // TODO: Improve the parser. RN is a piece of shit but the AGENDO response is crap
-
-  private getRequestCodeFromRequest(request: any): string {
-    const cac = JSON.parse(request.fields[request.fields.length - 1].value);
-    return cac[0][0].value.split('|')[0];
   }
 
   ngOnDestroy(): void {
