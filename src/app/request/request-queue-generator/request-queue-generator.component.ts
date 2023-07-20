@@ -161,98 +161,108 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
   private getRequestCodeFromRequest(request: any): string {
     if (this.isLocal) {
       return request.localCode
-    }
-    const cac = JSON.parse(request.fields[request.fields.length - 1].value);
-    this.clientCode = cac[0][0].value.split('|')[1];
-    return cac[0][0].value.split('|')[0].replace('/','');
-  }
-
-  private parseLocalSamples(samples: string): any {
-    if (samples == '') {
-      return;
-    }
-    return samples.split('---');
-  }
-
-
-  private getSamplesFromRequests(request: any): void {
-    let cac = [];
-    if (this.isLocal) {
-      cac = this.parseLocalSamples(request.samples);
     } else {
-      this.samples = [];
-      cac = JSON.parse(request.fields[request.fields.length - 1].value);
+      return request.ref;
     }
-    let sampleNumber = 1;
-    for (const val of cac) {
-    if (this.isLocal) {
-      const pedete = new Itemerino('Unknown', val, 'none', 'none', 0,
-      this.clientCode, '', this.request.id, this.taxonomyCode, 'Unknown', sampleNumber, false);
-    this.samples.push(pedete);
-    } else {
-      const pedete = new Itemerino('Unknown', val[0].value.replace(/\|/g, '_') + '_01', 'none', 'none', 0,
-      this.clientCode, '', this.request.id, this.taxonomyCode, 'Unknown', sampleNumber, false);
-      this.samples.push(pedete);
-    }
-      sampleNumber = sampleNumber + 1;
-      // this.samples.push(val[0].value.replace(/\|/g, '_'));
-    }
-    this.dataSource = this.samples;
-    this.cloneGlobal = this.samples;
   }
 
-  private getDatabaseFromRequest(): string {
+private parseLocalSamples(samples: string): any {
+  if (samples == '') {
+    return;
+  }
+  return samples.split('---');
+}
+
+private generateClientCode(sampleName: string): string {
+  return sampleName.split('_')[1];
+}
+
+private getSamplesFromRequests(request: any): void {
+  let cac = [];
+  if (this.isLocal) {
+    cac = this.parseLocalSamples(request.samples);
+  } else {
+    this.samples = [];
+    cac = JSON.parse(request.fields[request.fields.length - 1].value);
+  }
+  let sampleNumber = 1;
+  for (const val of cac) {
+    console.log(val);
     if (this.isLocal) {
-      return 'none';
+      const item = new Itemerino('Unknown', val, 'none', 'none', 0,
+      this.clientCode, '', this.request.id, this.taxonomyCode, 'Unknown', sampleNumber, false);
+      this.samples.push(item);
+    } else {
+      // If empty value, we skip
+      if ( val[0].value === "" ) {
+        continue;
+      }
+      if ( ! this.clientCode ) {
+        this.clientCode = this.generateClientCode(val[0].value.replace(/\|/g, '_')); 
+      }
+      const item = new Itemerino('Unknown', val[0].value.replace(/\|/g, '_') + '_01', 'none', 'none', 0,
+      this.clientCode, '', this.request.id, this.taxonomyCode, 'Unknown', sampleNumber, false);
+      this.samples.push(item);
     }
+    sampleNumber = sampleNumber + 1;
+    // this.samples.push(val[0].value.replace(/\|/g, '_'));
+  }
+  this.dataSource = this.samples;
+  this.cloneGlobal = this.samples;
+}
+
+private getDatabaseFromRequest(): string {
+  if (this.isLocal) {
+    return 'none';
+  }
+  for (const item of this.request.fields) {
+    if (item.name === 'QSample-DB') {
+      return item.value;
+    }
+  }
+  return '';
+}
+
+private getTaxonomyFromRequest(): string {
+  if (this.isLocal) {
+    return this.request.localTaxonomy;
+  } else {
     for (const item of this.request.fields) {
-      if (item.name === 'QSample-DB') {
+      if (item.name === 'Taxonomy') {
         return item.value;
       }
     }
-    return '';
   }
+}
 
-  private getTaxonomyFromRequest(): string {
-    if (this.isLocal) {
-      return this.request.localTaxonomy;
-    } else {
-      for (const item of this.request.fields) {
-        if (item.name === 'Taxonomy') {
-          return item.value;
-        }
-      }
-    }
+private getTaxonomyCodeFromName(taxonomyName: string): number {
+  switch (taxonomyName) {
+    case 'Human':
+      return 9606;
+    default:
+      return undefined;
   }
+}
 
-  private getTaxonomyCodeFromName(taxonomyName: string): number {
-    switch (taxonomyName) {
-      case 'Human':
-        return 9606;
-      default:
-        return undefined;
-    }
-  }
+public goBack(): void {
+  this.router.navigate(['/request', this.requestId]);
+}
 
-  public goBack(): void {
-    this.router.navigate(['/request', this.requestId]);
-  }
-
-  public drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.samples, event.previousIndex, event.currentIndex);
-  }
+public drop(event: CdkDragDrop<string[]>) {
+  moveItemInArray(this.samples, event.previousIndex, event.currentIndex);
+}
 
 
-  public addQC(type: string, index: number, associated?: boolean) {
-    switch (type) {
-      case 'QC01':
-        switch (associated) {
-          case true:
-            const sampleNumber = this.getPositionFromSampleName(this.dataSource[index].filename);
-            const qcNumber = this.getQCsByTypeBetweenIndexs(index, this.getNextSampleIndexGivenActualIndex(index), type);
-            this.dataSource.splice(this.getNextSampleIndexGivenActualIndex(index), 0, new Itemerino('QC',
-              // tslint:disable-next-line:max-line-length
-              `${this.requestCode}_${this.clientCode}_${sampleNumber}_${this.year}${this.month}${this.day}_${type}_001_${('0' + qcNumber).slice(-2)}`,
+public addQC(type: string, index: number, associated?: boolean) {
+  switch (type) {
+    case 'QC01':
+      switch (associated) {
+        case true:
+          const sampleNumber = this.getPositionFromSampleName(this.dataSource[index].filename);
+          const qcNumber = this.getQCsByTypeBetweenIndexs(index, this.getNextSampleIndexGivenActualIndex(index), type);
+          this.dataSource.splice(this.getNextSampleIndexGivenActualIndex(index), 0, new Itemerino('QC',
+            // tslint:disable-next-line:max-line-length
+            `${this.requestCode}_${this.clientCode}_${sampleNumber}_${this.year}${this.month}${this.day}_${type}_001_${('0' + qcNumber).slice(-2)}`,
               // tslint:disable-next-line:max-line-length
               this.getMethodAndVolumeQC(this.selectedInstrument, type).method, this.getVialPositionByQCType(type),
               // tslint:disable-next-line:max-line-length
