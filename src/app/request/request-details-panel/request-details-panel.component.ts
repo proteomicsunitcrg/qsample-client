@@ -27,11 +27,11 @@ export class RequestDetailsPanelComponent implements OnInit {
         // this.request.created_by.name = this.request.localCreator;
 
         this.local = true;
-        
+
       } else {
         this.local = false;
       }
-      
+
 
       console.log(this.local);
     } else {

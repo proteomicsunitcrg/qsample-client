@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Observable, BehaviorSubject, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { MiniRequest } from '../models/MiniRequest';
 import { Application } from '../models/Application';
 import { RequestLocal } from '../models/RequestLocal';
@@ -47,6 +47,10 @@ export class RequestService {
 
   public getRequestDetails(requestId: string): Observable<any> {
     return this.http.get<any>(`${this.apiPrefix}api/request/${requestId}`);
+  }
+
+  public getRequestCodeDetails(requestCode: string): Observable<any> {
+    return this.http.get<any>(`${this.apiPrefix}api/requestcode/${requestCode}`);
   }
 
   public getRequestPlotName(csId: number, paramId: string): Observable<string> {

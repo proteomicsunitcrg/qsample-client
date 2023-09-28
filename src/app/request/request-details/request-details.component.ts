@@ -26,6 +26,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
         this.requestId = params.apiKey;
         this.checkIfRequestIsFavorite();
         // console.log( this.requestId );
+        // TODO: Here to replace with a getRequestCodeDetails
         this.requestService.getRequestDetails(params.apiKey).subscribe(
           res => {
             this.request = res;
@@ -67,7 +68,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
 
   subscription: Subscription;
   isInternal = false;
-  
+
   local: boolean;
 
   request: any;
