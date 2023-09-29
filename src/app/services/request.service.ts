@@ -32,8 +32,6 @@ export class RequestService {
     this.currentApplication.next(value);
   }
 
-
-
   public getAllRequestsInternal(showAll: boolean, startDate: Date, endDate: Date): Observable<MiniRequest[]> {
     this.params = this.params.set('showAll', showAll ? 'true' : 'false');
     this.params = this.params.set('start_date', startDate.toISOString());

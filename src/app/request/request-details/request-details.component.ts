@@ -23,8 +23,6 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
     this.subscription = this.authService.getIsInternal().subscribe(res => this.isInternal = res);
     this.activeRouter.params.subscribe(
       params => {
-        console.log("HERE");
-        console.log(params);
         if (params.apiKey.match(/^[0-9]+$/)) {
           // Handle by requestId
           this.handleByRequestId(params.apiKey);
@@ -75,7 +73,12 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
   }
 
   private getApplicationInformation(): void {
-    this.applicationService.getByName(this.request['classs']).subscribe(
+    let classs = this.request['classs'];
+    if ( ! classs ) {
+      classs = this.request.application.name;
+      this.request['classs'] = classs;
+    }
+    this.applicationService.getByName(classs).subscribe(
       res => {
         this.application = res;
         if (!this.application.applicationConstraint) {
@@ -90,8 +93,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
     )
   }
   private handleByRequestId(requestId: string): void {
-        this.checkIfRequestIsFavorite();
-        // console.log( this.requestId );
+        this.checkIfRequestIsFavorite(parseInt(requestId));
         this.requestService.getRequestDetails(requestId).subscribe(
           res => {
             this.request = res;
@@ -128,36 +130,19 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
   }
 
   private handleByRequestCode(requestCode: string): void {
-        this.checkIfRequestIsFavorite();
         // console.log( this.requestId );
         this.requestService.getRequestDetailsByRequestCode(requestCode).subscribe(
           res => {
             this.request = res;
-            // console.log( this.request );
-            if (this.request.localCode !== null) { // means that a local code is setted so we dont have to use the agendo response and we avoid the "parser"
-              this.requestCode = this.request.localCode;
-              this.local = true;
+            this.requestCode = requestCode;
+            this.checkIfRequestIsFavorite(this.request.id);
 
-              // console.log(this.requestCode);
-              // TODO: Rethink if a better way
-              if ( this.request.created_by === null && this.request.localCreator !== null ) {
-                // console.log("Hack on local creator!");
-                this.request.created_by = {};
-                this.request.created_by.name = this.request.localCreator;
-                this.request.created_by.email = "";
-                // console.log(this);
-              }
-              // console.log( "We trigger info retrieval as well" );
-              this.requestService.changeRequestCode(this.requestCode);
-              this.getApplicationInformation();
-
-            } else {
-
-              this.local = false;
-              this.requestCode = this.request.ref; // We directly get from ref response
-              this.requestService.changeRequestCode(this.requestCode);
-              this.getApplicationInformation();
-            }
+            this.local = true;
+            this.request.created_by = {};
+            this.request.created_by.name = this.request.creator;
+            this.request.created_by.email = this.request.creator;
+            this.request.date_created = this.request.creation_date;
+            this.getApplicationInformation();
           },
           err => {
             console.error(err);
@@ -178,10 +163,15 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
     );
   }
 
-  private checkIfRequestIsFavorite(): void {
-    this.favRequestService.getFavRequestByAgendoId(this.requestId).subscribe(
+  private checkIfRequestIsFavorite(requestId?: number): void {
+    if ( ! requestId ) {
+      requestId = this.requestId;
+    }
+    console.log("REQUEST %s", requestId);
+    this.favRequestService.getFavRequestByAgendoId(requestId).subscribe(
       res => {
         this.favoriteRequestRelation = res;
+        console.log(this.favoriteRequestRelation);
         if (this.favoriteRequestRelation !== null) {
           this.isFav = true;
           this.isNotify = this.favoriteRequestRelation.notify;
