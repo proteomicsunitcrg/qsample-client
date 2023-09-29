@@ -49,8 +49,8 @@ export class RequestService {
     return this.http.get<any>(`${this.apiPrefix}api/request/${requestId}`);
   }
 
-  public getRequestCodeDetails(requestCode: string): Observable<any> {
-    return this.http.get<any>(`${this.apiPrefix}api/requestcode/${requestCode}`);
+  public getRequestDetailsByRequestCode(requestCode: string): Observable<any> {
+    return this.http.get<any>(`${this.apiPrefix}api/request/getByRequestCode/${requestCode}`);
   }
 
   public getRequestPlotName(csId: number, paramId: string): Observable<string> {
