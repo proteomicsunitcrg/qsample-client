@@ -25,25 +25,30 @@ export class RequestPlotRequestComponent implements OnInit, OnDestroy {
 
 
   constructor(private requestService: RequestService, private quantificationService: QuantificationService) {
-    this.myEventSubscription = this.requestService.currentRequestCode.subscribe(value => {
-      if (value !== undefined) {
-        this.requestCode = value;
+    this.myEventSubscription = this.requestService.currentRequestCode.subscribe(
+      value => {
+        if (value !== undefined) {
+          this.requestCode = value;
+        }
+      },
+      err => {
+        console.error(err);
       }
-    }
     );
 
     this.applicationSubcription = this.requestService.currentApplication.subscribe(
       value => {
         this.application = value;
-        console.log("APPLICATION");
-        console.log(this.application);
+      },
+      err => {
+        console.error(err);
       }
-    )
+    );
   }
 
   ngOnInit(): void {
     this.getShowNeonStats();
-    
+
     this.requestService.getIsLocalModeEnabled().subscribe(
       res => {
         this.isLocalMode = res;

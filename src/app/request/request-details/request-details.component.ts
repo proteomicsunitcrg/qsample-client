@@ -114,7 +114,6 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
               // console.log( "We trigger info retrieval as well" );
               this.requestService.changeRequestCode(this.requestCode);
               this.getApplicationInformation();
-
             } else {
 
               this.local = false;
@@ -142,6 +141,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
             this.request.created_by.name = this.request.creator;
             this.request.created_by.email = this.request.creator;
             this.request.date_created = this.request.creation_date;
+            this.requestService.changeRequestCode(this.requestCode);
             this.getApplicationInformation();
           },
           err => {
@@ -167,11 +167,11 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
     if ( ! requestId ) {
       requestId = this.requestId;
     }
-    console.log("REQUEST %s", requestId);
+    // console.log("REQUEST %s", requestId);
     this.favRequestService.getFavRequestByAgendoId(requestId).subscribe(
       res => {
         this.favoriteRequestRelation = res;
-        console.log(this.favoriteRequestRelation);
+        // console.log(this.favoriteRequestRelation);
         if (this.favoriteRequestRelation !== null) {
           this.isFav = true;
           this.isNotify = this.favoriteRequestRelation.notify;

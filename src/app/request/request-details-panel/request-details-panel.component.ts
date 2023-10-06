@@ -32,8 +32,6 @@ export class RequestDetailsPanelComponent implements OnInit {
         this.local = false;
       }
 
-
-      console.log(this.local);
     } else {
       this.local = false;
     }
