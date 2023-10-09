@@ -179,7 +179,7 @@ export class RequestsListComponent implements OnInit {
 
 
   private goTo(request): void {
-    this.router.navigate(['/request', request.id]);
+    this.router.navigate(['/request', request.lastField]);
   }
 
   private goToRequestEditor(request): void {
