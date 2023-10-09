@@ -1,21 +1,21 @@
-import { Component, OnInit, ViewChild, Input } from "@angular/core";
-import { RequestService } from "../../../services/request.service";
-import { Router } from "@angular/router";
-import { MatTableDataSource } from "@angular/material/table";
-import { FormControl, FormGroup } from "@angular/forms";
-import { RequestStatus } from "../../../models/RequestStatus";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatSort } from "@angular/material/sort";
-import { AuthService } from "../../../services/auth.service";
-import { Subscription } from "rxjs";
-import { MiniRequest } from "../../../models/MiniRequest";
-import { MatDialog } from "@angular/material/dialog";
-import { RequestListYearSelectorDialog } from "./dialog/request-list-year-selector-dialog";
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { RequestService } from '../../../services/request.service';
+import { Router } from '@angular/router';
+import { MatTableDataSource } from '@angular/material/table';
+import { FormControl, FormGroup } from '@angular/forms';
+import { RequestStatus } from '../../../models/RequestStatus';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { AuthService } from '../../../services/auth.service';
+import { Subscription } from 'rxjs';
+import { MiniRequest } from '../../../models/MiniRequest';
+import { MatDialog } from '@angular/material/dialog';
+import { RequestListYearSelectorDialog } from './dialog/request-list-year-selector-dialog';
 
 @Component({
-  selector: "app-requests-list",
-  templateUrl: "./requests-list.component.html",
-  styleUrls: ["./requests-list.component.css"],
+  selector: 'app-requests-list',
+  templateUrl: './requests-list.component.html',
+  styleUrls: ['./requests-list.component.css'],
 })
 export class RequestsListComponent implements OnInit {
   dataSource: MatTableDataSource<MiniRequest>;
@@ -25,13 +25,13 @@ export class RequestsListComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  classFilter = "";
+  classFilter = '';
 
-  statusFilter = "";
+  statusFilter = '';
 
-  creatorFilter = "";
+  creatorFilter = '';
 
-  lastFieldFilter = "";
+  lastFieldFilter = '';
 
   subscription: Subscription;
 
@@ -39,7 +39,7 @@ export class RequestsListComponent implements OnInit {
 
   // columnsToDisplay = ['code', 'type', 'creatorName', 'creationDate', 'status', 'hasData'];
 
-  columnsToDisplay = ["code", "type", "creatorName", "creationDate", "status"];
+  columnsToDisplay = ['code', 'type', 'creatorName', 'creationDate', 'status'];
 
   filteredValues = {};
 
@@ -58,17 +58,15 @@ export class RequestsListComponent implements OnInit {
 
   year: number;
 
-  @Input("settingsMode") settingsMode: boolean;
+  @Input('settingsMode') settingsMode: boolean;
 
   constructor(
     private requestService: RequestService,
     private router: Router,
     private authService: AuthService,
-    private dialog: MatDialog,
+    private dialog: MatDialog
   ) {
-    this.subscription = this.authService
-      .getIsInternal()
-      .subscribe((res) => (this.isInternal = res));
+    this.subscription = this.authService.getIsInternal().subscribe((res) => (this.isInternal = res));
   }
 
   requestStatusValues = RequestStatus;
@@ -82,31 +80,31 @@ export class RequestsListComponent implements OnInit {
   }
 
   private resetAllFilters(): any {
-    this.classFilter = "";
-    this.statusFilter = "";
-    this.creatorFilter = "";
-    this.lastFieldFilter = "";
+    this.classFilter = '';
+    this.statusFilter = '';
+    this.creatorFilter = '';
+    this.lastFieldFilter = '';
   }
 
   applyFilterStatus(filterValue: string) {
     const tableFilters = [];
     tableFilters.push(
       {
-        id: "type",
+        id: 'type',
         value: this.classFilter,
       },
       {
-        id: "status",
+        id: 'status',
         value: filterValue,
       },
       {
-        id: "creatorName",
+        id: 'creatorName',
         value: this.creatorFilter,
       },
       {
-        id: "lastField",
+        id: 'lastField',
         value: this.lastFieldFilter,
-      },
+      }
     );
     this.dataSource.filter = JSON.stringify(tableFilters);
   }
@@ -115,21 +113,21 @@ export class RequestsListComponent implements OnInit {
     const tableFilters = [];
     tableFilters.push(
       {
-        id: "type",
+        id: 'type',
         value: filterValue,
       },
       {
-        id: "status",
+        id: 'status',
         value: this.statusFilter,
       },
       {
-        id: "creatorName",
+        id: 'creatorName',
         value: this.creatorFilter,
       },
       {
-        id: "lastField",
+        id: 'lastField',
         value: this.lastFieldFilter,
-      },
+      }
     );
     this.dataSource.filter = JSON.stringify(tableFilters);
   }
@@ -138,21 +136,21 @@ export class RequestsListComponent implements OnInit {
     const tableFilters = [];
     tableFilters.push(
       {
-        id: "type",
+        id: 'type',
         value: this.classFilter,
       },
       {
-        id: "status",
+        id: 'status',
         value: this.statusFilter,
       },
       {
-        id: "creatorName",
+        id: 'creatorName',
         value: filterValue,
       },
       {
-        id: "lastField",
+        id: 'lastField',
         value: this.lastFieldFilter,
-      },
+      }
     );
     this.dataSource.filter = JSON.stringify(tableFilters);
   }
@@ -161,32 +159,32 @@ export class RequestsListComponent implements OnInit {
     const tableFilters = [];
     tableFilters.push(
       {
-        id: "type",
+        id: 'type',
         value: this.classFilter,
       },
       {
-        id: "status",
+        id: 'status',
         value: this.statusFilter,
       },
       {
-        id: "creatorName",
+        id: 'creatorName',
         value: this.creatorFilter,
       },
       {
-        id: "lastField",
+        id: 'lastField',
         value: filterValue,
-      },
+      }
     );
     // console.log(tableFilters);
     this.dataSource.filter = JSON.stringify(tableFilters);
   }
 
   private goTo(request): void {
-    this.router.navigate(["/request", request.lastField]);
+    this.router.navigate(['/request', request.lastField]);
   }
 
   private goToRequestEditor(request): void {
-    this.router.navigate(["/settings/local/request/editor", request.lastField]);
+    this.router.navigate(['/settings/local/request/editor', request.lastField]);
   }
 
   public handleClick(request): void {
@@ -202,10 +200,8 @@ export class RequestsListComponent implements OnInit {
       const matchFilter = [];
       const filters = JSON.parse(filtersJson);
       filters.forEach((filter) => {
-        const val = data[filter.id] === null ? "" : data[filter.id];
-        matchFilter.push(
-          val.toLowerCase().includes(filter.value.toLowerCase()),
-        );
+        const val = data[filter.id] === null ? '' : data[filter.id];
+        matchFilter.push(val.toLowerCase().includes(filter.value.toLowerCase()));
       });
       return matchFilter.every(Boolean);
     };
@@ -224,37 +220,29 @@ export class RequestsListComponent implements OnInit {
    *
    */
   public getAllRequestsInternal(): void {
-    const datePlusOne = new Date(
-      this.range.controls.end.value.getTime() + 1000 * 60 * 60 * 24,
-    );
+    const datePlusOne = new Date(this.range.controls.end.value.getTime() + 1000 * 60 * 60 * 24);
     this.finding = true;
-    this.requestService
-      .getAllRequestsInternal(
-        this.showAll,
-        this.range.controls.start.value,
-        datePlusOne,
-      )
-      .subscribe(
-        (res) => {
-          this.finding = false;
-          this.allRequests = res;
-          // Commented since lastField is already clean
-          // for (const request of this.allRequests) {
-          //   if (!request.local) {
-          //     request.lastField = this.getRequestCodeFromRequest(request.lastField);
-          //   }
-          // }
+    this.requestService.getAllRequestsInternal(this.showAll, this.range.controls.start.value, datePlusOne).subscribe(
+      (res) => {
+        this.finding = false;
+        this.allRequests = res;
+        // Commented since lastField is already clean
+        // for (const request of this.allRequests) {
+        //   if (!request.local) {
+        //     request.lastField = this.getRequestCodeFromRequest(request.lastField);
+        //   }
+        // }
 
-          this.storeRequestsInSessionStorage(this.allRequests);
-          this.dataSource = new MatTableDataSource(res);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-          this.predicate();
-        },
-        (err) => {
-          console.error(err);
-        },
-      );
+        this.storeRequestsInSessionStorage(this.allRequests);
+        this.dataSource = new MatTableDataSource(res);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.predicate();
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
   }
 
   // TODO: sessionStorage here: https://codedamn.com/news/reactjs/usestate-and-useeffect-hooks
@@ -282,7 +270,7 @@ export class RequestsListComponent implements OnInit {
       },
       (err) => {
         console.error(err);
-      },
+      }
     );
   }
 
@@ -294,7 +282,7 @@ export class RequestsListComponent implements OnInit {
   public openDialog(): void {
     const dialogRef = this.dialog.open(RequestListYearSelectorDialog, {
       data: {},
-      width: "35%",
+      width: '35%',
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result != undefined) {

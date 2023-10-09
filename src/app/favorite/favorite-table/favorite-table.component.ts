@@ -1,32 +1,32 @@
-import { Component, OnInit } from "@angular/core";
-import { MiniRequest } from "../../../app/models/MiniRequest";
-import { RequestStatus } from "../../../app/models/RequestStatus";
-import { FavoriteRequestService } from "../../../app/services/favoriteRequest.service";
+import { Component, OnInit } from '@angular/core';
+import { MiniRequest } from '../../../app/models/MiniRequest';
+import { RequestStatus } from '../../../app/models/RequestStatus';
+import { FavoriteRequestService } from '../../../app/services/favoriteRequest.service';
 
-import { MatTableDataSource } from "@angular/material/table";
-import { Router } from "@angular/router";
+import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: "app-favorite-table",
-  templateUrl: "./favorite-table.component.html",
-  styleUrls: ["./favorite-table.component.css"],
+  selector: 'app-favorite-table',
+  templateUrl: './favorite-table.component.html',
+  styleUrls: ['./favorite-table.component.css'],
 })
 export class FavoriteTableComponent implements OnInit {
   constructor(
     private favoriteRequestService: FavoriteRequestService,
-    private router: Router,
+    private router: Router
   ) {}
   allRequests: MiniRequest[] = [];
   dataSource: MatTableDataSource<MiniRequest>;
-  columnsToDisplay = ["code", "type", "creatorName", "creationDate", "status"];
+  columnsToDisplay = ['code', 'type', 'creatorName', 'creationDate', 'status'];
 
-  classFilter = "";
+  classFilter = '';
 
-  statusFilter = "";
+  statusFilter = '';
 
-  creatorFilter = "";
+  creatorFilter = '';
 
-  lastFieldFilter = "";
+  lastFieldFilter = '';
 
   requestStatusValues = RequestStatus;
   requestStatusValuesKeys(): Array<string> {
@@ -50,7 +50,7 @@ export class FavoriteTableComponent implements OnInit {
       },
       (err) => {
         console.error(err);
-      },
+      }
     );
   }
 
@@ -64,35 +64,35 @@ export class FavoriteTableComponent implements OnInit {
   // }
 
   public goTo(request): void {
-    this.router.navigate(["/request", request.lastField]);
+    this.router.navigate(['/request', request.lastField]);
   }
 
   private resetAllFilters(): any {
-    this.classFilter = "";
-    this.statusFilter = "";
-    this.creatorFilter = "";
-    this.lastFieldFilter = "";
+    this.classFilter = '';
+    this.statusFilter = '';
+    this.creatorFilter = '';
+    this.lastFieldFilter = '';
   }
 
   applyFilterStatus(filterValue: string) {
     const tableFilters = [];
     tableFilters.push(
       {
-        id: "type",
+        id: 'type',
         value: this.classFilter,
       },
       {
-        id: "status",
+        id: 'status',
         value: filterValue,
       },
       {
-        id: "creatorName",
+        id: 'creatorName',
         value: this.creatorFilter,
       },
       {
-        id: "lastField",
+        id: 'lastField',
         value: this.lastFieldFilter,
-      },
+      }
     );
     this.dataSource.filter = JSON.stringify(tableFilters);
   }
@@ -101,21 +101,21 @@ export class FavoriteTableComponent implements OnInit {
     const tableFilters = [];
     tableFilters.push(
       {
-        id: "type",
+        id: 'type',
         value: filterValue,
       },
       {
-        id: "status",
+        id: 'status',
         value: this.statusFilter,
       },
       {
-        id: "creatorName",
+        id: 'creatorName',
         value: this.creatorFilter,
       },
       {
-        id: "lastField",
+        id: 'lastField',
         value: this.lastFieldFilter,
-      },
+      }
     );
     this.dataSource.filter = JSON.stringify(tableFilters);
   }
@@ -124,21 +124,21 @@ export class FavoriteTableComponent implements OnInit {
     const tableFilters = [];
     tableFilters.push(
       {
-        id: "type",
+        id: 'type',
         value: this.classFilter,
       },
       {
-        id: "status",
+        id: 'status',
         value: this.statusFilter,
       },
       {
-        id: "creatorName",
+        id: 'creatorName',
         value: filterValue,
       },
       {
-        id: "lastField",
+        id: 'lastField',
         value: this.lastFieldFilter,
-      },
+      }
     );
     this.dataSource.filter = JSON.stringify(tableFilters);
   }
@@ -147,21 +147,21 @@ export class FavoriteTableComponent implements OnInit {
     const tableFilters = [];
     tableFilters.push(
       {
-        id: "type",
+        id: 'type',
         value: this.classFilter,
       },
       {
-        id: "status",
+        id: 'status',
         value: this.statusFilter,
       },
       {
-        id: "creatorName",
+        id: 'creatorName',
         value: this.creatorFilter,
       },
       {
-        id: "lastField",
+        id: 'lastField',
         value: filterValue,
-      },
+      }
     );
     // console.log(tableFilters);
     this.dataSource.filter = JSON.stringify(tableFilters);
@@ -172,10 +172,8 @@ export class FavoriteTableComponent implements OnInit {
       const matchFilter = [];
       const filters = JSON.parse(filtersJson);
       filters.forEach((filter) => {
-        const val = data[filter.id] === null ? "" : data[filter.id];
-        matchFilter.push(
-          val.toLowerCase().includes(filter.value.toLowerCase()),
-        );
+        const val = data[filter.id] === null ? '' : data[filter.id];
+        matchFilter.push(val.toLowerCase().includes(filter.value.toLowerCase()));
       });
       return matchFilter.every(Boolean);
     };
