@@ -183,7 +183,7 @@ export class RequestsListComponent implements OnInit {
   }
 
   private goToRequestEditor(request): void {
-    this.router.navigate(['/settings/local/request/editor', request.id]);
+    this.router.navigate(['/settings/local/request/editor', request.lastField]);
   }
 
   public handleClick(request): void {

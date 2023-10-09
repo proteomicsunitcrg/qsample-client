@@ -128,6 +128,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
       );
   }
 
+  // TODO: Need to review all this function with requestCode first scenario
   private handleByRequestCode(requestCode: string): void {
         // console.log( this.requestId );
         this.requestService.getRequestDetailsByRequestCode(requestCode).subscribe(
