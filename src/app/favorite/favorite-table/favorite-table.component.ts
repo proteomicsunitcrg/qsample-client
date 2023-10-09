@@ -64,7 +64,7 @@ export class FavoriteTableComponent implements OnInit {
   // }
 
   public goTo(request): void {
-    this.router.navigate(['/request', request.id]);
+    this.router.navigate(['/request', request.lastField])
   }
 
   private resetAllFilters(): any {
