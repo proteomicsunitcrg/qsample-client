@@ -42,7 +42,8 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
                 let id = requests[params.apiKey]['id'];
                 this.handleByRequestId(id);
               } else {
-                alert('Request not found in Agendo!'); // TODO: Handle in a dialog
+                alert('Request not found in Agendo!'); // TODO: Handle in a dialog.
+                // Try this: https://stackoverflow.com/questions/69197245/reacjs-popup-how-do-i-trigger-a-popup-without-it-being-click-hover
               }
             }
           },
