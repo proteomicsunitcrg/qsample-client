@@ -7,10 +7,9 @@ import { RequestService } from '../../services/request.service';
 @Component({
   selector: 'app-request-plot-request',
   templateUrl: './request-plot-request.component.html',
-  styleUrls: ['./request-plot-request.component.css']
+  styleUrls: ['./request-plot-request.component.css'],
 })
 export class RequestPlotRequestComponent implements OnInit, OnDestroy {
-
   myEventSubscription: Subscription;
 
   applicationSubcription: Subscription;
@@ -23,24 +22,26 @@ export class RequestPlotRequestComponent implements OnInit, OnDestroy {
 
   isNeonDisabled = true;
 
-
-  constructor(private requestService: RequestService, private quantificationService: QuantificationService) {
+  constructor(
+    private requestService: RequestService,
+    private quantificationService: QuantificationService
+  ) {
     this.myEventSubscription = this.requestService.currentRequestCode.subscribe(
-      value => {
+      (value) => {
         if (value !== undefined) {
           this.requestCode = value;
         }
       },
-      err => {
+      (err) => {
         console.error(err);
       }
     );
 
     this.applicationSubcription = this.requestService.currentApplication.subscribe(
-      value => {
+      (value) => {
         this.application = value;
       },
-      err => {
+      (err) => {
         console.error(err);
       }
     );
@@ -50,10 +51,10 @@ export class RequestPlotRequestComponent implements OnInit, OnDestroy {
     this.getShowNeonStats();
 
     this.requestService.getIsLocalModeEnabled().subscribe(
-      res => {
+      (res) => {
         this.isLocalMode = res;
       },
-      err => {
+      (err) => {
         console.error(err);
       }
     );
@@ -65,13 +66,12 @@ export class RequestPlotRequestComponent implements OnInit, OnDestroy {
 
   private getShowNeonStats(): void {
     this.quantificationService.getIsNeonStatsEnabled().subscribe(
-      res => {
+      (res) => {
         this.isNeonDisabled = res;
       },
-      err => {
+      (err) => {
         console.error(err);
       }
     );
   }
-
 }

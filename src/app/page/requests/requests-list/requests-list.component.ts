@@ -180,7 +180,11 @@ export class RequestsListComponent implements OnInit {
   }
 
   private goTo(request): void {
-    this.router.navigate(['/request', request.lastField]);
+    if (request.lastField === '') {
+      alert('Request not available yet'); // TODO: Change to a proper dialog
+    } else {
+      this.router.navigate(['/request', request.lastField]);
+    }
   }
 
   private goToRequestEditor(request): void {
@@ -245,10 +249,13 @@ export class RequestsListComponent implements OnInit {
     );
   }
 
-  // TODO: sessionStorage here: https://codedamn.com/news/reactjs/usestate-and-useeffect-hooks
+  // TODO: review sessionStorage here: https://codedamn.com/news/reactjs/usestate-and-useeffect-hooks
   private storeRequestsInSessionStorage(requests: MiniRequest[]): void {
-    // TODO: Map request by request code
-    // TODO: Place requests in sessionStorage
+    let storeRequests = {};
+    for (const request of requests) {
+      storeRequests[request.lastField] = request;
+    }
+    sessionStorage.setItem('requests', JSON.stringify(storeRequests));
   }
 
   // private getRequestCodeFromRequest(request: any): string {
