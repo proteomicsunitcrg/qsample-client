@@ -39,8 +39,8 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
               // We retrieve the request id from the session storage
               let requests = JSON.parse(sessionStorage.getItem('requests'));
               if (requests.hasOwnProperty(params.apiKey)) {
-                let id = requests[params.apiKey]['id'];
-                this.handleByRequestId(id);
+                this.requestId = requests[params.apiKey]['id'];
+                this.handleByRequestId(this.requestId);
               } else {
                 alert('Request not found in Agendo!'); // TODO: Handle in a dialog.
                 // Try this: https://stackoverflow.com/questions/69197245/reacjs-popup-how-do-i-trigger-a-popup-without-it-being-click-hover
@@ -94,7 +94,12 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
   }
 
   public goToQGenerator(): void {
-    this.router.navigate(['/request/QGenerator', this.requestId]);
+    // Moved to QGenerator with request code and request id
+    let apiKey = this.requestCode;
+    if (this.requestId) {
+      apiKey += '|' + String(this.requestId);
+    }
+    this.router.navigate(['/request/QGenerator', apiKey]);
   }
 
   private getApplicationInformation(): void {
@@ -117,8 +122,8 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
       }
     );
   }
-  private handleByRequestId(requestId: string): void {
-    this.checkIfRequestIsFavorite(parseInt(requestId));
+  private handleByRequestId(requestId: number): void {
+    this.checkIfRequestIsFavorite(requestId);
     this.requestService.getRequestDetails(requestId).subscribe(
       (res) => {
         this.request = res;
