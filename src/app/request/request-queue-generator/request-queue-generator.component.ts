@@ -34,6 +34,7 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
   ) {
     this.activeRouter.params.subscribe((params) => {
       // if apiKey has a | then we split it and get the first element
+      // TODO: Replace this with sessionStorage handling
       if (params.apiKey.includes('|')) {
         this.requestCode = params.apiKey.split('|')[0];
         this.requestId = parseInt(params.apiKey.split('|')[1], 10);

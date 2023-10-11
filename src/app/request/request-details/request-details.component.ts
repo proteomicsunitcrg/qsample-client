@@ -95,6 +95,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
 
   public goToQGenerator(): void {
     // Moved to QGenerator with request code and request id
+    // TODO: To be removed below and handed in request-queue-generator.component.ts with sessionStorage
     let apiKey = this.requestCode;
     if (this.requestId) {
       apiKey += '|' + String(this.requestId);
