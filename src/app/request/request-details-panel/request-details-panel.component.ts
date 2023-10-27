@@ -19,21 +19,17 @@ export class RequestDetailsPanelComponent implements OnInit {
   ngOnInit(): void {
     setTimeout(() => {  // The timeout is necessary because the PLOT isnt instant
 
-      console.log( this.request );
-
       if (this.request) {
 
         if (this.request.localCode !== null) { // means that a local code is setted so we dont have to use the agendo response and we avoid the "parser"
         // this.request.created_by.name = this.request.localCreator;
 
         this.local = true;
-        
+
       } else {
         this.local = false;
       }
-      
 
-      console.log(this.local);
     } else {
       this.local = false;
     }

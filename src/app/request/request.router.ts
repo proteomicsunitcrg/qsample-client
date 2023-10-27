@@ -1,4 +1,4 @@
-import { NgModule, Component } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { RoleGuardService as RoleGuard } from '../services/role-guard.service';
@@ -8,23 +8,26 @@ import { RequestQueueGeneratorComponent } from './request-queue-generator/reques
 
 const routes: Routes = [
   {
-    path: '', component: RequestMainComponent, canActivate: [RoleGuard], children: [
+    path: '',
+    component: RequestMainComponent,
+    canActivate: [RoleGuard],
+    children: [
       {
-        path: ':apiKey', component: RequestDetailsComponent
+        path: ':apiKey',
+        component: RequestDetailsComponent,
       },
       {
-        path: 'QGenerator/:apiKey', component: RequestQueueGeneratorComponent
-      }
-    ]
-  }
+        // TODO: Reconsider here with request id
+        path: 'QGenerator/:apiKey',
+        component: RequestQueueGeneratorComponent,
+      },
+    ],
+  },
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes)
-  ],
+  imports: [CommonModule, RouterModule.forChild(routes)],
   declarations: [],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class RequestRouter { }
+export class RequestRouter {}

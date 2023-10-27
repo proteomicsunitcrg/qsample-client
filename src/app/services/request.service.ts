@@ -1,17 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Observable, BehaviorSubject, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { MiniRequest } from '../models/MiniRequest';
 import { Application } from '../models/Application';
 import { RequestLocal } from '../models/RequestLocal';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class RequestService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   apiPrefix: string = environment.apiPrefix;
   public currentRequestCode = new Subject<string>();
@@ -21,7 +20,7 @@ export class RequestService {
   params = new HttpParams();
 
   httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
 
   public changeRequestCode(value: string) {
@@ -31,8 +30,6 @@ export class RequestService {
   public changeCurrentApplication(value: Application) {
     this.currentApplication.next(value);
   }
-
-
 
   public getAllRequestsInternal(showAll: boolean, startDate: Date, endDate: Date): Observable<MiniRequest[]> {
     this.params = this.params.set('showAll', showAll ? 'true' : 'false');
@@ -45,14 +42,18 @@ export class RequestService {
     return this.http.get<MiniRequest[]>(`${this.apiPrefix}api/request/external`);
   }
 
-  public getRequestDetails(requestId: string): Observable<any> {
+  public getRequestDetails(requestId: number): Observable<any> {
     return this.http.get<any>(`${this.apiPrefix}api/request/${requestId}`);
+  }
+
+  public getRequestDetailsByRequestCode(requestCode: string): Observable<any> {
+    return this.http.get<any>(`${this.apiPrefix}api/request/getByRequestCode/${requestCode}`);
   }
 
   public getRequestPlotName(csId: number, paramId: string): Observable<string> {
     const requestOptions: object = {
       /* other options here */
-      responseType: 'text'
+      responseType: 'text',
     };
     return this.http.get<string>(`${this.apiPrefix}api/request/getPlotName/${csId}/${paramId}`, requestOptions);
   }

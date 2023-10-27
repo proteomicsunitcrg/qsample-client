@@ -6,61 +6,76 @@ import { MatTable } from '@angular/material/table';
 import { QGeneratorService } from '../../services/qGenerator.service';
 import { Instrument } from '../../models/Instrument';
 import { InjectionCondition } from '../../models/InjectionCondition';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { QGeneratorDialogComponent } from './dialog/QGeneratorDialog.component';
 import { saveAs } from 'file-saver';
-import { MatGridList } from '@angular/material/grid-list';
 import { Method } from '../../models/Method';
 import { InjectionConditionQCService } from '../../services/injectionConditionsQC.service';
 import { InjectionConditionQC } from '../../models/InjectionConditionQC';
 import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-
-
 @Component({
   selector: 'app-request-queue-generator',
   templateUrl: './request-queue-generator.component.html',
-  styleUrls: ['./request-queue-generator.component.css']
+  styleUrls: ['./request-queue-generator.component.css'],
 })
 export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
-
   isLocal = false;
 
-  constructor(private activeRouter: ActivatedRoute, private requestService: RequestService, private router: Router,
-    private qGeneratorService: QGeneratorService, public dialog: MatDialog,
+  constructor(
+    private activeRouter: ActivatedRoute,
+    private requestService: RequestService,
+    private router: Router,
+    private qGeneratorService: QGeneratorService,
+    public dialog: MatDialog,
     private injectionConditionQCService: InjectionConditionQCService,
-    private snackBar: MatSnackBar) {
-    this.activeRouter.params.subscribe(
-      params => {
-        this.requestId = params.apiKey;
-        this.requestService.getRequestDetails(params.apiKey).subscribe(
-          res => {
-            if (res.localCode) {
-              this.isLocal = true;
+    private snackBar: MatSnackBar
+  ) {
+    this.activeRouter.params.subscribe((params) => {
+      // if apiKey has a | then we split it and get the first element
+      // TODO: Replace this with sessionStorage handling
+      if (params.apiKey.includes('|')) {
+        this.requestCode = params.apiKey.split('|')[0];
+        this.requestId = parseInt(params.apiKey.split('|')[1], 10);
+      } else {
+        this.requestCode = params.apiKey;
+      }
+
+      // Here we get samples from Angendo using requestId
+      if (this.requestId) {
+        this.requestService.getRequestDetails(this.requestId).subscribe(
+          (res) => {
+            if (res) {
+              if (res.localCode) {
+                this.isLocal = true;
+              }
+              this.request = res;
+              // this.requestCode = this.getRequestCodeFromRequest(this.request);
+              this.getSamplesFromRequests(this.request);
+              this.taxonomyCode = this.getTaxonomyCodeFromName(this.getTaxonomyFromRequest());
+              this.databaseCode = this.getDatabaseFromRequest();
+              this.requestService.changeRequestCode(this.requestCode);
+              this.getAvailableInstruments();
             }
-            this.request = res;
-            this.requestCode = this.getRequestCodeFromRequest(this.request);
-            this.getSamplesFromRequests(this.request);
-            this.taxonomyCode = this.getTaxonomyCodeFromName(this.getTaxonomyFromRequest());
-            this.databaseCode = this.getDatabaseFromRequest();
-            this.requestService.changeRequestCode(this.requestCode);
-            this.getAvailableInstruments();
           },
-          err => {
+          (err) => {
             console.error(err);
           }
         );
+      } else {
+        alert("No sample retrieval service associated");
       }
-    );
+    });
   }
   @ViewChild('table') table: MatTable<Itemerino>;
   displayedColumns: string[] = ['sampleType', 'filename', 'method', 'position', 'volume', 'edit', 'delete', 'add'];
-  requestId: number;
 
   taxonomyCode: number;
 
   request: any;
+
+  requestId: number;
 
   requestCode: string;
 
@@ -112,12 +127,11 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.csvSubscription.unsubscribe();
-
   }
 
   private getAvailableInstruments(): void {
     this.qGeneratorService.getAvailableInstruments(this.request.classs).subscribe(
-      res => {
+      (res) => {
         this.availableInstruments = res;
         if (this.availableInstruments.length === 1) {
           this.selectedInstrument = this.availableInstruments[0];
@@ -125,7 +139,7 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
           this.getInstrumentInjectionConditionsQC();
         }
       },
-      err => {
+      (err) => {
         console.error(err);
       }
     );
@@ -133,12 +147,13 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
 
   private getMethodsByAppNameAndInstrumentId(): void {
     this.qGeneratorService.getMethodsByAppNameAndInstrumentId(this.request.classs, this.selectedInstrument).subscribe(
-      res => {
+      (res) => {
         this.injectionCondition = res;
         if (this.injectionCondition !== undefined) {
           this.applyInjectionConditions();
         }
-      }, err => {
+      },
+      (err) => {
         console.error(err);
       }
     );
@@ -160,168 +175,287 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
 
   private getRequestCodeFromRequest(request: any): string {
     if (this.isLocal) {
-      return request.localCode
+      return request.localCode;
     } else {
       return request.ref;
     }
   }
 
-private parseLocalSamples(samples: string): any {
-  if (samples == '') {
-    return;
+  private parseLocalSamples(samples: string): any {
+    if (samples == '') {
+      return;
+    }
+    return samples.split('---');
   }
-  return samples.split('---');
-}
 
-private generateClientCode(sampleName: string): string {
-  return sampleName.split('_')[1];
-}
-
-private getSamplesFromRequests(request: any): void {
-  let cac = [];
-  if (this.isLocal) {
-    cac = this.parseLocalSamples(request.samples);
-  } else {
-    this.samples = [];
-    cac = JSON.parse(request.fields[request.fields.length - 1].value);
+  private generateClientCode(sampleName: string): string {
+    return sampleName.split('_')[1];
   }
-  let sampleNumber = 1;
-  for (const val of cac) {
-    console.log(val);
+
+  private getSamplesFromRequests(request: any): void {
+    let cac = [];
     if (this.isLocal) {
-      const item = new Itemerino('Unknown', val, 'none', 'none', 0,
-      this.clientCode, '', this.request.id, this.taxonomyCode, 'Unknown', sampleNumber, false);
-      this.samples.push(item);
+      cac = this.parseLocalSamples(request.samples);
     } else {
-      // If empty value, we skip
-      if ( val[0].value === "" ) {
-        continue;
-      }
-      if ( ! this.clientCode ) {
-        this.clientCode = this.generateClientCode(val[0].value.replace(/\|/g, '_')); 
-      }
-      const item = new Itemerino('Unknown', val[0].value.replace(/\|/g, '_') + '_01', 'none', 'none', 0,
-      this.clientCode, '', this.request.id, this.taxonomyCode, 'Unknown', sampleNumber, false);
-      this.samples.push(item);
+      this.samples = [];
+      cac = JSON.parse(request.fields[request.fields.length - 1].value);
     }
-    sampleNumber = sampleNumber + 1;
-    // this.samples.push(val[0].value.replace(/\|/g, '_'));
-  }
-  this.dataSource = this.samples;
-  this.cloneGlobal = this.samples;
-}
-
-private getDatabaseFromRequest(): string {
-  if (this.isLocal) {
-    return 'none';
-  }
-  for (const item of this.request.fields) {
-    if (item.name === 'QSample-DB') {
-      return item.value;
+    let sampleNumber = 1;
+    for (const val of cac) {
+      console.log(val);
+      if (this.isLocal) {
+        const item = new Itemerino(
+          'Unknown',
+          val,
+          'none',
+          'none',
+          0,
+          this.clientCode,
+          '',
+          this.request.id,
+          this.taxonomyCode,
+          'Unknown',
+          sampleNumber,
+          false
+        );
+        this.samples.push(item);
+      } else {
+        // If empty value, we skip
+        if (val[0].value === '') {
+          continue;
+        }
+        if (!this.clientCode) {
+          this.clientCode = this.generateClientCode(val[0].value.replace(/\|/g, '_'));
+        }
+        const item = new Itemerino(
+          'Unknown',
+          val[0].value.replace(/\|/g, '_') + '_01',
+          'none',
+          'none',
+          0,
+          this.clientCode,
+          '',
+          this.request.id,
+          this.taxonomyCode,
+          'Unknown',
+          sampleNumber,
+          false
+        );
+        this.samples.push(item);
+      }
+      sampleNumber = sampleNumber + 1;
+      // this.samples.push(val[0].value.replace(/\|/g, '_'));
     }
+    this.dataSource = this.samples;
+    this.cloneGlobal = this.samples;
   }
-  return '';
-}
 
-private getTaxonomyFromRequest(): string {
-  if (this.isLocal) {
-    return this.request.localTaxonomy;
-  } else {
+  private getDatabaseFromRequest(): string {
+    if (this.isLocal) {
+      return 'none';
+    }
     for (const item of this.request.fields) {
-      if (item.name === 'Taxonomy') {
+      if (item.name === 'QSample-DB') {
         return item.value;
       }
     }
+    return '';
   }
-}
 
-private getTaxonomyCodeFromName(taxonomyName: string): number {
-  switch (taxonomyName) {
-    case 'Human':
-      return 9606;
-    default:
-      return undefined;
+  private getTaxonomyFromRequest(): string {
+    if (this.isLocal) {
+      return this.request.localTaxonomy;
+    } else {
+      for (const item of this.request.fields) {
+        if (item.name === 'Taxonomy') {
+          return item.value;
+        }
+      }
+    }
   }
-}
 
-public goBack(): void {
-  this.router.navigate(['/request', this.requestId]);
-}
+  private getTaxonomyCodeFromName(taxonomyName: string): number {
+    switch (taxonomyName) {
+      case 'Human':
+        return 9606;
+      default:
+        return undefined;
+    }
+  }
 
-public drop(event: CdkDragDrop<string[]>) {
-  moveItemInArray(this.samples, event.previousIndex, event.currentIndex);
-}
+  public goBack(): void {
+    this.router.navigate(['/request', this.requestCode]);
+  }
 
+  public drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.samples, event.previousIndex, event.currentIndex);
+  }
 
-public addQC(type: string, index: number, associated?: boolean) {
-  switch (type) {
-    case 'QC01':
-      switch (associated) {
-        case true:
-          const sampleNumber = this.getPositionFromSampleName(this.dataSource[index].filename);
-          const qcNumber = this.getQCsByTypeBetweenIndexs(index, this.getNextSampleIndexGivenActualIndex(index), type);
-          this.dataSource.splice(this.getNextSampleIndexGivenActualIndex(index), 0, new Itemerino('QC',
-            // tslint:disable-next-line:max-line-length
-            `${this.requestCode}_${this.clientCode}_${sampleNumber}_${this.year}${this.month}${this.day}_${type}_001_${('0' + qcNumber).slice(-2)}`,
-              // tslint:disable-next-line:max-line-length
-              this.getMethodAndVolumeQC(this.selectedInstrument, type).method, this.getVialPositionByQCType(type),
-              // tslint:disable-next-line:max-line-length
-              this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, this.clientCode, '', this.dataSource[0].agendoId, undefined, type, undefined, true));
+  public addQC(type: string, index: number, associated?: boolean) {
+    switch (type) {
+      case 'QC01':
+        switch (associated) {
+          case true:
+            const sampleNumber = this.getPositionFromSampleName(this.dataSource[index].filename);
+            const qcNumber = this.getQCsByTypeBetweenIndexs(
+              index,
+              this.getNextSampleIndexGivenActualIndex(index),
+              type
+            );
+            this.dataSource.splice(
+              this.getNextSampleIndexGivenActualIndex(index),
+              0,
+              new Itemerino(
+                'QC',
+                // tslint:disable-next-line:max-line-length
+                `${this.requestCode}_${this.clientCode}_${sampleNumber}_${this.year}${this.month}${
+                  this.day
+                }_${type}_001_${('0' + qcNumber).slice(-2)}`,
+                // tslint:disable-next-line:max-line-length
+                this.getMethodAndVolumeQC(this.selectedInstrument, type).method,
+                this.getVialPositionByQCType(type),
+                // tslint:disable-next-line:max-line-length
+                this.getMethodAndVolumeQC(this.selectedInstrument, type).volume,
+                this.clientCode,
+                '',
+                this.dataSource[0].agendoId,
+                undefined,
+                type,
+                undefined,
+                true
+              )
+            );
             break;
           case false:
-            this.dataSource.splice(this.getNextSampleIndexGivenActualIndex(index), 0, new Itemerino('QC',
-              // tslint:disable-next-line:max-line-length
-              `${this.year}${this.month}${this.day}_${type}_001_${('0' + this.qc1Counter).slice(-2)}`,
-              // tslint:disable-next-line:max-line-length
-              this.getMethodAndVolumeQC(this.selectedInstrument, type).method, this.getVialPositionByQCType(type),
-              // tslint:disable-next-line:max-line-length
-              this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, 'QC01', '', '', undefined, type, undefined, false));
+            this.dataSource.splice(
+              this.getNextSampleIndexGivenActualIndex(index),
+              0,
+              new Itemerino(
+                'QC',
+                // tslint:disable-next-line:max-line-length
+                `${this.year}${this.month}${this.day}_${type}_001_${('0' + this.qc1Counter).slice(-2)}`,
+                // tslint:disable-next-line:max-line-length
+                this.getMethodAndVolumeQC(this.selectedInstrument, type).method,
+                this.getVialPositionByQCType(type),
+                // tslint:disable-next-line:max-line-length
+                this.getMethodAndVolumeQC(this.selectedInstrument, type).volume,
+                'QC01',
+                '',
+                '',
+                undefined,
+                type,
+                undefined,
+                false
+              )
+            );
             this.qc1Counter = this.qc1Counter + 1;
             break;
         }
 
         break;
       case 'QC02':
-        this.dataSource.splice(this.getNextSampleIndexGivenActualIndex(index), 0, new Itemerino('QC',
-          // tslint:disable-next-line:max-line-length
-          `${this.year}${this.month}${this.day}_${type}_001_${('0' + this.qc2Counter).slice(-2)}_100ng`,
-          // tslint:disable-next-line:max-line-length
-          this.getMethodAndVolumeQC(this.selectedInstrument, type).method, this.getVialPositionByQCType(type),
-          // tslint:disable-next-line:max-line-length
-          this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, 'QC02', '', '', undefined, type, undefined, false));
+        this.dataSource.splice(
+          this.getNextSampleIndexGivenActualIndex(index),
+          0,
+          new Itemerino(
+            'QC',
+            // tslint:disable-next-line:max-line-length
+            `${this.year}${this.month}${this.day}_${type}_001_${('0' + this.qc2Counter).slice(-2)}_100ng`,
+            // tslint:disable-next-line:max-line-length
+            this.getMethodAndVolumeQC(this.selectedInstrument, type).method,
+            this.getVialPositionByQCType(type),
+            // tslint:disable-next-line:max-line-length
+            this.getMethodAndVolumeQC(this.selectedInstrument, type).volume,
+            'QC02',
+            '',
+            '',
+            undefined,
+            type,
+            undefined,
+            false
+          )
+        );
         this.qc2Counter = this.qc2Counter + 1;
         break;
       case 'QC03':
-        this.dataSource.splice(this.getNextSampleIndexGivenActualIndex(index), 0, new Itemerino('QC',
-          // tslint:disable-next-line:max-line-length
-          `${this.year}${this.month}${this.day}_${type}_001_${('0' + this.qc3Counter).slice(-2)}_25ng`,
-          // tslint:disable-next-line:max-line-length
-          this.getMethodAndVolumeQC(this.selectedInstrument, type).method, this.getVialPositionByQCType(type),
-          // tslint:disable-next-line:max-line-length
-          this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, 'QC03', '', '', undefined, type, undefined, false));
+        this.dataSource.splice(
+          this.getNextSampleIndexGivenActualIndex(index),
+          0,
+          new Itemerino(
+            'QC',
+            // tslint:disable-next-line:max-line-length
+            `${this.year}${this.month}${this.day}_${type}_001_${('0' + this.qc3Counter).slice(-2)}_25ng`,
+            // tslint:disable-next-line:max-line-length
+            this.getMethodAndVolumeQC(this.selectedInstrument, type).method,
+            this.getVialPositionByQCType(type),
+            // tslint:disable-next-line:max-line-length
+            this.getMethodAndVolumeQC(this.selectedInstrument, type).volume,
+            'QC03',
+            '',
+            '',
+            undefined,
+            type,
+            undefined,
+            false
+          )
+        );
         this.qc3Counter = this.qc3Counter + 1;
         break;
       case 'QBSA':
         switch (associated) {
           case true:
             const sampleNumber = this.getPositionFromSampleName(this.dataSource[index].filename);
-            const qcNumber = this.getQCsByTypeBetweenIndexs(index, this.getNextSampleIndexGivenActualIndex(index), type);
-            this.dataSource.splice(this.getNextSampleIndexGivenActualIndex(index), 0, new Itemerino('QC',
-              // tslint:disable-next-line:max-line-length
-              `${this.requestCode}_${this.clientCode}_${sampleNumber}_${this.year}${this.month}${this.day}_${type}_001_${('0' + qcNumber).slice(-2)}`,
-              // tslint:disable-next-line:max-line-length
-              this.getMethodAndVolumeQC(this.selectedInstrument, type).method, this.getVialPositionByQCType(type),
-              // tslint:disable-next-line:max-line-length
-              this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, this.clientCode, '', this.dataSource[0].agendoId, undefined, type, undefined, true));
+            const qcNumber = this.getQCsByTypeBetweenIndexs(
+              index,
+              this.getNextSampleIndexGivenActualIndex(index),
+              type
+            );
+            this.dataSource.splice(
+              this.getNextSampleIndexGivenActualIndex(index),
+              0,
+              new Itemerino(
+                'QC',
+                // tslint:disable-next-line:max-line-length
+                `${this.requestCode}_${this.clientCode}_${sampleNumber}_${this.year}${this.month}${
+                  this.day
+                }_${type}_001_${('0' + qcNumber).slice(-2)}`,
+                // tslint:disable-next-line:max-line-length
+                this.getMethodAndVolumeQC(this.selectedInstrument, type).method,
+                this.getVialPositionByQCType(type),
+                // tslint:disable-next-line:max-line-length
+                this.getMethodAndVolumeQC(this.selectedInstrument, type).volume,
+                this.clientCode,
+                '',
+                this.dataSource[0].agendoId,
+                undefined,
+                type,
+                undefined,
+                true
+              )
+            );
             break;
           case false:
-            this.dataSource.splice(this.getNextSampleIndexGivenActualIndex(index), 0, new Itemerino('QC',
-              // tslint:disable-next-line:max-line-length
-              `${this.year}${this.month}${this.day}_${type}_001_${('0' + this.qBSACounter).slice(-2)}`,
-              // tslint:disable-next-line:max-line-length
-              this.getMethodAndVolumeQC(this.selectedInstrument, type).method, this.getVialPositionByQCType(type),
-              // tslint:disable-next-line:max-line-length
-              this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, 'QBSA', '', '', undefined, type, undefined, false));
+            this.dataSource.splice(
+              this.getNextSampleIndexGivenActualIndex(index),
+              0,
+              new Itemerino(
+                'QC',
+                // tslint:disable-next-line:max-line-length
+                `${this.year}${this.month}${this.day}_${type}_001_${('0' + this.qBSACounter).slice(-2)}`,
+                // tslint:disable-next-line:max-line-length
+                this.getMethodAndVolumeQC(this.selectedInstrument, type).method,
+                this.getVialPositionByQCType(type),
+                // tslint:disable-next-line:max-line-length
+                this.getMethodAndVolumeQC(this.selectedInstrument, type).volume,
+                'QBSA',
+                '',
+                '',
+                undefined,
+                type,
+                undefined,
+                false
+              )
+            );
             this.qBSACounter = this.qBSACounter + 1;
 
             break;
@@ -329,13 +463,27 @@ public addQC(type: string, index: number, associated?: boolean) {
 
         break;
       case 'QHELA':
-        this.dataSource.splice(this.getNextSampleIndexGivenActualIndex(index), 0, new Itemerino('QC',
-          // tslint:disable-next-line:max-line-length
-          `${this.year}${this.month}${this.day}_${type}_001_${('0' + this.qHELACounter).slice(-2)}_1ug`,
-          // tslint:disable-next-line:max-line-length
-          this.getMethodAndVolumeQC(this.selectedInstrument, type).method, this.getVialPositionByQCType(type),
-          // tslint:disable-next-line:max-line-length
-          this.getMethodAndVolumeQC(this.selectedInstrument, type).volume, 'QHELA', '', '', undefined, type, undefined, false));
+        this.dataSource.splice(
+          this.getNextSampleIndexGivenActualIndex(index),
+          0,
+          new Itemerino(
+            'QC',
+            // tslint:disable-next-line:max-line-length
+            `${this.year}${this.month}${this.day}_${type}_001_${('0' + this.qHELACounter).slice(-2)}_1ug`,
+            // tslint:disable-next-line:max-line-length
+            this.getMethodAndVolumeQC(this.selectedInstrument, type).method,
+            this.getVialPositionByQCType(type),
+            // tslint:disable-next-line:max-line-length
+            this.getMethodAndVolumeQC(this.selectedInstrument, type).volume,
+            'QHELA',
+            '',
+            '',
+            undefined,
+            type,
+            undefined,
+            false
+          )
+        );
         this.qHELACounter = this.qHELACounter + 1;
         break;
 
@@ -369,7 +517,6 @@ public addQC(type: string, index: number, associated?: boolean) {
       i++;
     }
     return this.dataSource.length; // the last sample
-
   }
 
   dropTable(event: CdkDragDrop<Itemerino[]>) {
@@ -378,41 +525,68 @@ public addQC(type: string, index: number, associated?: boolean) {
     this.table.renderRows();
   }
 
-  public autoQC(): void { // TODO repair this
+  public autoQC(): void {
+    // TODO repair this
     this.dataSource = this.removeQCsFromList(this.dataSource);
     const clone: Itemerino[] = [];
     const clone2 = [];
-    this.dataSource.forEach(val => clone.push(Object.assign({}, val)));
-    this.dataSource.forEach(val => clone2.push(Object.assign({}, val)));
+    this.dataSource.forEach((val) => clone.push(Object.assign({}, val)));
+    this.dataSource.forEach((val) => clone2.push(Object.assign({}, val)));
     this.dataSource = [];
     for (const sample of clone) {
       this.dataSource.push(sample);
-      this.dataSource.push(new Itemerino('QC',
-        // tslint:disable-next-line:max-line-length
-        `${this.requestCode}_${this.clientCode}_${this.getPositionFromSampleName(sample.filename)}_${this.year}${this.month}${this.day}_QBSA_001_01`,
-        // tslint:disable-next-line:max-line-length
-        this.getMethodAndVolumeQC(this.selectedInstrument, 'QBSA').method, this.getVialPositionByQCType('QBSA'),
-        // tslint:disable-next-line:max-line-length
-        this.getMethodAndVolumeQC(this.selectedInstrument, 'QBSA').volume, this.clientCode, '', this.dataSource[0].agendoId, undefined, 'QBSA', undefined, true));
+      this.dataSource.push(
+        new Itemerino(
+          'QC',
+          // tslint:disable-next-line:max-line-length
+          `${this.requestCode}_${this.clientCode}_${this.getPositionFromSampleName(sample.filename)}_${this.year}${
+            this.month
+          }${this.day}_QBSA_001_01`,
+          // tslint:disable-next-line:max-line-length
+          this.getMethodAndVolumeQC(this.selectedInstrument, 'QBSA').method,
+          this.getVialPositionByQCType('QBSA'),
+          // tslint:disable-next-line:max-line-length
+          this.getMethodAndVolumeQC(this.selectedInstrument, 'QBSA').volume,
+          this.clientCode,
+          '',
+          this.dataSource[0].agendoId,
+          undefined,
+          'QBSA',
+          undefined,
+          true
+        )
+      );
 
-      this.dataSource.push(new Itemerino('QC',
-        // tslint:disable-next-line:max-line-length
-        `${this.requestCode}_${this.clientCode}_${this.getPositionFromSampleName(sample.filename)}_${this.year}${this.month}${this.day}_QC01_001_01`,
-        // tslint:disable-next-line:max-line-length
-        this.getMethodAndVolumeQC(this.selectedInstrument, 'QC01').method, this.getVialPositionByQCType('QC01'),
-        // tslint:disable-next-line:max-line-length
-        this.getMethodAndVolumeQC(this.selectedInstrument, 'QC01').volume, this.clientCode, '', this.dataSource[0].agendoId, undefined, 'QC01', undefined, true));
+      this.dataSource.push(
+        new Itemerino(
+          'QC',
+          // tslint:disable-next-line:max-line-length
+          `${this.requestCode}_${this.clientCode}_${this.getPositionFromSampleName(sample.filename)}_${this.year}${
+            this.month
+          }${this.day}_QC01_001_01`,
+          // tslint:disable-next-line:max-line-length
+          this.getMethodAndVolumeQC(this.selectedInstrument, 'QC01').method,
+          this.getVialPositionByQCType('QC01'),
+          // tslint:disable-next-line:max-line-length
+          this.getMethodAndVolumeQC(this.selectedInstrument, 'QC01').volume,
+          this.clientCode,
+          '',
+          this.dataSource[0].agendoId,
+          undefined,
+          'QC01',
+          undefined,
+          true
+        )
+      );
     }
     this.table.renderRows();
   }
 
   private removeQCsFromList(list: Itemerino[]): Itemerino[] {
-    return list.filter(ele => ele.sampleType === 'Unknown');
+    return list.filter((ele) => ele.sampleType === 'Unknown');
   }
 
-
   public qHelaCombo(position: number): void {
-
     this.addQC('QHELA', position, false);
     this.addQC('QBSA', position, false);
     this.addQC('QC01', position, false);
@@ -439,8 +613,8 @@ public addQC(type: string, index: number, associated?: boolean) {
   private openDialog(item: Itemerino): void {
     const dialogRef = this.dialog.open(QGeneratorDialogComponent, {
       data: {
-        item
-      }
+        item,
+      },
     });
   }
 
@@ -458,7 +632,6 @@ public addQC(type: string, index: number, associated?: boolean) {
         return '1-V3';
     }
   }
-
 
   private getMethodAndVolumeQC(instrument: Instrument, qcType: string): any {
     if (instrument === undefined) {
@@ -496,11 +669,11 @@ public addQC(type: string, index: number, associated?: boolean) {
 
   private getInstrumentInjectionConditionsQC(): void {
     this.injectionConditionQCService.findByInstrumentId(this.selectedInstrument).subscribe(
-      res => {
+      (res) => {
         this.injectionConditionsQC = res;
         this.applyInjectionConditions();
       },
-      err => {
+      (err) => {
         console.error(err);
       }
     );
@@ -511,13 +684,10 @@ public addQC(type: string, index: number, associated?: boolean) {
     return splited[splited.length - 2];
   }
 
-
   private subscribeToSelectedPeptidesList(): void {
-    this.csvSubscription = this.qGeneratorService.getCSV().subscribe(
-      csv => {
-        this.processCSV(csv);
-      }
-    );
+    this.csvSubscription = this.qGeneratorService.getCSV().subscribe((csv) => {
+      this.processCSV(csv);
+    });
   }
 
   private processCSV(csv: string[]): void {
@@ -528,7 +698,8 @@ public addQC(type: string, index: number, associated?: boolean) {
     }
     const result = [];
     if (this.checkCorrectCSV(csv)) {
-      for (const line of csv.slice(1)) { // we dont need the headers
+      for (const line of csv.slice(1)) {
+        // we dont need the headers
         const lineName = line.split(';')[0].replace(/(\r\n|\n|\r)/gm, '');
         // Open Office calc and MS Excel puts a new line char at the end of every line
         const lineSamplePosition = line.split(';')[1];
@@ -543,11 +714,11 @@ public addQC(type: string, index: number, associated?: boolean) {
       this.table.renderRows();
       this.openSnackBar('CSV positions applied', 'Close');
     }
-
   }
 
   private checkCorrectCSV(csv: string[]): boolean {
-    if (csv[csv.length - 1] === ''.trim()) { // We check if the last line is empty
+    if (csv[csv.length - 1] === ''.trim()) {
+      // We check if the last line is empty
       csv.pop();
     }
     const header = csv[0].split(';');
@@ -556,7 +727,8 @@ public addQC(type: string, index: number, associated?: boolean) {
       return false;
     }
     if (header.length === 2 && header[0].trim() === 'sample name' && header[1].trim() === 'position') {
-      for (const line of csv.slice(1)) { // slice to skip the header (the first line)
+      for (const line of csv.slice(1)) {
+        // slice to skip the header (the first line)
         const lineSplitted = line.split(';');
         if (lineSplitted.length !== 2) {
           this.openSnackBar('One or more lines with bad length', 'Close');
@@ -585,12 +757,13 @@ public addQC(type: string, index: number, associated?: boolean) {
   private hasDuplicates<T>(array: Array<T>): boolean {
     const asSet: Set<T> = new Set();
     for (const x of array) {
-      if (asSet.has(x)) { return true; }
+      if (asSet.has(x)) {
+        return true;
+      }
       asSet.add(x);
     }
     return false;
   }
-
 }
 
 export class Itemerino {
@@ -607,8 +780,20 @@ export class Itemerino {
   sampleNumber: number;
   associated: boolean;
 
-  constructor(sampleType: string, filename: string, method: string, position: string, volume: number, client: string, comment: string,
-    agendoId: string, taxonomyId: number, qcType: string, sampleNumber: number, associated: boolean) {
+  constructor(
+    sampleType: string,
+    filename: string,
+    method: string,
+    position: string,
+    volume: number,
+    client: string,
+    comment: string,
+    agendoId: string,
+    taxonomyId: number,
+    qcType: string,
+    sampleNumber: number,
+    associated: boolean
+  ) {
     this.sampleType = sampleType;
     this.filename = filename;
     this.method = method;
@@ -622,6 +807,4 @@ export class Itemerino {
     this.sampleNumber = sampleNumber;
     this.associated = associated;
   }
-
-
 }

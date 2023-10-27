@@ -128,7 +128,7 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
 
     let fileParts = filename.split('_');
     fileParts.shift();
-    fileParts.shift(); 
+    fileParts.shift();
     filename = fileParts.join('_');
     return filename;
   }
