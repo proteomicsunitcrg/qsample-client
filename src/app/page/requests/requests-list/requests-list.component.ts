@@ -249,13 +249,22 @@ export class RequestsListComponent implements OnInit {
     );
   }
 
-  // TODO: review sessionStorage here: https://codedamn.com/news/reactjs/usestate-and-useeffect-hooks
+    // TODO: review sessionStorage here: https://codedamn.com/news/reactjs/usestate-and-useeffect-hooks - Move to another module
   private storeRequestsInSessionStorage(requests: MiniRequest[]): void {
     let storeRequests = {};
     for (const request of requests) {
       storeRequests[request.lastField] = request;
     }
-    sessionStorage.setItem('requests', JSON.stringify(storeRequests));
+
+    let currentCount = 0;
+    if (sessionStorage.getItem('requests_count')) {
+      currentCount = parseInt(sessionStorage.getItem('requests_count'), 10);
+    }
+
+    if (currentCount < requests.length) {
+      sessionStorage.setItem('requests_count', requests.length.toString());
+      sessionStorage.setItem('requests', JSON.stringify(storeRequests));
+    }
   }
 
   // private getRequestCodeFromRequest(request: any): string {

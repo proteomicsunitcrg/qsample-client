@@ -51,7 +51,6 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
 
                 this.requestService.getAllRequestsInternal(true, previousDate, currentDate).subscribe(
                   (res) => {
-                    console.log(res);
                     this.storeRequestsInSessionStorage(res);
                     let requests = JSON.parse(sessionStorage.getItem('requests'));
                     if (requests.hasOwnProperty(params.apiKey)) {
@@ -301,6 +300,15 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
     for (const request of requests) {
       storeRequests[request.lastField] = request;
     }
-    sessionStorage.setItem('requests', JSON.stringify(storeRequests));
+
+    let currentCount = 0;
+    if (sessionStorage.getItem('requests_count')) {
+      currentCount = parseInt(sessionStorage.getItem('requests_count'), 10);
+    }
+
+    if (currentCount < requests.length) {
+      sessionStorage.setItem('requests_count', requests.length.toString());
+      sessionStorage.setItem('requests', JSON.stringify(storeRequests));
+    }
   }
 }
