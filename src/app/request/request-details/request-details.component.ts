@@ -8,6 +8,7 @@ import { Application } from '../../models/Application';
 import { FavoriteRequestService } from '../../services/favoriteRequest.service';
 import { FavoriteRequest } from 'src/app/models/FavoriteRequest';
 import { FavoriteRequestUser } from 'src/app/models/FavoriteRequestUser';
+import { MiniRequest } from 'src/app/models/MiniRequest';
 
 @Component({
   selector: 'app-request-details',
@@ -37,12 +38,33 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
               this.handleByRequestCode(params.apiKey);
             } else {
               // We retrieve the request id from the session storage
+              // TODO: Problem if sessionStorage has no request id
               let requests = JSON.parse(sessionStorage.getItem('requests'));
               if (requests.hasOwnProperty(params.apiKey)) {
                 this.requestId = requests[params.apiKey]['id'];
                 this.handleByRequestId(this.requestId);
               } else {
-                alert('Request not found in Agendo!'); // TODO: Handle in a dialog.
+                // Get currentDate
+                let currentDate = new Date();
+                let allYears = 10; // TODO: To handle in a different way
+                let previousDate = this.subtractYears(currentDate, allYears);
+
+                this.requestService.getAllRequestsInternal(true, previousDate, currentDate).subscribe(
+                  (res) => {
+                    console.log(res);
+                    this.storeRequestsInSessionStorage(res);
+                    let requests = JSON.parse(sessionStorage.getItem('requests'));
+                    if (requests.hasOwnProperty(params.apiKey)) {
+                      this.requestId = requests[params.apiKey]['id'];
+                      this.handleByRequestId(this.requestId);
+                    } else {
+                      alert('Request not found in Agendo!'); // TODO: Handle in a dialog.
+                    }
+                  },
+                  (err) => {
+                    console.error(err);
+                  }
+                );
                 // Try this: https://stackoverflow.com/questions/69197245/reacjs-popup-how-do-i-trigger-a-popup-without-it-being-click-hover
               }
             }
@@ -263,5 +285,22 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
         console.error(err);
       }
     );
+  }
+
+  private subtractYears(date: Date, years: number): Date {
+    const dateCopy = new Date(date);
+
+    dateCopy.setFullYear(dateCopy.getFullYear() - years);
+
+    return dateCopy;
+  }
+
+  // TODO: review sessionStorage here: https://codedamn.com/news/reactjs/usestate-and-useeffect-hooks - Move to another module
+  private storeRequestsInSessionStorage(requests: MiniRequest[]): void {
+    let storeRequests = {};
+    for (const request of requests) {
+      storeRequests[request.lastField] = request;
+    }
+    sessionStorage.setItem('requests', JSON.stringify(storeRequests));
   }
 }
