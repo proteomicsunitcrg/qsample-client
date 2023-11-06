@@ -8,7 +8,7 @@ import { Application } from '../../models/Application';
 import { FavoriteRequestService } from '../../services/favoriteRequest.service';
 import { FavoriteRequest } from 'src/app/models/FavoriteRequest';
 import { FavoriteRequestUser } from 'src/app/models/FavoriteRequestUser';
-import { MiniRequest } from 'src/app/models/MiniRequest';
+import { SessionStorage } from '../../services/sessionStorage.service';
 
 @Component({
   selector: 'app-request-details',
@@ -22,7 +22,8 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
     private activeRouter: ActivatedRoute,
     private requestService: RequestService,
     private applicationService: ApplicationService,
-    private favRequestService: FavoriteRequestService
+    private favRequestService: FavoriteRequestService,
+    private sessionStorageService: SessionStorage
   ) {
     this.subscription = this.authService.getIsInternal().subscribe((res) => (this.isInternal = res));
     this.activeRouter.params.subscribe((params) => {
@@ -38,9 +39,8 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
               this.handleByRequestCode(params.apiKey);
             } else {
               // We retrieve the request id from the session storage
-              // TODO: Problem if sessionStorage has no request id
-              let requests = JSON.parse(sessionStorage.getItem('requests'));
-              if (requests.hasOwnProperty(params.apiKey)) {
+              let requests = this.sessionStorageService.getRequestsJson();
+              if (requests && requests.hasOwnProperty(params.apiKey)) {
                 this.requestId = requests[params.apiKey]['id'];
                 this.handleByRequestId(this.requestId);
               } else {
@@ -51,8 +51,8 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
 
                 this.requestService.getAllRequestsInternal(true, previousDate, currentDate).subscribe(
                   (res) => {
-                    this.storeRequestsInSessionStorage(res);
-                    let requests = JSON.parse(sessionStorage.getItem('requests'));
+                    this.sessionStorageService.storeRequests(res);
+                    let requests = this.sessionStorageService.getRequestsJson();
                     if (requests.hasOwnProperty(params.apiKey)) {
                       this.requestId = requests[params.apiKey]['id'];
                       this.handleByRequestId(this.requestId);
@@ -292,23 +292,5 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
     dateCopy.setFullYear(dateCopy.getFullYear() - years);
 
     return dateCopy;
-  }
-
-  // TODO: review sessionStorage here: https://codedamn.com/news/reactjs/usestate-and-useeffect-hooks - Move to another module
-  private storeRequestsInSessionStorage(requests: MiniRequest[]): void {
-    let storeRequests = {};
-    for (const request of requests) {
-      storeRequests[request.lastField] = request;
-    }
-
-    let currentCount = 0;
-    if (sessionStorage.getItem('requests_count')) {
-      currentCount = parseInt(sessionStorage.getItem('requests_count'), 10);
-    }
-
-    if (currentCount < requests.length) {
-      sessionStorage.setItem('requests_count', requests.length.toString());
-      sessionStorage.setItem('requests', JSON.stringify(storeRequests));
-    }
   }
 }

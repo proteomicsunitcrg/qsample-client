@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 import { MiniRequest } from '../../../models/MiniRequest';
 import { MatDialog } from '@angular/material/dialog';
 import { RequestListYearSelectorDialog } from './dialog/request-list-year-selector-dialog';
+import { SessionStorage } from '../../../services/sessionStorage.service';
 
 @Component({
   selector: 'app-requests-list',
@@ -62,6 +63,7 @@ export class RequestsListComponent implements OnInit {
 
   constructor(
     private requestService: RequestService,
+    private sessionStorageService: SessionStorage,
     private router: Router,
     private authService: AuthService,
     private dialog: MatDialog
@@ -237,7 +239,7 @@ export class RequestsListComponent implements OnInit {
         //   }
         // }
 
-        this.storeRequestsInSessionStorage(this.allRequests);
+        this.sessionStorageService.storeRequests(this.allRequests);
         this.dataSource = new MatTableDataSource(res);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -248,25 +250,6 @@ export class RequestsListComponent implements OnInit {
       }
     );
   }
-
-    // TODO: review sessionStorage here: https://codedamn.com/news/reactjs/usestate-and-useeffect-hooks - Move to another module
-  private storeRequestsInSessionStorage(requests: MiniRequest[]): void {
-    let storeRequests = {};
-    for (const request of requests) {
-      storeRequests[request.lastField] = request;
-    }
-
-    let currentCount = 0;
-    if (sessionStorage.getItem('requests_count')) {
-      currentCount = parseInt(sessionStorage.getItem('requests_count'), 10);
-    }
-
-    if (currentCount < requests.length) {
-      sessionStorage.setItem('requests_count', requests.length.toString());
-      sessionStorage.setItem('requests', JSON.stringify(storeRequests));
-    }
-  }
-
   // private getRequestCodeFromRequest(request: any): string {
   //   try {
   //     const cac = JSON.parse(request);
