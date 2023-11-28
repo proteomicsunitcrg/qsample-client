@@ -16,7 +16,6 @@ import { SessionStorage } from '../../services/sessionStorage.service';
   styleUrls: ['./request-details.component.css'],
 })
 export class RequestDetailsComponent implements OnInit, OnDestroy {
-
   isAgendoDown = false;
   isLoading = true;
 
@@ -67,9 +66,10 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
                     }
                   },
                   (err) => {
+                    // If not found in Agendo we try to retrieve it what we can from local using requestCode
+                    this.handleByRequestCode(params.apiKey);
                     this.isLoading = false;
                     this.isAgendoDown = true;
-                    // TODO: Here we need to move through even without Agendo
                     console.error(err);
                   }
                 );
@@ -197,15 +197,17 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
         console.log(this);
         this.request = res;
         this.requestCode = requestCode;
-        this.checkIfRequestIsFavorite(this.request.id);
+        this.checkIfRequestIsFavoriteByRequestCode(this.requestCode);
 
         this.local = true;
-        this.request.created_by = {};
-        this.request.created_by.name = this.request.creator;
-        this.request.created_by.email = this.request.creator;
-        this.request.date_created = this.request.creation_date;
+        if (this.request) {
+          this.request.created_by = {};
+          this.request.created_by.name = this.request.creator;
+          this.request.created_by.email = this.request.creator;
+          this.request.date_created = this.request.creation_date;
+          this.getApplicationInformation();
+        }
         this.requestService.changeRequestCode(this.requestCode);
-        this.getApplicationInformation();
       },
       (err) => {
         console.error(err);
@@ -225,12 +227,12 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
     );
   }
 
-  private checkIfRequestIsFavorite(requestId?: number): void {
-    if (!requestId) {
-      requestId = this.requestId;
+  private checkIfRequestIsFavoriteByRequestCode(requestCode?: string): void {
+    if (!requestCode) {
+      requestCode = this.requestCode;
     }
     // console.log("REQUEST %s", requestId);
-    this.favRequestService.getFavRequestByAgendoId(requestId).subscribe(
+    this.favRequestService.getFavRequestByRequestCode(requestCode).subscribe(
       (res) => {
         this.favoriteRequestRelation = res;
         // console.log(this.favoriteRequestRelation);
@@ -245,6 +247,48 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
         console.error(err);
       }
     );
+  }
+
+  private checkIfRequestIsFavorite(requestId?: number): void {
+    if (!requestId) {
+      requestId = this.requestId;
+    }
+    if (requestId) {
+      // console.log("REQUEST %s", requestId);
+      this.favRequestService.getFavRequestByAgendoId(requestId).subscribe(
+        (res) => {
+          this.favoriteRequestRelation = res;
+          // console.log(this.favoriteRequestRelation);
+          if (this.favoriteRequestRelation !== null) {
+            this.isFav = true;
+            this.isNotify = this.favoriteRequestRelation.notify;
+          } else {
+            this.isFav = false;
+          }
+        },
+        (err) => {
+          console.error(err);
+        }
+      );
+    } else {
+      if (this.requestCode) {
+        this.favRequestService.getFavRequestByRequestCode(this.requestCode).subscribe(
+          (res) => {
+            this.favoriteRequestRelation = res;
+            // console.log(this.favoriteRequestRelation);
+            if (this.favoriteRequestRelation !== null) {
+              this.isFav = true;
+              this.isNotify = this.favoriteRequestRelation.notify;
+            } else {
+              this.isFav = false;
+            }
+          },
+          (err) => {
+            console.error(err);
+          }
+        );
+      }
+    }
   }
 
   private removeFromFavorites(): void {

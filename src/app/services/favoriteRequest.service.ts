@@ -29,6 +29,14 @@ export class FavoriteRequestService {
     return this.http.post<any>(`${this.apiPrefix}/removeFav`, params, {headers: this.headers});
   }
 
+  public checkIfRequestIsFavByRequestCode(requestCode: string): Observable<any> {
+    return this.http.get<any>(`${this.apiPrefix}/checkByRequestCode/${requestCode}`);
+  }
+
+  public getFavRequestByRequestCode(requestCode: string): Observable<any> {
+    return this.http.get<any>(`${this.apiPrefix}/getByRequestCode/${requestCode}`);
+  }
+
   public checkIfRequestIsFav(agendoId: number): Observable<any> {
     return this.http.get<any>(`${this.apiPrefix}/check/${agendoId}`);
   }
