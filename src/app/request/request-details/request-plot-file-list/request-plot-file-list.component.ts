@@ -11,12 +11,13 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-request-plot-file-list',
   templateUrl: './request-plot-file-list.component.html',
-  styleUrls: ['./request-plot-file-list.component.css']
+  styleUrls: ['./request-plot-file-list.component.css'],
 })
 export class RequestPlotFileListComponent implements OnInit, OnDestroy {
-
-  constructor(private fileService: FileService, private plotService: PlotService) {
-  }
+  constructor(
+    private fileService: FileService,
+    private plotService: PlotService
+  ) {}
 
   files: RequestFile[] = [];
   @Input() requestCode: string;
@@ -41,30 +42,32 @@ export class RequestPlotFileListComponent implements OnInit, OnDestroy {
     // console.log( this.requestCode );
     // console.log( this.order );
     this.fileService.getFilesByRequestCode(this.requestCode, this.order).subscribe(
-      res => {
+      (res) => {
         this.selectedSamples = [];
         this.files = res;
         // console.log( this.files );
         if (this.files !== null) {
-          this.files.forEach(val => this.selectedSamples.push(Object.assign({}, val))); // we need to clone
+          this.files.forEach((val) => this.selectedSamples.push(Object.assign({}, val))); // we need to clone
           this.dataSource = new MatTableDataSource(this.files);
           this.dataSource.paginator = this.paginator;
           this.plotService.sendselectedSamples(this.selectedSamples);
         }
       },
-      err => {
+      (err) => {
         console.error(err);
       }
     );
   }
-
 
   public listChange(file: File, $event: MatCheckboxChange): void {
     if ($event.checked) {
       this.selectedSamples.push(file);
       this.selectedSamples.sort((a, b) => a.filename.localeCompare(b.filename));
     } else {
-      this.selectedSamples.splice(this.selectedSamples.findIndex(i => i.id === file.id), 1);
+      this.selectedSamples.splice(
+        this.selectedSamples.findIndex((i) => i.id === file.id),
+        1
+      );
     }
     this.plotService.sendselectedSamples(this.selectedSamples);
   }
@@ -77,8 +80,9 @@ export class RequestPlotFileListComponent implements OnInit, OnDestroy {
     }
   }
 
-  public checkIfElementSelected(element: RequestFile): boolean { //TODO. This function is called everytime the DOM updates so is inneficient
-    if (this.selectedSamples.find(e => e.id === element.id)) {
+  public checkIfElementSelected(element: RequestFile): boolean {
+    //TODO. This function is called everytime the DOM updates so is inneficient
+    if (this.selectedSamples.find((e) => e.id === element.id)) {
       return true;
     } else {
       return false;
@@ -86,12 +90,10 @@ export class RequestPlotFileListComponent implements OnInit, OnDestroy {
   }
 
   private subscribeToOrder(): void {
-    this.orderSubscription$ = this.plotService.selectedOrder.subscribe(
-      order => {
-        this.order = order;
-        this.getFilesByRequestCode();
-      }
-    );
+    this.orderSubscription$ = this.plotService.selectedOrder.subscribe((order) => {
+      this.order = order;
+      this.getFilesByRequestCode();
+    });
   }
 
   public changeOrder(newOrder: string): void {

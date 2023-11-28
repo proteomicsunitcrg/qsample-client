@@ -194,7 +194,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
     // console.log( this.requestId );
     this.requestService.getRequestDetailsByRequestCode(requestCode).subscribe(
       (res) => {
-        console.log(this);
+        // console.log(this);
         this.request = res;
         this.requestCode = requestCode;
         this.checkIfRequestIsFavoriteByRequestCode(this.requestCode);
