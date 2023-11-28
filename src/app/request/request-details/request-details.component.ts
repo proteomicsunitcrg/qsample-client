@@ -16,6 +16,10 @@ import { SessionStorage } from '../../services/sessionStorage.service';
   styleUrls: ['./request-details.component.css'],
 })
 export class RequestDetailsComponent implements OnInit, OnDestroy {
+
+  isAgendoDown = false;
+  isLoading = true;
+
   constructor(
     private router: Router,
     private authService: AuthService,
@@ -56,11 +60,16 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
                     if (requests.hasOwnProperty(params.apiKey)) {
                       this.requestId = requests[params.apiKey]['id'];
                       this.handleByRequestId(this.requestId);
+                      this.isLoading = false;
                     } else {
                       alert('Request not found in Agendo!'); // TODO: Handle in a dialog.
+                      this.isLoading = false;
                     }
                   },
                   (err) => {
+                    this.isLoading = false;
+                    this.isAgendoDown = true;
+                    // TODO: Here we need to move through even without Agendo
                     console.error(err);
                   }
                 );

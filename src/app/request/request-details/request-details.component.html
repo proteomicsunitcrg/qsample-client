@@ -1,4 +1,7 @@
 <div fxLayout="column">
+
+  <div id="agendoDown" *ngIf="isAgendoDown">Agendo is Down</div>
+
   <section class="mat-typography title-group">
     <h1 style="margin: 20px;">
       <div *ngIf="request != undefined">
@@ -56,3 +59,4 @@
     <!-- <app-request-wetlab-main style="width: 100%; margin-top: 3%;"></app-request-wetlab-main> -->
   </div>
 </div>
+<mat-progress-spinner [mode]="'indeterminate'" *ngIf="isLoading" class="center"></mat-progress-spinner>

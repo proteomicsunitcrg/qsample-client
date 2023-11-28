@@ -2,3 +2,11 @@
     cursor: pointer;
     vertical-align: center;
 }
+
+#agendoDown {
+  margin: 1em;
+  color: red;
+  font-weight: bold;
+  font-size: 150%;
+  text-align: center;
+}
