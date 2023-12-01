@@ -33,6 +33,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
       if (params.apiKey.match(/^[0-9]+$/)) {
         // Handle by requestId
         this.handleByRequestId(params.apiKey);
+        this.isLoading = false;
       } else {
         this.requestService.getIsLocalModeEnabled().subscribe(
           (res) => {
@@ -40,12 +41,14 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
             if (this.isLocalMode) {
               // Handle by requestCode
               this.handleByRequestCode(params.apiKey);
+              this.isLoading = false;
             } else {
               // We retrieve the request id from the session storage
               let requests = this.sessionStorageService.getRequestsJson();
               if (requests && requests.hasOwnProperty(params.apiKey)) {
                 this.requestId = requests[params.apiKey]['id'];
                 this.handleByRequestId(this.requestId);
+                this.isLoading = false;
               } else {
                 // Get currentDate
                 let currentDate = new Date();
@@ -58,8 +61,8 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
                     let requests = this.sessionStorageService.getRequestsJson();
                     if (requests.hasOwnProperty(params.apiKey)) {
                       this.requestId = requests[params.apiKey]['id'];
-                      this.handleByRequestId(this.requestId);
                       this.isLoading = false;
+                      this.handleByRequestId(this.requestId);
                     } else {
                       alert('Request not found in Agendo!'); // TODO: Handle in a dialog.
                       this.isLoading = false;
@@ -78,6 +81,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
             }
           },
           (err) => {
+            this.isLoading = false;
             console.error(err);
           }
         );
@@ -134,10 +138,13 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
   }
 
   private getApplicationInformation(): void {
-    let classs = this.request['classs'];
-    if (!classs) {
-      classs = this.request.application.name;
-      this.request['classs'] = classs;
+    let classs = 'User tailored request (Proteomics)';
+    if (this.request) {
+      classs = this.request['classs'];
+      if (!classs) {
+        classs = this.request.application.name;
+        this.request['classs'] = classs;
+      }
     }
     this.applicationService.getByName(classs).subscribe(
       (res) => {
@@ -153,6 +160,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
       }
     );
   }
+
   private handleByRequestId(requestId: number): void {
     this.checkIfRequestIsFavorite(requestId);
     this.requestService.getRequestDetails(requestId).subscribe(

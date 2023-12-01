@@ -118,7 +118,9 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
       },
       err => {
         this.noDataFound = true;
-        this.msgError = err.error.message;
+        if (err && err.error && err.error.message) {
+          this.msgError = err.error.message;
+        }
       }
     );
   }
