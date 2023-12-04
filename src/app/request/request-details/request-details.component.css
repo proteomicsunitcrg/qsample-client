@@ -3,6 +3,10 @@
     vertical-align: center;
 }
 
+.mat-progress-spinner {
+  margin: 2em auto;
+}
+
 #agendoDown {
   margin: 1em;
   color: red;
