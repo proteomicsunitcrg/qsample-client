@@ -47,7 +47,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
               let requests = this.sessionStorageService.getRequestsJson();
               if (requests && requests.hasOwnProperty(params.apiKey)) {
                 this.requestId = requests[params.apiKey]['id'];
-                this.handleByRequestId(this.requestId);
+                this.handleByRequestId(this.requestId, params.apiKey);
                 this.isLoading = false;
               } else {
                 // Get currentDate
@@ -161,7 +161,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
     );
   }
 
-  private handleByRequestId(requestId: number): void {
+  private handleByRequestId(requestId: number, requestCode?: string): void {
     this.checkIfRequestIsFavorite(requestId);
     this.requestService.getRequestDetails(requestId).subscribe(
       (res) => {
@@ -192,7 +192,12 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
         }
       },
       (err) => {
-        console.error(err);
+        if (requestCode) {
+          this.isAgendoDown = true;
+          this.handleByRequestCode(requestCode);
+        } else {
+          console.error(err);
+        }
       }
     );
   }
