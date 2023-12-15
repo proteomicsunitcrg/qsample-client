@@ -213,9 +213,9 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
           this.request.created_by.name = this.request.creator;
           this.request.created_by.email = this.request.creator;
           this.request.date_created = this.request.creation_date;
-          this.getApplicationInformation();
         }
         this.requestService.changeRequestCode(this.requestCode);
+        this.getApplicationInformation();
       },
       (err) => {
         console.error(err);
