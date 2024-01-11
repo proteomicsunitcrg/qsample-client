@@ -13,6 +13,7 @@ export class UserService {
 
   private apiPrefix = environment.apiPrefix;
   private userUrl = this.apiPrefix + 'api/user';
+  private currentUserUrl = this.apiPrefix + 'api/user/current';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -20,6 +21,10 @@ export class UserService {
 
   public getAllUsers(): Observable<User[]> {
     return this.httpClient.get<User[]>(`${this.userUrl}`);
+  }
+
+  public getCurrentUser(): Observable<User[]> {
+    return this.httpClient.get<User[]>(`${this.currentUserUrl}`);
   }
 
   public modifyRole(user: User, to: string): Observable<User> {

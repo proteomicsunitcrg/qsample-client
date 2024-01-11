@@ -1,19 +1,21 @@
-import { Component, OnInit } from "@angular/core";
-import { Router, ActivatedRoute } from "@angular/router";
-import { RequestService } from "src/app/services/request.service";
-import { RequestStatus } from "../../../../app/models/RequestStatus";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { ApplicationService } from "src/app/services/application.service";
-import { Application } from "src/app/models/Application";
-import { RequestLocal } from "src/app/models/RequestLocal";
+import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { RequestService } from 'src/app/services/request.service';
+import { RequestStatus } from '../../../../app/models/RequestStatus';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ApplicationService } from 'src/app/services/application.service';
+import { UserService } from 'src/app/services/user.service';
+import { Application } from 'src/app/models/Application';
+import { RequestLocal } from 'src/app/models/RequestLocal';
+import { User } from 'src/app/models/User';
 // import { sample } from 'rxjs/operators';
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { FileService } from "src/app/services/file.service";
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { FileService } from 'src/app/services/file.service';
 
 @Component({
-  selector: "app-settings-local-request-creator",
-  templateUrl: "./settings-local-request-creator.component.html",
-  styleUrls: ["./settings-local-request-creator.component.css"],
+  selector: 'app-settings-local-request-creator',
+  templateUrl: './settings-local-request-creator.component.html',
+  styleUrls: ['./settings-local-request-creator.component.css'],
 })
 export class SettingsLocalRequestCreatorComponent implements OnInit {
   constructor(
@@ -21,8 +23,9 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
     private router: Router,
     private localRequestService: RequestService,
     private applicationService: ApplicationService,
+    private userService: UserService,
     private snackBar: MatSnackBar,
-    private fileService: FileService,
+    private fileService: FileService
   ) {}
 
   isEdit: boolean;
@@ -40,51 +43,81 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
   }
 
   leForm = new FormGroup({
-    code: new FormControl("", Validators.required),
-    group: new FormControl("", Validators.required),
-    creator: new FormControl("", Validators.required),
-    taxonomy: new FormControl("", Validators.required),
-    status: new FormControl("", Validators.required),
-    application: new FormControl("", Validators.required),
-    sample: new FormControl(""),
-    date: new FormControl("", Validators.required),
+    code: new FormControl('', Validators.required),
+    group: new FormControl('', Validators.required),
+    creator: new FormControl('', Validators.required),
+    taxonomy: new FormControl('', Validators.required),
+    status: new FormControl('', Validators.required),
+    application: new FormControl('', Validators.required),
+    sample: new FormControl(''),
+    date: new FormControl('', Validators.required),
   });
 
+  currentUser: Object = {};
   requestFromServer = new RequestLocal();
 
   ngOnInit(): void {
     this.getAllAplications();
     this.activeRouter.params.subscribe(
       (params) => {
-        if (params.id !== "new") {
+        if (params.id !== 'new') {
           console.log(params);
           this.getLocalRequest(params.id); // TODO: Change to requestCode here
           this.isEdit = true;
         } else {
           this.isEdit = false;
+          this.addDefaultDateTimeValue();
+          this.getCurrentUsername();
         }
       },
       (err) => {
         console.error(err);
-      },
+      }
     );
   }
 
   private getLocalRequest(requestCode: string) {
-    this.localRequestService
-      .getRequestDetailsByRequestCode(requestCode)
-      .subscribe(
-        (res) => {
-          this.requestFromServer = res;
-          this.checkDeleteable();
-          this.mountForm(res);
-        },
-        (err) => {
-          this.openSnackBar("Error getting the request", "Close");
-          this.router.navigate(["/settings/local/request"]);
-          console.error(err);
-        },
-      );
+    this.localRequestService.getRequestDetailsByRequestCode(requestCode).subscribe(
+      (res) => {
+        this.requestFromServer = res;
+        this.checkDeleteable();
+        this.mountForm(res);
+      },
+      (err) => {
+        this.openSnackBar('Error getting the request', 'Close');
+        this.router.navigate(['/settings/local/request']);
+        console.error(err);
+      }
+    );
+  }
+
+  private getCurrentUsername(): void {
+    this.userService.getCurrentUser().subscribe(
+      (res) => {
+        this.currentUser = res;
+        this.leForm.controls.creator.setValue(this.currentUser['username']); // This might need to be revisited
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
+  }
+
+  private addDefaultDateTimeValue(): void {
+    // From: https://dev.to/kevinluo201/set-value-of-datetime-local-input-field-3435
+    // getFullYear, getMonth, getDate, getHours, getMinutes all return values of local time.
+    const convertToDateTimeLocalString = (date) => {
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+
+      return `${year}-${month}-${day}T${hours}:${minutes}`;
+    };
+    const currentTime = new Date();
+
+    this.leForm.controls.date.setValue(convertToDateTimeLocalString(currentTime));
   }
 
   private mountForm(request: any) {
@@ -104,10 +137,10 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
   }
 
   private parseSamples(samples: string): void {
-    if (samples == "") {
+    if (samples == '') {
       return;
     }
-    this.allSamples = samples.split("---");
+    this.allSamples = samples.split('---');
   }
 
   private getAllAplications(): void {
@@ -116,15 +149,15 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
         this.allApplications = res;
       },
       (err) => {
-        this.openSnackBar("Error getting the applications", "Close");
+        this.openSnackBar('Error getting the applications', 'Close');
         console.error(err);
-      },
+      }
     );
   }
 
   public addSample(): void {
     this.allSamples.push(this.leForm.controls.sample.value);
-    this.leForm.controls.sample.setValue("");
+    this.leForm.controls.sample.setValue('');
   }
 
   public removeSample(sample: string): void {
@@ -133,7 +166,7 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
   }
 
   public submit(): void {
-    let allSamples = "";
+    let allSamples = '';
     for (const sample of this.allSamples) {
       allSamples += `${sample}---`;
     }
@@ -144,16 +177,16 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
     localRequestToSend.application = this.leForm.controls.application.value;
     // Several hacks below to avoid problems with date format
     let formDate = this.leForm.controls.date.value.toString();
-    if (!formDate.includes(":")) {
-      formDate = formDate + " 00:00"; // Hack for adding HH:mm:ss
+    if (!formDate.includes(':')) {
+      formDate = formDate + ' 00:00'; // Hack for adding HH:mm:ss
     }
-    if (formDate.includes("T")) {
-      formDate = formDate.replace("T", " ");
+    if (formDate.includes('T')) {
+      formDate = formDate.replace('T', ' ');
     }
-    if (formDate.includes("Z")) {
-      formDate = formDate.replace("Z", "");
+    if (formDate.includes('Z')) {
+      formDate = formDate.replace('Z', '');
     }
-    formDate = formDate + ":00"; // Adding miliseconds
+    formDate = formDate + ':00'; // Adding miliseconds
 
     localRequestToSend.creation_date = formDate;
     localRequestToSend.creator = this.leForm.controls.creator.value;
@@ -163,12 +196,12 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
     localRequestToSend.samples = allSamples;
     this.localRequestService.saveLocalRequest(localRequestToSend).subscribe(
       (res) => {
-        this.openSnackBar("Request saved", "Close");
+        this.openSnackBar('Request saved', 'Close');
       },
       (err) => {
-        this.openSnackBar("Error saving the request", "Close");
+        this.openSnackBar('Error saving the request', 'Close');
         console.error(err);
-      },
+      }
     );
   }
 
@@ -179,38 +212,34 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
   }
 
   public delete(): void {
-    this.localRequestService
-      .deleteLocalRequest(this.requestFromServer)
-      .subscribe(
-        (res) => {
-          this.openSnackBar("Request deleted", "Close");
-          this.router.navigate(["/settings/local/request"]);
-        },
-        (err) => {
-          this.openSnackBar("Error deleting the request", "Close");
-          console.error(err);
-        },
-      );
+    this.localRequestService.deleteLocalRequest(this.requestFromServer).subscribe(
+      (res) => {
+        this.openSnackBar('Request deleted', 'Close');
+        this.router.navigate(['/settings/local/request']);
+      },
+      (err) => {
+        this.openSnackBar('Error deleting the request', 'Close');
+        console.error(err);
+      }
+    );
   }
 
   public goBack(): void {
-    this.router.navigate(["/settings/local/request"]);
+    this.router.navigate(['/settings/local/request']);
   }
 
   private checkDeleteable(): void {
-    this.fileService
-      .getFilesByRequestCode(this.requestFromServer.requestCode, "asc")
-      .subscribe(
-        (res) => {
-          if (res == null) {
-            this.deleteable = true;
-          } else {
-            this.deleteable = false;
-          }
-        },
-        (err) => {
-          console.error(err);
-        },
-      );
+    this.fileService.getFilesByRequestCode(this.requestFromServer.requestCode, 'asc').subscribe(
+      (res) => {
+        if (res == null) {
+          this.deleteable = true;
+        } else {
+          this.deleteable = false;
+        }
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
   }
 }
