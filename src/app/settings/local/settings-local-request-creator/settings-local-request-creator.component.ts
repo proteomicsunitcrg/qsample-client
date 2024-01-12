@@ -84,7 +84,7 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
         this.mountForm(res);
       },
       (err) => {
-        this.openSnackBar('Error getting the request', 'Close');
+        this.openSnackBar('Error getting the request', 'Close'); // TODO: Move message
         this.router.navigate(['/settings/local/request']);
         console.error(err);
       }
@@ -163,7 +163,7 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
         this.allApplications = res;
       },
       (err) => {
-        this.openSnackBar('Error getting the applications', 'Close');
+        this.openSnackBar('Error getting the applications', 'Close'); // TODO: Move message
         console.error(err);
       }
     );
@@ -210,10 +210,11 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
     localRequestToSend.samples = allSamples;
     this.localRequestService.saveLocalRequest(localRequestToSend).subscribe(
       (res) => {
-        this.openSnackBar('Request saved', 'Close');
+        this.openSnackBar('Request saved', 'Close'); // TODO: Move message
+        this.router.navigate(['/settings/local/request']); // Back once saved
       },
       (err) => {
-        this.openSnackBar('Error saving the request', 'Close');
+        this.openSnackBar('Error saving the request', 'Close'); // TODO: Move message
         console.error(err);
       }
     );
@@ -228,11 +229,11 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
   public delete(): void {
     this.localRequestService.deleteLocalRequest(this.requestFromServer).subscribe(
       (res) => {
-        this.openSnackBar('Request deleted', 'Close');
+        this.openSnackBar('Request deleted', 'Close'); // TODO: Move message
         this.router.navigate(['/settings/local/request']);
       },
       (err) => {
-        this.openSnackBar('Error deleting the request', 'Close');
+        this.openSnackBar('Error deleting the request', 'Close'); // TODO: Move message
         console.error(err);
       }
     );
