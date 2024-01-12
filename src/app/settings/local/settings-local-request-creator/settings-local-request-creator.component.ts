@@ -95,7 +95,21 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
     this.userService.getCurrentUser().subscribe(
       (res) => {
         this.currentUser = res;
-        this.leForm.controls.creator.setValue(this.currentUser['username']); // This might need to be revisited
+        let fullname = [];
+        let groupp = null;
+        if (this.currentUser['name']) {
+          fullname.push(this.currentUser['name']);
+        }
+        if (this.currentUser['lastname']) {
+          fullname.push(this.currentUser['lastname']);
+        }
+        if (this.currentUser['groupp']) {
+          groupp = this.currentUser['groupp'];
+        }
+        this.leForm.controls.creator.setValue(fullname.join(" ")); // This might need to be revisited
+        if (groupp) {
+          this.leForm.controls.group.setValue(groupp);
+        }
       },
       (err) => {
         console.error(err);
