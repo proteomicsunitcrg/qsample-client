@@ -14,6 +14,8 @@
   <app-request-plot-fileinfo [requestCode]="requestCode" *ngIf="application && application.applicationConstraint.showFileInfoPlot"></app-request-plot-fileinfo>
   <!-- 2.2. Totals plot with data coming from modifications -->
   <app-request-plot-modifications [requestCode]="requestCode" *ngIf="application && application.applicationConstraint.showModificationsPlot" [name]="'Number of modification sites'" [type]="'total-numbers'"></app-request-plot-modifications>
+
+  <app-request-plot-modifications [requestCode]="requestCode" *ngIf="application" [name]="'Polymer contaminants'" [type]="'total-numbers'"></app-request-plot-modifications>
   <!-- 2.3. Specific plots for PTM Histones application -->
   <app-request-plot-modifications [requestCode]="requestCode" *ngIf="application && application.applicationConstraint.showHistonesBiological" [name]="'N-term Propionyl'" [type]="'histones-biological'"></app-request-plot-modifications>
   <app-request-plot-modifications [requestCode]="requestCode" *ngIf="application && application.applicationConstraint.showHistonesTailored" [name]="'N-term PIC'" [type]="'histones-tailored'"></app-request-plot-modifications>
