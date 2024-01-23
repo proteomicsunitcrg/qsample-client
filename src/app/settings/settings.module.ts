@@ -8,6 +8,7 @@ import { SharedModule } from '../shared.module';
 import { SettingsMainComponent } from './settings-main/settings-main.component';
 import { SettingsRouter } from './settings.router';
 import { SettingsSidebarComponent } from './settings-sidebar/settings-sidebar.component';
+import { SettingsAddUserComponent } from './settings-adduser/settings-adduser.component';
 import { SettingsUserComponent, UserSettingDialogComponent } from './settings-user/settings-user.component';
 import { SettingsQgeneratorSystemsComponent } from './system/settings-qgenerator-systems/settings-qgenerator-systems.component';
 // tslint:disable-next-line:max-line-length
@@ -30,6 +31,7 @@ import { SettingsLocalRequestCreatorComponent } from './local/settings-local-req
   declarations: [
     SettingsMainComponent,
     SettingsSidebarComponent,
+    SettingsAddUserComponent,
     SettingsUserComponent,
     UserSettingDialogComponent,
     SettingsQgeneratorSystemsComponent,

@@ -31,4 +31,12 @@ export class UserService {
     const params = JSON.stringify(user);
     return this.httpClient.post<User>(`${this.userUrl}/modifyRole/${to}`, params, this.httpOptions);
   }
+
+  // TODO: Pending backend to be created
+  public addUser(user: User): Observable<User> {
+    const params = JSON.stringify(user);
+    return this.httpClient.post<User>(`${this.userUrl}/addUser`, params, this.httpOptions);
+  }
+
+
 }
