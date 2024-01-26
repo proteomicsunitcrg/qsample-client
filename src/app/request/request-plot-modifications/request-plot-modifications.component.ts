@@ -5,6 +5,7 @@ import { FileService } from '../../../app/services/file.service';
 import { PlotService } from '../../../app/services/plot.service';
 import { ThemeService } from '../../../app/services/theme.service';
 import { LAYOUTDARKGROUP, LAYOUTDARKOVERLAY, LAYOUTLIGHTGROUP, LAYOUTLIGHTOVERLAY } from '../../wetlab/wetlab-plot/plot.utils';
+import { ApplicationService } from '../../services/application.service';
 
 declare var Plotly: any;
 
@@ -25,6 +26,9 @@ export class RequestPlotModificationsComponent implements OnInit, OnDestroy {
   // tslint:disable-next-line:no-input-rename
   @Input('name') title: string;
 
+  // tslint:disable-next-line:no-input-rename
+  @Input('tooltip') tooltip;
+
   // Subscription to know the order
   orderSubscription$: Subscription;
 
@@ -33,6 +37,8 @@ export class RequestPlotModificationsComponent implements OnInit, OnDestroy {
   // Flag to know if the plot has data
   noDataFound = false;
 
+  // Help element
+  help = '';
 
   // Message error
   msgError = '';
@@ -59,7 +65,7 @@ export class RequestPlotModificationsComponent implements OnInit, OnDestroy {
 
 
 
-  constructor(private fileService: FileService, private themeService: ThemeService, private plotService: PlotService) { }
+  constructor(private fileService: FileService, private themeService: ThemeService, private plotService: PlotService, private applicationService: ApplicationService) { }
 
   ngOnInit(): void {
     this.randString = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -68,6 +74,7 @@ export class RequestPlotModificationsComponent implements OnInit, OnDestroy {
     this.subscribeToListChanges();
     this.subscribeToOrder();
     this.getData();
+    this.help = this.applicationService.getAppMessage( this.tooltip );
   }
 
   ngOnDestroy(): void {
