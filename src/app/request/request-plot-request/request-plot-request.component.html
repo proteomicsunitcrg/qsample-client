@@ -2,7 +2,7 @@
 
   <!-- 1. General plots for applications without specific modifications-->
   <app-request-plot-plot [cs]="[1]" [param]="'1'" [requestCode]="requestCode" [name]="'Number of protein groups'" [tooltip]="'general-number-protein-groups'" *ngIf="application && application.applicationConstraint.showIdentifiedProteinsPlot"></app-request-plot-plot>
-  <app-request-plot-plot [cs]="[2]" [param]="'1'" [requestCode]="requestCode" [name]="'Number of peptides'" [tooltip]="'general-number-peptides'" *ngIf="application && !application.applicationConstraint.showModificationsPlot"></app-request-plot-plot>
+  <app-request-plot-plot [cs]="[2]" [param]="'1'" [requestCode]="requestCode" [name]="'Number of peptides'" [tooltip]="'general-number-peptides'" *ngIf="application && application.applicationConstraint.showIdentifiedPeptidesPlot"></app-request-plot-plot>
   <!-- <app-request-plot-plot [cs]="[7]" [param]="'1'" [requestCode]="requestCode" [name]="'Sum of base peak intensity (removed log10 04/04/22)'" *ngIf="application && application.applicationConstraint.showIdentifiedPeptidesPlot"></app-request-plot-plot>-->
   <app-request-plot-plot [cs]="[19]" [param]="'1'" [requestCode]="requestCode" [name]="'Sum of Total TIC'" [tooltip]="'general-sum-total-tic'" *ngIf="application && application.applicationConstraint.showIdentifiedPeptidesPlot"></app-request-plot-plot>
   <app-request-plot-plot [cs]="[20,21,22,23]" [param]="'1'" [requestCode]="requestCode" [name]="'Peptides grouped by number of missed cleavages'" [tooltip]="'general-peptides-grouped-number-missed-cleavages'" *ngIf="application && application.applicationConstraint.showIdentifiedPeptidesPlot"></app-request-plot-plot>
@@ -11,7 +11,7 @@
 
   <!-- 2. Plots for applications with specific modifications-->
   <!-- 2.1. Totals plot with data coming from FileInfo -->
-  <app-request-plot-fileinfo [requestCode]="requestCode" *ngIf="application && application.applicationConstraint.showFileInfoPlot"></app-request-plot-fileinfo>
+  <app-request-plot-fileinfo [requestCode]="requestCode" *ngIf="application && application.applicationConstraint.showFileInfoPlot && !application.applicationConstraint.showModificationsPlot"></app-request-plot-fileinfo>
   <!-- 2.2. Totals plot with data coming from modifications -->
   <app-request-plot-modifications [requestCode]="requestCode" *ngIf="application && application.applicationConstraint.showModificationsPlot" [name]="'Number of modification sites'" [type]="'total-numbers'"></app-request-plot-modifications>
 
