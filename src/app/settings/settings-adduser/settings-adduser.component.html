@@ -14,13 +14,18 @@
           <mat-label>Last name</mat-label>
           <input matInput formControlName="lastname" required>
         </mat-form-field>
-        <mat-form-field appearance="standard" style="width: 95%;">
+        <mat-form-field appearance="email" style="width: 95%;">
           <mat-label>Email</mat-label>
           <input matInput formControlName="username" type="email" required>
         </mat-form-field>
-
-        <blockquote>An email will be sent to the new user with a password and further instructions.
-        </blockquote>
+        <mat-form-field appearance="password" style="width: 95%;">
+          <mat-label>Password</mat-label>
+          <input matInput formControlName="password" type="password" required>
+        </mat-form-field>
+        <mat-form-field appearance="password" style="width: 95%;">
+          <mat-label>Confirm Password</mat-label>
+          <input matInput formControlName="confirmpassword" type="password" required>
+        </mat-form-field>
       </form>
       <button mat-raised-button color="accent" (click)="submit()" [disabled]="ucForm.invalid">Add</button>
     </mat-card-content>

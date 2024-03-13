@@ -21,30 +21,28 @@ export class SettingsAddUserComponent implements OnInit {
 
   dataSource: MatTableDataSource<any>;
 
-  ucForm = new FormGroup({
-    firstname: new FormControl('', Validators.required),
-    lastname: new FormControl('', Validators.required),
-    username: new FormControl('', Validators.required),
-  });
+  ucForm = new FormGroup(
+    {
+      firstname: new FormControl('', [Validators.minLength(1), Validators.required]),
+      lastname: new FormControl('', [Validators.minLength(1), Validators.required]),
+      username: new FormControl('', [Validators.email, Validators.required]),
+      password: new FormControl('', [Validators.minLength(6), Validators.required]),
+      confirmpassword: new FormControl('', [Validators.minLength(6), Validators.required]),
+    },
+    // TODO: Add password match validator
+    // { validators: this.passwordMatchValidator }
+    //
+  );
 
   ngOnInit(): void {}
 
-  // this.id = id;
-  // this.apiKey = apiKey;
-  // this.firstname = firstname;
-  // this.lastname = lastname;
-  // this.username = username;
-  // this.agendoId = agendoId;
-  // this.groupp = groupp;
-  //
-  //
   public submit(): void {
-
     let firstname = this.ucForm.controls.firstname.value;
     let lastname = this.ucForm.controls.lastname.value;
     let username = this.ucForm.controls.username.value;
+    let password = this.ucForm.controls.password.value;
 
-    const userToSend = new UserCreation(firstname, lastname, username, '123456');
+    const userToSend = new UserCreation(firstname, lastname, username, password);
     this.userService.addUser(userToSend).subscribe(
       (res) => {
         this.openSnackBar('User added', 'Close'); // TODO: Move message
