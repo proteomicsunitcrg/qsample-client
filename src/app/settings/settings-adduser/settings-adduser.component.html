@@ -24,9 +24,12 @@
         </mat-form-field>
         <mat-form-field appearance="password" style="width: 95%;">
           <mat-label>Confirm Password</mat-label>
-          <input matInput formControlName="confirmpassword" type="password" required>
+          <input matInput class="form-control" formControlName="confirmpassword" type="password" required>
         </mat-form-field>
       </form>
+      <div *ngIf="ucForm.get('confirmpassword').errors?.notSame" class="alert alert-danger">
+        Passwords do not match
+      </div>
       <button mat-raised-button color="accent" (click)="submit()" [disabled]="ucForm.invalid">Add</button>
     </mat-card-content>
   </mat-card>

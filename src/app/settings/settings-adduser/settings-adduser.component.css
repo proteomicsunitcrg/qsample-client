@@ -1,0 +1,6 @@
+.alert-danger {
+  font-weight: bold;
+  font-size: 90%;
+  color: red;
+  margin-bottom: 1em;
+}

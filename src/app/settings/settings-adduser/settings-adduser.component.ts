@@ -6,6 +6,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dial
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FunctionsService } from '../../services/functions.service';
 
 @Component({
   selector: 'app-settings-adduser',
@@ -16,6 +17,7 @@ export class SettingsAddUserComponent implements OnInit {
   constructor(
     private router: Router,
     private userService: UserService,
+    private functionsService: FunctionsService,
     private snackBar: MatSnackBar
   ) {}
 
@@ -27,11 +29,8 @@ export class SettingsAddUserComponent implements OnInit {
       lastname: new FormControl('', [Validators.minLength(1), Validators.required]),
       username: new FormControl('', [Validators.email, Validators.required]),
       password: new FormControl('', [Validators.minLength(6), Validators.required]),
-      confirmpassword: new FormControl('', [Validators.minLength(6), Validators.required]),
-    },
-    // TODO: Add password match validator
-    // { validators: this.passwordMatchValidator }
-    //
+      confirmpassword: new FormControl('', [Validators.minLength(6), Validators.required, this.functionsService.confirmPasswordValidator]),
+    }
   );
 
   ngOnInit(): void {}
