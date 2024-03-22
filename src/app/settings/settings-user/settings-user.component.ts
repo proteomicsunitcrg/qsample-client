@@ -13,7 +13,7 @@ export class SettingsUserComponent implements OnInit {
 
   dataSource: MatTableDataSource<any>;
 
-  columnsToDisplay = ['username', 'firstname', 'lastname', 'groupp'];
+  columnsToDisplay = ['username', 'firstname', 'lastname', 'groupp', 'permissions', 'remove'];
 
 
   constructor(private userService: UserService, public dialog: MatDialog) {
@@ -44,8 +44,23 @@ export class SettingsUserComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
+      window.location.reload(); // Prompted reload for getting new permissions from table
     });
   }
+
+  public removeDialog(user: User): void {
+    const dialogRef = this.dialog.open(UserSettingDialogComponent, {
+      data: {
+        user
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+      window.location.reload(); // Prompted reload for getting new permissions from table
+    });
+  }
+
 
 }
 
