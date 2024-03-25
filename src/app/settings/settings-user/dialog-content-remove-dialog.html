@@ -1,0 +1,10 @@
+<h2 mat-dialog-title>{{user.username}} removal</h2>
+<mat-dialog-content class="mat-typography">
+  <p>Do you really want to remove this user?</p>
+  <ng-container>
+    <button align="center" mat-button (click)="removeUser()">Remove</button>
+  </ng-container>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Exit</button>
+</mat-dialog-actions>
