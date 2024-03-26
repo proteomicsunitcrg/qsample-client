@@ -12,7 +12,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dial
 export class SettingsUserComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
 
-  columnsToDisplay = ['username', 'firstname', 'lastname', 'groupp', 'permissions', 'remove'];
+  columnsToDisplay = ['username', 'firstname', 'lastname', 'groupp', 'roles', 'permissions', 'remove'];
 
   constructor(
     private userService: UserService,
