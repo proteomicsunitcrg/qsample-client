@@ -128,7 +128,7 @@ export class UserRemoveDialogComponent {
         window.location.reload(); // Prompted reload for getting new permissions from table
       },
       (err) => {
-        alert(err.error.message + ' - User could not be removed!');
+        alert(err.error.message);
         console.error(err);
       }
     );
