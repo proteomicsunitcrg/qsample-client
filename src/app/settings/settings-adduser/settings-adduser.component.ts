@@ -28,6 +28,7 @@ export class SettingsAddUserComponent implements OnInit {
       firstname: new FormControl('', [Validators.minLength(1), Validators.required]),
       lastname: new FormControl('', [Validators.minLength(1), Validators.required]),
       username: new FormControl('', [Validators.email, Validators.required]),
+      groupp: new FormControl(''),
       password: new FormControl('', [Validators.minLength(6), Validators.required]),
       confirmpassword: new FormControl('', [Validators.minLength(6), Validators.required, this.functionsService.confirmPasswordValidator]),
     }
@@ -40,8 +41,12 @@ export class SettingsAddUserComponent implements OnInit {
     let lastname = this.ucForm.controls.lastname.value;
     let username = this.ucForm.controls.username.value;
     let password = this.ucForm.controls.password.value;
+    let groupp = null;
+    if ( this.ucForm.controls.groupp.value && this.ucForm.controls.groupp.value.trim().length > 0) {
+      groupp = this.ucForm.controls.groupp.value.trim();
+    }
 
-    const userToSend = new UserCreation(firstname, lastname, username, password);
+    const userToSend = new UserCreation(firstname, lastname, username, password, groupp);
     this.userService.addUser(userToSend).subscribe(
       (res) => {
         this.openSnackBar('User added', 'Close'); // TODO: Move message
