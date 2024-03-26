@@ -39,5 +39,10 @@ export class UserService {
     return this.httpClient.post<User>(`${this.authUrl}/addUser`, params, this.httpOptions);
   }
 
+  public deleteUser(user: User): Observable<any> {
+    const params = JSON.stringify(user);
+    return this.httpClient.post<User>(`${this.authUrl}/deleteUser`, params, this.httpOptions);
+  }
+
 
 }

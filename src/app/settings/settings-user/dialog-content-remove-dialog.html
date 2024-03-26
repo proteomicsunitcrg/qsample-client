@@ -2,7 +2,9 @@
 <mat-dialog-content class="mat-typography">
   <p>Do you really want to remove this user?</p>
   <ng-container>
-    <button align="center" mat-button (click)="removeUser()">Remove</button>
+    <div class="mat-dialog-actions remove-button" align="center">
+      <button mat-button (click)="removeUser()">Remove</button>
+    </div>
   </ng-container>
 </mat-dialog-content>
 <mat-dialog-actions align="end">

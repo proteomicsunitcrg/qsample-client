@@ -109,6 +109,7 @@ export class UserSettingDialogComponent {
 @Component({
   selector: 'app-dialog-content-remove-dialog',
   templateUrl: './dialog-content-remove-dialog.html',
+  styleUrls: ['./settings-user.component.css'],
 })
 export class UserRemoveDialogComponent {
   user: User;
@@ -121,6 +122,15 @@ export class UserRemoveDialogComponent {
   }
 
   public removeUser(): void {
-    alert('Removed!');
+    this.userService.deleteUser(this.user).subscribe(
+      (res) => {
+        console.log(res);
+        window.location.reload(); // Prompted reload for getting new permissions from table
+      },
+      (err) => {
+        alert(err.error.message + ' - User could not be removed!');
+        console.error(err);
+      }
+    );
   }
 }

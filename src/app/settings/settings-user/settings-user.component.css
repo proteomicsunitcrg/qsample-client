@@ -2,3 +2,11 @@
   cursor: pointer;
   text-decoration: underline;
 }
+
+.mat-dialog-content {
+  overflow-y: hidden;
+}
+
+.remove-button {
+  height: 75px;
+}
