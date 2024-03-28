@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { MessagesService } from '../../../services/messages.service'
+import { MessagesService } from '../../../services/messages.service';
 import { WetLab } from '../../../models/WetLab';
 import { WetLabCategory } from '../../../models/WetLabCategory';
 import { WetLabService } from '../../../services/wetlab.service';
+import { ServerConfigService } from '../../../services/serverconfig.service';
 import { Router } from '@angular/router';
 
 // Considered: https://stackoverflow.com/questions/48204477/passing-ngfor-variable-to-an-ngif-template
@@ -10,45 +11,50 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-wetlab-list',
   templateUrl: './wetlab-list.component.html',
-  styleUrls: ['./wetlab-list.component.css']
+  styleUrls: ['./wetlab-list.component.css'],
 })
 export class WetlabListComponent implements OnInit {
-
-  constructor(private wetLabService: WetLabService, private messagesService: MessagesService, private router: Router) { }
+  constructor(
+    private wetLabService: WetLabService,
+    private messagesService: MessagesService,
+    private serverConfigService: ServerConfigService,
+    private router: Router
+  ) {}
 
   messages = {};
   WetLabs: WetLab[];
   Categories: WetLabCategory[];
   additional: string;
   title: string;
+  local: boolean = true;
 
   ngOnInit(): void {
-
     // TODO: Part of the migration
     this.getMessages();
-    console.log(this.messages);
+    // console.log(this.messages);
 
     // this.title = window['env']['general-wetlab-home']; # TODO: Migrate
     this.title = 'Sample preparation QC';
     this.additional = '';
     // if ( ! window['env']['local_requests']  ) { # TODO: Migrate
-    if ( this.wetLabService.apiPrefix.includes('qsample.crg.eu') ) {
+    if (this.wetLabService.apiPrefix.includes('qsample.crg.eu')) {
       this.additional = '(New 30 min gradient starting from 14/02/2022)';
       // this.title = window['env']['general-wetlab-production']; # TODO: Migrate
       this.title = 'Wetlab';
     }
 
     this.getAllWetlabs();
+    this.getServerConfig();
   }
 
   private getAllWetlabs() {
     this.wetLabService.getWetlabLists().subscribe(
-      res => {
+      (res) => {
         this.WetLabs = res;
         // Process wetlab categories below
         this.Categories = this.processCategories(this.WetLabs);
       },
-      err => {
+      (err) => {
         console.error(err);
       }
     );
@@ -64,30 +70,42 @@ export class WetlabListComponent implements OnInit {
 
   private getMessages() {
     this.messagesService.getMessages().subscribe(
-      res => {
+      (res) => {
         this.messages = res;
       },
-      err => {
+      (err) => {
         console.error(err);
       }
     );
   }
 
+  private getServerConfig() {
+    this.serverConfigService.getConfig().subscribe(
+      (res) => {
+        if (res.hasOwnProperty('local_requests')) {
+          this.local = res['local_requests'];
+        }
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
+  }
 
   private processCategories(wetlab: WetLab[]) {
     let wetlabArray = [];
-    for ( let item of wetlab ) {
+    for (let item of wetlab) {
       let found = 0;
-      for ( let exist of wetlabArray ) {
-        if ( item.wetlabCategory.id === exist.id ) {
+      for (let exist of wetlabArray) {
+        if (item.wetlabCategory.id === exist.id) {
           found = 1;
         }
       }
-      if ( found === 0 ) {
+      if (found === 0) {
         wetlabArray.push(item.wetlabCategory);
       }
     }
-    wetlabArray.sort(function(a, b) { 
+    wetlabArray.sort(function (a, b) {
       return a.id - b.id;
     });
     return wetlabArray;
@@ -100,5 +118,4 @@ export class WetlabListComponent implements OnInit {
   public navigateToGuideset() {
     this.router.navigate(['/wetlab/guideset']);
   }
-
 }

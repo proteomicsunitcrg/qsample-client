@@ -5,11 +5,11 @@
         </mat-card-title>
         {{additional}}
         <div class="wetlab-blocks">
-          <div *ngFor="let block of Categories"><h2>{{block.name}}</h2> 
+          <div *ngFor="let block of Categories"><h2>{{block.name}}</h2>
              <ng-container [ngTemplateOutlet]='element' [ngTemplateOutletContext]="{block:block}"></ng-container>
           </div>
         </div>
-        <mat-card-actions>
+        <mat-card-actions *ngIf="!local">
             <button mat-raised-button color="primary" (click)="navigateToGuideset()">OPTIONS</button>
         </mat-card-actions>
     </mat-card>
