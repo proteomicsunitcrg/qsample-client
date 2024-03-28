@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { User } from '../models/User';
+import { UserCreation } from '../models/UserCreation';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -14,6 +15,7 @@ export class UserService {
   private apiPrefix = environment.apiPrefix;
   private userUrl = this.apiPrefix + 'api/user';
   private currentUserUrl = this.apiPrefix + 'api/user/current';
+  private authUrl = this.apiPrefix + 'api/auth';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -32,10 +34,14 @@ export class UserService {
     return this.httpClient.post<User>(`${this.userUrl}/modifyRole/${to}`, params, this.httpOptions);
   }
 
-  // TODO: Pending backend to be created
-  public addUser(user: User): Observable<User> {
+  public addUser(user: UserCreation): Observable<User> {
     const params = JSON.stringify(user);
-    return this.httpClient.post<User>(`${this.apiPrefix}/auth/addUser`, params, this.httpOptions);
+    return this.httpClient.post<User>(`${this.authUrl}/addUser`, params, this.httpOptions);
+  }
+
+  public deleteUser(user: User): Observable<any> {
+    const params = JSON.stringify(user);
+    return this.httpClient.post<User>(`${this.authUrl}/deleteUser`, params, this.httpOptions);
   }
 
 
