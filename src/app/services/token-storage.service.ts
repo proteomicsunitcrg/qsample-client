@@ -51,17 +51,17 @@ export class TokenStorageService {
 
 
   public isManagerUser(): boolean {
-    let admin = false;
+    let manager = false;
     const token = this.getUser();
     if (token == null) {
       return;
     }
     token.roles.forEach(element => {
       if (element === 'ROLE_MANAGER') {
-        admin = true;
+        manager = true;
       }
     });
-    return admin;
+    return manager;
   }
 
   public saveUser(user) {

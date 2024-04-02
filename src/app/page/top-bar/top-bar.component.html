@@ -6,7 +6,7 @@
       <mat-icon>star</mat-icon>
     </button>
     <app-theme-selector></app-theme-selector>
-    <button mat-icon-button (click)="goToRequestSettings()" *ngIf="isAdmin && isLocalMode">
+    <button mat-icon-button (click)="goToRequestSettings()" *ngIf="isManager && isLocalMode">
       <mat-icon>science</mat-icon>
     </button>
     <button mat-icon-button (click)="goToUserPage()" *ngIf="isAdmin">

@@ -15,11 +15,13 @@ export class TopBarComponent implements OnInit {
   subscription: Subscription;
 
   isAdmin = false;
+  isManager = false;
   isLocalMode = false;
 
   constructor(private requestService: RequestService, private tokenService: TokenStorageService, private router: Router,
     private authService: AuthService, private tokenStorageService: TokenStorageService) {
     this.subscription = authService.getIsAdmin().subscribe(res => this.isAdmin = res);
+    this.subscription = authService.getIsManager().subscribe(res => this.isManager = res);
   }
 
   ngOnInit(): void {
@@ -32,8 +34,9 @@ export class TopBarComponent implements OnInit {
         console.error(err);
       }
     );
- 
+
     this.authService.updateIsAdmin(this.tokenStorageService.isAdminUser());
+    this.authService.updateIsManager(this.tokenStorageService.isManagerUser());
   }
 
   public goToHomePage(): void {
