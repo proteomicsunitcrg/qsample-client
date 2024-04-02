@@ -1,22 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import { ServerConfigService } from '../../services/serverconfig.service';
+import { TokenStorageService } from '../../services/token-storage.service';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-settings-main',
   templateUrl: './settings-main.component.html',
-  styleUrls: ['./settings-main.component.css']
+  styleUrls: ['./settings-main.component.css'],
 })
 export class SettingsMainComponent implements OnInit {
+  subscription: Subscription;
+  isAdmin = false;
 
   constructor(
-    private serverConfigService: ServerConfigService
-  ) {}
+    private serverConfigService: ServerConfigService,
+    private authService: AuthService,
+    private tokenStorageService: TokenStorageService
+  ) {
+    this.subscription = authService.getIsAdmin().subscribe((res) => (this.isAdmin = res));
+  }
 
   local: boolean = true;
 
   ngOnInit(): void {
-
     this.getServerConfig();
+    this.authService.updateIsAdmin(this.tokenStorageService.isAdminUser());
   }
 
   private getServerConfig() {
@@ -31,6 +40,4 @@ export class SettingsMainComponent implements OnInit {
       }
     );
   }
-
-
 }

@@ -2,7 +2,7 @@
     <mat-card>
         <mat-card-title>
             Requests Manager
-            <button mat-fab color="primary" aria-label="New local request" style="float: right;" (click)="newRequest()">
+            <button mat-fab color="primary" aria-label="New local request" style="float: right;" (click)="newRequest()" *ngIf="isManager">
               <mat-icon>add</mat-icon>
             </button>
         </mat-card-title>

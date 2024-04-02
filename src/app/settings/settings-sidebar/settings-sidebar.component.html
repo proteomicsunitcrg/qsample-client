@@ -1,5 +1,5 @@
 <mat-accordion>
-  <mat-expansion-panel hideToggle>
+  <mat-expansion-panel hideToggle *ngIf="isAdmin">
     <mat-expansion-panel-header>
       <mat-panel-title>
         Users
@@ -26,7 +26,7 @@
     <a routerLink="/settings/QGenerator/methods" routerLinkActive="active">View QGenerator methods</a>
     <br>
   </mat-expansion-panel>
-  <mat-expansion-panel hideToggle *ngIf="isLocalMode">
+  <mat-expansion-panel hideToggle *ngIf="isLocalMode && isManager">
     <mat-expansion-panel-header>
       <mat-panel-title>
         Local

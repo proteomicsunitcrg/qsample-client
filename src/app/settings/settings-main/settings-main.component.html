@@ -1,7 +1,7 @@
 <div fxLayout style="margin-top: 10px; margin-left: 10px;">
   <div fxFlex="20%">
     <app-settings-sidebar></app-settings-sidebar>
-    <app-settings-adduser *ngIf="local"></app-settings-adduser>
+    <app-settings-adduser *ngIf="local && isAdmin"></app-settings-adduser>
   </div>
     <div fxFlex="70%">
     <router-outlet></router-outlet>

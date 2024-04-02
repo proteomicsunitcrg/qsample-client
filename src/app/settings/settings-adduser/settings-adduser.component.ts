@@ -23,16 +23,18 @@ export class SettingsAddUserComponent implements OnInit {
 
   dataSource: MatTableDataSource<any>;
 
-  ucForm = new FormGroup(
-    {
-      firstname: new FormControl('', [Validators.minLength(1), Validators.required]),
-      lastname: new FormControl('', [Validators.minLength(1), Validators.required]),
-      username: new FormControl('', [Validators.email, Validators.required]),
-      groupp: new FormControl(''),
-      password: new FormControl('', [Validators.minLength(6), Validators.required]),
-      confirmpassword: new FormControl('', [Validators.minLength(6), Validators.required, this.functionsService.confirmPasswordValidator]),
-    }
-  );
+  ucForm = new FormGroup({
+    firstname: new FormControl('', [Validators.minLength(1), Validators.required]),
+    lastname: new FormControl('', [Validators.minLength(1), Validators.required]),
+    username: new FormControl('', [Validators.email, Validators.required]),
+    groupp: new FormControl(''),
+    password: new FormControl('', [Validators.minLength(6), Validators.required]),
+    confirmpassword: new FormControl('', [
+      Validators.minLength(6),
+      Validators.required,
+      this.functionsService.confirmPasswordValidator,
+    ]),
+  });
 
   ngOnInit(): void {}
 
@@ -42,7 +44,7 @@ export class SettingsAddUserComponent implements OnInit {
     let username = this.ucForm.controls.username.value;
     let password = this.ucForm.controls.password.value;
     let groupp = null;
-    if ( this.ucForm.controls.groupp.value && this.ucForm.controls.groupp.value.trim().length > 0) {
+    if (this.ucForm.controls.groupp.value && this.ucForm.controls.groupp.value.trim().length > 0) {
       groupp = this.ucForm.controls.groupp.value.trim();
     }
 

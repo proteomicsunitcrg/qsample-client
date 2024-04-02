@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { TokenStorageService } from '../../../services/token-storage.service';
+import { AuthService } from '../../../services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-settings-local-request',
@@ -8,9 +11,14 @@ import { Router } from '@angular/router';
 })
 export class SettingsLocalRequestComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  subscription: Subscription;
+  isManager = false;
 
+  constructor(private router: Router, private tokenStorageService: TokenStorageService, private authService: AuthService) {
+    this.subscription = authService.getIsManager().subscribe((res) => (this.isManager = res));
+  }
   ngOnInit(): void {
+    this.authService.updateIsManager(this.tokenStorageService.isManagerUser());
   }
 
   public newRequest(): void {
