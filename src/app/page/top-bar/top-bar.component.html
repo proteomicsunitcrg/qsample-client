@@ -9,7 +9,7 @@
     <button mat-icon-button (click)="goToRequestSettings()" *ngIf="isManager && isLocalMode">
       <mat-icon>science</mat-icon>
     </button>
-    <button mat-icon-button (click)="goToUserPage()" *ngIf="isAdmin">
+    <button mat-icon-button (click)="goToUserPage()" *ngIf="isManager">
       <mat-icon>group</mat-icon>
     </button>
     <button mat-icon-button (click)="goToHelp()" *ngIf="!isLocalMode">
