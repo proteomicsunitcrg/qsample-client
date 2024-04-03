@@ -12,6 +12,7 @@ import { AuthService } from '../../services/auth.service';
 export class SettingsMainComponent implements OnInit {
   subscription: Subscription;
   isAdmin = false;
+  isManager = false;
 
   constructor(
     private serverConfigService: ServerConfigService,
@@ -19,6 +20,7 @@ export class SettingsMainComponent implements OnInit {
     private tokenStorageService: TokenStorageService
   ) {
     this.subscription = authService.getIsAdmin().subscribe((res) => (this.isAdmin = res));
+    this.subscription = authService.getIsManager().subscribe((res) => (this.isManager = res));
   }
 
   local: boolean = true;
@@ -26,6 +28,7 @@ export class SettingsMainComponent implements OnInit {
   ngOnInit(): void {
     this.getServerConfig();
     this.authService.updateIsAdmin(this.tokenStorageService.isAdminUser());
+    this.authService.updateIsAdmin(this.tokenStorageService.isManagerUser());
   }
 
   private getServerConfig() {
