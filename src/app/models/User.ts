@@ -7,6 +7,7 @@ export class User {
   agendoId: number;
   groupp: string;
   roles: { id: number, name: string, roleString: string }[];
+  profile: string;
 
   constructor(id: number, apiKey: string, firstname: string, lastname: string, username: string, agendoId: number, groupp: string) {
     this.id = id;

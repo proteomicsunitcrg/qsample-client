@@ -1,15 +1,16 @@
 <h2 mat-dialog-title>{{user.username}} roles</h2>
 <mat-dialog-content class="mat-typography">
-  <p *ngIf="isInternal" class="mat-body-2">Internal user</p>
-  <p *ngIf="isExternal">External user</p>
-  <p *ngFor="let role of user.roles">
-    {{role.name}}
-  </p>
+  <p *ngIf="isInternal && isManager" class="mat-body-2">Lab Manager</p>
+  <p *ngIf="isInternal && !isManager" class="mat-body-2">Internal User</p>
+  <p *ngIf="isExternal" class="mat-body-2">External User</p>
+  <!-- <p *ngFor="let role of user.roles"> -->
+  <!--   {{role.name}} -->
+  <!-- </p> -->
   <ng-container>
-    <button mat-button (click)="modifyRole('external')">To external</button>
-    <button mat-button (click)="modifyRole('internal')">To internal basic</button>
-    <button mat-button (click)="modifyRole('manager')">To internal manager</button>
-    <button mat-button (click)="modifyRole('admin')">To internal admin</button>
+    <button mat-button (click)="modifyRole('external')">To External User</button>
+    <button mat-button (click)="modifyRole('internal')">To Internal User</button>
+    <button mat-button (click)="modifyRole('manager')">To Lab Manager</button>
+    <!-- <button mat-button (click)="modifyRole('admin')">To internal admin</button> -->
 
   </ng-container>
 

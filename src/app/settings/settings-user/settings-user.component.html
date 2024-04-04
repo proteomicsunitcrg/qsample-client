@@ -22,8 +22,8 @@
           <td mat-cell *matCellDef="let entry"> {{entry.groupp}} </td>
         </ng-container>
         <ng-container matColumnDef="roles">
-          <th mat-header-cell *matHeaderCellDef> Roles </th>
-          <td mat-cell *matCellDef="let entry"> <span *ngFor="let r of entry.roles"> {{ r.name  }} </span> </td>
+          <th mat-header-cell *matHeaderCellDef> Role </th>
+          <td mat-cell *matCellDef="let entry"> {{entry.profile}} </td>
         </ng-container>
         <ng-container matColumnDef="permissions">
           <th mat-header-cell *matHeaderCellDef> </th>

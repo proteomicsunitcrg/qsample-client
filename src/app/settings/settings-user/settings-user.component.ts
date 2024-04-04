@@ -20,9 +20,9 @@ export class SettingsUserComponent implements OnInit {
   ) {
     this.userService.getAllUsers().subscribe(
       (res) => {
-        this.dataSource = new MatTableDataSource(res);
+        this.dataSource = new MatTableDataSource(this.rolesMapping(res));
         this.allUsers = res;
-        console.log(res);
+        // console.log(res);
       },
       (err) => {
         console.error(err);
@@ -59,6 +59,31 @@ export class SettingsUserComponent implements OnInit {
       window.location.reload(); // Prompted reload for getting new permissions from table
     });
   }
+
+  // Function for mapping roles to easier to understand profiles
+  private rolesMapping(users: User[]): User[] {
+    let modifUsers = [];
+
+    for (let u of users) {
+      u.profile = 'External';
+      for (let r of u.roles) {
+        if (r.name == 'ROLE_EXTERNAL') {
+          u.profile = 'External';
+          break;
+        }
+        if (r.name == 'ROLE_INTERNAL') {
+          u.profile = 'Internal';
+        }
+        if (r.name == 'ROLE_ADMIN' || r.name == 'ROLE_MANAGER') {
+          u.profile = 'Lab Manager';
+          break;
+        }
+      }
+      modifUsers.push(u);
+    }
+
+    return modifUsers;
+  }
 }
 
 @Component({
@@ -72,21 +97,28 @@ export class UserSettingDialogComponent {
     private userService: UserService
   ) {
     this.user = userC.user;
-    console.log(this.user);
     this.getMainRole();
   }
 
   isInternal: boolean;
-
   isExternal: boolean;
+  isManager: boolean;
 
   private getMainRole(): void {
     for (const role of this.user.roles) {
       if (role.name === 'ROLE_INTERNAL') {
         this.isInternal = true;
-        break;
-      } else if (role.name === 'ROLE_EXTERNAL') {
+        this.isExternal = false;
+      }
+      if (role.name === 'ROLE_EXTERNAL') {
         this.isExternal = true;
+        this.isInternal = false;
+        break;
+      }
+      if (role.name === 'ROLE_ADMIN' || role.name === 'ROLE_MANAGER') {
+        this.isManager = true;
+        this.isExternal = false;
+        this.isInternal = true;
         break;
       }
     }
@@ -95,6 +127,10 @@ export class UserSettingDialogComponent {
   public modifyRole(to: string): void {
     this.userService.modifyRole(this.user, to).subscribe(
       (res) => {
+        // Hack a bit for internal. Could be nicer
+        if (to == 'internal') {
+          this.isManager = false;
+        }
         this.user = res;
         this.getMainRole();
       },
@@ -118,13 +154,12 @@ export class UserRemoveDialogComponent {
     private userService: UserService
   ) {
     this.user = userC.user;
-    console.log(this.user);
   }
 
   public removeUser(): void {
     this.userService.deleteUser(this.user).subscribe(
       (res) => {
-        console.log(res);
+        // console.log(res);
         window.location.reload(); // Prompted reload for getting new permissions from table
       },
       (err) => {
