@@ -53,13 +53,16 @@ export class SettingsAddUserComponent implements OnInit {
       (res) => {
         this.openSnackBar('User added', 'Close'); // TODO: Move message
         this.router.navigate(['/settings/user']); // Back once saved
-        window.location.reload(); // Prompted reload for getting new user from table
       },
       (err) => {
         this.openSnackBar('Error adding user', 'Close'); // TODO: Move message
         console.error(err);
       }
     );
+  }
+
+  public goBack(): void {
+    this.router.navigate(['/settings/user']);
   }
 
   private openSnackBar(message: string, action: string): void {

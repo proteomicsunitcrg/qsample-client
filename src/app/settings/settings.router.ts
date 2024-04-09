@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { RoleGuardService as RoleGuard } from '../services/role-guard.service';
 import { SettingsMainComponent } from './settings-main/settings-main.component';
 import { SettingsUserComponent } from './settings-user/settings-user.component';
+import { SettingsAddUserComponent } from './settings-adduser/settings-adduser.component';
 import { SettingsQgeneratorSystemsComponent } from './system/settings-qgenerator-systems/settings-qgenerator-systems.component';
 // tslint:disable-next-line:max-line-length
 import { SettingsQgeneratorApplicationsComponent } from './application/settings-qgenerator-applications/settings-qgenerator-applications.component';
@@ -22,6 +23,7 @@ const routes: Routes = [
     path: '', component: SettingsMainComponent, canActivate: [RoleGuard]
     , children: [
       { path: 'user', component: SettingsUserComponent },
+      { path: 'user/editor/:id', component: SettingsAddUserComponent },
       { path: 'QGenerator/systems', component: SettingsQgeneratorSystemsComponent },
       { path: 'QGenerator/systems/editor/:id', component: SettingsQgeneratorSystemsCreatorComponent },
       { path: 'QGenerator/systems/qc/:id', component: SettingsQgeneratorSystemsQcComponent },
