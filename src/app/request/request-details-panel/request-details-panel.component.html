@@ -10,17 +10,18 @@
       <mat-list-item *ngIf="local != undefined">
         <div *ngIf="!local">
           <span class="bold">Creator:&nbsp;</span> <span [innerHTML]="request.created_by.name"></span>
-          <span>
+          <span *ngIf="request.created_by.email">
             ({{request.created_by.email}})
           </span>
         </div>
         <div *ngIf="local">
-          <span class="bold">Creator: </span> <span [innerHTML]="request.localCreator"></span> <span>
+          <span class="bold">Creator: </span> <span [innerHTML]="request.localCreator"></span>
+          <span *ngIf="request.localCreator">
             ({{request.localCreator}})</span>
           </div>
       </mat-list-item>
       <mat-list-item>
-          <span class="bold">Creation date:&nbsp;</span> {{request.date_created}}
+          <span class="bold">Creation date:&nbsp;</span> {{request.date_created | date: 'yyyy-MM-dd'}}
       </mat-list-item>
       <mat-list-item>
           <span class="bold">Lab name:&nbsp;</span> <span [innerHTML]="request.group"></span>
