@@ -179,7 +179,7 @@ export const LAYOUTLIGHTOVERLAY = {
 export const LAYOUTDARKGROUP = {
   autosize: false,
   width: 700,
-  height: 450,
+  height: 550,
   shapes: [],
   hovermode: 'closest',
   plot_bgcolor: '#424242',
@@ -207,7 +207,7 @@ export const LAYOUTDARKGROUP = {
 export const LAYOUTLIGHTGROUP = {
   autosize: false,
   width: 700,
-  height: 450,
+  height: 550,
   shapes: [],
   hovermode: 'closest',
   plot_bgcolor: 'white',
@@ -223,7 +223,7 @@ export const LAYOUTLIGHTGROUP = {
     linecolor: '#FFFFFF',
     tickcolor: '#FFFFFF',
     exponentformat: 'power',
-    
+
     // range: rangeArray
   },
   font: {
