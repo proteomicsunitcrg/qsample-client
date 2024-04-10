@@ -38,14 +38,22 @@ export class SettingsAddUserComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  private trimValue(value: string): string {
+    let newValue = value;
+    if (newValue) {
+      newValue = newValue.trim();
+    }
+    return newValue;
+  }
+
   public submit(): void {
-    let firstname = this.ucForm.controls.firstname.value;
-    let lastname = this.ucForm.controls.lastname.value;
-    let username = this.ucForm.controls.username.value;
-    let password = this.ucForm.controls.password.value;
+    let firstname = this.trimValue(this.ucForm.controls.firstname.value);
+    let lastname = this.trimValue(this.ucForm.controls.lastname.value);
+    let username = this.trimValue(this.ucForm.controls.username.value);
+    let password = this.trimValue(this.ucForm.controls.password.value);
     let groupp = null;
     if (this.ucForm.controls.groupp.value && this.ucForm.controls.groupp.value.trim().length > 0) {
-      groupp = this.ucForm.controls.groupp.value.trim();
+      groupp = this.trimValue(this.ucForm.controls.groupp.value);
     }
 
     const userToSend = new UserCreation(firstname, lastname, username, password, groupp);
