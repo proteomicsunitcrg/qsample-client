@@ -1,24 +1,22 @@
 <mat-card *ngIf="request != undefined" style="margin-left: 1vw; margin-right: 1vw;">
   <mat-card-title>
-    Request details <button *ngIf="!local" style="float: right;" mat-stroked-button (click)="openDialog(request)">More</button>
+    Request details <button *ngIf="!isLocalMode" style="float: right;" mat-stroked-button (click)="openDialog(request)">More</button>
   </mat-card-title>
   <mat-card-content>
     <mat-list>
       <mat-list-item>
           <span class="bold">Application:&nbsp;</span> {{request.classs}}
       </mat-list-item>
-      <mat-list-item *ngIf="local != undefined">
-        <div *ngIf="!local">
+      <mat-list-item>
+        <div *ngIf="!isLocalMode">
           <span class="bold">Creator:&nbsp;</span> <span [innerHTML]="request.created_by.name"></span>
           <span *ngIf="request.created_by.email">
             ({{request.created_by.email}})
           </span>
         </div>
-        <div *ngIf="local">
-          <span class="bold">Creator: </span> <span [innerHTML]="request.localCreator"></span>
-          <span *ngIf="request.localCreator">
-            ({{request.localCreator}})</span>
-          </div>
+        <div *ngIf="isLocalMode && request.creator">
+          <span class="bold">Creator: </span> <span [innerHTML]="request.creator"></span>
+        </div>
       </mat-list-item>
       <mat-list-item>
           <span class="bold">Creation date:&nbsp;</span> {{request.date_created | date: 'yyyy-MM-dd'}}
