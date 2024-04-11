@@ -1,8 +1,11 @@
 <div style=" margin-left: 20px;">
   <mat-card>
     <mat-card-title>
-      Users
+      Users Manager
     </mat-card-title>
+    <button mat-fab color="primary" aria-label="New user" style="float: right;" (click)="newUser()" *ngIf="isManager">
+        <mat-icon>add</mat-icon>
+    </button>
     <mat-card-content>
       <table style="width: 100%;" mat-table [dataSource]="dataSource">
         <ng-container matColumnDef="username">

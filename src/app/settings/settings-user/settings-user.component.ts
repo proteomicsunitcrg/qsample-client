@@ -1,8 +1,12 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/User';
+import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../../services/auth.service';
+import { TokenStorageService } from '../../services/token-storage.service';
 
 @Component({
   selector: 'app-settings-user',
@@ -14,9 +18,15 @@ export class SettingsUserComponent implements OnInit {
 
   columnsToDisplay = ['username', 'firstname', 'lastname', 'groupp', 'roles', 'permissions', 'remove'];
 
+  subscription: Subscription;
+  isManager = false;
+
   constructor(
+    private router: Router,
     private userService: UserService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private authService: AuthService,
+    private tokenStorageService: TokenStorageService
   ) {
     this.userService.getAllUsers().subscribe(
       (res) => {
@@ -28,11 +38,14 @@ export class SettingsUserComponent implements OnInit {
         console.error(err);
       }
     );
+    this.subscription = authService.getIsManager().subscribe((res) => (this.isManager = res));
   }
 
   allUsers: User[] = [];
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.authService.updateIsManager(this.tokenStorageService.isManagerUser());
+  }
 
   public openDialog(user: User): void {
     const dialogRef = this.dialog.open(UserSettingDialogComponent, {
@@ -58,6 +71,10 @@ export class SettingsUserComponent implements OnInit {
       console.log(`Dialog result: ${result}`);
       window.location.reload(); // Prompted reload for getting new permissions from table
     });
+  }
+
+  public newUser(): void {
+    this.router.navigate(['/settings/user/editor', 'new']);
   }
 
   // Function for mapping roles to easier to understand profiles

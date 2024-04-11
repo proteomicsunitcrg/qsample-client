@@ -1,15 +1,15 @@
 <mat-accordion>
-  <mat-expansion-panel hideToggle *ngIf="isManager">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Users
-      </mat-panel-title>
-      <mat-panel-description>
-        Manage QSample users
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-    <a routerLink="/settings/user" routerLinkActive="active">View and manage users</a>
-  </mat-expansion-panel>
+  <!-- <mat-expansion-panel hideToggle *ngIf="isManager"> -->
+  <!--   <mat-expansion-panel-header> -->
+  <!--     <mat-panel-title> -->
+  <!--       Users -->
+  <!--     </mat-panel-title> -->
+  <!--     <mat-panel-description> -->
+  <!--       Manage QSample users -->
+  <!--     </mat-panel-description> -->
+  <!--   </mat-expansion-panel-header> -->
+  <!--   <a routerLink="/settings/user" routerLinkActive="active">View and manage users</a> -->
+  <!-- </mat-expansion-panel> -->
   <mat-expansion-panel hideToggle *ngIf="!isLocalMode">
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -26,15 +26,15 @@
     <a routerLink="/settings/QGenerator/methods" routerLinkActive="active">View QGenerator methods</a>
     <br>
   </mat-expansion-panel>
-  <mat-expansion-panel hideToggle *ngIf="isLocalMode && isManager">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Local
-      </mat-panel-title>
-      <mat-panel-description>
-        Manage local settings
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-    <a routerLink="/settings/local/request" routerLinkActive="active">View and manage local requests</a>
-  </mat-expansion-panel>
+  <!-- <mat-expansion-panel hideToggle *ngIf="isLocalMode && isManager"> -->
+  <!--   <mat-expansion-panel-header> -->
+  <!--     <mat-panel-title> -->
+  <!--       Local -->
+  <!--     </mat-panel-title> -->
+  <!--     <mat-panel-description> -->
+  <!--       Manage local settings -->
+  <!--     </mat-panel-description> -->
+  <!--   </mat-expansion-panel-header> -->
+  <!--   <a routerLink="/settings/local/request" routerLinkActive="active">View and manage local requests</a> -->
+  <!-- </mat-expansion-panel> -->
 </mat-accordion>

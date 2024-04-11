@@ -4,7 +4,12 @@ import { RequestFile } from '../../../app/models/RequestFile';
 import { FileService } from '../../../app/services/file.service';
 import { PlotService } from '../../../app/services/plot.service';
 import { ThemeService } from '../../../app/services/theme.service';
-import { LAYOUTDARKGROUP, LAYOUTDARKOVERLAY, LAYOUTLIGHTGROUP, LAYOUTLIGHTOVERLAY } from '../../wetlab/wetlab-plot/plot.utils';
+import {
+  LAYOUTDARKGROUP,
+  LAYOUTDARKOVERLAY,
+  LAYOUTLIGHTGROUP,
+  LAYOUTLIGHTOVERLAY,
+} from '../../wetlab/wetlab-plot/plot.utils';
 import { ApplicationService } from '../../services/application.service';
 
 declare var Plotly: any;
@@ -12,11 +17,9 @@ declare var Plotly: any;
 @Component({
   selector: 'app-request-plot-modifications',
   templateUrl: './request-plot-modifications.component.html',
-  styleUrls: ['./request-plot-modifications.component.css']
+  styleUrls: ['./request-plot-modifications.component.css'],
 })
 export class RequestPlotModificationsComponent implements OnInit, OnDestroy {
-
-
   // tslint:disable-next-line:no-input-rename
   @Input('requestCode') requestCode: string;
 
@@ -43,7 +46,6 @@ export class RequestPlotModificationsComponent implements OnInit, OnDestroy {
   // Message error
   msgError = '';
 
-
   allFiles: RequestFile[] = [];
 
   // The current colot schema
@@ -51,7 +53,6 @@ export class RequestPlotModificationsComponent implements OnInit, OnDestroy {
 
   // Subscription to update the plot on theme change
   themeChangesSubscription$: Subscription;
-
 
   // Subscription to update the plot on list change
   fileListChangesSubscription$: Subscription;
@@ -63,9 +64,12 @@ export class RequestPlotModificationsComponent implements OnInit, OnDestroy {
 
   randString = '';
 
-
-
-  constructor(private fileService: FileService, private themeService: ThemeService, private plotService: PlotService, private applicationService: ApplicationService) { }
+  constructor(
+    private fileService: FileService,
+    private themeService: ThemeService,
+    private plotService: PlotService,
+    private applicationService: ApplicationService
+  ) {}
 
   ngOnInit(): void {
     this.randString = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -74,24 +78,22 @@ export class RequestPlotModificationsComponent implements OnInit, OnDestroy {
     this.subscribeToListChanges();
     this.subscribeToOrder();
     this.getData();
-    this.help = this.applicationService.getAppMessage( this.tooltip );
+    this.help = this.applicationService.getAppMessage(this.tooltip);
   }
 
   ngOnDestroy(): void {
     this.themeChangesSubscription$.unsubscribe();
     this.fileListChangesSubscription$.unsubscribe();
     this.orderSubscription$.unsubscribe();
-
   }
-
 
   private getData(): void {
     this.allFiles = [];
     this.fileService.getFilesByRequestCode(this.requestCode, this.order).subscribe(
-      res => {
+      (res) => {
         if (!res) {
           this.noDataFound = true;
-          this.msgError = "No data found";
+          this.msgError = 'No data found';
         } else {
           // for (let file of res) {
           //   for (let relation of file.modificationRelation) {
@@ -102,12 +104,12 @@ export class RequestPlotModificationsComponent implements OnInit, OnDestroy {
           //     }
           //   }
           // }
+          this.noDataFound = false;
           this.allFiles = res;
           this.plotGraph();
-          this.noDataFound = false;
         }
       },
-      err => {
+      (err) => {
         this.noDataFound = true;
         this.msgError = 'Nothing found';
         console.error(err);
@@ -115,44 +117,48 @@ export class RequestPlotModificationsComponent implements OnInit, OnDestroy {
     );
   }
 
-
+  // Two initial parts of the filename are removed
+  private parseFilename(filename: string): string {
+    let fileParts = filename.split('_');
+    fileParts.shift();
+    fileParts.shift();
+    filename = fileParts.join('_');
+    return filename;
+  }
   private plotGraph(): void {
     const filenames: string[] = [];
     const valuesPeptideHits: number[] = [];
     const valuesPeptideModified: number[] = [];
-    const traces = []
+    const traces = [];
     if (!this.allFiles) {
       return;
     }
-    this.allFiles.forEach(
-      file => {
-        if (this.checkFileInList(file)) {
-          filenames.push(file.filename);
-          const orderedCopy = file.modificationRelation;
-          orderedCopy.sort((a, b) => (a.id > b.id) ? 1 : -1); // we need the copy because it came unordered from the backend
-          orderedCopy.forEach(
-            modRel => {
-                orderedCopy.sort();
-                let found = false;
-                for (let mod of traces) {
-                  if (mod.name == modRel.modification.name) {
-                    mod.y.push(modRel.value);
-                    found = true;
-                  }
-                }
-                if (!found && modRel.modification.type == this.type) {
-                  traces.push({
-                    name: modRel.modification.name,
-                    y: [modRel.value],
-                    x: filenames,
-                    type: 'bar'
-                  })
-                }
+    this.allFiles.forEach((file) => {
+      if (this.checkFileInList(file)) {
+        filenames.push(this.parseFilename(file.filename));
+        const orderedCopy = file.modificationRelation;
+        orderedCopy.sort((a, b) => (a.id > b.id ? 1 : -1)); // we need the copy because it came unordered from the backend
+        orderedCopy.forEach((modRel) => {
+          orderedCopy.sort();
+          let found = false;
+          for (let mod of traces) {
+            if (mod.name == modRel.modification.name) {
+              mod.y.push(modRel.value);
+              found = true;
             }
-            );
-        }
+          }
+          if (!found && modRel.modification.type == this.type) {
+            traces.push({
+              name: modRel.modification.name,
+              y: [modRel.value],
+              x: filenames,
+              // x: this.removeRequestCode(filenames, this.requestCode),
+              type: 'bar',
+            });
+          }
+        });
       }
-      );
+    });
     // // Check current theme
     if (this.themeColor === 'dark-theme') {
       this.layout = LAYOUTDARKGROUP;
@@ -163,19 +169,18 @@ export class RequestPlotModificationsComponent implements OnInit, OnDestroy {
     }
     const config = { responsive: true };
     Plotly.react(`Graph${this.randString}`, traces, this.layout, config);
-    setTimeout(() => {  // The timeout is necessary because the PLOT isnt instant
-      const plotsSVG = document.getElementsByClassName('main-svg');  // the only way because this inst plotly native LUL
-      for (const ploterino of (plotsSVG as any)) {
+    setTimeout(() => {
+      // The timeout is necessary because the PLOT isnt instant
+      const plotsSVG = document.getElementsByClassName('main-svg'); // the only way because this inst plotly native LUL
+      for (const ploterino of plotsSVG as any) {
         ploterino.style['border-radius'] = '4px';
       }
     }, 100);
-
   }
 
-
   /**
-* Relayouts the plot
-*/
+   * Relayouts the plot
+   */
   private reLayout(): void {
     let update = {};
     switch (this.themeColor) {
@@ -184,8 +189,8 @@ export class RequestPlotModificationsComponent implements OnInit, OnDestroy {
           plot_bgcolor: '#424242',
           paper_bgcolor: '#424242',
           font: {
-            color: '#FFFFFF'
-          }
+            color: '#FFFFFF',
+          },
         };
         break;
       case 'light-theme':
@@ -193,8 +198,8 @@ export class RequestPlotModificationsComponent implements OnInit, OnDestroy {
           plot_bgcolor: 'white',
           paper_bgcolor: 'white',
           font: {
-            color: 'black'
-          }
+            color: 'black',
+          },
         };
         break;
     }
@@ -202,38 +207,31 @@ export class RequestPlotModificationsComponent implements OnInit, OnDestroy {
   }
 
   /**
-* Subscribes to theme changes
-*/
+   * Subscribes to theme changes
+   */
   private subscribeToThemeChanges(): void {
-    this.themeChangesSubscription$ = this.themeService.selectedTheme$.subscribe(
-      theme => {
-        this.themeColor = theme;
-        this.reLayout();
-      }
-    );
+    this.themeChangesSubscription$ = this.themeService.selectedTheme$.subscribe((theme) => {
+      this.themeColor = theme;
+      this.reLayout();
+    });
   }
 
-    /**
-* Subscribes to list display changes
-*/
-private subscribeToListChanges(): void {
-  this.fileListChangesSubscription$ = this.plotService.selectedSamples.subscribe(
-    list => {
+  /**
+   * Subscribes to list display changes
+   */
+  private subscribeToListChanges(): void {
+    this.fileListChangesSubscription$ = this.plotService.selectedSamples.subscribe((list) => {
       this.selectedSamples = list;
       this.plotGraph();
-    }
-  );
-}
+    });
+  }
 
-private subscribeToOrder(): void {
-  this.orderSubscription$ = this.plotService.selectedOrder.subscribe(
-    order => {
+  private subscribeToOrder(): void {
+    this.orderSubscription$ = this.plotService.selectedOrder.subscribe((order) => {
       this.order = order;
       this.getData();
-    }
-  );
-}
-
+    });
+  }
 
   private checkFileInList(file: any): boolean {
     for (const item of this.selectedSamples) {
@@ -243,5 +241,4 @@ private subscribeToOrder(): void {
     }
     return false;
   }
-
 }

@@ -170,8 +170,16 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
     );
   }
 
+  private trimValue(value: string): string {
+    let newValue = value;
+    if (newValue) {
+      newValue = newValue.trim();
+    }
+    return newValue;
+  }
+
   public addSample(): void {
-    this.allSamples.push(this.leForm.controls.sample.value);
+    this.allSamples.push(this.trimValue(this.leForm.controls.sample.value));
     this.leForm.controls.sample.setValue('');
   }
 
@@ -188,7 +196,7 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
     allSamples = allSamples.slice(0, -3);
     const localRequestToSend = new RequestLocal();
     localRequestToSend.id = this.requestFromServer.id;
-    localRequestToSend.requestCode = this.leForm.controls.code.value;
+    localRequestToSend.requestCode = this.trimValue(this.leForm.controls.code.value);
     localRequestToSend.application = this.leForm.controls.application.value;
     // Several hacks below to avoid problems with date format
     let formDate = this.leForm.controls.date.value.toString();
@@ -204,10 +212,10 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
     formDate = formDate + ':00'; // Adding miliseconds
 
     localRequestToSend.creation_date = formDate;
-    localRequestToSend.creator = this.leForm.controls.creator.value;
-    localRequestToSend.group = this.leForm.controls.group.value;
+    localRequestToSend.creator = this.trimValue(this.leForm.controls.creator.value);
+    localRequestToSend.group = this.trimValue(this.leForm.controls.group.value);
     localRequestToSend.status = this.leForm.controls.status.value;
-    localRequestToSend.taxonomy = this.leForm.controls.taxonomy.value;
+    localRequestToSend.taxonomy = this.trimValue(this.leForm.controls.taxonomy.value);
     localRequestToSend.samples = allSamples;
     this.localRequestService.saveLocalRequest(localRequestToSend).subscribe(
       (res) => {

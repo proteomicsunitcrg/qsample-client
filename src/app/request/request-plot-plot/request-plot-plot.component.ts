@@ -13,10 +13,9 @@ declare var Plotly: any;
 @Component({
   selector: 'app-request-plot-plot',
   templateUrl: './request-plot-plot.component.html',
-  styleUrls: ['./request-plot-plot.component.css']
+  styleUrls: ['./request-plot-plot.component.css'],
 })
 export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewInit {
-
   // tslint:disable-next-line:no-input-rename
   @ViewChild('Graph', { static: true })
   private Graph: ElementRef;
@@ -64,7 +63,6 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
 
   order: string;
 
-
   // Flag to know if the plot has data
   noDataFound = false;
 
@@ -77,10 +75,13 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
 
   counter = 0;
 
-
-  constructor(private dataService: DataService, private themeService: ThemeService, private requestService: RequestService,
-    private plotService: PlotService, private applicationService: ApplicationService) {
-  }
+  constructor(
+    private dataService: DataService,
+    private themeService: ThemeService,
+    private requestService: RequestService,
+    private plotService: PlotService,
+    private applicationService: ApplicationService
+  ) {}
 
   ngOnInit(): void {
     this.layout.shapes = [];
@@ -89,9 +90,8 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
     this.subscribeToOrder(); // this method retrieves the data
     this.subscribeToThemeChanges();
     this.subscribeToListChanges();
-    this.title = this.name
-    this.help = this.applicationService.getAppMessage( this.tooltip );
-
+    this.title = this.name;
+    this.help = this.applicationService.getAppMessage(this.tooltip);
   }
 
   ngOnDestroy(): void {
@@ -105,19 +105,22 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
     this.plotElement = document.getElementById('Graph' + this.randString) as any;
   }
 
-
   private getData(): void {
     this.dataService.getDataForPlotRequest(this.cs, this.param, this.requestCode, this.order).subscribe(
-      res => {
+      (res) => {
         this.plotTrace = res;
 
         if (this.plotTrace.length !== 0) {
           this.plotGraph();
           this.noDataFound = false;
+        } else {
+          this.noDataFound = true;
+          this.msgError = 'No data found';
         }
       },
-      err => {
+      (err) => {
         this.noDataFound = true;
+        this.msgError = 'No data found';
         if (err && err.error && err.error.message) {
           this.msgError = err.error.message;
         }
@@ -127,7 +130,6 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
 
   // Two initial parts of the filename are removed
   private parseFilename(filename: string): string {
-
     let fileParts = filename.split('_');
     fileParts.shift();
     fileParts.shift();
@@ -140,36 +142,34 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
     if (this.plotTrace === undefined) {
       return;
     }
-    this.plotTrace.forEach(
-      plotTrace => {
-        const values = [];
-        const filenames = [];
-        const dates = [];
-        const color = [];
-        const checksum = [];
-        plotTrace.plotTracePoints.forEach(
-          plotTracePoint => {
-            if (this.checkFileInList(plotTracePoint.file)) {
-              values.push(plotTracePoint.value);
-              filenames.push(this.parseFilename(plotTracePoint.file.filename));
-              dates.push(plotTracePoint.file.creationDate);
-              color.push('red');
-              checksum.push(`${plotTracePoint.file.filename}<br>${plotTracePoint.value}<br>${plotTracePoint.file.creation_date}<br>${plotTracePoint.file.checksum}`);
-            }
-          }
-        );
-        const trace = {
-          x: filenames,
-          y: values,
-          type: 'bar',
-          name: plotTrace.abbreviated,
-          filenames,
-          checksum,
-          hovertemplate: checksum
-        };
-        dataForPlot.push(trace);
-      }
-    );
+    this.plotTrace.forEach((plotTrace) => {
+      const values = [];
+      const filenames = [];
+      const dates = [];
+      const color = [];
+      const checksum = [];
+      plotTrace.plotTracePoints.forEach((plotTracePoint) => {
+        if (this.checkFileInList(plotTracePoint.file)) {
+          values.push(plotTracePoint.value);
+          filenames.push(this.parseFilename(plotTracePoint.file.filename));
+          dates.push(plotTracePoint.file.creationDate);
+          color.push('red');
+          checksum.push(
+            `${plotTracePoint.file.filename}<br>${plotTracePoint.value}<br>${plotTracePoint.file.creation_date}<br>${plotTracePoint.file.checksum}`
+          );
+        }
+      });
+      const trace = {
+        x: filenames,
+        y: values,
+        type: 'bar',
+        name: plotTrace.abbreviated,
+        filenames,
+        checksum,
+        hovertemplate: checksum,
+      };
+      dataForPlot.push(trace);
+    });
     // Check current theme
     if (this.themeColor === 'dark-theme') {
       this.layout = LAYOUTDARK;
@@ -182,25 +182,26 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
     this.layout.title = '';
     const config = { responsive: true };
     Plotly.react(`Graph${this.randString}`, dataForPlot, this.layout, config);
-    setTimeout(() => {  // The timeout is necessary because the PLOT isnt instant
-      const plotsSVG = document.getElementsByClassName('main-svg');  // the only way because this inst plotly native LUL
-      for (const ploterino of (plotsSVG as any)) {
+    setTimeout(() => {
+      // The timeout is necessary because the PLOT isnt instant
+      const plotsSVG = document.getElementsByClassName('main-svg'); // the only way because this inst plotly native LUL
+      for (const ploterino of plotsSVG as any) {
         ploterino.style['border-radius'] = '4px';
       }
     }, 100);
-    if (this.counter === 0) { // Only link the listener the first time the plot is created
+    if (this.counter === 0) {
+      // Only link the listener the first time the plot is created
       const plot = document.getElementById('Graph' + this.randString) as any;
       plot.on('plotly_click', (data) => {
         this.plotService.getChecksumFromPlotlyClickEvent(data);
       });
     }
     this.counter++;
-
   }
 
   /**
-  * Relayouts the plot
-  */
+   * Relayouts the plot
+   */
   private reLayout(): void {
     let update = {};
     switch (this.themeColor) {
@@ -209,8 +210,8 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
           plot_bgcolor: '#424242',
           paper_bgcolor: '#424242',
           font: {
-            color: '#FFFFFF'
-          }
+            color: '#FFFFFF',
+          },
         };
         break;
       case 'light-theme':
@@ -218,8 +219,8 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
           plot_bgcolor: 'white',
           paper_bgcolor: 'white',
           font: {
-            color: 'black'
-          }
+            color: 'black',
+          },
         };
         break;
     }
@@ -227,36 +228,30 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   /**
-  * Subscribes to theme changes
-  */
+   * Subscribes to theme changes
+   */
   private subscribeToThemeChanges(): void {
-    this.themeChangesSubscription$ = this.themeService.selectedTheme$.subscribe(
-      theme => {
-        this.themeColor = theme;
-        this.reLayout();
-      }
-    );
+    this.themeChangesSubscription$ = this.themeService.selectedTheme$.subscribe((theme) => {
+      this.themeColor = theme;
+      this.reLayout();
+    });
   }
 
   /**
-  * Subscribes to list display changes
-  */
+   * Subscribes to list display changes
+   */
   private subscribeToListChanges(): void {
-    this.fileListChangesSubscription$ = this.plotService.selectedSamples.subscribe(
-      list => {
-        this.selectedSamples = list;
-        this.plotGraph();
-      }
-    );
+    this.fileListChangesSubscription$ = this.plotService.selectedSamples.subscribe((list) => {
+      this.selectedSamples = list;
+      this.plotGraph();
+    });
   }
 
   private subscribeToOrder(): void {
-    this.orderSubscription$ = this.plotService.selectedOrder.subscribe(
-      order => {
-        this.order = order;
-        this.getData();
-      }
-    );
+    this.orderSubscription$ = this.plotService.selectedOrder.subscribe((order) => {
+      this.order = order;
+      this.getData();
+    });
   }
 
   private checkFileInList(file: any): boolean {
@@ -267,5 +262,4 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
     }
     return false;
   }
-
 }

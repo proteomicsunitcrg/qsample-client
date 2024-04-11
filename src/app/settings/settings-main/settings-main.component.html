@@ -1,9 +1,8 @@
 <div fxLayout style="margin-top: 10px; margin-left: 10px;">
-  <div fxFlex="20%">
-    <app-settings-sidebar></app-settings-sidebar>
-    <app-settings-adduser *ngIf="local && isManager"></app-settings-adduser>
-  </div>
-    <div fxFlex="70%">
+  <div fxFlex="75%">
     <router-outlet></router-outlet>
+  </div>
+  <div fxFlex="23%" style="margin-left: 10px;">
+    <app-settings-sidebar></app-settings-sidebar>
   </div>
 </div>
