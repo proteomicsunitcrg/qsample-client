@@ -104,9 +104,9 @@ export class RequestPlotModificationsComponent implements OnInit, OnDestroy {
           //     }
           //   }
           // }
+          this.noDataFound = false;
           this.allFiles = res;
           this.plotGraph();
-          this.noDataFound = false;
         }
       },
       (err) => {
