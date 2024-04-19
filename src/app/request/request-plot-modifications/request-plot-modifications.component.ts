@@ -89,29 +89,27 @@ export class RequestPlotModificationsComponent implements OnInit, OnDestroy {
 
   private getData(): void {
     this.allFiles = [];
+    this.noDataFound = true;
+    this.msgError = 'No data found';
+
     this.fileService.getFilesByRequestCode(this.requestCode, this.order).subscribe(
       (res) => {
-        if (!res) {
-          this.noDataFound = true;
-          this.msgError = 'No data found';
-        } else {
-          // for (let file of res) {
-          //   for (let relation of file.modificationRelation) {
-          //     console.log(relation);
-
-          //     if (relation.modification.type != this.type) {
-          //       console.log(relation.modification.type, this.type);
-          //     }
-          //   }
-          // }
-          this.noDataFound = false;
+        if (res) {
+          for (let file of res) {
+            if (file.hasOwnProperty('modificationRelation') && file.modificationRelation.length > 0) {
+              for (let rel of file.modificationRelation) {
+                if (rel.modification.type == this.type) {
+                  this.noDataFound = false;
+                  break;
+                }
+              }
+            }
+          }
           this.allFiles = res;
           this.plotGraph();
         }
       },
       (err) => {
-        this.noDataFound = true;
-        this.msgError = 'Nothing found';
         console.error(err);
       }
     );
