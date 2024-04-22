@@ -1,23 +1,27 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ThemeService } from '../../../app/services/theme.service';
-import { WetLabFile } from '../../../app/models/WetLabFile';
 import { FileService } from '../../../app/services/file.service';
 import { LAYOUTDARKOVERLAY, LAYOUTLIGHTOVERLAY } from '../../wetlab/wetlab-plot/plot.utils';
 import { PlotService } from '../../../app/services/plot.service';
 import { RequestFile } from 'src/app/models/RequestFile';
-
+import { ApplicationService } from '../../services/application.service';
 declare var Plotly: any;
 
 @Component({
   selector: 'app-request-plot-fileinfo',
   templateUrl: './request-plot-fileinfo.component.html',
-  styleUrls: ['./request-plot-fileinfo.component.css']
+  styleUrls: ['./request-plot-fileinfo.component.css'],
 })
 export class RequestPlotFileinfoComponent implements OnInit, OnDestroy {
-
   // tslint:disable-next-line:no-input-rename
   @Input('requestCode') requestCode: string;
+
+  // tslint:disable-next-line:no-input-rename
+  @Input('name') name;
+
+  // tslint:disable-next-line:no-input-rename
+  @Input('tooltip') tooltip;
 
   allFiles: RequestFile[];
 
@@ -43,12 +47,23 @@ export class RequestPlotFileinfoComponent implements OnInit, OnDestroy {
   // Flag to know if the plot has data
   noDataFound = false;
 
+  // Title of the component
+  title = '';
+
+  // Help element
+  help = '';
+
   // Message error
   msgError = '';
 
   selectedSamples = [];
 
-  constructor(private fileService: FileService, private themeService: ThemeService, private plotService: PlotService) { }
+  constructor(
+    private fileService: FileService,
+    private themeService: ThemeService,
+    private plotService: PlotService,
+    private applicationService: ApplicationService
+  ) {}
 
   ngOnInit(): void {
     this.randString = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -57,6 +72,8 @@ export class RequestPlotFileinfoComponent implements OnInit, OnDestroy {
     this.subscribeToOrder();
     this.subscribeToListChanges();
     this.getData();
+    this.title = this.name;
+    this.help = this.applicationService.getAppMessage(this.tooltip);
   }
 
   ngOnDestroy(): void {
@@ -67,17 +84,17 @@ export class RequestPlotFileinfoComponent implements OnInit, OnDestroy {
 
   private getData(): void {
     this.fileService.getFilesByRequestCode(this.requestCode, this.order).subscribe(
-      res => {
+      (res) => {
         if (!res) {
           this.noDataFound = true;
-          this.msgError = "No data found";
+          this.msgError = 'No data found';
         } else {
           this.allFiles = res;
           this.plotGraph();
           this.noDataFound = false;
         }
       },
-      err => {
+      (err) => {
         this.noDataFound = true;
         this.msgError = 'Nothing found';
         console.error(err);
@@ -93,30 +110,28 @@ export class RequestPlotFileinfoComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.allFiles.forEach(
-      file => {
-        if (file.fileInfo) {
-          if (this.checkFileInList(file)) {
-            valuesPeptideHits.push(file.fileInfo.peptideHits);
-            valuesPeptideModified.push(file.fileInfo.peptideModified);
-            filenames.push(file.filename);
-          }
+    this.allFiles.forEach((file) => {
+      if (file.fileInfo) {
+        if (this.checkFileInList(file)) {
+          valuesPeptideHits.push(file.fileInfo.peptideHits);
+          valuesPeptideModified.push(file.fileInfo.peptideModified);
+          filenames.push(file.filename);
         }
       }
-    );
+    });
     const tracePeptideHits = {
       x: filenames,
       y: valuesPeptideHits,
       type: 'bar',
       name: 'All peptides',
-      filenames
+      filenames,
     };
     const tracePeptideModified = {
       x: filenames,
       y: valuesPeptideModified,
       type: 'bar',
       name: 'Modified peptides',
-      filenames
+      filenames,
     };
     // Check current theme
     if (this.themeColor === 'dark-theme') {
@@ -128,19 +143,18 @@ export class RequestPlotFileinfoComponent implements OnInit, OnDestroy {
     }
     const config = { responsive: true };
     Plotly.react(`Graph${this.randString}`, [tracePeptideHits, tracePeptideModified], this.layout, config);
-    setTimeout(() => {  // The timeout is necessary because the PLOT isnt instant
-      const plotsSVG = document.getElementsByClassName('main-svg');  // the only way because this inst plotly native LUL
-      for (const ploterino of (plotsSVG as any)) {
+    setTimeout(() => {
+      // The timeout is necessary because the PLOT isnt instant
+      const plotsSVG = document.getElementsByClassName('main-svg'); // the only way because this inst plotly native LUL
+      for (const ploterino of plotsSVG as any) {
         ploterino.style['border-radius'] = '4px';
       }
     }, 100);
-
   }
 
-
   /**
-* Relayouts the plot
-*/
+   * Relayouts the plot
+   */
   private reLayout(): void {
     let update = {};
     switch (this.themeColor) {
@@ -149,8 +163,8 @@ export class RequestPlotFileinfoComponent implements OnInit, OnDestroy {
           plot_bgcolor: '#424242',
           paper_bgcolor: '#424242',
           font: {
-            color: '#FFFFFF'
-          }
+            color: '#FFFFFF',
+          },
         };
         break;
       case 'light-theme':
@@ -158,8 +172,8 @@ export class RequestPlotFileinfoComponent implements OnInit, OnDestroy {
           plot_bgcolor: 'white',
           paper_bgcolor: 'white',
           font: {
-            color: 'black'
-          }
+            color: 'black',
+          },
         };
         break;
     }
@@ -167,37 +181,30 @@ export class RequestPlotFileinfoComponent implements OnInit, OnDestroy {
   }
 
   /**
-* Subscribes to theme changes
-*/
+   * Subscribes to theme changes
+   */
   private subscribeToThemeChanges(): void {
-    this.themeChangesSubscription$ = this.themeService.selectedTheme$.subscribe(
-      theme => {
-        this.themeColor = theme;
-        this.reLayout();
-      }
-    );
+    this.themeChangesSubscription$ = this.themeService.selectedTheme$.subscribe((theme) => {
+      this.themeColor = theme;
+      this.reLayout();
+    });
   }
 
-
   private subscribeToOrder(): void {
-    this.orderSubscription$ = this.plotService.selectedOrder.subscribe(
-      order => {
-        this.order = order;
-        this.getData();
-      }
-    );
+    this.orderSubscription$ = this.plotService.selectedOrder.subscribe((order) => {
+      this.order = order;
+      this.getData();
+    });
   }
 
   /**
-* Subscribes to list display changes
-*/
+   * Subscribes to list display changes
+   */
   private subscribeToListChanges(): void {
-    this.fileListChangesSubscription$ = this.plotService.selectedSamples.subscribe(
-      list => {
-        this.selectedSamples = list;
-        this.plotGraph();
-      }
-    );
+    this.fileListChangesSubscription$ = this.plotService.selectedSamples.subscribe((list) => {
+      this.selectedSamples = list;
+      this.plotGraph();
+    });
   }
 
   private checkFileInList(file: any): boolean {
@@ -208,6 +215,4 @@ export class RequestPlotFileinfoComponent implements OnInit, OnDestroy {
     }
     return false;
   }
-
-
 }

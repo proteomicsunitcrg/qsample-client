@@ -5,7 +5,6 @@ import { ThemeService } from '../../services/theme.service';
 import { LAYOUTDARK, LAYOUTLIGHT } from '../../wetlab/wetlab-plot/plot.utils';
 import { Subscription } from 'rxjs';
 import { RequestService } from '../../services/request.service';
-import { LoginFormComponent } from '../../entry-point/login-form/login-form.component';
 import { PlotService } from '../../services/plot.service';
 import { ApplicationService } from '../../services/application.service';
 declare var Plotly: any;
