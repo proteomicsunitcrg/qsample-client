@@ -13,9 +13,9 @@
   <!-- 2.1. Totals plot with data coming from FileInfo -->
   <app-request-plot-fileinfo [requestCode]="requestCode" *ngIf="application && application.applicationConstraint.showFileInfoPlot && !application.applicationConstraint.showModificationsPlot" [name]="'Number of modified peptides'"></app-request-plot-fileinfo>
   <!-- 2.2. Totals plot with data coming from modifications -->
-  <app-request-plot-modifications [requestCode]="requestCode" *ngIf="application && application.applicationConstraint.showModificationsPlot" [name]="'Number of modification sites'" [type]="'total-numbers'" tooltip="general-peptides-modified"></app-request-plot-modifications>
+  <app-request-plot-modifications [requestCode]="requestCode" *ngIf="application && application.applicationConstraint.showModificationsPlot" [name]="'Number of modification sites'" [type]="'total-numbers'" tooltip="general-site-modifications"></app-request-plot-modifications>
   <!-- Fileinfo case above shown afterwards -->
-  <app-request-plot-fileinfo [requestCode]="requestCode" *ngIf="application && application.applicationConstraint.showFileInfoPlot && application.applicationConstraint.showModificationsPlot" [name]="'Number of modified peptides'" tooltip="general-site-modifications"></app-request-plot-fileinfo>
+  <app-request-plot-fileinfo [requestCode]="requestCode" *ngIf="application && application.applicationConstraint.showFileInfoPlot && application.applicationConstraint.showModificationsPlot" [name]="'Number of modified peptides'" tooltip="general-peptides-modified"></app-request-plot-fileinfo>
   <app-request-plot-modifications [requestCode]="requestCode" *ngIf="application" [name]="'Polymer contaminants (%TIC)'" [type]="'polymer-contaminants'" [tooltip]="'general-polymer-contaminants'"></app-request-plot-modifications>
   <!-- 2.3. Specific plots for PTM Histones application -->
   <app-request-plot-modifications [requestCode]="requestCode" *ngIf="application && application.applicationConstraint.showHistonesBiological" [name]="'N-term Propionyl'" [type]="'histones-biological'"></app-request-plot-modifications>
