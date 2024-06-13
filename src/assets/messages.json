@@ -13,5 +13,7 @@
   "correlation-protein-abundances": "Algorithm:\n1) Creation of a list with all protein abundances for all the samples within the request.\n2) With the slider bar, the number of minimum common proteins to perform the correlation between samples is set. By default is 20, which means that for computing the correlation between two samples we need at least 20 proteins in common.\n3) Pearson correlation of the protein sequences is computed for any pair of samples.",
   "wetlab-number_of_protein_groups": "Sum of all protein groups present within the sample. A protein group contains all proteins indistinguishable from the set of identified peptides.",
   "wetlab-number_of_peptides": "Sum of all peptidoforms present within the sample. The term “peptidoform” is used for the specific “form” or “entity” of a given peptide that results from the combination of the amino acid sequence and modification(s) at specific amino acid positions.\nExample: for this two arbitrary scans,\nscan=\"49914\" sequence=\"AVVAIS(Phospho)\" charge=\"2\"​​​\nscan=\"53195\" sequence=\"AVVAIS(Phospho)\" charge=\"3\"\nThe peptidoform is \"AVVAIK(Phospho)\" regardless of the number of scan and charge.",
-  "wetlab-number_of_modification_sites_sty": "Number of all peptidoforms present within the sample with at least one phosphorilated S, T or Y."
+  "wetlab-number_of_modification_sites_sty": "Number of all peptidoforms present within the sample with at least one phosphorilated S, T or Y",
+  "wetlab-number_of_modification_sites": "Number of sites with specific modifications",
+  "wetlab-number_of_modified_peptides": "Number of peptides that have at least one generic modification"
 }
