@@ -105,7 +105,6 @@ export class WetlabPlotComponent implements OnInit, OnDestroy {
    */
   plotGraph() {
     const dataForPlot = [];
-
     this.plotTrace.forEach(
       plotTrace => {
         const errorBar = [];
@@ -120,7 +119,7 @@ export class WetlabPlotComponent implements OnInit, OnDestroy {
             filenames.push(plotTracePoint.name);
             color.push('red');
             errorBar.push(plotTracePoint.std);
-            text.push(`${plotTracePoint.value}<br>±${plotTracePoint.std}<br>W${plotTracePoint.week}Y${plotTracePoint.year}<br>${plotTracePoint.triplicats.map(e => `${e.filename}<br>`)}`);
+            text.push(`${plotTracePoint.value.toFixed(2)}<br>±${plotTracePoint.std.toFixed(2)}<br>W${plotTracePoint.week}Y${plotTracePoint.year}<br>${plotTracePoint.triplicats.map(e => `${e.filename}<br>`)}`);
           }
         );
         const trace = {
