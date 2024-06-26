@@ -154,7 +154,7 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
           dates.push(plotTracePoint.file.creationDate);
           color.push('red');
           checksum.push(
-            `${plotTracePoint.file.filename}<br>${plotTracePoint.value}<br>${plotTracePoint.file.creation_date}<br>${plotTracePoint.file.checksum}`
+            `${plotTracePoint.file.filename}<br>${plotTracePoint.value.toExponential(1).toLocaleUpperCase()}<br>${plotTracePoint.file.creation_date}<br>${plotTracePoint.file.checksum}`
           );
         }
       });

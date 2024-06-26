@@ -78,7 +78,7 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
     this.loading = false;
     let data = [
       {
-        z: this.data,
+        z: this.data.map(item => item.map(value => value.toFixed(2))),
         // x: this.selectedSamples.map(item => `sample ${item.filename.split('_')[2]}`),
         x: this.filenames.map(item => item.split('_').splice(2).join('_')),
         // y: this.selectedSamples.map(item => `sample ${item.filename.split('_')[2]}`),

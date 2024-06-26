@@ -141,14 +141,15 @@ export class RequestPlotModificationsComponent implements OnInit, OnDestroy {
           let found = false;
           for (let mod of traces) {
             if (mod.name == modRel.modification.name) {
-              mod.y.push(modRel.value);
+              mod.y.push(modRel.value.toFixed(2));
               found = true;
             }
           }
+          let legend = [];
           if (!found && modRel.modification.type == this.type) {
             traces.push({
               name: modRel.modification.name,
-              y: [modRel.value],
+              y: [modRel.value.toFixed(2)],
               x: filenames,
               // x: this.removeRequestCode(filenames, this.requestCode),
               type: 'bar',
