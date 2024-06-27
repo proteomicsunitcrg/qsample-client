@@ -136,6 +136,15 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
     return filename;
   }
 
+  private processExpValue(value) {
+    let expValue = value;
+    if (value.toString().length > 7) {
+      expValue = value.toExponential(1).toLocaleUpperCase();
+    }
+
+    return expValue;
+  }
+
   private plotGraph(): void {
     const dataForPlot = [];
     if (this.plotTrace === undefined) {
@@ -153,8 +162,9 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
           filenames.push(this.parseFilename(plotTracePoint.file.filename));
           dates.push(plotTracePoint.file.creationDate);
           color.push('red');
+          let expvalue = this.processExpValue(plotTracePoint.value);
           checksum.push(
-            `${plotTracePoint.file.filename}<br>${plotTracePoint.value.toExponential(1).toLocaleUpperCase()}<br>${plotTracePoint.file.creation_date}<br>${plotTracePoint.file.checksum}`
+            `${plotTracePoint.file.filename}<br>${expvalue}<br>${plotTracePoint.file.creation_date}<br>${plotTracePoint.file.checksum}`
           );
         }
       });
