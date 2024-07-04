@@ -157,7 +157,8 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
       const color = [];
       const checksum = [];
       plotTrace.plotTracePoints.forEach((plotTracePoint) => {
-        if (this.checkFileInList(plotTracePoint.file)) {
+        // NOTE: We restrict the plot to only show the samples that are in the list and with a value > 0
+        if (this.checkFileInList(plotTracePoint.file) && plotTracePoint.value > 0 ) {
           values.push(plotTracePoint.value);
           filenames.push(this.parseFilename(plotTracePoint.file.filename));
           dates.push(plotTracePoint.file.creationDate);
