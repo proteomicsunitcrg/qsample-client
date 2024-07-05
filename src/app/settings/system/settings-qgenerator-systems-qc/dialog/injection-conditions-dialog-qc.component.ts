@@ -59,7 +59,7 @@ export class InjectionConditionsQCDialogComponent implements OnInit {
       },
       err => {
         this.openSnackBar('Something went wrong, contact the administrator', 'Close');
-        console.log(err);
+        console.error(err);
       }
     );
   }

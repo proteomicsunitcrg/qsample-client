@@ -243,7 +243,7 @@ export function thresholdShapesUP(thresholdToDraw: ThresholdForPlot): any {
   const shapes = [];
   const color: string[] = ['#27AE60', '#FFC300', '#FF5733', '#C70039'];
   for (let i = -1; i < thresholdToDraw.steps; i++) {
-    console.log((i + 1) * thresholdToDraw.stepValue);
+    // console.log((i + 1) * thresholdToDraw.stepValue);
     const shape = {
       type: 'line',
       x0: 0,

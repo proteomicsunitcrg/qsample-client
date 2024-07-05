@@ -16,7 +16,7 @@ export class NonConformitiesDialogComponent {
     public dialogRef: MatDialogRef<NonConformitiesDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public itemC: any) {
     this.ncFiles = itemC.files;
-    console.log(this.ncFiles);
+    // console.log(this.ncFiles);
 
   }
 

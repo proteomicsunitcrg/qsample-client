@@ -36,7 +36,6 @@ export class QuantificationService {
     listOfChecksums.forEach((item) => {
       this.params = this.params.append(`checksums[]`, item);
     });
-    console.log(listOfChecksums);
 
     return this.http.get<any>(`${this.apiPrefix}/PCA/${requestCode}`, {params: this.params});
   }

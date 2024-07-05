@@ -202,7 +202,7 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
     }
     let sampleNumber = 1;
     for (const val of cac) {
-      console.log(val);
+      // console.log(val);
       if (this.isLocal) {
         const item = new Itemerino(
           'Unknown',

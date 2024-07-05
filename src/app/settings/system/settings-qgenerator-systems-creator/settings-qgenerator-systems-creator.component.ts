@@ -64,7 +64,7 @@ export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
         this.systemFrom.get('name').setValue(this.instrument.name);
       },
       err => {
-        console.log(err);
+        console.error(err);
       }
     );
   }
@@ -93,7 +93,7 @@ export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
         }
       },
       err => {
-        console.log(err);
+        console.error(err);
         this.openSnackBar('Error, contact the administrators', 'Close');
       }
     );
@@ -110,7 +110,6 @@ export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
   }
 
   public goToQC(): void {
-    console.log(this.instrument);
 
     this.router.navigate(['settings/QGenerator/systems/qc/', this.instrument.id]);
   }

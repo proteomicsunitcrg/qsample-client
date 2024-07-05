@@ -52,7 +52,7 @@ export class InjectionConditionsDialogComponent implements OnInit {
     this.qGeneratorService.getMethodsByAppNameAndInstrumentId(this.application.name, this.instrument).subscribe(
       res => {
         if (res !== null) {
-          console.log(res);
+          // console.log(res);
 
           this.injectionCondition = res;
           // this.injCondForm.get('method').setValue(this.injectionCondition.method);
@@ -71,7 +71,7 @@ export class InjectionConditionsDialogComponent implements OnInit {
       res => {
         this.allMethods = res;
         this.checkIfMethodSelected();
-        console.log(this.methodsToDisplay);
+        // console.log(this.methodsToDisplay);
 
       },
       err => console.error(err)
@@ -82,7 +82,7 @@ export class InjectionConditionsDialogComponent implements OnInit {
     this.injectionCondition.volume = this.injCondForm.get('volume').value;
     this.injectionCondition.application = this.application;
     this.injectionCondition.instrument = this.instrument;
-    console.log(this.injectionCondition);
+    // console.log(this.injectionCondition);
     this.qGeneratorService.saveInjectionCondition(this.injectionCondition).subscribe(
       res => {
         this.openSnackBar('Injection condition saved', 'Close');
@@ -118,7 +118,7 @@ export class InjectionConditionsDialogComponent implements OnInit {
 
   private checkIfMethodSelected(): void {
     this.methodsToDisplay = [];
-    console.log(this.injectionCondition);
+    // console.log(this.injectionCondition);
 
     if (this.injectionCondition.methods.length === 0) {
       this.methodsToDisplay = this.allMethods;
@@ -137,7 +137,7 @@ export class InjectionConditionsDialogComponent implements OnInit {
   }
 
   public methodClick(method: Method): void {
-    console.log(method);
+    // console.log(method);
     this.injectionCondition.methods.push(method);
     this.checkIfMethodSelected();
   }

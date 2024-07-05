@@ -64,7 +64,7 @@ export class SettingsQgeneratorMethodsCreatorComponent implements OnInit {
         }
       },
       err => {
-        console.log(err);
+        console.error(err);
         this.openSnackBar('Error, contact the administrators', 'Close');
       }
     );
@@ -79,7 +79,7 @@ export class SettingsQgeneratorMethodsCreatorComponent implements OnInit {
         this.methodForm.get('name').setValue(this.method.name);
       },
       err => {
-        console.log(err);
+        console.error(err);
       }
     );
   }

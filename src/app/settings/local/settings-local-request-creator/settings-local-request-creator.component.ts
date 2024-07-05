@@ -61,7 +61,7 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
     this.activeRouter.params.subscribe(
       (params) => {
         if (params.id !== 'new') {
-          console.log(params);
+          // console.log(params);
           this.getLocalRequest(params.id); // TODO: Change to requestCode here
           this.isEdit = true;
         } else {
@@ -94,7 +94,7 @@ export class SettingsLocalRequestCreatorComponent implements OnInit {
   private getCurrentUsername(): void {
     this.userService.getCurrentUser().subscribe(
       (res) => {
-        console.log(res);
+        // console.log(res);
         this.currentUser = res;
         let fullname = [];
         let groupp = null;

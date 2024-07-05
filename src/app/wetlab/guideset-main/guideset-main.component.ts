@@ -38,7 +38,7 @@ export class GuidesetMainComponent implements OnInit {
   private getAllWetlabs(): void {
     this.wetLabService.getWetlabLists().subscribe(
       res => {
-        console.log(res);
+        // console.log(res);
         this.allWetLabs = res;
       },
       err => {
@@ -51,7 +51,7 @@ export class GuidesetMainComponent implements OnInit {
     this.selectedWetlab = wetlab;
     this.fileService.getWetLabFilesByWetLabApiKey(wetlab.apiKey).subscribe(
       res => {
-        console.log(res);
+        // console.log(res);
         this.wetLabFiles = res;
         this.getGuideSet();
       },
@@ -67,12 +67,12 @@ export class GuidesetMainComponent implements OnInit {
   }
 
   public setGuideset(): void {
-    console.log(this.selectedWetlab);
-    console.log(this.selectedFiles);
+    // console.log(this.selectedWetlab);
+    // console.log(this.selectedFiles);
     this.guidesetService.setGuideset(this.selectedWetlab, this.selectedFiles).subscribe(
       res => {
         this.getGuideSet();
-        console.log(res);
+        // console.log(res);
       },
       err => {
         console.error(err);
@@ -86,7 +86,7 @@ export class GuidesetMainComponent implements OnInit {
     } else {
       this.selectedFiles.splice(this.selectedFiles.indexOf(file), 1);
     }
-    console.log(this.selectedFiles);
+    // console.log(this.selectedFiles);
   }
 
   public getGuideSet(): void {
@@ -98,7 +98,7 @@ export class GuidesetMainComponent implements OnInit {
         // }
       },
       err => {
-        console.log(err);
+        console.error(err);
       }
     );
   }
@@ -106,7 +106,7 @@ export class GuidesetMainComponent implements OnInit {
   public deleteGuideSet(): void {
     this.guidesetService.deleteGuideset(this.setedGuideset).subscribe(
       res => {
-        console.log(res);
+        // console.log(res);
         this.getGuideSet();
       },
       err => {

@@ -193,7 +193,7 @@ export class WetlabPlotComponent implements OnInit, OnDestroy {
         shapes = thresholdShapesUPDOWN(thresholdToDraw);
         break;
       default:
-        console.log('bad direction!');
+        // console.log('bad direction!');
         break;
     }
     this.layout.shapes = shapes;

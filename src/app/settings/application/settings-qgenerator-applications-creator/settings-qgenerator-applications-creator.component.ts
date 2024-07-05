@@ -65,7 +65,7 @@ export class SettingsQgeneratorApplicationsCreatorComponent implements OnInit {
         }
       },
       err => {
-        console.log(err);
+        console.error(err);
         this.openSnackBar('Error, contact the administrators', 'Close');
       }
     );
@@ -80,7 +80,7 @@ export class SettingsQgeneratorApplicationsCreatorComponent implements OnInit {
         this.systemFrom.get('name').setValue(this.application.name);
       },
       err => {
-        console.log(err);
+        console.error(err);
       }
     );
   }

@@ -45,7 +45,7 @@ export class SettingsQgeneratorSystemsQcComponent implements OnInit {
         this.instrument = res;
       },
       err => {
-        console.log(err);
+        console.error(err);
       }
     );
   }

@@ -24,7 +24,7 @@ export class SettingsQgeneratorMethodsComponent implements OnInit {
   private getAllApplications(): void {
     this.applicationService.getAll().subscribe(
       res => {
-        console.log(res);
+        // console.log(res);
 
         this.dataSource = new MatTableDataSource(res);
       },

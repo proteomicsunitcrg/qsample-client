@@ -12,7 +12,6 @@ export class RequestPanelDialogComponent {
     public dialogRef: MatDialogRef<RequestPanelDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public itemC: any) {
     this.item = itemC.item;
-    console.log(this.item);
 
   }
 
