@@ -23,8 +23,8 @@ export class PlotService {
   }
 
   public getChecksumFromPlotlyClickEvent(data: any): void {
-    const splitted = data.points[0].hovertemplate.split('<br>');
-    const checksum = splitted[splitted.length - 1];
+    // We retrieve checksum from customdata Plotly attribute
+    const checksum = data.points[0].customdata;
     this.sendselectedChecksum(checksum);
   }
 

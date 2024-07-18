@@ -156,6 +156,7 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
       const dates = [];
       const color = [];
       const checksum = [];
+      const hovertemplate = [];
       plotTrace.plotTracePoints.forEach((plotTracePoint) => {
         // NOTE: We restrict the plot to only show the samples that are in the list and with a value > 0
         if (this.checkFileInList(plotTracePoint.file) && plotTracePoint.value > 0 ) {
@@ -164,7 +165,8 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
           dates.push(plotTracePoint.file.creationDate);
           color.push('red');
           let expvalue = this.processExpValue(plotTracePoint.value);
-          checksum.push(
+          checksum.push(plotTracePoint.file.checksum);
+          hovertemplate.push(
             `${plotTracePoint.file.filename}<br>${expvalue}<br>${plotTracePoint.file.creation_date}`
           );
         }
@@ -175,8 +177,8 @@ export class RequestPlotPlotComponent implements OnInit, OnDestroy, AfterViewIni
         type: 'bar',
         name: plotTrace.abbreviated,
         filenames,
-        checksum,
-        hovertemplate: checksum,
+        customdata: checksum, // We store in customdata attribute so it can be accessed
+        hovertemplate: hovertemplate,
       };
       dataForPlot.push(trace);
     });
