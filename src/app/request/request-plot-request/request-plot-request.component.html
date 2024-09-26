@@ -7,7 +7,7 @@
   <app-request-plot-plot [cs]="[19]" [param]="'1'" [requestCode]="requestCode" [name]="'Sum of Total TIC'" [tooltip]="'general-sum-total-tic'" *ngIf="application && application.applicationConstraint.showIdentifiedPeptidesPlot"></app-request-plot-plot>
   <app-request-plot-plot [cs]="[20,21,22,23]" [param]="'1'" [requestCode]="requestCode" [name]="'Peptides grouped by number of missed cleavages'" [tooltip]="'general-peptides-grouped-number-missed-cleavages'" *ngIf="application && application.applicationConstraint.showIdentifiedPeptidesPlot"></app-request-plot-plot>
   <app-request-plot-plot [cs]="[3, 4, 5]" [param]="'1'" [requestCode]="requestCode" [name]="'Precursors grouped by charge'" [tooltip]="'general-precursors-grouped-charge'" *ngIf="application && application.applicationConstraint.showChargesPlot"></app-request-plot-plot>
-  <app-request-plot-plot [cs]="[10, 11, 12, 13, 14, 15, 16, 17, 18]" [param]="'1'" [requestCode]="requestCode" [name]="'Secondary reactions (percentage)'" [tooltip]="'general-secondary-reactions'" *ngIf="application && application.applicationConstraint.showChargesPlot && application.id!=15 && !isLocalMode"></app-request-plot-plot>
+  <app-request-plot-plot [cs]="[10, 11, 12, 13, 14, 15, 16, 17, 18, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36]" [param]="'1'" [requestCode]="requestCode" [name]="'Secondary reactions (% PSM)'" [tooltip]="'general-secondary-reactions'" *ngIf="application && application.applicationConstraint.showChargesPlot && application.id!=15"></app-request-plot-plot>
 
   <!-- 2. Plots for applications with specific modifications-->
   <!-- 2.1. Totals plot with data coming from FileInfo -->
