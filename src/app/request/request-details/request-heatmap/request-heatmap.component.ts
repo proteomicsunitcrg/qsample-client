@@ -12,11 +12,15 @@ declare var Plotly: any;
 @Component({
   selector: 'app-request-heatmap',
   templateUrl: './request-heatmap.component.html',
-  styleUrls: ['./request-heatmap.component.css']
+  styleUrls: ['./request-heatmap.component.css'],
 })
 export class RequestHeatmapComponent implements OnInit, OnDestroy {
-
-  constructor(private quantificationService: QuantificationService, private plotService: PlotService, private themeService: ThemeService, private applicationService: ApplicationService) { }
+  constructor(
+    private quantificationService: QuantificationService,
+    private plotService: PlotService,
+    private themeService: ThemeService,
+    private applicationService: ApplicationService
+  ) {}
 
   // tslint:disable-next-line:no-input-rename
   @ViewChild('Graph', { static: true })
@@ -34,7 +38,7 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
   themeChangesSubscription$: Subscription;
 
   // Subscription to update order
-  orderSubscription$: Subscription
+  orderSubscription$: Subscription;
 
   // The current colot schema
   themeColor: string;
@@ -64,8 +68,7 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
     this.subscribeToListChanges();
     this.subscribeToThemeChanges();
     this.randString = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    this.help = this.applicationService.getAppMessage( 'correlation-protein-abundances' ); // TODO: This might get removed
-
+    this.help = this.applicationService.getAppMessage('correlation-protein-abundances'); // TODO: This might get removed
   }
 
   ngOnDestroy(): void {
@@ -76,13 +79,14 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
 
   private drawHeatMap(): void {
     this.loading = false;
+    console.log(this.data);
     let data = [
       {
-        z: this.data.map(item => item.map(value => value.toFixed(2))),
+        z: this.data.map((item) => item.map((value) => value.toFixed(2))),
         // x: this.selectedSamples.map(item => `sample ${item.filename.split('_')[2]}`),
-        x: this.filenames.map(item => item.split('_').splice(2).join('_')),
+        x: this.filenames.map((item) => item.split('_').splice(2).join('_')),
         // y: this.selectedSamples.map(item => `sample ${item.filename.split('_')[2]}`),
-        y:this.filenames.map(item => item.split('_').splice(2).join('_')),
+        y: this.filenames.map((item) => item.split('_').splice(2).join('_')),
         w: 'cac',
         type: 'heatmap',
         hoverongaps: false,
@@ -94,9 +98,9 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
           ['0.6', 'rgb(255, 131, 127)'],
           ['0.8', 'rgb(254, 39, 0)'],
           ['1', 'rgb(255,0,0)'],
-        ]
+        ],
         // colorscale: 'RdGy',
-      }
+      },
     ];
     if (this.themeColor === 'dark-theme') {
       this.layout = LAYOUTDARKHEATMAP;
@@ -106,67 +110,61 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
       this.layout = LAYOUTLIGHTHEATMAP;
     }
     Plotly.newPlot(`heatMap`, data, this.layout, { responsive: true });
-
   }
 
   private getHeatMapData() {
     this.loading = true;
-    this.quantificationService.getHeatMap(this.requestCode, this.listOfChecksum, this.sliderValue, this.order).subscribe(
-      res => {
-        if (res == null) {
-          this.nothingFound = true;
-        } else {
-          this.nothingFound = false;
+    this.quantificationService
+      .getHeatMap(this.requestCode, this.listOfChecksum, this.sliderValue, this.order)
+      .subscribe(
+        (res) => {
+          if (res == null) {
+            this.nothingFound = true;
+          } else {
+            this.nothingFound = false;
+          }
+          this.data = res.data;
+          this.filenames = res.names;
+          this.drawHeatMap();
+        },
+        (err) => {
+          console.error(err);
         }
-        this.data = res.data;
-        this.filenames = res.names;
-        this.drawHeatMap();
-      },
-      err => {
-        console.error(err);
-      }
-    );
+      );
   }
 
   /**
-* Subscribes to list display changes
-*/
+   * Subscribes to list display changes
+   */
   private subscribeToListChanges(): void {
-    this.fileListChangesSubscription$ = this.plotService.selectedSamples.subscribe(
-      list => {
-        this.selectedSamples = list;
-        this.listOfChecksum = this.selectedSamples.map(item => item.checksum);
-        this.getHeatMapData();
-      }
-    );
+    this.fileListChangesSubscription$ = this.plotService.selectedSamples.subscribe((list) => {
+      this.selectedSamples = list;
+      this.listOfChecksum = this.selectedSamples.map((item) => item.checksum);
+      this.getHeatMapData();
+    });
   }
 
   public sliderChange(): void {
     this.getHeatMapData();
   }
 
-
   /**
-  * Subscribes to theme changes
-  */
+   * Subscribes to theme changes
+   */
   private subscribeToThemeChanges(): void {
-    this.themeChangesSubscription$ = this.themeService.selectedTheme$.subscribe(
-      theme => {
-        this.themeColor = theme;
-        this.reLayout();
-      }
-    );
+    this.themeChangesSubscription$ = this.themeService.selectedTheme$.subscribe((theme) => {
+      this.themeColor = theme;
+      this.reLayout();
+    });
   }
 
   private subscribeToOrderChanges(): void {
-    this.orderSubscription$ = this.plotService.selectedOrder.subscribe(
-      order => this.order = order
-    );
+    this.orderSubscription$ = this.plotService.selectedOrder.subscribe((order) => (this.order = order));
   }
 
   /**
-* Relayouts the plot
-*/
+   * Relayouts the plot
+   */
   private reLayout(): void {
     let update = {};
     switch (this.themeColor) {
@@ -175,8 +173,8 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
           plot_bgcolor: '#424242',
           paper_bgcolor: '#424242',
           font: {
-            color: '#FFFFFF'
-          }
+            color: '#FFFFFF',
+          },
         };
         break;
       case 'light-theme':
@@ -184,13 +182,11 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
           plot_bgcolor: 'white',
           paper_bgcolor: 'white',
           font: {
-            color: 'black'
-          }
+            color: 'black',
+          },
         };
         break;
     }
     this.getHeatMapData();
   }
-
-
 }
