@@ -24,9 +24,10 @@
     <mat-card-footer>
       <button mat-raised-button color="primary" class="btn-block" (click)="logIn()" [disabled]="!loginForm.valid">Log
         in</button>
-      <button mat-flat-button class="btn-block-small" (click)="recoverPassword()" style="margin-top: 5%;">Recover
+      <button mat-flat-button class="btn-block-small" (click)="recoverPassword()" style="margin-top: 5%; width: auto;">Recover
         password</button>
+      <app-login-custom></app-login-custom>
     </mat-card-footer>
-    <app-login-custom></app-login-custom>
+
   </mat-card>
 </div>
