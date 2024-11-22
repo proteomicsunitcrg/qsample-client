@@ -64,7 +64,7 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
           }
         );
       } else {
-        alert("No sample retrieval service associated");
+        alert('No sample retrieval service associated');
       }
     });
   }
@@ -193,15 +193,15 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
   }
 
   private getSamplesFromRequests(request: any): void {
-    let cac = [];
+    let samples = [];
     if (this.isLocal) {
-      cac = this.parseLocalSamples(request.samples);
+      samples = this.parseLocalSamples(request.samples);
     } else {
       this.samples = [];
-      cac = JSON.parse(request.fields[request.fields.length - 1].value);
+      samples = request.samples;
     }
     let sampleNumber = 1;
-    for (const val of cac) {
+    for (const val of samples) {
       // console.log(val);
       if (this.isLocal) {
         const item = new Itemerino(
@@ -220,16 +220,17 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
         );
         this.samples.push(item);
       } else {
+        // For Agendo, info is in val.code
         // If empty value, we skip
-        if (val[0].value === '') {
+        if (val.code === '') {
           continue;
         }
         if (!this.clientCode) {
-          this.clientCode = this.generateClientCode(val[0].value.replace(/\|/g, '_'));
+          this.clientCode = this.generateClientCode(val.code.replace(/\|/g, '_'));
         }
         const item = new Itemerino(
           'Unknown',
-          val[0].value.replace(/\|/g, '_') + '_01',
+          val.code.replace(/\|/g, '_') + '_01',
           'none',
           'none',
           0,
