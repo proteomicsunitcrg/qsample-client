@@ -14,11 +14,15 @@ declare var Plotly: any;
 @Component({
   selector: 'app-wetlab-plot',
   templateUrl: './wetlab-plot.component.html',
-  styleUrls: ['./wetlab-plot.component.css']
+  styleUrls: ['./wetlab-plot.component.css'],
 })
 export class WetlabPlotComponent implements OnInit, OnDestroy {
-
-  constructor(private dataService: DataService, private themeService: ThemeService, private threholdService: ThresholdService, private applicationService: ApplicationService) { }
+  constructor(
+    private dataService: DataService,
+    private themeService: ThemeService,
+    private threholdService: ThresholdService,
+    private applicationService: ApplicationService
+  ) {}
 
   // The div element to draw the plot
   @ViewChild('Graph', { static: true })
@@ -69,7 +73,7 @@ export class WetlabPlotComponent implements OnInit, OnDestroy {
     this.getData();
     this.subscribeToDateChanges();
     this.subscribeToThemeChanges();
-    this.help = this.applicationService.getAppMessage("wetlab-"+(this.plot.name).toLowerCase().replaceAll(" ", "_"));
+    this.help = this.applicationService.getAppMessage('wetlab-' + this.plot.name.toLowerCase().replaceAll(' ', '_'));
   }
 
   ngOnDestroy(): void {
@@ -78,15 +82,15 @@ export class WetlabPlotComponent implements OnInit, OnDestroy {
     this.themeChangesSubscription$.unsubscribe();
   }
 
-
   /**
    * Asks the server for the plot data
    */
   private getData(): void {
     this.dataService.getDataForPlot(this.plot.id, this.wetlab.apiKey).subscribe(
-      res => {
+      (res) => {
         this.plotTrace = res;
-        if (this.plotTrace.length !== 0) { // Check the server have returned data
+        if (this.plotTrace.length !== 0) {
+          // Check the server have returned data
           this.plotGraph();
           this.noDataFound = false;
           this.loadThreshold();
@@ -94,10 +98,18 @@ export class WetlabPlotComponent implements OnInit, OnDestroy {
           this.noDataFound = true;
         }
       },
-      err => {
+      (err) => {
         console.error(err);
       }
     );
+  }
+
+  private setPointStd(std): String {
+    if (std && typeof std === 'number') {
+      return std.toFixed(2).toString();
+    } else {
+      return '';
+    }
   }
 
   /**
@@ -105,40 +117,39 @@ export class WetlabPlotComponent implements OnInit, OnDestroy {
    */
   plotGraph() {
     const dataForPlot = [];
-    this.plotTrace.forEach(
-      plotTrace => {
-        const errorBar = [];
-        const values = [];
-        const filenames = [];
-        const color = [];
-        const text = [];
-        plotTrace.plotTracePoints.sort((a, b) => a.year - b.year || a.week - b.week); //order by year and week
-        plotTrace.plotTracePoints.forEach(
-          plotTracePoint => {
-            values.push(plotTracePoint.value);
-            filenames.push(plotTracePoint.name);
-            color.push('red');
-            errorBar.push(plotTracePoint.std);
-            text.push(`${plotTracePoint.value.toFixed(2)}<br>±${plotTracePoint.std.toFixed(2)}<br>W${plotTracePoint.week}Y${plotTracePoint.year}<br>${plotTracePoint.triplicats.map(e => `${e.filename}<br>`)}`);
-          }
+    this.plotTrace.forEach((plotTrace) => {
+      const errorBar = [];
+      const values = [];
+      const filenames = [];
+      const color = [];
+      const text = [];
+      plotTrace.plotTracePoints.sort((a, b) => a.year - b.year || a.week - b.week); //order by year and week
+      plotTrace.plotTracePoints.forEach((plotTracePoint) => {
+        let fixed_val = this.setPointStd(plotTracePoint.std);
+        values.push(plotTracePoint.value);
+        filenames.push(plotTracePoint.name);
+        color.push('red');
+        errorBar.push(plotTracePoint.std);
+        text.push(
+          `${plotTracePoint.value.toFixed(2)}<br>±${fixed_val}<br>W${plotTracePoint.week}Y${plotTracePoint.year}<br>${plotTracePoint.triplicats.map((e) => `${e.filename}<br>`)}`
         );
-        const trace = {
-          x: filenames,
-          y: values,
-          type: 'bar',
-          name: plotTrace.abbreviated,
-          filenames, // same as filenames: filenames
-          hovertemplate: text,
-          error_y: {
-            type: 'data',
-            array: errorBar,
-            color: '#85144B',
-            visible: true
-          },
-        };
-        dataForPlot.push(trace);
-      }
-    );
+      });
+      const trace = {
+        x: filenames,
+        y: values,
+        type: 'bar',
+        name: plotTrace.abbreviated,
+        filenames, // same as filenames: filenames
+        hovertemplate: text,
+        error_y: {
+          type: 'data',
+          array: errorBar,
+          color: '#85144B',
+          visible: true,
+        },
+      };
+      dataForPlot.push(trace);
+    });
     // Check current theme
     if (this.themeColor === 'dark-theme') {
       this.layout = LAYOUTDARK;
@@ -150,27 +161,26 @@ export class WetlabPlotComponent implements OnInit, OnDestroy {
       this.layout.shapes = [];
     }
     Plotly.react(`Graph${this.randString}`, dataForPlot, this.layout);
-    setTimeout(() => {  // The timeout is necessary because the PLOT isnt instant
-      const plotsSVG = document.getElementsByClassName('main-svg');  // the only way because this inst plotly native LUL
-      for (const ploterino of (plotsSVG as any)) {
+    setTimeout(() => {
+      // The timeout is necessary because the PLOT isnt instant
+      const plotsSVG = document.getElementsByClassName('main-svg'); // the only way because this inst plotly native LUL
+      for (const ploterino of plotsSVG as any) {
         ploterino.style['border-radius'] = '4px';
       }
     }, 100);
-
   }
-
 
   /**
    * Asks the server for the threshold
    */
   private loadThreshold(): void {
     this.threholdService.getThresholdForPlot(this.plot.apiKey, this.wetlab.apiKey).subscribe(
-      res => {
+      (res) => {
         if (res != null) {
           this.drawThreshold(res);
         }
       },
-      err => {
+      (err) => {
         console.error(err);
       }
     );
@@ -183,13 +193,13 @@ export class WetlabPlotComponent implements OnInit, OnDestroy {
     this.hasThreshold = true;
     let shapes: any[] = [];
     switch (thresholdToDraw.direction) {
-      case ('UP'):
+      case 'UP':
         shapes = thresholdShapesUP(thresholdToDraw);
         break;
-      case ('DOWN'):
+      case 'DOWN':
         shapes = thresholdShapesDOWN(thresholdToDraw);
         break;
-      case ('UPDOWN'):
+      case 'UPDOWN':
         shapes = thresholdShapesUPDOWN(thresholdToDraw);
         break;
       default:
@@ -204,26 +214,21 @@ export class WetlabPlotComponent implements OnInit, OnDestroy {
    * Subscribe to the date changes
    */
   private subscribeToDateChanges(): void {
-    this.dateChangesSubscription$ = this.dataService.selectedDates$
-      .subscribe(
-        (dates) => {
-          this.currentDates = dates;
-          // reload the plot...
-          this.getData();
-        }
-      );
+    this.dateChangesSubscription$ = this.dataService.selectedDates$.subscribe((dates) => {
+      this.currentDates = dates;
+      // reload the plot...
+      this.getData();
+    });
   }
 
   /**
    * Subscribes to theme changes
    */
   private subscribeToThemeChanges(): void {
-    this.themeChangesSubscription$ = this.themeService.selectedTheme$.subscribe(
-      theme => {
-        this.themeColor = theme;
-        this.reLayout();
-      }
-    );
+    this.themeChangesSubscription$ = this.themeService.selectedTheme$.subscribe((theme) => {
+      this.themeColor = theme;
+      this.reLayout();
+    });
   }
 
   /**
@@ -237,8 +242,8 @@ export class WetlabPlotComponent implements OnInit, OnDestroy {
           plot_bgcolor: '#424242',
           paper_bgcolor: '#424242',
           font: {
-            color: '#FFFFFF'
-          }
+            color: '#FFFFFF',
+          },
         };
         break;
       case 'light-theme':
@@ -246,12 +251,11 @@ export class WetlabPlotComponent implements OnInit, OnDestroy {
           plot_bgcolor: 'white',
           paper_bgcolor: 'white',
           font: {
-            color: 'black'
-          }
+            color: 'black',
+          },
         };
         break;
     }
     this.getData();
   }
-
 }
