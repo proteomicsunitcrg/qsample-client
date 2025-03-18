@@ -614,6 +614,21 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
     element.isEditing = false;
   }
 
+  // We append text value to the different filenames
+  public appendToFilenames(value: string): void {
+    const elements = document.querySelectorAll('.filename');
+    elements.forEach((element) => {
+      element.textContent += value;
+    });
+    // element.filename = element.textContent;
+    let newDataSource = [];
+    this.dataSource.forEach((element) => {
+      element.filename = element.filename + value;
+      newDataSource.push(element);
+    });
+    this.dataSource = newDataSource;
+  }
+
   public deleteRow(item: Itemerino, i: number): void {
     this.dataSource.splice(this.dataSource.indexOf(item), 1);
     this.table.renderRows();

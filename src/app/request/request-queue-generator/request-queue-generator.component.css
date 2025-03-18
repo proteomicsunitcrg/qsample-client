@@ -7,6 +7,11 @@ table {
   cursor: pointer;
 }
 
+.append-label {
+  margin-right: 1em;
+}
+
+
 .cursor {
   cursor: pointer;
 }
