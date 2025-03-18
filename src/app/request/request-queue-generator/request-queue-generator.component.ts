@@ -606,6 +606,14 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
     this.openDialog(item);
   }
 
+  public editFilename(element: any) {
+    element.isEditing = true;
+  }
+
+  public saveFilename(element: any) {
+    element.isEditing = false;
+  }
+
   public deleteRow(item: Itemerino, i: number): void {
     this.dataSource.splice(this.dataSource.indexOf(item), 1);
     this.table.renderRows();

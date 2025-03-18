@@ -17,23 +17,23 @@
           <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
           <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
         </mat-form-field>
-          <mat-form-field  hidden="true" style="display: none;">
-            <input matInput placeholder="Filename" [(ngModel)] = "filename">
-          </mat-form-field>
+        <mat-form-field hidden="true" style="display: none;">
+          <input matInput placeholder="Filename" [(ngModel)]="filename">
+        </mat-form-field>
 
-          <mat-form-field>
-            <input matInput placeholder="Request Code" [(ngModel)] = "code">
-          </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Request Code" [(ngModel)]="code">
+        </mat-form-field>
 
         <button mat-mini-fab color="primary" aria-label="find by date range"
-        style="margin-left: 20px; margin-right: 20px;" [disabled]="range.invalid" (click)="getAllRequestFiles()">
-        <mat-icon>search</mat-icon>
-      </button>
+          style="margin-left: 20px; margin-right: 20px;" [disabled]="range.invalid" (click)="getAllRequestFiles()">
+          <mat-icon>search</mat-icon>
+        </button>
 
       </div>
       <table mat-table [dataSource]="datasource" style="width: 100%;">
         <ng-container matColumnDef="filename">
-          <th mat-header-cell *matHeaderCellDef > Filename </th>
+          <th mat-header-cell *matHeaderCellDef> Filename </th>
           <td mat-cell *matCellDef="let entry"> {{entry.filename}} </td>
         </ng-container>
         <ng-container matColumnDef="requestCode">
@@ -41,7 +41,7 @@
           <td mat-cell *matCellDef="let entry"> {{entry.requestCode}} </td>
         </ng-container>
         <ng-container matColumnDef="creation_date">
-          <th mat-header-cell *matHeaderCellDef > Acquisition date </th>
+          <th mat-header-cell *matHeaderCellDef> Acquisition date </th>
           <td mat-cell *matCellDef="let entry"> {{entry.creation_date}} </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>

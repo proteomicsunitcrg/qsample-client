@@ -3,6 +3,10 @@ table {
   width: 90%;
 }
 
+.filename {
+  cursor: pointer;
+}
+
 .cursor {
   cursor: pointer;
 }
