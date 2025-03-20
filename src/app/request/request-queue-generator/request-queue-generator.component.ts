@@ -292,6 +292,7 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
     moveItemInArray(this.samples, event.previousIndex, event.currentIndex);
   }
 
+  // TODO: Make it generic
   public addQC(type: string, index: number, associated?: boolean) {
     switch (type) {
       case 'QC01':
@@ -587,6 +588,7 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
     return list.filter((ele) => ele.sampleType === 'Unknown');
   }
 
+  // TODO: This should be deprecated
   public qHelaCombo(position: number): void {
     this.addQC('QHELA', position, false);
     this.addQC('QBSA', position, false);
@@ -594,6 +596,7 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
     this.table.renderRows();
   }
 
+  // TODO: This should be deprecated
   public fullCombo(position: number): void {
     this.addQC('QC03', position, false);
     this.addQC('QC02', position, false);
