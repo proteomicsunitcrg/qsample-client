@@ -16,7 +16,7 @@ import { TokenStorageService } from '../../services/token-storage.service';
 export class SettingsUserComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
 
-  columnsToDisplay = ['username', 'firstname', 'lastname', 'groupp', 'roles', 'permissions', 'remove'];
+  columnsToDisplay = ['username', 'firstname', 'lastname', 'groupp', 'roles', 'changepw', 'permissions', 'remove'];
 
   subscription: Subscription;
   isManager = false;
@@ -45,6 +45,19 @@ export class SettingsUserComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.updateIsManager(this.tokenStorageService.isManagerUser());
+  }
+
+  public changePassword(user: User): void {
+    const dialogRef = this.dialog.open(UserChangePasswordDialogComponent, {
+      data: {
+        user,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      // console.log(`Dialog result: ${result}`);
+      window.location.reload(); // Prompted reload for getting new permissions from table
+    });
   }
 
   public openDialog(user: User): void {
@@ -156,6 +169,46 @@ export class UserSettingDialogComponent {
         console.error(err);
       }
     );
+  }
+}
+
+@Component({
+  selector: 'app-dialog-content-changepw-dialog',
+  templateUrl: './dialog-content-changepw-dialog.html',
+  styleUrls: ['./settings-user.component.css'],
+})
+export class UserChangePasswordDialogComponent {
+  user: User;
+  newPassword: string;
+  confirmPassword: string;
+  passwordMismatch: boolean = false;
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public userC: any,
+    private userService: UserService
+  ) {
+    this.user = userC.user;
+  }
+
+  public changePassword(): void {
+    if (this.newPassword !== this.confirmPassword) {
+      this.passwordMismatch = true;
+    } else {
+      console.log(this.newPassword);
+      this.passwordMismatch = false;
+      // Proceed with password change logic
+      this.userService.changePassword(this.user, this.newPassword).subscribe(
+        (res) => {
+          // console.log(res);
+          window.location.reload(); // Prompted reload for getting new permissions from table
+        },
+        (err) => {
+          alert(err.error.message);
+          console.error(err);
+        }
+      );
+
+      alert('Change');
+    }
   }
 }
 
