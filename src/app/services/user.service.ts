@@ -43,11 +43,8 @@ export class UserService {
     return this.httpClient.post<User>(`${this.authUrl}/deleteUser`, params, this.httpOptions);
   }
 
-  public changePassword(user: User, password: string): Observable<any> {
-    // TODO: Change call here
+  public changeUserPassword(user: UserCreation): Observable<any> {
     const params = JSON.stringify(user);
-    console.log(password);
-    return;
-    return this.httpClient.post<User>(`${this.authUrl}/changePassword`, params, this.httpOptions);
+    return this.httpClient.post<User>(`${this.authUrl}/changeUserPassword`, params, this.httpOptions);
   }
 }

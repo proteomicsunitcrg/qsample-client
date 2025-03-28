@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/User';
+import { UserCreation } from '../../models/UserCreation';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
@@ -47,7 +48,7 @@ export class SettingsUserComponent implements OnInit {
     this.authService.updateIsManager(this.tokenStorageService.isManagerUser());
   }
 
-  public changePassword(user: User): void {
+  public changePassword(user: UserCreation): void {
     const dialogRef = this.dialog.open(UserChangePasswordDialogComponent, {
       data: {
         user,
@@ -178,7 +179,7 @@ export class UserSettingDialogComponent {
   styleUrls: ['./settings-user.component.css'],
 })
 export class UserChangePasswordDialogComponent {
-  user: User;
+  user: UserCreation;
   newPassword: string;
   confirmPassword: string;
   passwordMismatch: boolean = false;
@@ -195,8 +196,9 @@ export class UserChangePasswordDialogComponent {
     } else {
       console.log(this.newPassword);
       this.passwordMismatch = false;
+      this.user.password = this.newPassword;
       // Proceed with password change logic
-      this.userService.changePassword(this.user, this.newPassword).subscribe(
+      this.userService.changeUserPassword(this.user).subscribe(
         (res) => {
           // console.log(res);
           window.location.reload(); // Prompted reload for getting new permissions from table
