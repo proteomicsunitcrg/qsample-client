@@ -183,6 +183,7 @@ export class UserChangePasswordDialogComponent {
   newPassword: string;
   confirmPassword: string;
   passwordMismatch: boolean = false;
+  passwordLength: boolean = false;
   constructor(
     @Inject(MAT_DIALOG_DATA) public userC: any,
     private userService: UserService
@@ -194,22 +195,25 @@ export class UserChangePasswordDialogComponent {
     if (this.newPassword !== this.confirmPassword) {
       this.passwordMismatch = true;
     } else {
-      console.log(this.newPassword);
       this.passwordMismatch = false;
-      this.user.password = this.newPassword;
-      // Proceed with password change logic
-      this.userService.changeUserPassword(this.user).subscribe(
-        (res) => {
-          // console.log(res);
-          window.location.reload(); // Prompted reload for getting new permissions from table
-        },
-        (err) => {
-          alert(err.error.message);
-          console.error(err);
-        }
-      );
-
-      alert('Change');
+      // TODO: Check correspondence in password length
+      if (this.newPassword.length < 6) {
+        this.passwordLength = true;
+      } else {
+        this.passwordLength = false;
+        this.user.password = this.newPassword;
+        // Proceed with password change logic
+        this.userService.changeUserPassword(this.user).subscribe(
+          (res) => {
+            alert('Password changed');
+            window.location.reload(); // Prompted reload for getting new permissions from table
+          },
+          (err) => {
+            alert(err.error.message);
+            console.error(err);
+          }
+        );
+      }
     }
   }
 }

@@ -4,11 +4,14 @@
   <div class="mat-dialog-content">
     <mat-form-field>
       <mat-label>New Password</mat-label>
-      <input matInput [(ngModel)]="newPassword" type="password" placeholder="Enter new password">
+      <input matInput [(ngModel)]="newPassword" type="password" placeholder="Enter new password" minlength="6" required>
+      <div *ngIf="passwordLength" class="error-message">
+        Password must be at least 6 characters long.
+      </div>
     </mat-form-field>
     <mat-form-field>
       <mat-label>Confirm Password</mat-label>
-      <input matInput [(ngModel)]="confirmPassword" type="password" placeholder="Confirm new password">
+      <input matInput [(ngModel)]="confirmPassword" type="password" placeholder="Confirm new password" required>
     </mat-form-field>
     <div *ngIf="passwordMismatch" class="error-message">
       Passwords do not match.
