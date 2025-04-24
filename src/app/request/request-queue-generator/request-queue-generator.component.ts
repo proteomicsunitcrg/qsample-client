@@ -527,59 +527,41 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
     this.table.renderRows();
   }
 
+  private addQCToSample(sample, qc: string): Itemerino {
+    return new Itemerino(
+      qc,
+      // tslint:disable-next-line:max-line-length
+      `${this.requestCode}_${this.clientCode}_${this.getPositionFromSampleName(sample.filename)}_${this.year}${
+        this.month
+      }${this.day}_${qc}_001_01`,
+      // tslint:disable-next-line:max-line-length
+      this.getMethodAndVolumeQC(this.selectedInstrument, qc).method,
+      this.getVialPositionByQCType(qc),
+      // tslint:disable-next-line:max-line-length
+      this.getMethodAndVolumeQC(this.selectedInstrument, qc).volume,
+      this.clientCode,
+      '',
+      this.dataSource[0].agendoId,
+      undefined,
+      qc,
+      undefined,
+      true
+    );
+  }
+
   public autoQC(): void {
-    // TODO repair this
     this.dataSource = this.removeQCsFromList(this.dataSource);
     const clone: Itemerino[] = [];
     const clone2 = [];
     this.dataSource.forEach((val) => clone.push(Object.assign({}, val)));
     this.dataSource.forEach((val) => clone2.push(Object.assign({}, val)));
     this.dataSource = [];
+    console.log(this.injectionConditionsQC);
     for (const sample of clone) {
       this.dataSource.push(sample);
-      this.dataSource.push(
-        new Itemerino(
-          'QC',
-          // tslint:disable-next-line:max-line-length
-          `${this.requestCode}_${this.clientCode}_${this.getPositionFromSampleName(sample.filename)}_${this.year}${
-            this.month
-          }${this.day}_QBSA_001_01`,
-          // tslint:disable-next-line:max-line-length
-          this.getMethodAndVolumeQC(this.selectedInstrument, 'QBSA').method,
-          this.getVialPositionByQCType('QBSA'),
-          // tslint:disable-next-line:max-line-length
-          this.getMethodAndVolumeQC(this.selectedInstrument, 'QBSA').volume,
-          this.clientCode,
-          '',
-          this.dataSource[0].agendoId,
-          undefined,
-          'QBSA',
-          undefined,
-          true
-        )
-      );
-
-      this.dataSource.push(
-        new Itemerino(
-          'QC',
-          // tslint:disable-next-line:max-line-length
-          `${this.requestCode}_${this.clientCode}_${this.getPositionFromSampleName(sample.filename)}_${this.year}${
-            this.month
-          }${this.day}_QC01_001_01`,
-          // tslint:disable-next-line:max-line-length
-          this.getMethodAndVolumeQC(this.selectedInstrument, 'QC01').method,
-          this.getVialPositionByQCType('QC01'),
-          // tslint:disable-next-line:max-line-length
-          this.getMethodAndVolumeQC(this.selectedInstrument, 'QC01').volume,
-          this.clientCode,
-          '',
-          this.dataSource[0].agendoId,
-          undefined,
-          'QC01',
-          undefined,
-          true
-        )
-      );
+      // TODO: Should we list all QCs instead of only 2?
+      this.dataSource.push(this.addQCToSample(sample, 'QBSA'));
+      this.dataSource.push(this.addQCToSample(sample, 'QC01'));
     }
     this.table.renderRows();
   }
@@ -698,6 +680,7 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
     this.injectionConditionQCService.findByInstrumentId(this.selectedInstrument).subscribe(
       (res) => {
         this.injectionConditionsQC = res;
+        console.log(this.injectionConditionsQC);
         this.applyInjectionConditions();
       },
       (err) => {
