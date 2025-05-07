@@ -3,25 +3,28 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Instrument } from '../models/Instrument';
+import { QCtype } from '../models/QCtype';
 import { InjectionConditionQC } from '../models/InjectionConditionQC';
 import { catchError } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class InjectionConditionQCService {
-
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {}
 
   apiPrefix: string = environment.apiPrefix + 'api/injectionConditionsQC/';
 
   headers = new HttpHeaders().set('Content-type', 'application/json');
 
-
-  public findInjectionConditionQCByQCTypeAndInstrument(instrument: Instrument, qcType: string): Observable<InjectionConditionQC> {
-    return this.httpClient.get<InjectionConditionQC>(`${this.apiPrefix}getByInstrumentIdAndQCType/${instrument.id}/${qcType}`);
+  public findInjectionConditionQCByQCTypeAndInstrument(
+    instrument: Instrument,
+    qcType: QCtype
+  ): Observable<InjectionConditionQC> {
+    return this.httpClient.get<InjectionConditionQC>(
+      `${this.apiPrefix}getByInstrumentIdAndQCType/${instrument.id}/${qcType.name}`
+    );
   }
-
 
   public saveInjectionCondition(condition: InjectionConditionQC): Observable<InjectionConditionQC> {
     const params = JSON.stringify(condition);
@@ -40,5 +43,4 @@ export class InjectionConditionQCService {
   //   // console.log(error);
   //   return throwError(error || 'Server Error');
   // }
-
 }

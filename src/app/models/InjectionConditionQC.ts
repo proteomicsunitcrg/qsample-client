@@ -1,17 +1,18 @@
 import { Instrument } from './Instrument';
+import { Method } from './Method';
+import { QCtype } from './QCtype';
 export class InjectionConditionQC {
+  id: number;
+  qctype: QCtype;
+  instrument: Instrument;
+  method: Method;
+  volume: number;
 
-    id: number;
-    qctype: string;
-    instrument: Instrument;
-    method: string;
-    volume: number;
-
-    constructor(id: number, qctype: string, instrument: Instrument, method: string, volume: number) {
-        this.id = id;
-        this.qctype = qctype;
-        this.instrument = instrument;
-        this.method = method;
-        this.volume = volume;
-    }
+  constructor(id: number, qctype: QCtype, instrument: Instrument, method: Method, volume: number) {
+    this.id = id;
+    this.qctype = qctype;
+    this.instrument = instrument;
+    this.method = method;
+    this.volume = volume;
+  }
 }
