@@ -53,17 +53,19 @@
 </mat-grid-list>
 <mat-divider></mat-divider>
 
-<mat-grid-list cols="4" rowHeight="100px">
+<mat-grid-list cols="5" rowHeight="150px">
   <mat-grid-tile>
-    <button mat-raised-button (click)="autoQC()" [disabled]="!injectionConditionsQC">Intrument QC</button>
+    <mat-select [(value)]="selectedQCTypes" multiple>
+      <mat-option [value]="qctype" *ngFor="let qctype of qctypes">{{qctype.name}}</mat-option>
+    </mat-select>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button mat-raised-button (click)="autoQC()" [disabled]="selectedQCTypes.length==0">Instrument QC</button>
   </mat-grid-tile>
   <mat-grid-tile>
     <span class="append-label">Append text to all filenames:</span> <input type="text" #inputToAppend
       (keydown.enter)="appendToFilenames(inputToAppend.value)">
   </mat-grid-tile>
-  <!--<mat-grid-tile>
-        <button mat-raised-button (click)="qHelaCombo(dataSource.length)">QHela combo</button>
-    </mat-grid-tile>-->
   <mat-grid-tile>
     <button mat-raised-button (click)="generateCSV()">Generate CSV</button>
   </mat-grid-tile>
@@ -128,22 +130,11 @@
     <ng-container matColumnDef="add">
       <th mat-header-cell *matHeaderCellDef> Add </th>
       <td mat-cell *matCellDef="let element; index as i;">
-        <!-- TODO: This should be changed to a multiple selection. Odering matters. No combos -->
-        <button mat-button [disabled]="element.sampleType != 'Unknown'" [matMenuTriggerFor]="menu">Add</button>
-        <mat-menu #menu="matMenu">
-          <!-- <button mat-menu-item (click)="addQC('QC01', i, true)" [disabled]="!injectionConditionsQC">Add associated -->
-          <!--   QC01</button> -->
-          <!-- <button mat-menu-item (click)="addQC('QC01', i, false)" [disabled]="!injectionConditionsQC">Add QC01</button> -->
-          <!-- <button mat-menu-item (click)="addQC('QBSA', i, true)" [disabled]="!injectionConditionsQC">Add associated -->
-          <!--   QBSA</button> -->
-          <!-- <button mat-menu-item (click)="addQC('QBSA', i, false)" [disabled]="!injectionConditionsQC">Add QBSA</button> -->
-          <!-- <button mat-menu-item (click)="addQC('QC02', i, false)" [disabled]="!injectionConditionsQC">Add QC02</button> -->
-          <!-- <button mat-menu-item (click)="addQC('QHELA', i, false)" [disabled]="!injectionConditionsQC">Add -->
-          <!--   QHela</button> -->
-          <!-- <button mat-menu-item (click)="addQC('QC03', i, false)" [disabled]="!injectionConditionsQC">Add QC03</button> -->
-          <!-- <button mat-menu-item (click)="qHelaCombo(i)" [disabled]="!injectionConditionsQC">QHela combo</button> -->
-          <!-- <button mat-menu-item (click)="fullCombo(i)" [disabled]="!injectionConditionsQC">Full combo</button> -->
-        </mat-menu>
+          <mat-checkbox [(ngModel)]="isAssociated[i]" *ngIf="element.sampleType == 'Unknown'">Associated</mat-checkbox>
+          <mat-select [(value)]="selectedQCTypesInd[i]" *ngIf="element.sampleType == 'Unknown'" multiple>
+            <mat-option [value]="qctype" *ngFor="let qctype of qctypes">{{qctype.name}}</mat-option>
+          </mat-select>
+          <button mat-button [disabled]="selectedQCTypesInd[i].length==0" (click)="addMultipleQC(selectedQCTypesInd[i], i, isAssociated[i])" *ngIf="element.sampleType == 'Unknown'">Add</button>
       </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

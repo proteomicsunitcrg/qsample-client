@@ -101,13 +101,19 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
 
   selectedMethod: Method;
 
+  selectedQCTypes: QCtype[] = [];
+
+  selectedQCTypesInd: QCtype[][] = [];
+
+  isAssociated: boolean[] = [];
+
   injectionCondition: InjectionCondition;
 
   injectionConditionsQC: InjectionConditionQC[];
 
-  methods: Method[];
+  methods: Method[] = [];
 
-  qctypes: QCtype[];
+  qctypes: QCtype[] = [];
 
   path = 'C:\\Xcalibur\\Data';
 
@@ -146,10 +152,11 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
   private getMethodsByAppNameAndInstrumentId(): void {
     this.qGeneratorService.getMethodsByAppNameAndInstrumentId(this.request.classs, this.selectedInstrument).subscribe(
       (res) => {
-        console.log('selection here');
+        // console.log('selection here');
         this.injectionCondition = res;
         console.log(this.injectionCondition);
         if (this.injectionCondition !== undefined) {
+          // TODO: To check this
           // this.applyInjectionConditions();
         }
       },
@@ -160,8 +167,6 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
   }
 
   public applyInjectionConditions(): void {
-    console.log('To process!');
-    console.log(this.injectionConditionsQC);
     if (this.selectedMethod) {
       this.qctypes = this.retrieveQCs(this.injectionConditionsQC, this.selectedMethod);
     }
@@ -173,6 +178,7 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
           item.volume = this.injectionCondition.volume;
         }
       } else {
+        // TODO: Need to map item.qctype to QCtype
         // item.method = this.getMethodAndVolumeQC(this.selectedInstrument, item.qcType).method;
         // item.volume = this.getMethodAndVolumeQC(this.selectedInstrument, item.qcType).volume;
       }
@@ -253,6 +259,13 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
       sampleNumber = sampleNumber + 1;
       // this.samples.push(val[0].value.replace(/\|/g, '_'));
     }
+    let iter = 0;
+    while (iter < sampleNumber - 1) {
+      this.selectedQCTypesInd[iter] = [];
+      this.isAssociated[iter] = false;
+      iter = iter + 1;
+    }
+    console.log(this.selectedQCTypesInd);
     this.dataSource = this.samples;
     this.cloneGlobal = this.samples;
   }
@@ -298,7 +311,12 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
     moveItemInArray(this.samples, event.previousIndex, event.currentIndex);
   }
 
-  // TODO: Make it generic
+  public addMultipleQC(qctypes: QCtype[], index: number, associated: boolean) {
+    for (const qctype of qctypes) {
+      this.addQC(qctype, index, associated);
+    }
+  }
+
   public addQC(qctype: QCtype, index: number, associated?: boolean) {
     if (associated) {
       const sampleNumber = this.getPositionFromSampleName(this.dataSource[index].filename);
@@ -317,7 +335,7 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
             this.day
           }_${qctype.name}_001_${('0' + qcNumber).slice(-2)}`,
           // tslint:disable-next-line:max-line-length
-          this.getMethodAndVolumeQC(this.selectedInstrument, qctype).method,
+          this.getMethodAndVolumeQC(this.selectedInstrument, qctype).method.name,
           qctype.position,
           // tslint:disable-next-line:max-line-length
           this.getMethodAndVolumeQC(this.selectedInstrument, qctype).volume,
@@ -339,7 +357,7 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
           // tslint:disable-next-line:max-line-length
           `${this.year}${this.month}${this.day}_${qctype.name}_001_${('0' + this.qcCounter[qctype.name]).slice(-2)}`,
           // tslint:disable-next-line:max-line-length
-          this.getMethodAndVolumeQC(this.selectedInstrument, qctype).method,
+          this.getMethodAndVolumeQC(this.selectedInstrument, qctype).method.name,
           qctype.position,
           // tslint:disable-next-line:max-line-length
           this.getMethodAndVolumeQC(this.selectedInstrument, qctype).volume,
@@ -557,11 +575,9 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
     this.dataSource.forEach((val) => clone.push(Object.assign({}, val)));
     this.dataSource.forEach((val) => clone2.push(Object.assign({}, val)));
     this.dataSource = [];
-    console.log('AutoQC');
     for (const sample of clone) {
       this.dataSource.push(sample);
-      // TODO: Check if from listing is OK
-      for (let qctype of this.qctypes) {
+      for (let qctype of this.selectedQCTypes) {
         this.dataSource.push(this.addQCToSample(sample, qctype));
       }
     }
