@@ -131,18 +131,18 @@
         <!-- TODO: This should be changed to a multiple selection. Odering matters. No combos -->
         <button mat-button [disabled]="element.sampleType != 'Unknown'" [matMenuTriggerFor]="menu">Add</button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="addQC('QC01', i, true)" [disabled]="!injectionConditionsQC">Add associated
-            QC01</button>
-          <button mat-menu-item (click)="addQC('QC01', i, false)" [disabled]="!injectionConditionsQC">Add QC01</button>
-          <button mat-menu-item (click)="addQC('QBSA', i, true)" [disabled]="!injectionConditionsQC">Add associated
-            QBSA</button>
-          <button mat-menu-item (click)="addQC('QBSA', i, false)" [disabled]="!injectionConditionsQC">Add QBSA</button>
-          <button mat-menu-item (click)="addQC('QC02', i, false)" [disabled]="!injectionConditionsQC">Add QC02</button>
-          <button mat-menu-item (click)="addQC('QHELA', i, false)" [disabled]="!injectionConditionsQC">Add
-            QHela</button>
-          <button mat-menu-item (click)="addQC('QC03', i, false)" [disabled]="!injectionConditionsQC">Add QC03</button>
-          <button mat-menu-item (click)="qHelaCombo(i)" [disabled]="!injectionConditionsQC">QHela combo</button>
-          <button mat-menu-item (click)="fullCombo(i)" [disabled]="!injectionConditionsQC">Full combo</button>
+          <!-- <button mat-menu-item (click)="addQC('QC01', i, true)" [disabled]="!injectionConditionsQC">Add associated -->
+          <!--   QC01</button> -->
+          <!-- <button mat-menu-item (click)="addQC('QC01', i, false)" [disabled]="!injectionConditionsQC">Add QC01</button> -->
+          <!-- <button mat-menu-item (click)="addQC('QBSA', i, true)" [disabled]="!injectionConditionsQC">Add associated -->
+          <!--   QBSA</button> -->
+          <!-- <button mat-menu-item (click)="addQC('QBSA', i, false)" [disabled]="!injectionConditionsQC">Add QBSA</button> -->
+          <!-- <button mat-menu-item (click)="addQC('QC02', i, false)" [disabled]="!injectionConditionsQC">Add QC02</button> -->
+          <!-- <button mat-menu-item (click)="addQC('QHELA', i, false)" [disabled]="!injectionConditionsQC">Add -->
+          <!--   QHela</button> -->
+          <!-- <button mat-menu-item (click)="addQC('QC03', i, false)" [disabled]="!injectionConditionsQC">Add QC03</button> -->
+          <!-- <button mat-menu-item (click)="qHelaCombo(i)" [disabled]="!injectionConditionsQC">QHela combo</button> -->
+          <!-- <button mat-menu-item (click)="fullCombo(i)" [disabled]="!injectionConditionsQC">Full combo</button> -->
         </mat-menu>
       </td>
     </ng-container>
