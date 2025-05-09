@@ -115,18 +115,7 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
 
   databaseCode: string;
 
-  // TODO: To check replaced counters
-  // Need to initialize
   qcCounter = Object;
-  // qc1Counter = 1;
-  //
-  // qc2Counter = 1;
-  //
-  // qc3Counter = 1;
-  //
-  // qBSACounter = 1;
-  //
-  // qHELACounter = 1;
 
   csvSubscription: Subscription; // Subscription to the CSV uploaded by the user in the other component
 
@@ -348,7 +337,7 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
         new Itemerino(
           qctype.name,
           // tslint:disable-next-line:max-line-length
-          `${this.year}${this.month}${this.day}_${qctype.name}_001_${('0' + this.qc1Counter).slice(-2)}`,
+          `${this.year}${this.month}${this.day}_${qctype.name}_001_${('0' + this.qcCounter[qctype.name]).slice(-2)}`,
           // tslint:disable-next-line:max-line-length
           this.getMethodAndVolumeQC(this.selectedInstrument, qctype).method,
           qctype.position,
@@ -709,6 +698,10 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
           qctypes_ids.add(id);
         }
       }
+    }
+    // Initialize counters
+    for (const qctype of qctypes) {
+      this.qcCounter[qctype.name] = 1;
     }
     return qctypes;
   }
