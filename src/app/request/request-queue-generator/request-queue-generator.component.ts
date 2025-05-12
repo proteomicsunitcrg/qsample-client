@@ -329,7 +329,7 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
         this.getNextSampleIndexGivenActualIndex(index),
         0,
         new Itemerino(
-          'QC',
+          qctype.name,
           // tslint:disable-next-line:max-line-length
           `${this.requestCode}_${this.clientCode}_${sampleNumber}_${this.year}${this.month}${
             this.day
@@ -627,21 +627,6 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
       },
     });
   }
-
-  // private getVialPositionByQCType(qcType: string): any {
-  //   switch (qcType) {
-  //     case 'QBSA':
-  //     case 'QC01':
-  //     case 'QC':
-  //       return '1-V1';
-  //     case 'QC02':
-  //       return '1-V2';
-  //     case 'QHELA':
-  //       return '1-V4';
-  //     case 'QC03':
-  //       return '1-V3';
-  //   }
-  // }
 
   private getMethodAndVolumeQC(instrument: Instrument, qcType: QCtype): any {
     if (instrument === undefined) {
