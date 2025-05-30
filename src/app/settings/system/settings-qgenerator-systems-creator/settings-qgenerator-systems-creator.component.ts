@@ -10,23 +10,23 @@ import { MatDialog } from '@angular/material/dialog';
 import { InjectionConditionsDialogComponent } from './dialog/injection-conditions-dialog.component';
 import { Application } from '../../../models/Application';
 
-
 @Component({
   selector: 'app-settings-qgenerator-systems-creator',
   templateUrl: './settings-qgenerator-systems-creator.component.html',
-  styleUrls: ['./settings-qgenerator-systems-creator.component.css']
+  styleUrls: ['./settings-qgenerator-systems-creator.component.css'],
 })
 export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
-
-  constructor(private activeRouter: ActivatedRoute, private instrumentService: InstrumentService, private snackBar: MatSnackBar,
-    private router: Router, private applicationService: ApplicationService, private dialog: MatDialog) {
-
-  }
+  constructor(
+    private activeRouter: ActivatedRoute,
+    private instrumentService: InstrumentService,
+    private snackBar: MatSnackBar,
+    private router: Router,
+    private applicationService: ApplicationService,
+    private dialog: MatDialog
+  ) {}
 
   systemFrom = new FormGroup({
-    name: new FormControl('', [
-      Validators.required,
-    ]),
+    name: new FormControl('', [Validators.required]),
   });
 
   columnsToDisplay = ['name'];
@@ -34,14 +34,13 @@ export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
 
   dataSourceQC: MatTableDataSource<any>;
 
-
   oldName: string;
-  instrument = new Instrument(null, null);
+  instrument = new Instrument(null, null, null, null);
   isEdit: boolean;
 
   ngOnInit(): void {
     this.activeRouter.params.subscribe(
-      params => {
+      (params) => {
         if (params.id !== 'new') {
           this.getByid(params.id);
           this.isEdit = true;
@@ -49,7 +48,7 @@ export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
           this.isEdit = false;
         }
       },
-      err => {
+      (err) => {
         console.error(err);
       }
     );
@@ -58,12 +57,14 @@ export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
 
   private getByid(id: number): void {
     this.instrumentService.getById(id).subscribe(
-      res => {
+      (res) => {
         this.oldName = res.name;
         this.instrument = res;
         this.systemFrom.get('name').setValue(this.instrument.name);
+        this.systemFrom.get('path').setValue(this.instrument.path);
+        this.systemFrom.get('method').setValue(this.instrument.method);
       },
-      err => {
+      (err) => {
         console.error(err);
       }
     );
@@ -71,12 +72,14 @@ export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
 
   public save(): void {
     this.instrument.name = this.systemFrom.get('name').value;
+    this.instrument.path = this.systemFrom.get('path').value;
+    this.instrument.method = this.systemFrom.get('method').value;
     this.instrumentService.save(this.instrument).subscribe(
-      res => {
+      (res) => {
         this.openSnackBar('Instrument saved', 'Close');
         this.goBack();
       },
-      err => {
+      (err) => {
         this.openSnackBar('Error, contact the administrators', 'Close');
       }
     );
@@ -84,7 +87,7 @@ export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
 
   public delete(): void {
     this.instrumentService.delete(this.instrument).subscribe(
-      res => {
+      (res) => {
         if (res) {
           this.openSnackBar('Instrument deleted', 'Close');
           this.goBack();
@@ -92,7 +95,7 @@ export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
           this.openSnackBar('Remove all injection conditions before the deletion', 'Close');
         }
       },
-      err => {
+      (err) => {
         console.error(err);
         this.openSnackBar('Error, contact the administrators', 'Close');
       }
@@ -110,16 +113,15 @@ export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
   }
 
   public goToQC(): void {
-
     this.router.navigate(['settings/QGenerator/systems/qc/', this.instrument.id]);
   }
 
   private getAllApplications(): void {
     this.applicationService.getAll().subscribe(
-      res => {
+      (res) => {
         this.dataSource = new MatTableDataSource(res);
       },
-      err => {
+      (err) => {
         console.error(err);
       }
     );
@@ -129,13 +131,9 @@ export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
     const dialogRef = this.dialog.open(InjectionConditionsDialogComponent, {
       data: {
         application,
-        instrument
+        instrument,
       },
       width: '75%',
     });
   }
-
-
 }
-
-

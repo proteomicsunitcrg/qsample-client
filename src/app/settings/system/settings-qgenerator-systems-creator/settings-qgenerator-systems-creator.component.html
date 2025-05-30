@@ -13,6 +13,14 @@
           <mat-label>Name</mat-label>
           <input matInput formControlName="name">
         </mat-form-field>
+        <mat-form-field appearance="standard">
+          <mat-label>Path</mat-label>
+          <input matInput formControlName="path">
+        </mat-form-field>
+        <mat-form-field appearance="standard">
+          <mat-label>Method</mat-label>
+          <input matInput formControlName="method">
+        </mat-form-field>
       </form>
       <br>
       <button mat-raised-button color="primary" (click)="save()" [disabled]="!systemFrom.valid">Save</button>
