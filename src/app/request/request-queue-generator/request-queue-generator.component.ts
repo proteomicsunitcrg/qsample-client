@@ -602,14 +602,17 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
 
   // We append text value to the different filenames
   public appendToFilenames(value: string): void {
-    const elements = document.querySelectorAll('.filename');
+    // TODO: Need to check it works
+    const elements = document.querySelectorAll('.unknown-filename');
     elements.forEach((element) => {
       element.textContent += value;
     });
     // element.filename = element.textContent;
     let newDataSource = [];
     this.dataSource.forEach((element) => {
-      element.filename = element.filename + value;
+      if (element.sampleType === 'Unknown') {
+        element.filename = element.filename + value;
+      }
       newDataSource.push(element);
     });
     this.dataSource = newDataSource;

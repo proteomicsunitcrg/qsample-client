@@ -93,7 +93,7 @@
     <ng-container matColumnDef="filename">
       <th mat-header-cell *matHeaderCellDef> Filename </th>
       <td mat-cell *matCellDef="let element">
-        <span *ngIf="!element.isEditing" class="filename" (click)="editFilename(element)">{{element.filename}}</span>
+        <span *ngIf="!element.isEditing" class="filename" [ngClass]="{'unknown-filename': element.sampleType === 'Unknown'}" (click)="editFilename(element)">{{element.filename}}</span>
         <input *ngIf="element.isEditing" type="text" [(ngModel)]="element.filename" (blur)="saveFilename(element)"
           (keydown.enter)="saveFilename(element)" [attr.size]="element.filename.length || 15 " />
       </td>
