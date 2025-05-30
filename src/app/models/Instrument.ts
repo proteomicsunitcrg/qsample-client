@@ -1,10 +1,13 @@
 export class Instrument {
+  id: number;
+  name: string;
+  path: string;
+  method: string;
 
-    id: number;
-    name: string;
-
-    constructor(id: number, name: string) {
-        this.id = id;
-        this.name = name;
-    }
+  constructor(id: number, name: string, path: string, method: string) {
+    this.id = id;
+    this.name = name;
+    this.path = path;
+    this.method = this.method;
+  }
 }
