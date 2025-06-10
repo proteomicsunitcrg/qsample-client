@@ -115,9 +115,9 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
 
   qctypes: QCtype[] = [];
 
-  path = 'C:\\Xcalibur\\Data';
+  path = '';
 
-  methodPath = 'C:\\Xcalibur\\methods\\current\\';
+  methodPath = '';
 
   databaseCode: string;
 

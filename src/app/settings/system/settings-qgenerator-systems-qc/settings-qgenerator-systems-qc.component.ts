@@ -11,15 +11,19 @@ import { InjectionConditionsQCDialogComponent } from './dialog/injection-conditi
 @Component({
   selector: 'app-settings-qgenerator-systems-qc',
   templateUrl: './settings-qgenerator-systems-qc.component.html',
-  styleUrls: ['./settings-qgenerator-systems-qc.component.css']
+  styleUrls: ['./settings-qgenerator-systems-qc.component.css'],
 })
 export class SettingsQgeneratorSystemsQcComponent implements OnInit {
+  constructor(
+    private activeRouter: ActivatedRoute,
+    private instrumentService: InstrumentService,
+    private snackBar: MatSnackBar,
+    private router: Router,
+    private applicationService: ApplicationService,
+    private dialog: MatDialog
+  ) {}
 
-  constructor(private activeRouter: ActivatedRoute, private instrumentService: InstrumentService, private snackBar: MatSnackBar,
-    private router: Router, private applicationService: ApplicationService, private dialog: MatDialog) { }
-
-
-  instrument = new Instrument(null, null);
+  instrument = new Instrument(null, null, null, null);
 
   allQCTypes = ['QBSA', 'QC01', 'QC02', 'QHELA', 'QC03'];
 
@@ -28,23 +32,22 @@ export class SettingsQgeneratorSystemsQcComponent implements OnInit {
 
   ngOnInit(): void {
     this.activeRouter.params.subscribe(
-      params => {
+      (params) => {
         this.getByid(params.id);
       },
-      err => {
+      (err) => {
         console.error(err);
       }
     );
     this.dataSource = new MatTableDataSource(this.allQCTypes);
   }
 
-
   private getByid(id: number): void {
     this.instrumentService.getById(id).subscribe(
-      res => {
+      (res) => {
         this.instrument = res;
       },
-      err => {
+      (err) => {
         console.error(err);
       }
     );
@@ -54,11 +57,9 @@ export class SettingsQgeneratorSystemsQcComponent implements OnInit {
     const dialogRef = this.dialog.open(InjectionConditionsQCDialogComponent, {
       data: {
         qcType,
-        instrument: this.instrument
+        instrument: this.instrument,
       },
       width: '75%',
     });
   }
-
-
 }
