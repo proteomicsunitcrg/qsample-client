@@ -663,6 +663,8 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
   public changeInstrument(): void {
     this.getMethodsByAppNameAndInstrumentId();
     this.getInstrumentInjectionConditionsQC();
+    this.path = this.selectedInstrument.path;
+    this.methodPath = this.selectedInstrument.method;
   }
 
   private getInstrumentInjectionConditionsQC(): void {
