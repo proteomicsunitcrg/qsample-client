@@ -3,20 +3,17 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Instrument } from '../models/Instrument';
-import { InjectionCondition } from '../models/InjectionCondition';
+// import { InjectionCondition } from '../models/InjectionCondition';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class InstrumentService {
-
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {}
 
   apiPrefix: string = environment.apiPrefix + 'api/instrument/';
 
   headers = new HttpHeaders().set('Content-type', 'application/json');
-
-
 
   public getAll(): Observable<Instrument[]> {
     return this.httpClient.get<Instrument[]>(`${this.apiPrefix}`);
@@ -34,6 +31,4 @@ export class InstrumentService {
   public delete(instrument: Instrument) {
     return this.httpClient.delete<Instrument>(`${this.apiPrefix}${instrument.id}`);
   }
-
-
 }

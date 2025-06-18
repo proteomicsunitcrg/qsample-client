@@ -5,7 +5,7 @@ import { Application } from '../../../../models/Application';
 import { Instrument } from '../../../../models/Instrument';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { QGeneratorService } from '../../../../services/qGenerator.service';
-import { InjectionCondition } from '../../../../models/InjectionCondition';
+// import { InjectionCondition } from '../../../../models/InjectionCondition';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Method } from '../../../../models/Method';
 import { QCtype } from '../../../../models/QCtype';

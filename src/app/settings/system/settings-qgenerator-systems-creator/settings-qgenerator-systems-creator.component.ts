@@ -10,11 +10,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { InjectionConditionsDialogComponent } from './dialog/injection-conditions-dialog.component';
 import { Application } from '../../../models/Application';
 
-@Component({
-  selector: 'app-settings-qgenerator-systems-creator',
-  templateUrl: './settings-qgenerator-systems-creator.component.html',
-  styleUrls: ['./settings-qgenerator-systems-creator.component.css'],
-})
+// @Component({
+//   selector: 'app-settings-qgenerator-systems-creator',
+//   templateUrl: './settings-qgenerator-systems-creator.component.html',
+//   styleUrls: ['./settings-qgenerator-systems-creator.component.css'],
+// })
 export class SettingsQgeneratorSystemsCreatorComponent implements OnInit {
   constructor(
     private activeRouter: ActivatedRoute,

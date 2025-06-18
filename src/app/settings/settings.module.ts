@@ -9,23 +9,26 @@ import { SettingsMainComponent } from './settings-main/settings-main.component';
 import { SettingsRouter } from './settings.router';
 import { SettingsSidebarComponent } from './settings-sidebar/settings-sidebar.component';
 import { SettingsAddUserComponent } from './settings-adduser/settings-adduser.component';
-import { SettingsUserComponent, UserRemoveDialogComponent, UserSettingDialogComponent } from './settings-user/settings-user.component';
+import {
+  SettingsUserComponent,
+  UserRemoveDialogComponent,
+  UserSettingDialogComponent,
+} from './settings-user/settings-user.component';
 import { SettingsQgeneratorSystemsComponent } from './system/settings-qgenerator-systems/settings-qgenerator-systems.component';
 // tslint:disable-next-line:max-line-length
 import { SettingsQgeneratorApplicationsComponent } from './application/settings-qgenerator-applications/settings-qgenerator-applications.component';
 // tslint:disable-next-line:max-line-length
-import { SettingsQgeneratorSystemsCreatorComponent } from './system/settings-qgenerator-systems-creator/settings-qgenerator-systems-creator.component';
+// import { SettingsQgeneratorSystemsCreatorComponent } from './system/settings-qgenerator-systems-creator/settings-qgenerator-systems-creator.component';
 // tslint:disable-next-line:max-line-length
 import { SettingsQgeneratorApplicationsCreatorComponent } from './application/settings-qgenerator-applications-creator/settings-qgenerator-applications-creator.component';
 // tslint:disable-next-line:max-line-length
-import { InjectionConditionsDialogComponent } from './system/settings-qgenerator-systems-creator/dialog/injection-conditions-dialog.component';
+// import { InjectionConditionsDialogComponent } from './system/settings-qgenerator-systems-creator/dialog/injection-conditions-dialog.component';
 import { SettingsQgeneratorMethodsComponent } from './method/settings-qgenerator-methods/settings-qgenerator-methods.component';
 import { SettingsQgeneratorMethodsCreatorComponent } from './method/settings-qgenerator-methods-creator/settings-qgenerator-methods-creator.component';
 import { SettingsQgeneratorSystemsQcComponent } from './system/settings-qgenerator-systems-qc/settings-qgenerator-systems-qc.component';
 import { InjectionConditionsQCDialogComponent } from './system/settings-qgenerator-systems-qc/dialog/injection-conditions-dialog-qc.component';
 import { SettingsLocalRequestComponent } from './local/settings-local-request/settings-local-request.component';
 import { SettingsLocalRequestCreatorComponent } from './local/settings-local-request-creator/settings-local-request-creator.component';
-
 
 @NgModule({
   declarations: [
@@ -37,15 +40,15 @@ import { SettingsLocalRequestCreatorComponent } from './local/settings-local-req
     UserRemoveDialogComponent,
     SettingsQgeneratorSystemsComponent,
     SettingsQgeneratorApplicationsComponent,
-    SettingsQgeneratorSystemsCreatorComponent,
+    // SettingsQgeneratorSystemsCreatorComponent,
     SettingsQgeneratorApplicationsCreatorComponent,
-    InjectionConditionsDialogComponent,
+    // InjectionConditionsDialogComponent,
     InjectionConditionsQCDialogComponent,
     SettingsQgeneratorMethodsComponent,
     SettingsQgeneratorMethodsCreatorComponent,
     SettingsQgeneratorSystemsQcComponent,
     SettingsLocalRequestComponent,
-    SettingsLocalRequestCreatorComponent
+    SettingsLocalRequestCreatorComponent,
   ],
   imports: [
     FlexLayoutModule,
@@ -55,10 +58,9 @@ import { SettingsLocalRequestCreatorComponent } from './local/settings-local-req
     ReactiveFormsModule,
     AngularMaterialModule,
     SharedModule,
-    SettingsRouter
+    SettingsRouter,
   ],
-  providers: [
-  ],
-  bootstrap: []
+  providers: [],
+  bootstrap: [],
 })
-export class SettingsModule { }
+export class SettingsModule {}

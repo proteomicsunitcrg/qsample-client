@@ -6,7 +6,7 @@ import { MatTable } from '@angular/material/table';
 import { QGeneratorService } from '../../services/qGenerator.service';
 import { Instrument } from '../../models/Instrument';
 import { QCtype } from '../../models/QCtype';
-import { InjectionCondition } from '../../models/InjectionCondition';
+// import { InjectionCondition } from '../../models/InjectionCondition';
 import { MatDialog } from '@angular/material/dialog';
 import { QGeneratorDialogComponent } from './dialog/QGeneratorDialog.component';
 import { saveAs } from 'file-saver';
@@ -107,7 +107,7 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
 
   isAssociated: boolean[] = [];
 
-  injectionCondition: InjectionCondition;
+  injectionCondition: InjectionConditionQC;
 
   injectionConditionsQC: InjectionConditionQC[];
 
@@ -139,8 +139,8 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
         this.availableInstruments = res;
         if (this.availableInstruments.length === 1) {
           this.selectedInstrument = this.availableInstruments[0];
-          this.getMethodsByAppNameAndInstrumentId();
-          this.getInstrumentInjectionConditionsQC();
+          this.getInjectionConditionsByInstrumentId();
+          // this.getInstrumentInjectionConditionsQC();
         }
       },
       (err) => {
@@ -149,11 +149,12 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
     );
   }
 
-  private getMethodsByAppNameAndInstrumentId(): void {
-    this.qGeneratorService.getMethodsByAppNameAndInstrumentId(this.request.classs, this.selectedInstrument).subscribe(
+  private getInjectionConditionsByInstrumentId(): void {
+    this.qGeneratorService.getInjectionConditionsByInstrumentId(this.selectedInstrument).subscribe(
       (res) => {
         // console.log('selection here');
-        this.injectionCondition = res;
+        let injectionConditions = res;
+        this.injectionCondition = injectionConditions.shift();
         console.log(this.injectionCondition);
         if (this.injectionCondition !== undefined) {
           // TODO: To check this
@@ -661,8 +662,8 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
   }
 
   public changeInstrument(): void {
-    this.getMethodsByAppNameAndInstrumentId();
-    this.getInstrumentInjectionConditionsQC();
+    this.getInjectionConditionsByInstrumentId();
+    // this.getInstrumentInjectionConditionsQC();
     this.path = this.selectedInstrument.path;
     this.methodPath = this.selectedInstrument.method;
   }
