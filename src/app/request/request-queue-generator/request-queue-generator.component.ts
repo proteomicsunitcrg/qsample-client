@@ -107,7 +107,7 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
 
   isAssociated: boolean[] = [];
 
-  injectionCondition: InjectionConditionQC;
+  injectionConditions: InjectionConditionQC[];
 
   injectionConditionsQC: InjectionConditionQC[];
 
@@ -152,11 +152,11 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
   private getInjectionConditionsByInstrumentId(): void {
     this.qGeneratorService.getInjectionConditionsByInstrumentId(this.selectedInstrument).subscribe(
       (res) => {
-        // console.log('selection here');
         let injectionConditions = res;
-        this.injectionCondition = injectionConditions.shift();
-        console.log(this.injectionCondition);
-        if (this.injectionCondition !== undefined) {
+        // TODO: Filter for qctype eq null
+        this.injectionConditions = injectionConditions;
+        console.log(this.injectionConditions);
+        if (this.injectionConditions !== undefined) {
           // TODO: To check this
           // this.applyInjectionConditions();
         }
@@ -167,6 +167,7 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
     );
   }
 
+  // TODO: Fix for condition
   public applyInjectionConditions(): void {
     if (this.selectedMethod) {
       this.qctypes = this.retrieveQCs(this.injectionConditionsQC, this.selectedMethod);
@@ -175,8 +176,8 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
       console.log(item);
       if (item.sampleType === 'Unknown') {
         if (this.selectedMethod) {
-          item.method = this.selectedMethod.name;
-          item.volume = this.injectionCondition.volume;
+          // item.method = this.selectedMethod.name;
+          // item.volume = this.injectionCondition.volume;
         }
       } else {
         // TODO: Need to map item.qctype to QCtype
