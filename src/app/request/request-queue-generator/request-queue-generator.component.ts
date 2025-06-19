@@ -113,6 +113,8 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
 
   methods: Method[] = [];
 
+  method_volumes = {};
+
   qctypes: QCtype[] = [];
 
   path = '';
@@ -153,12 +155,16 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
     this.qGeneratorService.getInjectionConditionsByInstrumentId(this.selectedInstrument).subscribe(
       (res) => {
         let injectionConditions = res;
-        // TODO: Filter for qctype eq null
-        this.injectionConditions = injectionConditions;
-        console.log(this.injectionConditions);
+        this.injectionConditions = this.filterConditions(injectionConditions);
+        let { methods, method_volumes } = this.retrieveMethods(this.injectionConditions);
+        this.injectionConditionsQC = this.filterConditions(injectionConditions, true);
+        let { qctypes, qctype_map } = this.retrieveQCs(this.injectionConditionsQC);
+        console.log(qctypes);
+        console.log(this.injectionConditionsQC);
+        this.methods = methods;
+        this.method_volumes = method_volumes;
         if (this.injectionConditions !== undefined) {
-          // TODO: To check this
-          // this.applyInjectionConditions();
+          this.applyInjectionConditions();
         }
       },
       (err) => {
@@ -167,17 +173,30 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
     );
   }
 
+  // Filter conditions that have no qctype
+  private filterConditions(injectionConditions: InjectionConditionQC[], qc: boolean = false): InjectionConditionQC[] {
+    let baseConditions = [];
+    let methods = new Set<string>();
+    for (let ic of injectionConditions) {
+      if ((qc && ic.qctype !== null) || (!qc && ic.qctype === null)) {
+        // We add conditions if null
+        if (ic.method && ic.method.name !== null && !methods.has(ic.method.name)) {
+          methods.add(ic.method.name);
+          baseConditions.push(ic);
+        }
+      }
+    }
+
+    return baseConditions;
+  }
+
   // TODO: Fix for condition
   public applyInjectionConditions(): void {
-    if (this.selectedMethod) {
-      this.qctypes = this.retrieveQCs(this.injectionConditionsQC, this.selectedMethod);
-    }
     for (const item of this.dataSource) {
-      console.log(item);
       if (item.sampleType === 'Unknown') {
         if (this.selectedMethod) {
-          // item.method = this.selectedMethod.name;
-          // item.volume = this.injectionCondition.volume;
+          item.method = this.selectedMethod.name;
+          item.volume = this.method_volumes[item.method];
         }
       } else {
         // TODO: Need to map item.qctype to QCtype
@@ -664,54 +683,48 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
 
   public changeInstrument(): void {
     this.getInjectionConditionsByInstrumentId();
-    // this.getInstrumentInjectionConditionsQC();
     this.path = this.selectedInstrument.path;
     this.methodPath = this.selectedInstrument.method;
   }
 
-  private getInstrumentInjectionConditionsQC(): void {
-    this.injectionConditionQCService.findByInstrumentId(this.selectedInstrument).subscribe(
-      (res) => {
-        this.injectionConditionsQC = res;
-        this.methods = this.retrieveMethods(this.injectionConditionsQC);
-        this.applyInjectionConditions();
-      },
-      (err) => {
-        console.error(err);
-      }
-    );
-  }
-
-  private retrieveMethods(injectionConditionsQC: InjectionConditionQC[]): Method[] {
+  private retrieveMethods(injectionConditionsQC: InjectionConditionQC[]): {
+    methods: Method[];
+    method_volumes: Record<string, number>;
+  } {
     let methods = [];
+    let method_volumes = {};
     const methods_ids = new Set();
     for (const iqc of injectionConditionsQC) {
       let id = iqc.method.id;
       if (!methods_ids.has(id)) {
         methods.push(iqc.method);
         methods_ids.add(id);
+        method_volumes[iqc.method.name] = iqc.volume;
       }
     }
-    return methods;
+    return { methods, method_volumes };
   }
 
-  private retrieveQCs(injectionConditionsQC: InjectionConditionQC[], method: Method): QCtype[] {
+  private retrieveQCs(injectionConditionsQC: InjectionConditionQC[]): {
+    qctypes: QCtype[];
+    qctype_map: Object;
+  } {
     let qctypes = [];
+    let qctype_map = {};
     const qctypes_ids = new Set();
     for (const iqc of injectionConditionsQC) {
       let id = iqc.qctype.id;
-      if (method.id == iqc.method.id) {
-        if (!qctypes_ids.has(id)) {
-          qctypes.push(iqc.qctype);
-          qctypes_ids.add(id);
-        }
+      if (!qctypes_ids.has(id)) {
+        qctypes.push(iqc.qctype);
+        qctypes_ids.add(id);
       }
     }
+
     // Initialize counters
     for (const qctype of qctypes) {
       this.qcCounter[qctype.name] = 1;
     }
-    return qctypes;
+    return { qctypes, qctype_map };
   }
 
   private getPositionFromSampleName(name: string): string {

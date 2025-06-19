@@ -42,7 +42,7 @@
     </mat-form-field>
   </mat-grid-tile>
 
-  <mat-grid-tile *ngIf="injectionConditionsQC">
+  <mat-grid-tile *ngIf="injectionConditions">
     <mat-form-field appearance="fill">
       <mat-label>Method</mat-label>
       <mat-select [(value)]="selectedMethod" (selectionChange)="applyInjectionConditions()">
