@@ -7,12 +7,13 @@ import { Application } from '../../../models/Application';
 @Component({
   selector: 'app-settings-qgenerator-applications',
   templateUrl: './settings-qgenerator-applications.component.html',
-  styleUrls: ['./settings-qgenerator-applications.component.css']
+  styleUrls: ['./settings-qgenerator-applications.component.css'],
 })
 export class SettingsQgeneratorApplicationsComponent implements OnInit {
-
-  constructor(private applicationService: ApplicationService, private router: Router) { }
-
+  constructor(
+    private applicationService: ApplicationService,
+    private router: Router
+  ) {}
 
   columnsToDisplay = ['name'];
   dataSource: MatTableDataSource<any>;
@@ -23,10 +24,10 @@ export class SettingsQgeneratorApplicationsComponent implements OnInit {
 
   private getAllApplications(): void {
     this.applicationService.getAll().subscribe(
-      res => {
+      (res) => {
         this.dataSource = new MatTableDataSource(res);
       },
-      err => {
+      (err) => {
         console.error(err);
       }
     );
