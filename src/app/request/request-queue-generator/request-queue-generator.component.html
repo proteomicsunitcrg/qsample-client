@@ -134,7 +134,7 @@
           <mat-select [(value)]="selectedQCTypesInd[i]" *ngIf="element.sampleType == 'Unknown'" multiple>
             <mat-option [value]="qctype" *ngFor="let qctype of qctypes">{{qctype.name}}</mat-option>
           </mat-select>
-          <button mat-button [disabled]="selectedQCTypesInd[i].length==0" (click)="addMultipleQC(selectedQCTypesInd[i], i, isAssociated[i])" *ngIf="element.sampleType == 'Unknown'">Add</button>
+          <button mat-button (click)="addMultipleQC(selectedQCTypesInd[i], i, isAssociated[i])" *ngIf="element.sampleType == 'Unknown'">Add</button>
       </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

@@ -159,10 +159,9 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
         let { methods, method_volumes } = this.retrieveMethods(this.injectionConditions);
         this.injectionConditionsQC = this.filterConditions(injectionConditions, true);
         let { qctypes, qctype_map } = this.retrieveQCs(this.injectionConditionsQC);
-        console.log(qctypes);
-        console.log(this.injectionConditionsQC);
         this.methods = methods;
         this.method_volumes = method_volumes;
+        this.qctypes = qctypes;
         if (this.injectionConditions !== undefined) {
           this.applyInjectionConditions();
         }
@@ -190,7 +189,6 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
     return baseConditions;
   }
 
-  // TODO: Fix for condition
   public applyInjectionConditions(): void {
     for (const item of this.dataSource) {
       if (item.sampleType === 'Unknown') {
@@ -341,7 +339,7 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
   public addQC(qctype: QCtype, index: number, associated?: boolean) {
     if (associated) {
       const sampleNumber = this.getPositionFromSampleName(this.dataSource[index].filename);
-      const qcNumber = this.getQCsByTypeBetweenIndexs(
+      const qcNumber = this.getQCsByTypeBetweenIndexes(
         index,
         this.getNextSampleIndexGivenActualIndex(index),
         qctype.name
@@ -394,148 +392,10 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
       this.qcCounter[qctype.name] = this.qcCounter[qctype.name] + 1;
     }
 
-    //       break;
-    //     case 'QC02':
-    //       this.dataSource.splice(
-    //         this.getNextSampleIndexGivenActualIndex(index),
-    //         0,
-    //         new Itemerino(
-    //           'QC',
-    //           // tslint:disable-next-line:max-line-length
-    //           `${this.year}${this.month}${this.day}_${type}_001_${('0' + this.qc2Counter).slice(-2)}_100ng`,
-    //           // tslint:disable-next-line:max-line-length
-    //           this.getMethodAndVolumeQC(this.selectedInstrument, type).method,
-    //           this.getVialPositionByQCType(type),
-    //           // tslint:disable-next-line:max-line-length
-    //           this.getMethodAndVolumeQC(this.selectedInstrument, type).volume,
-    //           'QC02',
-    //           '',
-    //           '',
-    //           undefined,
-    //           type,
-    //           undefined,
-    //           false
-    //         )
-    //       );
-    //       this.qc2Counter = this.qc2Counter + 1;
-    //       break;
-    //     case 'QC03':
-    //       this.dataSource.splice(
-    //         this.getNextSampleIndexGivenActualIndex(index),
-    //         0,
-    //         new Itemerino(
-    //           'QC',
-    //           // tslint:disable-next-line:max-line-length
-    //           `${this.year}${this.month}${this.day}_${type}_001_${('0' + this.qc3Counter).slice(-2)}_25ng`,
-    //           // tslint:disable-next-line:max-line-length
-    //           this.getMethodAndVolumeQC(this.selectedInstrument, type).method,
-    //           this.getVialPositionByQCType(type),
-    //           // tslint:disable-next-line:max-line-length
-    //           this.getMethodAndVolumeQC(this.selectedInstrument, type).volume,
-    //           'QC03',
-    //           '',
-    //           '',
-    //           undefined,
-    //           type,
-    //           undefined,
-    //           false
-    //         )
-    //       );
-    //       this.qc3Counter = this.qc3Counter + 1;
-    //       break;
-    //     case 'QBSA':
-    //       switch (associated) {
-    //         case true:
-    //           const sampleNumber = this.getPositionFromSampleName(this.dataSource[index].filename);
-    //           const qcNumber = this.getQCsByTypeBetweenIndexs(
-    //             index,
-    //             this.getNextSampleIndexGivenActualIndex(index),
-    //             type
-    //           );
-    //           this.dataSource.splice(
-    //             this.getNextSampleIndexGivenActualIndex(index),
-    //             0,
-    //             new Itemerino(
-    //               'QC',
-    //               // tslint:disable-next-line:max-line-length
-    //               `${this.requestCode}_${this.clientCode}_${sampleNumber}_${this.year}${this.month}${
-    //                 this.day
-    //               }_${type}_001_${('0' + qcNumber).slice(-2)}`,
-    //               // tslint:disable-next-line:max-line-length
-    //               this.getMethodAndVolumeQC(this.selectedInstrument, type).method,
-    //               this.getVialPositionByQCType(type),
-    //               // tslint:disable-next-line:max-line-length
-    //               this.getMethodAndVolumeQC(this.selectedInstrument, type).volume,
-    //               this.clientCode,
-    //               '',
-    //               this.dataSource[0].agendoId,
-    //               undefined,
-    //               type,
-    //               undefined,
-    //               true
-    //             )
-    //           );
-    //           break;
-    //         case false:
-    //           this.dataSource.splice(
-    //             this.getNextSampleIndexGivenActualIndex(index),
-    //             0,
-    //             new Itemerino(
-    //               'QC',
-    //               // tslint:disable-next-line:max-line-length
-    //               `${this.year}${this.month}${this.day}_${type}_001_${('0' + this.qBSACounter).slice(-2)}`,
-    //               // tslint:disable-next-line:max-line-length
-    //               this.getMethodAndVolumeQC(this.selectedInstrument, type).method,
-    //               this.getVialPositionByQCType(type),
-    //               // tslint:disable-next-line:max-line-length
-    //               this.getMethodAndVolumeQC(this.selectedInstrument, type).volume,
-    //               'QBSA',
-    //               '',
-    //               '',
-    //               undefined,
-    //               type,
-    //               undefined,
-    //               false
-    //             )
-    //           );
-    //           this.qBSACounter = this.qBSACounter + 1;
-    //
-    //           break;
-    //       }
-    //
-    //       break;
-    //     case 'QHELA':
-    //       this.dataSource.splice(
-    //         this.getNextSampleIndexGivenActualIndex(index),
-    //         0,
-    //         new Itemerino(
-    //           'QC',
-    //           // tslint:disable-next-line:max-line-length
-    //           `${this.year}${this.month}${this.day}_${type}_001_${('0' + this.qHELACounter).slice(-2)}_1ug`,
-    //           // tslint:disable-next-line:max-line-length
-    //           this.getMethodAndVolumeQC(this.selectedInstrument, type).method,
-    //           this.getVialPositionByQCType(type),
-    //           // tslint:disable-next-line:max-line-length
-    //           this.getMethodAndVolumeQC(this.selectedInstrument, type).volume,
-    //           'QHELA',
-    //           '',
-    //           '',
-    //           undefined,
-    //           type,
-    //           undefined,
-    //           false
-    //         )
-    //       );
-    //       this.qHELACounter = this.qHELACounter + 1;
-    //       break;
-    //
-    //     default:
-    //       break;
-    //   }
     this.table.renderRows();
   }
   //
-  getQCsByTypeBetweenIndexs(indexStart: number, indexEnd: number, type: string) {
+  getQCsByTypeBetweenIndexes(indexStart: number, indexEnd: number, type: string) {
     let counter = 1;
     for (let i = indexStart + 1; i < indexEnd; i++) {
       if (this.dataSource[i].sampleType !== 'Unknown') {
@@ -568,6 +428,7 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
   }
 
   private addQCToSample(sample, qc: QCtype): Itemerino {
+    console.log(sample);
     return new Itemerino(
       qc.name,
       // tslint:disable-next-line:max-line-length
@@ -713,10 +574,16 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
     let qctype_map = {};
     const qctypes_ids = new Set();
     for (const iqc of injectionConditionsQC) {
+      let method = iqc.method;
+      let volume = iqc.volume;
       let id = iqc.qctype.id;
       if (!qctypes_ids.has(id)) {
         qctypes.push(iqc.qctype);
         qctypes_ids.add(id);
+        qctype_map[id] = {
+          method: method,
+          volume: volume,
+        };
       }
     }
 
