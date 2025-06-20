@@ -11,11 +11,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { QGeneratorDialogComponent } from './dialog/QGeneratorDialog.component';
 import { saveAs } from 'file-saver';
 import { Method } from '../../models/Method';
-import { InjectionConditionQCService } from '../../services/injectionConditionsQC.service';
+// import { InjectionConditionQCService } from '../../services/injectionConditionsQC.service';
 import { InjectionConditionQC } from '../../models/InjectionConditionQC';
 import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { SettingsQgeneratorSystemsQcComponent } from 'src/app/settings/system/settings-qgenerator-systems-qc/settings-qgenerator-systems-qc.component';
+// import { SettingsQgeneratorSystemsQcComponent } from 'src/app/settings/system/settings-qgenerator-systems-qc/settings-qgenerator-systems-qc.component';
 
 @Component({
   selector: 'app-request-queue-generator',
@@ -31,7 +31,7 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
     private router: Router,
     private qGeneratorService: QGeneratorService,
     public dialog: MatDialog,
-    private injectionConditionQCService: InjectionConditionQCService,
+    // private injectionConditionQCService: InjectionConditionQCService,
     private snackBar: MatSnackBar
   ) {
     this.activeRouter.params.subscribe((params) => {
@@ -100,6 +100,8 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
   selectedInstrument: Instrument;
 
   selectedMethod: Method;
+
+  selectedVolume: Number;
 
   selectedQCTypes: QCtype[] = [];
 
@@ -195,6 +197,7 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
         if (this.selectedMethod) {
           item.method = this.selectedMethod.name;
           item.volume = this.method_volumes[item.method];
+          this.selectedVolume = item.volume;
         }
       } else {
         // TODO: Need to map item.qctype to QCtype
@@ -284,7 +287,7 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
       this.isAssociated[iter] = false;
       iter = iter + 1;
     }
-    console.log(this.selectedQCTypesInd);
+    // console.log(this.selectedQCTypesInd);
     this.dataSource = this.samples;
     this.cloneGlobal = this.samples;
   }
@@ -428,7 +431,6 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
   }
 
   private addQCToSample(sample, qc: QCtype): Itemerino {
-    console.log(sample);
     return new Itemerino(
       qc.name,
       // tslint:disable-next-line:max-line-length

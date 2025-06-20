@@ -14,20 +14,14 @@
   </h1>
   <mat-divider></mat-divider>
 </section>
-<mat-grid-list cols="4" rowHeight="100px">
-  <mat-grid-tile>
-    <mat-form-field class="example-full-width">
-      <mat-label>Path</mat-label>
-      <input matInput [(ngModel)]="path">
-    </mat-form-field>
-  </mat-grid-tile>
-  <mat-grid-tile>
-    <mat-form-field class="example-full-width">
-      <mat-label>Method path</mat-label>
-      <input matInput [(ngModel)]="methodPath">
-    </mat-form-field>
-  </mat-grid-tile>
-  <mat-grid-tile>
+<div class="qgenerator-two-columns">
+<div class="qgenerator-left-column">
+  <div>
+      <mat-label>Application</mat-label>
+      <input matInput [(ngModel)]="request.classs">
+  </div>
+
+  <div>
     <mat-form-field appearance="fill" *ngIf="availableInstruments.length > 1">
       <mat-label>Instrument</mat-label>
       <mat-select [(value)]="selectedInstrument" (selectionChange)="changeInstrument()">
@@ -40,28 +34,40 @@
         <mat-option default [value]="availableInstruments[0]">{{availableInstruments[0].name}}</mat-option>
       </mat-select>
     </mat-form-field>
-  </mat-grid-tile>
+  </div>
+    <div>
+      <mat-label>Path</mat-label>
+      <input matInput [(ngModel)]="path">
+    </div>
+  <div>
+      <mat-label>Method path</mat-label>
+      <input matInput [(ngModel)]="methodPath">
+  </div>
 
-  <mat-grid-tile *ngIf="injectionConditions">
+ <div *ngIf="injectionConditions">
     <mat-form-field appearance="fill">
       <mat-label>Method</mat-label>
       <mat-select [(value)]="selectedMethod" (selectionChange)="applyInjectionConditions()">
         <mat-option [value]="method" *ngFor="let method of methods">{{method.name}}</mat-option>
       </mat-select>
     </mat-form-field>
-  </mat-grid-tile>
-</mat-grid-list>
-<mat-divider></mat-divider>
+  </div>
+  <div >
+      <mat-label>Volume</mat-label>
+      <input matInput [(ngModel)]="selectedVolume">
+  </div>
 
-<mat-grid-list cols="5" rowHeight="150px">
-  <mat-grid-tile>
+  <div>
     <mat-select [(value)]="selectedQCTypes" multiple>
       <mat-option [value]="qctype" *ngFor="let qctype of qctypes">{{qctype.name}}</mat-option>
     </mat-select>
-  </mat-grid-tile>
-  <mat-grid-tile>
     <button mat-raised-button (click)="autoQC()" [disabled]="selectedQCTypes.length==0">Instrument QC</button>
-  </mat-grid-tile>
+  </div>
+
+</div>
+<div class="qgenerator-right-column">
+
+<mat-grid-list cols="3" rowHeight="150px">
   <mat-grid-tile>
     <span class="append-label">Append text to all filenames:</span> <input type="text" #inputToAppend
       (keydown.enter)="appendToFilenames(inputToAppend.value)">
@@ -78,7 +84,6 @@
     </a>
   </mat-grid-tile>
 </mat-grid-list>
-<!-- </div> -->
 
 
 <div fxLayout="row" fxLayoutAlign="center center">
@@ -140,4 +145,6 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag [cdkDragData]="row"></tr>
   </table>
+</div>
+</div>
 </div>
