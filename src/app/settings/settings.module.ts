@@ -18,11 +18,11 @@ import { SettingsQgeneratorSystemsComponent } from './system/settings-qgenerator
 // tslint:disable-next-line:max-line-length
 import { SettingsQgeneratorApplicationsComponent } from './application/settings-qgenerator-applications/settings-qgenerator-applications.component';
 // tslint:disable-next-line:max-line-length
-// import { SettingsQgeneratorSystemsCreatorComponent } from './system/settings-qgenerator-systems-creator/settings-qgenerator-systems-creator.component';
+import { SettingsQgeneratorSystemsCreatorComponent } from './system/settings-qgenerator-systems-creator/settings-qgenerator-systems-creator.component';
 // tslint:disable-next-line:max-line-length
 import { SettingsQgeneratorApplicationsCreatorComponent } from './application/settings-qgenerator-applications-creator/settings-qgenerator-applications-creator.component';
 // tslint:disable-next-line:max-line-length
-// import { InjectionConditionsDialogComponent } from './system/settings-qgenerator-systems-creator/dialog/injection-conditions-dialog.component';
+import { InjectionConditionsDialogComponent } from './system/settings-qgenerator-systems-creator/dialog/injection-conditions-dialog.component';
 import { SettingsQgeneratorMethodsComponent } from './method/settings-qgenerator-methods/settings-qgenerator-methods.component';
 import { SettingsQgeneratorMethodsCreatorComponent } from './method/settings-qgenerator-methods-creator/settings-qgenerator-methods-creator.component';
 import { SettingsQgeneratorSystemsQcComponent } from './system/settings-qgenerator-systems-qc/settings-qgenerator-systems-qc.component';
@@ -40,9 +40,9 @@ import { SettingsLocalRequestCreatorComponent } from './local/settings-local-req
     UserRemoveDialogComponent,
     SettingsQgeneratorSystemsComponent,
     SettingsQgeneratorApplicationsComponent,
-    // SettingsQgeneratorSystemsCreatorComponent,
+    SettingsQgeneratorSystemsCreatorComponent,
     SettingsQgeneratorApplicationsCreatorComponent,
-    // InjectionConditionsDialogComponent,
+    InjectionConditionsDialogComponent,
     InjectionConditionsQCDialogComponent,
     SettingsQgeneratorMethodsComponent,
     SettingsQgeneratorMethodsCreatorComponent,

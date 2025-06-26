@@ -10,10 +10,10 @@ import { InjectionConditionQC } from '../../../../models/InjectionConditionQC';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Method } from '../../../../models/Method';
 import { MethodService } from '../../../../services/method.service';
-// @Component({
-//   selector: 'app-dialog-content-injection-conditions',
-//   templateUrl: 'dialog-content-injection-conditions.html',
-// })
+@Component({
+  selector: 'app-dialog-content-injection-conditions',
+  templateUrl: 'dialog-content-injection-conditions.html',
+})
 export class InjectionConditionsDialogComponent implements OnInit {
   allMethods: Method[] = [];
   injectionCondition = new InjectionConditionQC(null, null, null, null, null);
@@ -25,6 +25,7 @@ export class InjectionConditionsDialogComponent implements OnInit {
   injCondForm = new FormGroup({
     // TODO: To check
     // method: new FormControl(this.injectionCondition.methods, [Validators.required]),
+    method: null,
     volume: new FormControl('', [Validators.required, Validators.min(0)]),
   });
 
@@ -48,21 +49,21 @@ export class InjectionConditionsDialogComponent implements OnInit {
   }
 
   private getMethodsByInstrumentId(): void {
-    this.qGeneratorService.getMethodsByInstrumentId(this.instrument).subscribe((res) => {
-      if (res !== null) {
-        // console.log(res);
-
-        let injectionConditions = res;
-        this.injectionCondition = injectionConditions.shift(); // TODO: CHECK
-        // this.injCondForm.get('method').setValue(this.injectionCondition.method);
-        this.injCondForm.get('volume').setValue(this.injectionCondition.volume);
-        this.isUpdate = true;
-      } else {
-        // TODO: To check
-        // this.injectionCondition.method = [];
-      }
-      this.getAllMethods();
-    });
+    // this.qGeneratorService.getMethodsByInstrumentId(this.instrument).subscribe((res) => {
+    //   if (res !== null) {
+    //     // console.log(res);
+    //
+    //     let injectionConditions = res;
+    //     this.injectionCondition = injectionConditions.shift(); // TODO: CHECK
+    //     // this.injCondForm.get('method').setValue(this.injectionCondition.method);
+    //     this.injCondForm.get('volume').setValue(this.injectionCondition.volume);
+    //     this.isUpdate = true;
+    //   } else {
+    //     // TODO: To check
+    //     // this.injectionCondition.method = [];
+    //   }
+    //   this.getAllMethods();
+    // });
   }
 
   private getAllMethods(): void {
@@ -78,38 +79,38 @@ export class InjectionConditionsDialogComponent implements OnInit {
   }
 
   // TODO: To check
-  // public save(): void {
-  //   this.injectionCondition.volume = this.injCondForm.get('volume').value;
-  //   this.injectionCondition.application = this.application;
-  //   this.injectionCondition.instrument = this.instrument;
-  //   // console.log(this.injectionCondition);
-  //   this.qGeneratorService.saveInjectionCondition(this.injectionCondition).subscribe(
-  //     (res) => {
-  //       this.openSnackBar('Injection condition saved', 'Close');
-  //       this.dialogRef.close();
-  //     },
-  //     (err) => {
-  //       this.openSnackBar('Error, contact the administrators', 'Close');
-  //     }
-  //   );
-  // }
+  public save(): void {
+    //   this.injectionCondition.volume = this.injCondForm.get('volume').value;
+    //   this.injectionCondition.application = this.application;
+    //   this.injectionCondition.instrument = this.instrument;
+    //   // console.log(this.injectionCondition);
+    //   this.qGeneratorService.saveInjectionCondition(this.injectionCondition).subscribe(
+    //     (res) => {
+    //       this.openSnackBar('Injection condition saved', 'Close');
+    //       this.dialogRef.close();
+    //     },
+    //     (err) => {
+    //       this.openSnackBar('Error, contact the administrators', 'Close');
+    //     }
+    //   );
+  }
 
   // TODO: To recover
-  // public delete(): void {
-  //   this.qGeneratorService.deleteInjectionCondition(this.injectionCondition.id).subscribe(
-  //     (res) => {
-  //       if (res) {
-  //         this.openSnackBar('Injection condition deleted', 'Close');
-  //         this.dialogRef.close();
-  //       } else {
-  //         this.openSnackBar('Error, contact the administrators', 'Close');
-  //       }
-  //     },
-  //     (err) => {
-  //       console.error(err);
-  //     }
-  //   );
-  // }
+  public delete(): void {
+    //   this.qGeneratorService.deleteInjectionCondition(this.injectionCondition.id).subscribe(
+    //     (res) => {
+    //       if (res) {
+    //         this.openSnackBar('Injection condition deleted', 'Close');
+    //         this.dialogRef.close();
+    //       } else {
+    //         this.openSnackBar('Error, contact the administrators', 'Close');
+    //       }
+    //     },
+    //     (err) => {
+    //       console.error(err);
+    //     }
+    //   );
+  }
 
   private openSnackBar(message: string, action: string): void {
     this.snackBar.open(message, action, {

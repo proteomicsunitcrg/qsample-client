@@ -9,7 +9,7 @@ import { SettingsQgeneratorSystemsComponent } from './system/settings-qgenerator
 // tslint:disable-next-line:max-line-length
 import { SettingsQgeneratorApplicationsComponent } from './application/settings-qgenerator-applications/settings-qgenerator-applications.component';
 // tslint:disable-next-line:max-line-length
-// import { SettingsQgeneratorSystemsCreatorComponent } from './system/settings-qgenerator-systems-creator/settings-qgenerator-systems-creator.component';
+import { SettingsQgeneratorSystemsCreatorComponent } from './system/settings-qgenerator-systems-creator/settings-qgenerator-systems-creator.component';
 // tslint:disable-next-line:max-line-length
 import { SettingsQgeneratorApplicationsCreatorComponent } from './application/settings-qgenerator-applications-creator/settings-qgenerator-applications-creator.component';
 import { SettingsQgeneratorMethodsComponent } from './method/settings-qgenerator-methods/settings-qgenerator-methods.component';
@@ -27,7 +27,7 @@ const routes: Routes = [
       { path: 'user', component: SettingsUserComponent },
       { path: 'user/editor/:id', component: SettingsAddUserComponent },
       { path: 'QGenerator/systems', component: SettingsQgeneratorSystemsComponent },
-      // { path: 'QGenerator/systems/editor/:id', component: SettingsQgeneratorSystemsCreatorComponent },
+      { path: 'QGenerator/systems/editor/:id', component: SettingsQgeneratorSystemsCreatorComponent },
       { path: 'QGenerator/systems/qc/:id', component: SettingsQgeneratorSystemsQcComponent },
       { path: 'QGenerator/applications', component: SettingsQgeneratorApplicationsComponent },
       { path: 'QGenerator/applications/editor/:id', component: SettingsQgeneratorApplicationsCreatorComponent },

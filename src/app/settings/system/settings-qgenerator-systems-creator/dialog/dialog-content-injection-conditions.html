@@ -15,20 +15,20 @@
         <input matInput formControlName="volume" type="number">
       </mat-form-field>
       <!-- <br> -->
-      <p *ngFor="let method of injectionCondition.methods">
-        {{method.name}}
-        <span class="material-icons" style="cursor: pointer;" (click)="removeFromMethodFromInjectionCondition(method)">
-          delete
-        </span>
-      </p>
-      <mat-form-field appearance="fill" style="width: 90%;">
-        <mat-label>Method</mat-label>
-        <mat-select formControlName="method">
-          <mat-option *ngFor="let method of methodsToDisplay" [value]="method" (click)="methodClick(method)">
-            {{method.name}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      <!-- <p *ngFor="let method of injectionCondition.methods"> -->
+      <!--   {{method.name}} -->
+      <!--   <span class="material-icons" style="cursor: pointer;" (click)="removeFromMethodFromInjectionCondition(method)"> -->
+      <!--     delete -->
+      <!--   </span> -->
+      <!-- </p> -->
+      <!-- <mat-form-field appearance="fill" style="width: 90%;"> -->
+      <!--   <mat-label>Method</mat-label> -->
+      <!--   <mat-select formControlName="method"> -->
+      <!--     <mat-option *ngFor="let method of methodsToDisplay" [value]="method" (click)="methodClick(method)"> -->
+      <!--       {{method.name}} -->
+      <!--     </mat-option> -->
+      <!--   </mat-select> -->
+      <!-- </mat-form-field> -->
     </form>
   </div>
 </mat-dialog-content>
