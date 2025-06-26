@@ -11,6 +11,7 @@ export class ApplicationService {
   constructor(private httpClient: HttpClient) {}
 
   apiPrefix: string = environment.apiPrefix + 'api/application/';
+  apiPrefixQG: string = environment.apiPrefix + 'api/qgenerator/';
 
   headers = new HttpHeaders().set('Content-type', 'application/json');
 
@@ -28,7 +29,7 @@ export class ApplicationService {
 
   // Retrieve by Qgenerator
   public getByInstrumentId(id: number): Observable<Application[]> {
-    return this.httpClient.get<Application[]>(`/api/qgenerator/applications/${id}`);
+    return this.httpClient.get<Application[]>(`${this.apiPrefixQG}applications/${id}`);
   }
 
   public save(instrument: Application): Observable<Application> {

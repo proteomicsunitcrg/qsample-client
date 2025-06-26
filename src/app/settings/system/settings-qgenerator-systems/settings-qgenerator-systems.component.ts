@@ -70,7 +70,6 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
     this.applicationService.getByInstrumentId(instrument.id).subscribe(
       (res) => {
         this.applicationInstrumentSource = new MatTableDataSource(res);
-        console.log(this.applicationInstrumentSource);
       },
       (err) => {
         console.error(err);
