@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { InstrumentService } from 'src/app/services/instrument.service';
+import { MethodService } from 'src/app/services/method.service';
 import { ApplicationService } from 'src/app/services/application.service';
 // import { QGeneratorService } from '../../../services/qGenerator.service';
 import { Instrument } from '../../../models/Instrument';
@@ -16,12 +17,14 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
   constructor(
     private applicationService: ApplicationService,
     private instrumentService: InstrumentService,
+    private methodService: MethodService,
     private router: Router
   ) {}
 
   columnsToDisplay = ['name'];
   instrumentSource: MatTableDataSource<any>;
   applicationSource: MatTableDataSource<any>;
+  methodSource: MatTableDataSource<any>;
   selectedApplicationIds: number[] = [];
   selectedInstrumentId: number | null = null;
 
@@ -33,6 +36,7 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
   ngOnInit(): void {
     this.getAllInstruments();
     this.getAllApplications();
+    this.getAllMethods();
   }
 
   private getAllInstruments(): void {
@@ -51,6 +55,19 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
       (res) => {
         this.applicationSource = new MatTableDataSource(res);
         this.applicationSource.data = this.applicationSource.data.sort((a, b) => a.name.localeCompare(b.name));
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
+  }
+
+  private getAllMethods(): void {
+    this.methodService.getAll().subscribe(
+      (res) => {
+        const filtered = res.filter((method) => method.name !== null);
+        this.methodSource = new MatTableDataSource(filtered);
+        this.methodSource.data = this.methodSource.data.sort((a, b) => a.name.localeCompare(b.name));
       },
       (err) => {
         console.error(err);
