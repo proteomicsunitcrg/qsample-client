@@ -15,3 +15,6 @@ tr {
   flex: 0 0 75%;
   max-width: 75%;
 }
+.selected-row {
+  background-color: #e0f7fa !important; /* or any color you prefer */
+}

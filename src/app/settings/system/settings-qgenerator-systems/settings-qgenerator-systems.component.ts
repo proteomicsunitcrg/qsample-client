@@ -22,7 +22,8 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
   columnsToDisplay = ['name'];
   instrumentSource: MatTableDataSource<any>;
   applicationSource: MatTableDataSource<any>;
-  applicationInstrumentSource: MatTableDataSource<any>;
+  selectedApplicationIds: number[] = [];
+  selectedInstrumentId: number | null = null;
 
   dataInstruments = new FormGroup({
     method: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(60)]),
@@ -38,6 +39,7 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
     this.instrumentService.getAll().subscribe(
       (res) => {
         this.instrumentSource = new MatTableDataSource(res);
+        this.instrumentSource.data = this.instrumentSource.data.sort((a, b) => a.name.localeCompare(b.name));
       },
       (err) => {
         console.error(err);
@@ -48,11 +50,31 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
     this.applicationService.getAll().subscribe(
       (res) => {
         this.applicationSource = new MatTableDataSource(res);
+        this.applicationSource.data = this.applicationSource.data.sort((a, b) => a.name.localeCompare(b.name));
       },
       (err) => {
         console.error(err);
       }
     );
+  }
+
+  // Trigger by checkbox change
+  public onApplicationCheckboxChange(appId: number, checked: boolean): void {
+    if (checked) {
+      if (!this.selectedApplicationIds.includes(appId)) {
+        this.selectedApplicationIds = [...this.selectedApplicationIds, appId];
+      }
+    } else {
+      this.selectedApplicationIds = this.selectedApplicationIds.filter((id) => id !== appId);
+    }
+  }
+
+  // TODO: This needs to be changed and adapted
+  public saveApplicationInstruments(): void {
+    const selectedApplications = this.applicationSource.data.filter((app) =>
+      this.selectedApplicationIds.includes(app.id)
+    );
+    console.log(selectedApplications);
   }
 
   public saveInstrumentPaths(): void {
@@ -65,11 +87,11 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
   }
 
   public selectInstrument(instrument: Instrument): void {
-    console.log(instrument);
+    this.selectedInstrumentId = instrument.id;
     this.dataInstruments.patchValue({ method: instrument.method, path: instrument.path });
     this.applicationService.getByInstrumentId(instrument.id).subscribe(
       (res) => {
-        this.applicationInstrumentSource = new MatTableDataSource(res);
+        this.selectedApplicationIds = res.map((app) => app.id);
       },
       (err) => {
         console.error(err);

@@ -15,25 +15,34 @@
               <td mat-cell *matCellDef="let entry"> {{entry.name}} </td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-            <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay" (click)="selectInstrument(myRowData)"></tr>
+            <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay" (click)="selectInstrument(myRowData)" [class.selected-row]="myRowData.id === selectedInstrumentId"></tr>
           </table>
         </mat-card-content>
       </mat-card>
     </div>
   </div>
   <div class="qgenerator-right-column">
-    <mat-card>
-     <mat-card-title>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title class="mat-card-title">
           Applications
-          <button mat-icon-button (click)="newSystem()" style="float: right;">
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <button mat-icon-button (click)="newSystem()" style="float: right;">
             <mat-icon>add_circle</mat-icon>
-          </button>
-      </mat-card-title>
+      </button>
       <mat-card-content>
         <table mat-table [dataSource]="applicationSource">
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef> Name </th>
-            <td mat-cell *matCellDef="let element"> {{element.name}} <input type="checkbox"></td>
+            <td mat-cell *matCellDef="let element">
+              <span style="display: flex; justify-content: space-between; align-items: center;">
+              <span>{{element.name}}</span>
+                <input type="checkbox" [checked]="selectedApplicationIds.includes(element.id)"
+                (change)="onApplicationCheckboxChange(element.id, $event.target.checked)"
+                >
+              </span>
+            </td>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
@@ -49,47 +58,64 @@
             <!-- <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay" (click)="selectInstrument(myRowData)"></tr> -->
           <!-- </table> -->
         </mat-card-content>
+        <mat-dialog-actions align="end">
+          <button mat-button (click)="saveApplicationInstruments()">Save Application association to instruments</button>
+        </mat-dialog-actions>
 
-    </mat-card>
-    <mat-card>
-      <mat-card-title>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title class="mat-card-title">
           Methods
-          <button mat-icon-button (click)="newSystem()" style="float: right;">
-            <mat-icon>add_circle</mat-icon>
-          </button>
-      </mat-card-title>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
 
-    </mat-card>
-    <mat-card>
-      <mat-card-title>
+      <button mat-icon-button (click)="newSystem()" style="float: right;">
+        <mat-icon>add_circle</mat-icon>
+      </button>
+
+      <mat-card-content>
+      </mat-card-content>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title class="mat-card-title">
           QCs
-          <button mat-icon-button (click)="newSystem()" style="float: right;">
-            <mat-icon>add_circle</mat-icon>
-          </button>
-      </mat-card-title>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
 
-    </mat-card>
-    <mat-card>
-      <mat-card-title>Data settings</mat-card-title>
-        <form class="dataInstruments" [formGroup]="dataInstruments">
-        <mat-form-field appearance="standard" class="fullWidth">
-          <mat-label>Method Path</mat-label>
-          <input matInput type="text" required name="method" formControlName="method" disabled>
-          <!-- <mat-error *ngIf="dataInstruments.controls['method'].errors?.required && dataInstruments.controls['method'].touched"> -->
-          <!--   Method Path is <strong>required</strong> -->
-          <!-- </mat-error> -->
-        </mat-form-field>
-        <mat-form-field appearance="standard" class="fullWidth">
-          <mat-label>Path</mat-label>
-          <input matInput type="text" required name="path" formControlName="path" disabled>
-          <!-- <mat-error *ngIf="dataInstruments.controls['path'].errors?.required && dataInstruments.controls['path'].touched"> -->
-          <!--   Path is <strong>required</strong> -->
-          <!-- </mat-error> -->
-        </mat-form-field>
+      <button mat-icon-button (click)="newSystem()" style="float: right;">
+        <mat-icon>add_circle</mat-icon>
+      </button>
+
+      <mat-card-content>
+      </mat-card-content>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title class="mat-card-title">
+          Data settings
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <form class="dataInstruments" [formGroup]="dataInstruments">
+      <mat-form-field appearance="standard" class="fullWidth">
+        <mat-label>Method Path</mat-label>
+        <input matInput type="text" required name="method" formControlName="method" disabled>
+        <!-- <mat-error *ngIf="dataInstruments.controls['method'].errors?.required && dataInstruments.controls['method'].touched"> -->
+        <!--   Method Path is <strong>required</strong> -->
+        <!-- </mat-error> -->
+      </mat-form-field>
+      <mat-form-field appearance="standard" class="fullWidth">
+        <mat-label>Path</mat-label>
+        <input matInput type="text" required name="path" formControlName="path" disabled>
+        <!-- <mat-error *ngIf="dataInstruments.controls['path'].errors?.required && dataInstruments.controls['path'].touched"> -->
+        <!--   Path is <strong>required</strong> -->
+        <!-- </mat-error> -->
+      </mat-form-field>
       <mat-dialog-actions align="end">
         <button mat-button (click)="saveInstrumentPaths()">Save Instrument Paths</button>
       </mat-dialog-actions>
-      </form>
-    </mat-card>
+    </form>
+    </mat-expansion-panel>
   </div>
 </div>
