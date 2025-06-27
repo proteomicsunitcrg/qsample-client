@@ -3,7 +3,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { InstrumentService } from 'src/app/services/instrument.service';
 import { MethodService } from 'src/app/services/method.service';
 import { ApplicationService } from 'src/app/services/application.service';
-// import { QGeneratorService } from '../../../services/qGenerator.service';
+import { QGeneratorService } from '../../../services/qGenerator.service';
 import { Instrument } from '../../../models/Instrument';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -18,6 +18,7 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
     private applicationService: ApplicationService,
     private instrumentService: InstrumentService,
     private methodService: MethodService,
+    private qGeneratorService: QGeneratorService,
     private router: Router
   ) {}
 
@@ -109,6 +110,15 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
     this.applicationService.getByInstrumentId(instrument.id).subscribe(
       (res) => {
         this.selectedApplicationIds = res.map((app) => app.id);
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
+    this.qGeneratorService.getInjectionConditionsByInstrumentId(instrument).subscribe(
+      (res) => {
+        // TODO: Handle here what methods and QCs are available for the instrument
+        console.log(res);
       },
       (err) => {
         console.error(err);
