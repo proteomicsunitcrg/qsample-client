@@ -62,6 +62,8 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
     this.getAllQCtypes();
   }
 
+  // TODO: Handle editMode -> Only allow one checkbox checked per panel
+
   private getAllInstruments(): void {
     this.instrumentService.getAll().subscribe(
       (res) => {
