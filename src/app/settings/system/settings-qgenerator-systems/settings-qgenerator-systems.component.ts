@@ -2,11 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { InstrumentService } from 'src/app/services/instrument.service';
 import { MethodService } from 'src/app/services/method.service';
+import { InjectionConditionQCService } from 'src/app/services/injectionConditionsQC.service';
 import { ApplicationService } from 'src/app/services/application.service';
+import { QCtypeService } from 'src/app/services/qctype.service';
 import { QGeneratorService } from '../../../services/qGenerator.service';
 import { Instrument } from '../../../models/Instrument';
+import { Method } from '../../../models/Method';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ViewChild } from '@angular/core';
+import { MatExpansionPanel } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-settings-qgenerator-systems',
@@ -18,26 +23,43 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
     private applicationService: ApplicationService,
     private instrumentService: InstrumentService,
     private methodService: MethodService,
+    private qctypeService: QCtypeService,
     private qGeneratorService: QGeneratorService,
+    private injectionConditionQCService: InjectionConditionQCService,
     private router: Router
   ) {}
+  @ViewChild('methodsPanel') methodsPanel: MatExpansionPanel;
+  @ViewChild('qctypesPanel') qctypesPanel: MatExpansionPanel;
+  @ViewChild('volumesPanel') volumesPanel: MatExpansionPanel;
 
   columnsToDisplay = ['name'];
   instrumentSource: MatTableDataSource<any>;
   applicationSource: MatTableDataSource<any>;
   methodSource: MatTableDataSource<any>;
+  qctypeSource: MatTableDataSource<any>;
+  volumes: number[] = [];
   selectedApplicationIds: number[] = [];
+  selectedMethodIds: number[] = [];
+  selectedQCtypeIds: number[] = [];
+  selectedVolumes: number[] = [];
   selectedInstrumentId: number | null = null;
+  selectedInstrument: Instrument;
+  selectedMethod: Method;
+  isVolumeInputEnabled = false;
+  editMode = false;
 
   dataInstruments = new FormGroup({
     method: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(60)]),
     path: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(60)]),
   });
 
+  volumeControl = new FormControl('', [Validators.required, Validators.min(0), Validators.max(100)]);
+
   ngOnInit(): void {
     this.getAllInstruments();
     this.getAllApplications();
     this.getAllMethods();
+    this.getAllQCtypes();
   }
 
   private getAllInstruments(): void {
@@ -75,6 +97,59 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
       }
     );
   }
+  private getAllQCtypes(): void {
+    this.qctypeService.getAll().subscribe(
+      (res) => {
+        this.qctypeSource = new MatTableDataSource(res);
+        this.qctypeSource.data = this.qctypeSource.data.sort((a, b) => a.name.localeCompare(b.name));
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
+  }
+
+  private getInjectionConditionsQCByInstrument(): void {
+    this.injectionConditionQCService.findByInstrumentId(this.selectedInstrument).subscribe(
+      (res) => {
+        const filtered = res.filter((iqc) => iqc.method !== null);
+
+        const uniqueVolumes = [...new Set(filtered.map((iqc) => iqc.volume))];
+        const uniqueQCtypes = [...new Set(filtered.filter((iqc) => iqc.qctype !== null).map((iqc) => iqc.qctype))];
+        // this.qctypeSource = new MatTableDataSource(uniqueQCtypes);
+        // this.qctypeSource.data = this.qctypeSource.data.sort((a, b) => a.name.localeCompare(b.name));
+        this.volumes = uniqueVolumes.sort((a, b) => a - b);
+
+        this.selectedMethodIds = filtered.map((iqc) => iqc.method.id);
+        if (this.selectedMethod) {
+          this.selectedQCtypeIds = filtered
+            .filter((iqc) => iqc.method.id == this.selectedMethod.id && iqc.qctype !== null)
+            .map((iqc) => iqc.qctype.id);
+          this.selectedVolumes = filtered
+            .filter((iqc) => iqc.method.id == this.selectedMethod.id && iqc.volume !== null)
+            .map((iqc) => iqc.volume);
+
+          if (this.qctypesPanel) {
+            if (this.selectedQCtypeIds.length > 0) {
+              this.qctypesPanel.open();
+            } else {
+              this.qctypesPanel.close();
+            }
+          }
+          if (this.volumesPanel) {
+            if (this.selectedVolumes.length > 0) {
+              this.volumesPanel.open();
+            } else {
+              this.volumesPanel.close();
+            }
+          }
+        }
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
+  }
 
   // Trigger by checkbox change
   public onApplicationCheckboxChange(appId: number, checked: boolean): void {
@@ -92,7 +167,6 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
     const selectedApplications = this.applicationSource.data.filter((app) =>
       this.selectedApplicationIds.includes(app.id)
     );
-    console.log(selectedApplications);
   }
 
   public saveInstrumentPaths(): void {
@@ -100,11 +174,18 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
     console.log('Save Instrument Paths');
   }
 
+  // This exposes an input to put a different number
+  public newVolume(): void {
+    this.isVolumeInputEnabled = true;
+    this.volumeControl.enable();
+  }
+
   public newSystem(): void {
     this.router.navigate(['/settings/QGenerator/systems/editor/', 'new']);
   }
 
   public selectInstrument(instrument: Instrument): void {
+    this.selectedInstrument = instrument;
     this.selectedInstrumentId = instrument.id;
     this.dataInstruments.patchValue({ method: instrument.method, path: instrument.path });
     this.applicationService.getByInstrumentId(instrument.id).subscribe(
@@ -115,15 +196,20 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
         console.error(err);
       }
     );
-    this.qGeneratorService.getInjectionConditionsByInstrumentId(instrument).subscribe(
-      (res) => {
-        // TODO: Handle here what methods and QCs are available for the instrument
-        console.log(res);
-      },
-      (err) => {
-        console.error(err);
-      }
-    );
+
+    this.getInjectionConditionsQCByInstrument();
+    if (this.methodsPanel) {
+      this.methodsPanel.open();
+    }
+    //     // if (this.volumesPanel) {
+    //   this.volumesPanel.open();
+    // }
+  }
+  public selectMethod(method: Method): void {
+    if (this.selectedMethodIds.includes(method.id)) {
+      this.selectedMethod = method;
+      this.getInjectionConditionsQCByInstrument();
+    }
   }
 
   public edit(system: Instrument): void {

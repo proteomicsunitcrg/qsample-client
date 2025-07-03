@@ -15,9 +15,19 @@
               <td mat-cell *matCellDef="let entry"> {{entry.name}} </td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-            <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay" (click)="selectInstrument(myRowData)" [class.selected-row]="myRowData.id === selectedInstrumentId"></tr>
+            <tr mat-row *matRowDef="let row; columns: columnsToDisplay" (click)="selectInstrument(row)" [class.selected-row]="row.id === selectedInstrumentId"></tr>
           </table>
         </mat-card-content>
+      </mat-card>
+      <mat-card>
+        <mat-label>Edit Mode</mat-label>
+        <input type="checkbox" name="editMode" [(ngModel)]="editMode">
+
+        <div>
+          <button mat-icon-button (click)="newSystem()" [disabled]="!editMode">
+            COMMIT CONDITION
+          </button>
+        </div>
       </mat-card>
     </div>
   </div>
@@ -39,7 +49,7 @@
               <span style="display: flex; justify-content: space-between; align-items: center;">
               <span>{{element.name}}</span>
                 <input type="checkbox" [checked]="selectedApplicationIds.includes(element.id)"
-                (change)="onApplicationCheckboxChange(element.id, $event.target.checked)"
+                (change)="onApplicationCheckboxChange(element.id, $event.target.checked)" [disabled]="!editMode"
                 >
               </span>
             </td>
@@ -49,14 +59,6 @@
           <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
         </table>
 
-          <!-- <table style="width: 100%;" mat-table [dataSource]="applicationSource"> -->
-          <!--   <ng-container matColumnDef="name"> -->
-          <!--     <th mat-header-cell *matHeaderCellDef> Name </th> -->
-          <!--     <td mat-cell *matCellDef="let entry"> {{entry.name}} </td> -->
-          <!--   </ng-container> -->
-          <!--   <!-- <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr> -->
-            <!-- <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay" (click)="selectInstrument(myRowData)"></tr> -->
-          <!-- </table> -->
         </mat-card-content>
         <mat-dialog-actions align="end">
           <button mat-button (click)="saveApplicationInstruments()">Save Application association to instruments</button>
@@ -64,6 +66,34 @@
 
     </mat-expansion-panel>
     <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title class="mat-card-title">
+          Data settings
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <form class="dataInstruments" [formGroup]="dataInstruments">
+      <mat-form-field appearance="standard" class="fullWidth">
+        <mat-label>Method Path</mat-label>
+        <input matInput type="text" required name="method" formControlName="method" disabled>
+        <!-- <mat-error *ngIf="dataInstruments.controls['method'].errors?.required && dataInstruments.controls['method'].touched"> -->
+        <!--   Method Path is <strong>required</strong> -->
+        <!-- </mat-error> -->
+      </mat-form-field>
+      &nbsp; &nbsp; &nbsp;
+      <mat-form-field appearance="standard" class="fullWidth">
+        <mat-label>Path</mat-label>
+        <input matInput type="text" required name="path" formControlName="path" disabled>
+        <!-- <mat-error *ngIf="dataInstruments.controls['path'].errors?.required && dataInstruments.controls['path'].touched"> -->
+        <!--   Path is <strong>required</strong> -->
+        <!-- </mat-error> -->
+      </mat-form-field>
+      <mat-dialog-actions align="end">
+        <button mat-button (click)="saveInstrumentPaths()">Save Instrument Paths</button>
+      </mat-dialog-actions>
+    </form>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel #methodsPanel>
       <mat-expansion-panel-header>
         <mat-panel-title class="mat-card-title">
           Methods
@@ -80,18 +110,18 @@
             <td mat-cell *matCellDef="let element">
               <span style="display: flex; justify-content: space-between; align-items: center;">
               <span>{{element.name}}</span>
-                <input type="checkbox">
+                <input type="checkbox" [disabled]="!editMode">
               </span>
             </td>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-          <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+          <tr mat-row *matRowDef="let row; columns: columnsToDisplay;" (click)="selectMethod(row)" [class.selected-row]="selectedMethodIds.includes(row.id)"></tr>
         </table>
 
       </mat-card-content>
     </mat-expansion-panel>
-    <mat-expansion-panel>
+    <mat-expansion-panel #qctypesPanel>
       <mat-expansion-panel-header>
         <mat-panel-title class="mat-card-title">
           QCs
@@ -103,33 +133,65 @@
       </button>
 
       <mat-card-content>
+        <table mat-table [dataSource]="qctypeSource">
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Name </th>
+            <td mat-cell *matCellDef="let element">
+              <span style="display: flex; justify-content: space-between; align-items: center;">
+              <span>{{element.name}}</span>
+                <input type="checkbox" [disabled]="!editMode">
+              </span>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+          <tr mat-row *matRowDef="let row; columns: columnsToDisplay;" [class.selected-row]="selectedQCtypeIds.includes(row.id)"></tr>
+        </table>
+
+
       </mat-card-content>
     </mat-expansion-panel>
-    <mat-expansion-panel>
+
+    <mat-expansion-panel #volumesPanel>
       <mat-expansion-panel-header>
         <mat-panel-title class="mat-card-title">
-          Data settings
+          Volumes
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <form class="dataInstruments" [formGroup]="dataInstruments">
-      <mat-form-field appearance="standard" class="fullWidth">
-        <mat-label>Method Path</mat-label>
-        <input matInput type="text" required name="method" formControlName="method" disabled>
-        <!-- <mat-error *ngIf="dataInstruments.controls['method'].errors?.required && dataInstruments.controls['method'].touched"> -->
-        <!--   Method Path is <strong>required</strong> -->
-        <!-- </mat-error> -->
-      </mat-form-field>
-      <mat-form-field appearance="standard" class="fullWidth">
-        <mat-label>Path</mat-label>
-        <input matInput type="text" required name="path" formControlName="path" disabled>
-        <!-- <mat-error *ngIf="dataInstruments.controls['path'].errors?.required && dataInstruments.controls['path'].touched"> -->
-        <!--   Path is <strong>required</strong> -->
-        <!-- </mat-error> -->
-      </mat-form-field>
-      <mat-dialog-actions align="end">
-        <button mat-button (click)="saveInstrumentPaths()">Save Instrument Paths</button>
-      </mat-dialog-actions>
-    </form>
+
+      <button mat-icon-button (click)="newVolume()" style="float: right;">
+        <mat-icon>add_circle</mat-icon>
+      </button>
+
+      <mat-card-content>
+      <ng-container *ngIf="isVolumeInputEnabled">
+        <input type="text" type="number" [formControl]="volumeControl" length=5 min="0" max="100" [disabled]="!isVolumeInputEnabled">
+        <div *ngIf="volumeControl.invalid && volumeControl.touched">
+          <span *ngIf="volumeControl.errors?.required">Value is required.</span>
+          <span *ngIf="volumeControl.errors?.min">Minimum value is 0.</span>
+          <span *ngIf="volumeControl.errors?.max">Maximum value is 100.</span>
+        </div>
+      </ng-container>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Volume</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let volume of volumes" [class.selected-row]="selectedVolumes.includes(volume)">
+            <span style="display: flex; justify-content: space-between; align-items: center;">
+              <span>{{volume}}</span>
+                <input type="checkbox" [disabled]="isVolumeInputEnabled" [disabled]="!editMode">
+              </span>
+          </tr>
+        </tbody>
+      </table>
+
+
+      </mat-card-content>
     </mat-expansion-panel>
+
   </div>
 </div>
