@@ -2,7 +2,7 @@
   window['env'] = window['env'] || {};
 
   // Environment variables
-  window['env']['apiPrefix'] = 'http://gambusia.crg.es:8099/';
+  window['env']['apiPrefix'] = 'http://localhost:8099/';
 
   let config_url = window['env']['apiPrefix'] + 'api/config';
 
