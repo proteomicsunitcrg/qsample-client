@@ -26,6 +26,7 @@ export class SettingsQgeneratorApplicationsComponent implements OnInit {
     this.applicationService.getAll().subscribe(
       (res) => {
         this.dataSource = new MatTableDataSource(res);
+        this.dataSource.data = this.dataSource.data.sort((a, b) => a.name.localeCompare(b.name));
       },
       (err) => {
         console.error(err);

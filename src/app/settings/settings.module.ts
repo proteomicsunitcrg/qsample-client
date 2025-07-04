@@ -25,6 +25,10 @@ import { SettingsQgeneratorApplicationsCreatorComponent } from './application/se
 import { InjectionConditionsDialogComponent } from './system/settings-qgenerator-systems-creator/dialog/injection-conditions-dialog.component';
 import { SettingsQgeneratorMethodsComponent } from './method/settings-qgenerator-methods/settings-qgenerator-methods.component';
 import { SettingsQgeneratorMethodsCreatorComponent } from './method/settings-qgenerator-methods-creator/settings-qgenerator-methods-creator.component';
+
+import { SettingsQgeneratorQCtypesComponent } from './qctype/settings-qgenerator-qctypes/settings-qgenerator-qctypes.component';
+import { SettingsQgeneratorQCtypesCreatorComponent } from './qctype/settings-qgenerator-qctypes-creator/settings-qgenerator-qctypes-creator.component';
+
 import { SettingsQgeneratorSystemsQcComponent } from './system/settings-qgenerator-systems-qc/settings-qgenerator-systems-qc.component';
 import { InjectionConditionsQCDialogComponent } from './system/settings-qgenerator-systems-qc/dialog/injection-conditions-dialog-qc.component';
 import { SettingsLocalRequestComponent } from './local/settings-local-request/settings-local-request.component';
@@ -46,6 +50,8 @@ import { SettingsLocalRequestCreatorComponent } from './local/settings-local-req
     InjectionConditionsQCDialogComponent,
     SettingsQgeneratorMethodsComponent,
     SettingsQgeneratorMethodsCreatorComponent,
+    // SettingsQgeneratorQCtypesComponent,
+    // SettingsQgeneratorQCtypesCreatorComponent,
     SettingsQgeneratorSystemsQcComponent,
     SettingsLocalRequestComponent,
     SettingsLocalRequestCreatorComponent,

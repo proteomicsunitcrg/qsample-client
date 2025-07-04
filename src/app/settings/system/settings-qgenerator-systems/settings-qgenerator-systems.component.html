@@ -38,9 +38,13 @@
           Applications
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <button mat-icon-button (click)="newSystem()" style="float: right;">
+      <button mat-icon-button (click)="goToApplicationsNew()" style="float: right;">
+            <mat-icon>edit_circle</mat-icon>
+      </button>
+      <button mat-icon-button (click)="goToApplications()" style="float: right;">
             <mat-icon>add_circle</mat-icon>
       </button>
+
       <mat-card-content>
         <table mat-table [dataSource]="applicationSource">
           <ng-container matColumnDef="name">
@@ -100,9 +104,13 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
 
-      <button mat-icon-button (click)="newSystem()" style="float: right;">
+      <button mat-icon-button (click)="goToMethodsNew()" style="float: right;">
         <mat-icon>add_circle</mat-icon>
       </button>
+     <button mat-icon-button (click)="goToMethods()" style="float: right;">
+        <mat-icon>edit_circle</mat-icon>
+      </button>
+
       <mat-card-content>
         <table mat-table [dataSource]="methodSource">
           <ng-container matColumnDef="name">
@@ -128,7 +136,10 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
 
-      <button mat-icon-button (click)="newSystem()" style="float: right;">
+      <button mat-icon-button (click)="goToQCtypes()" style="float: right;">
+        <mat-icon>edit_circle</mat-icon>
+      </button>
+      <button mat-icon-button (click)="goToQCtypesNew()" style="float: right;">
         <mat-icon>add_circle</mat-icon>
       </button>
 

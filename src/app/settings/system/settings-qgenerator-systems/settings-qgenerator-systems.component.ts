@@ -186,6 +186,27 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
     this.router.navigate(['/settings/QGenerator/systems/editor/', 'new']);
   }
 
+  public goToApplications(): void {
+    this.router.navigate(['/settings/QGenerator/applications']);
+  }
+  public goToApplicationsNew(): void {
+    this.router.navigate(['/settings/QGenerator/applications/editor/', 'new']);
+  }
+
+  public goToMethods(): void {
+    this.router.navigate(['/settings/QGenerator/methods']);
+  }
+  public goToMethodsNew(): void {
+    this.router.navigate(['/settings/QGenerator/methods/editor/', 'new']);
+  }
+
+  public goToQCtypes(): void {
+    this.router.navigate(['/settings/QGenerator/qctypes']);
+  }
+  public goToQCtypesNew(): void {
+    this.router.navigate(['/settings/QGenerator/qctypes/editor/', 'new']);
+  }
+
   public selectInstrument(instrument: Instrument): void {
     this.selectedInstrument = instrument;
     this.selectedInstrumentId = instrument.id;

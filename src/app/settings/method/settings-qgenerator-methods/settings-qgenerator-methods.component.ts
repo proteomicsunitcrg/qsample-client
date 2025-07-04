@@ -7,33 +7,33 @@ import { MethodService } from 'src/app/services/method.service';
 @Component({
   selector: 'app-settings-qgenerator-methods',
   templateUrl: './settings-qgenerator-methods.component.html',
-  styleUrls: ['./settings-qgenerator-methods.component.css']
+  styleUrls: ['./settings-qgenerator-methods.component.css'],
 })
 export class SettingsQgeneratorMethodsComponent implements OnInit {
-
-  constructor(private applicationService: MethodService, private router: Router) { }
-
+  constructor(
+    private methodService: MethodService,
+    private router: Router
+  ) {}
 
   columnsToDisplay = ['name'];
   dataSource: MatTableDataSource<any>;
 
   ngOnInit(): void {
-    this.getAllApplications();
+    this.getAllMethods();
   }
 
-  private getAllApplications(): void {
-    this.applicationService.getAll().subscribe(
-      res => {
-        // console.log(res);
-
-        this.dataSource = new MatTableDataSource(res);
+  private getAllMethods(): void {
+    this.methodService.getAll().subscribe(
+      (res) => {
+        const filtered = res.filter((method) => method.name !== null);
+        this.dataSource = new MatTableDataSource(filtered);
+        this.dataSource.data = this.dataSource.data.sort((a, b) => a.name.localeCompare(b.name));
       },
-      err => {
+      (err) => {
         console.error(err);
       }
     );
   }
-
   public edit(app: Method): void {
     this.router.navigate(['/settings/QGenerator/methods/editor/', app.id]);
   }
@@ -41,5 +41,4 @@ export class SettingsQgeneratorMethodsComponent implements OnInit {
   public newMethod(): void {
     this.router.navigate(['/settings/QGenerator/methods/editor/', 'new']);
   }
-
 }
