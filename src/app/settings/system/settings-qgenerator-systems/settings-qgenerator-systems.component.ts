@@ -48,6 +48,10 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
   isVolumeInputEnabled = false;
   editMode = false;
 
+  selectedMethodId: number | null = null;
+  selectedQCtypeId: number | null = null;
+  selectedVolume: number | null = null;
+
   dataInstruments = new FormGroup({
     method: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(60)]),
     path: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(60)]),
@@ -164,6 +168,18 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
     }
   }
 
+  onMethodCheckboxChange(id: number, checked: boolean): void {
+    this.selectedMethodId = checked ? id : null;
+  }
+
+  onQCtypeCheckboxChange(id: number, checked: boolean): void {
+    this.selectedQCtypeId = checked ? id : null;
+  }
+
+  onVolumeCheckboxChange(id: number, checked: boolean): void {
+    this.selectedVolume = checked ? id : null;
+  }
+
   // TODO: This needs to be changed and adapted
   public saveApplicationInstruments(): void {
     const selectedApplications = this.applicationSource.data.filter((app) =>
@@ -180,6 +196,16 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
   public newVolume(): void {
     this.isVolumeInputEnabled = true;
     this.volumeControl.enable();
+    this.selectedVolume = null;
+  }
+
+  public onVolumeInputEnter(): void {
+    if (this.volumeControl.valid) {
+      this.selectedVolume = this.volumeControl.value;
+      // Optionally disable input or reset:
+      // this.isVolumeInputEnabled = false;
+      // this.volumeControl.reset();
+    }
   }
 
   public newSystem(): void {
@@ -205,6 +231,44 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
   }
   public goToQCtypesNew(): void {
     this.router.navigate(['/settings/QGenerator/qctypes/editor/', 'new']);
+  }
+
+  // Trigger a new Injection Condition QC
+  public commitInjectionConditionQC(): void {
+    if (this.editMode && this.selectedInstrumentId && this.selectedMethodId) {
+      if (this.selectedQCtypeId) {
+        console.log('QC Type selected:', this.selectedQCtypeId);
+      }
+
+      if (this.selectedVolume === null) {
+        alert('Volume needed');
+      } else {
+        const newInjectionConditionQC = {
+          instrument: { id: this.selectedInstrumentId },
+          method: { id: this.selectedMethodId },
+          qctype: { id: this.selectedQCtypeId },
+          volume: this.selectedVolume,
+        };
+
+        console.log('New Injection Condition QC:', newInjectionConditionQC);
+        alert(`New Injection Condition QC: ${JSON.stringify(newInjectionConditionQC)}`);
+        // this.injectionConditionQCService.create(newInjectionConditionQC).subscribe(
+        //   (res) => {
+        //     console.log('New Injection Condition QC created:', res);
+        //     this.getInjectionConditionsQCByInstrument();
+        //     // Reset selections
+        //     this.selectedMethodId = null;
+        //     this.selectedQCtypeId = null;
+        //     this.selectedVolume = null;
+        //     this.volumeControl.reset();
+        //     this.isVolumeInputEnabled = false;
+        //   },
+        //   (err) => {
+        //     console.error('Error creating Injection Condition QC:', err);
+        //   }
+        // );
+      }
+    }
   }
 
   public selectInstrument(instrument: Instrument): void {
