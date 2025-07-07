@@ -8,6 +8,7 @@ import { QCtypeService } from 'src/app/services/qctype.service';
 import { QGeneratorService } from '../../../services/qGenerator.service';
 import { Instrument } from '../../../models/Instrument';
 import { Method } from '../../../models/Method';
+import { QCtype } from '../../../models/QCtype';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ViewChild } from '@angular/core';
@@ -43,14 +44,17 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
   selectedQCtypeIds: number[] = [];
   selectedVolumes: number[] = [];
   selectedInstrumentId: number | null = null;
-  selectedInstrument: Instrument;
-  selectedMethod: Method;
+  selectedInstrument: Instrument | null = null;
+  selectedMethod: Method | null = null;
   isVolumeInputEnabled = false;
   editMode = false;
 
   selectedMethodId: number | null = null;
   selectedQCtypeId: number | null = null;
   selectedVolume: number | null = null;
+
+  selectedMethodBox: Method | null = null;
+  selectedQCtypeBox: QCtype | null = null;
 
   dataInstruments = new FormGroup({
     method: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(60)]),
@@ -168,12 +172,12 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
     }
   }
 
-  onMethodCheckboxChange(id: number, checked: boolean): void {
-    this.selectedMethodId = checked ? id : null;
+  onMethodCheckboxChange(method: Method, checked: boolean): void {
+    this.selectedMethodBox = checked ? method : null;
   }
 
-  onQCtypeCheckboxChange(id: number, checked: boolean): void {
-    this.selectedQCtypeId = checked ? id : null;
+  onQCtypeCheckboxChange(qctype: QCtype, checked: boolean): void {
+    this.selectedQCtypeBox = checked ? qctype : null;
   }
 
   onVolumeCheckboxChange(id: number, checked: boolean): void {
@@ -235,23 +239,27 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
 
   // Trigger a new Injection Condition QC
   public commitInjectionConditionQC(): void {
-    if (this.editMode && this.selectedInstrumentId && this.selectedMethodId) {
-      if (this.selectedQCtypeId) {
-        console.log('QC Type selected:', this.selectedQCtypeId);
+    console.log(this.selectedInstrument, this.selectedMethodBox, this.selectedQCtypeBox, this.selectedVolume);
+    if (this.editMode && this.selectedInstrument && this.selectedMethodBox) {
+      if (this.selectedQCtypeBox) {
+        console.log('QC Type selected:', this.selectedQCtypeBox);
       }
 
       if (this.selectedVolume === null) {
         alert('Volume needed');
       } else {
         const newInjectionConditionQC = {
-          instrument: { id: this.selectedInstrumentId },
-          method: { id: this.selectedMethodId },
-          qctype: { id: this.selectedQCtypeId },
+          instrument: this.selectedInstrument,
+          method: this.selectedMethodBox,
+          qctype: this.selectedQCtypeBox,
           volume: this.selectedVolume,
         };
 
         console.log('New Injection Condition QC:', newInjectionConditionQC);
         alert(`New Injection Condition QC: ${JSON.stringify(newInjectionConditionQC)}`);
+
+        // TODO: Prevent to save if condition already exists! -> Check from preloaded
+
         // this.injectionConditionQCService.create(newInjectionConditionQC).subscribe(
         //   (res) => {
         //     console.log('New Injection Condition QC created:', res);

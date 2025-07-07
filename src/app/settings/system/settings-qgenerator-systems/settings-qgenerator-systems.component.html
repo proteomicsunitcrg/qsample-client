@@ -120,8 +120,8 @@
               <span>{{element.name}}</span>
 
                 <input type="checkbox"
-                [checked]="selectedMethodId === element.id"
-                (change)="onMethodCheckboxChange(element.id, $event.target.checked)"
+                [checked]="selectedMethodBox === element"
+                (change)="onMethodCheckboxChange(element, $event.target.checked)"
                 [disabled]="!editMode">
 
               </span>
@@ -157,8 +157,8 @@
               <span>{{element.name}}</span>
 
                 <input type="checkbox"
-                [checked]="selectedQCtypeId === element.id"
-                (change)="onQCtypeCheckboxChange(element.id, $event.target.checked)"
+                [checked]="selectedQCtypeBox === element"
+                (change)="onQCtypeCheckboxChange(element, $event.target.checked)"
                 [disabled]="!editMode">
 
               </span>
