@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { SettingsQgeneratorQCtypesComponent } from './settings-qgenerator-methods.component';
+import { SettingsQgeneratorQCtypesComponent } from './settings-qgenerator-qctypes.component';
 
 describe('SettingsQgeneratorQCtypesComponent', () => {
   let component: SettingsQgeneratorQCtypesComponent;
@@ -8,9 +8,8 @@ describe('SettingsQgeneratorQCtypesComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [SettingsQgeneratorQCtypesComponent]
-    })
-      .compileComponents();
+      declarations: [SettingsQgeneratorQCtypesComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

@@ -14,6 +14,9 @@ import { SettingsQgeneratorSystemsCreatorComponent } from './system/settings-qge
 import { SettingsQgeneratorApplicationsCreatorComponent } from './application/settings-qgenerator-applications-creator/settings-qgenerator-applications-creator.component';
 import { SettingsQgeneratorMethodsComponent } from './method/settings-qgenerator-methods/settings-qgenerator-methods.component';
 import { SettingsQgeneratorMethodsCreatorComponent } from './method/settings-qgenerator-methods-creator/settings-qgenerator-methods-creator.component';
+import { SettingsQgeneratorQCtypesComponent } from './qctype/settings-qgenerator-qctypes/settings-qgenerator-qctypes.component';
+import { SettingsQgeneratorQCtypesCreatorComponent } from './qctype/settings-qgenerator-qctypes-creator/settings-qgenerator-qctypes-creator.component';
+
 import { SettingsQgeneratorSystemsQcComponent } from './system/settings-qgenerator-systems-qc/settings-qgenerator-systems-qc.component';
 import { SettingsLocalRequestComponent } from './local/settings-local-request/settings-local-request.component';
 import { SettingsLocalRequestCreatorComponent } from './local/settings-local-request-creator/settings-local-request-creator.component';
@@ -33,6 +36,8 @@ const routes: Routes = [
       { path: 'QGenerator/applications/editor/:id', component: SettingsQgeneratorApplicationsCreatorComponent },
       { path: 'QGenerator/methods', component: SettingsQgeneratorMethodsComponent },
       { path: 'QGenerator/methods/editor/:id', component: SettingsQgeneratorMethodsCreatorComponent },
+      { path: 'QGenerator/qctypes', component: SettingsQgeneratorQCtypesComponent },
+      { path: 'QGenerator/qctypes/editor/:id', component: SettingsQgeneratorQCtypesCreatorComponent },
       { path: 'local/request', component: SettingsLocalRequestComponent },
       { path: 'local/request/editor/:id', component: SettingsLocalRequestCreatorComponent },
     ],

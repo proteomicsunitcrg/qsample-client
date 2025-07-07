@@ -16,53 +16,99 @@
 </section>
 <div class="qgenerator-two-columns">
 <div class="qgenerator-left-column">
-  <div>
-      <mat-label>Application</mat-label>
-      <input matInput [(ngModel)]="request.classs">
-  </div>
+  <mat-expansion-panel #applicationPanel>
+    <mat-expansion-panel-header>
+      <mat-panel-title class="mat-card-title">
+        Application
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-card-content>
+        <input matInput [(ngModel)]="request.classs">
+    </mat-card-content>
+  </mat-expansion-panel>
+  <mat-expansion-panel #instrumentsPanel *ngIf="availableInstruments.length > 0">
 
-  <div>
-    <mat-form-field appearance="fill" *ngIf="availableInstruments.length > 1">
+    <mat-expansion-panel-header>
+      <mat-panel-title class="mat-card-title">
+        Instrument
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-card-content>
+      <mat-form-field appearance="fill" *ngIf="availableInstruments.length > 1">
+        <mat-select [(value)]="selectedInstrument" (selectionChange)="changeInstrument()">
+          <mat-option [value]="ins" *ngFor="let ins of availableInstruments">{{ins.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill" *ngIf="availableInstruments.length == 1">
       <mat-label>Instrument</mat-label>
-      <mat-select [(value)]="selectedInstrument" (selectionChange)="changeInstrument()">
-        <mat-option [value]="ins" *ngFor="let ins of availableInstruments">{{ins.name}}</mat-option>
+        <mat-select [(value)]="selectedInstrument" disabled>
+          <mat-option default [value]="availableInstruments[0]">{{availableInstruments[0].name}}</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field appearance="fill" *ngIf="availableInstruments.length == 1">
-      <mat-label>Instrument</mat-label>
-      <mat-select [(value)]="selectedInstrument" disabled>
-        <mat-option default [value]="availableInstruments[0]">{{availableInstruments[0].name}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-    <div>
-      <mat-label>Path</mat-label>
+    </mat-card-content>
+  </mat-expansion-panel>
+  <mat-expansion-panel #pathPanel *ngIf="availableInstruments.length > 0 && selectedInstrument">
+    <mat-expansion-panel-header>
+      <mat-panel-title class="mat-card-title">
+        Path
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-card-content>
       <input matInput [(ngModel)]="path">
-    </div>
-  <div>
-      <mat-label>Method path</mat-label>
+    </mat-card-content>
+  </mat-expansion-panel>
+  <mat-expansion-panel #methodPathPanel *ngIf="availableInstruments.length > 0 && selectedInstrument">
+    <mat-expansion-panel-header>
+      <mat-panel-title class="mat-card-title">
+        Method Path
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-card-content>
       <input matInput [(ngModel)]="methodPath">
-  </div>
+    </mat-card-content>
+  </mat-expansion-panel>
 
- <div *ngIf="injectionConditions">
-    <mat-form-field appearance="fill">
-      <mat-label>Method</mat-label>
-      <mat-select [(value)]="selectedMethod" (selectionChange)="applyInjectionConditions()">
-        <mat-option [value]="method" *ngFor="let method of methods">{{method.name}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <div >
-      <mat-label>Volume</mat-label>
-      <input matInput [(ngModel)]="selectedVolume">
-  </div>
-
-  <div>
-    <mat-select [(value)]="selectedQCTypes" multiple>
-      <mat-option [value]="qctype" *ngFor="let qctype of qctypes">{{qctype.name}}</mat-option>
-    </mat-select>
+  <mat-expansion-panel #methodsPanel *ngIf="injectionConditions">
+  <mat-expansion-panel-header>
+      <mat-panel-title class="mat-card-title">
+        Method
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-card-content>
+      <mat-form-field appearance="fill">
+        <mat-select [(value)]="selectedMethod" (selectionChange)="applyInjectionConditions()">
+          <mat-option [value]="method" *ngFor="let method of methods">{{method.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-card-content>
+  </mat-expansion-panel>
+  <mat-expansion-panel #volumePanel *ngIf="injectionConditions">
+  <mat-expansion-panel-header>
+      <mat-panel-title class="mat-card-title">
+        Volume
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-card-content>
+      <mat-form-field appearance="fill">
+        <input matInput [(ngModel)]="selectedVolume">
+      </mat-form-field>&nbsp; (ul)
+    </mat-card-content>
+  </mat-expansion-panel>
+  <mat-expansion-panel #qctypesPanel *ngIf="injectionConditions">
+  <mat-expansion-panel-header>
+      <mat-panel-title class="mat-card-title">
+        QC
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-card-content>
+      <mat-form-field appearance="fill">
+        <mat-select [(value)]="selectedQCTypes" multiple>
+          <mat-option [value]="qctype" *ngFor="let qctype of qctypes">{{qctype.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
     <button mat-raised-button (click)="autoQC()" [disabled]="selectedQCTypes.length==0">Instrument QC</button>
-  </div>
+    </mat-card-content>
+  </mat-expansion-panel>
 
 </div>
 <div class="qgenerator-right-column">

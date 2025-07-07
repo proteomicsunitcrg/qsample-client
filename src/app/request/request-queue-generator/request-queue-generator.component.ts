@@ -17,6 +17,8 @@ import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 // import { SettingsQgeneratorSystemsQcComponent } from 'src/app/settings/system/settings-qgenerator-systems-qc/settings-qgenerator-systems-qc.component';
 
+import { MatExpansionPanel } from '@angular/material/expansion';
+
 @Component({
   selector: 'app-request-queue-generator',
   templateUrl: './request-queue-generator.component.html',
@@ -71,6 +73,10 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
     });
   }
   @ViewChild('table') table: MatTable<Itemerino>;
+  @ViewChild('methodsPanel') methodsPanel: MatExpansionPanel;
+  @ViewChild('qctypesPanel') qctypesPanel: MatExpansionPanel;
+  @ViewChild('volumePanel') volumesPanel: MatExpansionPanel;
+
   displayedColumns: string[] = ['sampleType', 'filename', 'method', 'position', 'volume', 'edit', 'delete', 'add'];
 
   taxonomyCode: number;
@@ -548,6 +554,7 @@ export class RequestQueueGeneratorComponent implements OnInit, OnDestroy {
     this.getInjectionConditionsByInstrumentId();
     this.path = this.selectedInstrument.path;
     this.methodPath = this.selectedInstrument.method;
+    // this.methodsPanel.open();
   }
 
   private retrieveMethods(injectionConditionsQC: InjectionConditionQC[]): {
