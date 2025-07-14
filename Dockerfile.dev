@@ -1,4 +1,4 @@
-FROM node:14-buster as nodeclient
+FROM node:14-bullseye as nodeclient
 ARG QSAMPLE_API_PREFIX=http://localhost:8099/
 
 RUN apt update && apt upgrade -y && apt -y install gettext-base
