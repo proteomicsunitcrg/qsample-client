@@ -125,14 +125,19 @@ export class WetlabPlotComponent implements OnInit, OnDestroy {
       const text = [];
       plotTrace.plotTracePoints.sort((a, b) => a.year - b.year || a.week - b.week); //order by year and week
       plotTrace.plotTracePoints.forEach((plotTracePoint) => {
-        let fixed_val = this.setPointStd(plotTracePoint.std);
-        values.push(plotTracePoint.value);
-        filenames.push(plotTracePoint.name);
-        color.push('red');
-        errorBar.push(plotTracePoint.std);
-        text.push(
-          `${plotTracePoint.value.toFixed(2)}<br>±${fixed_val}<br>W${plotTracePoint.week}Y${plotTracePoint.year}<br>${plotTracePoint.triplicats.map((e) => `${e.filename}<br>`)}`
-        );
+        let value = plotTracePoint.value;
+
+        // We skip values that are 0 or null
+        if (value && value > 0) {
+          let fixed_val = this.setPointStd(plotTracePoint.std);
+          values.push(plotTracePoint.value);
+          filenames.push(plotTracePoint.name);
+          color.push('red');
+          errorBar.push(plotTracePoint.std);
+          text.push(
+            `${plotTracePoint.value.toFixed(2)}<br>±${fixed_val}<br>W${plotTracePoint.week}Y${plotTracePoint.year}<br>${plotTracePoint.triplicats.map((e) => `${e.filename}<br>`)}`
+          );
+        }
       });
       const trace = {
         x: filenames,
