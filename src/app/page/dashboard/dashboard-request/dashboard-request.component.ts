@@ -7,13 +7,12 @@ import { FileService } from '../../../services/file.service';
 @Component({
   selector: 'app-dashboard-request',
   templateUrl: './dashboard-request.component.html',
-  styleUrls: ['./dashboard-request.component.css']
+  styleUrls: ['./dashboard-request.component.css'],
 })
 export class DashboardRequestComponent implements OnInit {
-
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  constructor(private fileService: FileService) { }
+  constructor(private fileService: FileService) {}
 
   datasource: MatTableDataSource<any>;
 
@@ -27,28 +26,32 @@ export class DashboardRequestComponent implements OnInit {
     start: new FormControl(this.monthAgo),
     end: new FormControl(this.today),
     filename: new FormControl(''),
-    code: new FormControl('')
+    code: new FormControl(''),
   });
 
   filename = '';
   code = '';
-
 
   ngOnInit(): void {
     this.getAllRequestFiles();
   }
 
   public getAllRequestFiles(): void {
-    this.fileService.getRequestFilesDashboard(this.today, this.monthAgo, this.filename, this.code).subscribe(
-      res => {
-        this.datasource = new MatTableDataSource(res);
-        this.datasource.paginator = this.paginator;
-      },
-      err => {
-        console.error(err);
-      }
-    );
-
+    this.fileService
+      .getRequestFilesDashboard(
+        this.range.controls.end.value,
+        this.range.controls.start.value,
+        this.filename,
+        this.code
+      )
+      .subscribe(
+        (res) => {
+          this.datasource = new MatTableDataSource(res);
+          this.datasource.paginator = this.paginator;
+        },
+        (err) => {
+          console.error(err);
+        }
+      );
   }
-
 }
