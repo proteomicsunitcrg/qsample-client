@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/User';
+import { UserCreation } from '../../models/UserCreation';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
@@ -16,7 +17,7 @@ import { TokenStorageService } from '../../services/token-storage.service';
 export class SettingsUserComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
 
-  columnsToDisplay = ['username', 'firstname', 'lastname', 'groupp', 'roles', 'permissions', 'remove'];
+  columnsToDisplay = ['username', 'firstname', 'lastname', 'groupp', 'roles', 'changepw', 'permissions', 'remove'];
 
   subscription: Subscription;
   isManager = false;
@@ -45,6 +46,19 @@ export class SettingsUserComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.updateIsManager(this.tokenStorageService.isManagerUser());
+  }
+
+  public changePassword(user: UserCreation): void {
+    const dialogRef = this.dialog.open(UserChangePasswordDialogComponent, {
+      data: {
+        user,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      // console.log(`Dialog result: ${result}`);
+      window.location.reload(); // Prompted reload for getting new permissions from table
+    });
   }
 
   public openDialog(user: User): void {
@@ -156,6 +170,51 @@ export class UserSettingDialogComponent {
         console.error(err);
       }
     );
+  }
+}
+
+@Component({
+  selector: 'app-dialog-content-changepw-dialog',
+  templateUrl: './dialog-content-changepw-dialog.html',
+  styleUrls: ['./settings-user.component.css'],
+})
+export class UserChangePasswordDialogComponent {
+  user: UserCreation;
+  newPassword: string;
+  confirmPassword: string;
+  passwordMismatch: boolean = false;
+  passwordLength: boolean = false;
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public userC: any,
+    private userService: UserService
+  ) {
+    this.user = userC.user;
+  }
+
+  public changePassword(): void {
+    if (this.newPassword !== this.confirmPassword) {
+      this.passwordMismatch = true;
+    } else {
+      this.passwordMismatch = false;
+      // TODO: Check correspondence in password length
+      if (this.newPassword.length < 6) {
+        this.passwordLength = true;
+      } else {
+        this.passwordLength = false;
+        this.user.password = this.newPassword;
+        // Proceed with password change logic
+        this.userService.changeUserPassword(this.user).subscribe(
+          (res) => {
+            alert('Password changed');
+            window.location.reload(); // Prompted reload for getting new permissions from table
+          },
+          (err) => {
+            alert(err.error.message);
+            console.error(err);
+          }
+        );
+      }
+    }
   }
 }
 

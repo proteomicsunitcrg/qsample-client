@@ -7,6 +7,10 @@
   overflow-y: hidden;
 }
 
+.error-message {
+  color: red;
+}
+
 .remove-button {
   height: 75px;
 }

@@ -6,11 +6,10 @@ import { UserCreation } from '../models/UserCreation';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
-
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {}
 
   private apiPrefix = environment.apiPrefix;
   private userUrl = this.apiPrefix + 'api/user';
@@ -18,7 +17,7 @@ export class UserService {
   private authUrl = this.apiPrefix + 'api/auth';
 
   httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
 
   public getAllUsers(): Observable<User[]> {
@@ -44,5 +43,8 @@ export class UserService {
     return this.httpClient.post<User>(`${this.authUrl}/deleteUser`, params, this.httpOptions);
   }
 
-
+  public changeUserPassword(user: UserCreation): Observable<any> {
+    const params = JSON.stringify(user);
+    return this.httpClient.post<User>(`${this.authUrl}/changeUserPassword`, params, this.httpOptions);
+  }
 }

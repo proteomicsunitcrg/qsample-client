@@ -9,7 +9,12 @@ import { SettingsMainComponent } from './settings-main/settings-main.component';
 import { SettingsRouter } from './settings.router';
 import { SettingsSidebarComponent } from './settings-sidebar/settings-sidebar.component';
 import { SettingsAddUserComponent } from './settings-adduser/settings-adduser.component';
-import { SettingsUserComponent, UserRemoveDialogComponent, UserSettingDialogComponent } from './settings-user/settings-user.component';
+import {
+  SettingsUserComponent,
+  UserChangePasswordDialogComponent,
+  UserRemoveDialogComponent,
+  UserSettingDialogComponent,
+} from './settings-user/settings-user.component';
 import { SettingsQgeneratorSystemsComponent } from './system/settings-qgenerator-systems/settings-qgenerator-systems.component';
 // tslint:disable-next-line:max-line-length
 import { SettingsQgeneratorApplicationsComponent } from './application/settings-qgenerator-applications/settings-qgenerator-applications.component';
@@ -26,7 +31,6 @@ import { InjectionConditionsQCDialogComponent } from './system/settings-qgenerat
 import { SettingsLocalRequestComponent } from './local/settings-local-request/settings-local-request.component';
 import { SettingsLocalRequestCreatorComponent } from './local/settings-local-request-creator/settings-local-request-creator.component';
 
-
 @NgModule({
   declarations: [
     SettingsMainComponent,
@@ -34,6 +38,7 @@ import { SettingsLocalRequestCreatorComponent } from './local/settings-local-req
     SettingsAddUserComponent,
     SettingsUserComponent,
     UserSettingDialogComponent,
+    UserChangePasswordDialogComponent,
     UserRemoveDialogComponent,
     SettingsQgeneratorSystemsComponent,
     SettingsQgeneratorApplicationsComponent,
@@ -45,7 +50,7 @@ import { SettingsLocalRequestCreatorComponent } from './local/settings-local-req
     SettingsQgeneratorMethodsCreatorComponent,
     SettingsQgeneratorSystemsQcComponent,
     SettingsLocalRequestComponent,
-    SettingsLocalRequestCreatorComponent
+    SettingsLocalRequestCreatorComponent,
   ],
   imports: [
     FlexLayoutModule,
@@ -55,10 +60,9 @@ import { SettingsLocalRequestCreatorComponent } from './local/settings-local-req
     ReactiveFormsModule,
     AngularMaterialModule,
     SharedModule,
-    SettingsRouter
+    SettingsRouter,
   ],
-  providers: [
-  ],
-  bootstrap: []
+  providers: [],
+  bootstrap: [],
 })
-export class SettingsModule { }
+export class SettingsModule {}
