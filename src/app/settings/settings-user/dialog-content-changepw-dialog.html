@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>{{user.username}} - change of password</h2>
+<mat-dialog-content class="mat-typography">
+  <p>Write down twice the new password for the user</p>
+  <div class="mat-dialog-content">
+    <mat-form-field>
+      <mat-label>New Password</mat-label>
+      <input matInput [(ngModel)]="newPassword" type="password" placeholder="Enter new password" minlength="6" required>
+      <div *ngIf="passwordLength" class="error-message">
+        Password must be at least 6 characters long.
+      </div>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Confirm Password</mat-label>
+      <input matInput [(ngModel)]="confirmPassword" type="password" placeholder="Confirm new password" required>
+    </mat-form-field>
+    <div *ngIf="passwordMismatch" class="error-message">
+      Passwords do not match.
+    </div>
+  </div>
+  <ng-container>
+    <div class="mat-dialog-actions changepw-button" align="center">
+      <button mat-button (click)="changePassword()">Change Password</button>
+    </div>
+  </ng-container>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Exit</button>
+</mat-dialog-actions>

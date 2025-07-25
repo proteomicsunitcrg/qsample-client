@@ -11,6 +11,7 @@ import { SettingsSidebarComponent } from './settings-sidebar/settings-sidebar.co
 import { SettingsAddUserComponent } from './settings-adduser/settings-adduser.component';
 import {
   SettingsUserComponent,
+  UserChangePasswordDialogComponent,
   UserRemoveDialogComponent,
   UserSettingDialogComponent,
 } from './settings-user/settings-user.component';
@@ -41,6 +42,7 @@ import { SettingsLocalRequestCreatorComponent } from './local/settings-local-req
     SettingsAddUserComponent,
     SettingsUserComponent,
     UserSettingDialogComponent,
+    UserChangePasswordDialogComponent,
     UserRemoveDialogComponent,
     SettingsQgeneratorSystemsComponent,
     SettingsQgeneratorApplicationsComponent,
