@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Instrument } from '../models/Instrument';
+import { Application } from '../models/Application';
 import { QCtype } from '../models/QCtype';
 import { InjectionConditionQC } from '../models/InjectionConditionQC';
 import { catchError } from 'rxjs/operators';
@@ -37,6 +38,15 @@ export class InjectionConditionQCService {
 
   public findByInstrumentId(instrument: Instrument): Observable<InjectionConditionQC[]> {
     return this.httpClient.get<InjectionConditionQC[]>(`${this.apiPrefix}findByInstrumentId/${instrument.id}`);
+  }
+
+  public findByInstrumentIdAndApplicationId(
+    instrument: Instrument,
+    application: Application
+  ): Observable<InjectionConditionQC[]> {
+    return this.httpClient.get<InjectionConditionQC[]>(
+      `${this.apiPrefix}findByInstrumentIdAndApplicationId/${instrument.id}/${application.id}`
+    );
   }
 
   // errorHandler(error: HttpErrorResponse) {

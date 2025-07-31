@@ -16,7 +16,7 @@ import { MethodService } from '../../../../services/method.service';
 })
 export class InjectionConditionsDialogComponent implements OnInit {
   allMethods: Method[] = [];
-  injectionCondition = new InjectionConditionQC(null, null, null, null, null);
+  injectionCondition = new InjectionConditionQC(null, null, null, null, null, null);
   application: Application;
   instrument: Instrument;
   isUpdate = false;

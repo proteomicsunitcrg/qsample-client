@@ -19,6 +19,7 @@ import { InjectionConditionQC } from '../../../../models/InjectionConditionQC';
 export class InjectionConditionsQCDialogComponent implements OnInit {
   qcType: QCtype;
   instrument: Instrument;
+  application: Application;
 
   isUpdate = false;
 
@@ -66,6 +67,7 @@ export class InjectionConditionsQCDialogComponent implements OnInit {
       this.injCondId,
       this.qcType,
       this.instrument,
+      this.application,
       this.injCondForm.controls.method.value,
       this.injCondForm.controls.volume.value
     );

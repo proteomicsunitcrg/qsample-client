@@ -32,7 +32,7 @@
     </div>
   </div>
   <div class="qgenerator-right-column">
-    <mat-expansion-panel>
+    <mat-expansion-panel #appsPanel>
       <mat-expansion-panel-header>
         <mat-panel-title class="mat-card-title">
           Applications
@@ -60,7 +60,7 @@
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-          <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+          <tr mat-row *matRowDef="let row; columns: columnsToDisplay;" (click)="selectApplication(row)"></tr>
         </table>
 
         </mat-card-content>

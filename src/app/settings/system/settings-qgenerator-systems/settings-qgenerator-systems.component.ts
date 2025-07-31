@@ -6,6 +6,7 @@ import { InjectionConditionQCService } from 'src/app/services/injectionCondition
 import { ApplicationService } from 'src/app/services/application.service';
 import { QCtypeService } from 'src/app/services/qctype.service';
 import { QGeneratorService } from '../../../services/qGenerator.service';
+import { Application } from '../../../models/Application';
 import { Instrument } from '../../../models/Instrument';
 import { Method } from '../../../models/Method';
 import { QCtype } from '../../../models/QCtype';
@@ -29,6 +30,8 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
     private injectionConditionQCService: InjectionConditionQCService,
     private router: Router
   ) {}
+
+  @ViewChild('appsPanel') appsPanel: MatExpansionPanel;
   @ViewChild('methodsPanel') methodsPanel: MatExpansionPanel;
   @ViewChild('qctypesPanel') qctypesPanel: MatExpansionPanel;
   @ViewChild('volumesPanel') volumesPanel: MatExpansionPanel;
@@ -39,6 +42,10 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
   methodSource: MatTableDataSource<any>;
   qctypeSource: MatTableDataSource<any>;
   volumes: number[] = [];
+
+  selectedApplicationId: number | null = null;
+  selectedApplication: Application | null = null;
+
   selectedApplicationIds: number[] = [];
   selectedMethodIds: number[] = [];
   selectedQCtypeIds: number[] = [];
@@ -129,6 +136,8 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
         // this.qctypeSource = new MatTableDataSource(uniqueQCtypes);
         // this.qctypeSource.data = this.qctypeSource.data.sort((a, b) => a.name.localeCompare(b.name));
         this.volumes = uniqueVolumes.sort((a, b) => a - b);
+
+        this.selectedApplicationIds = filtered.map((iqc) => iqc.application.id);
 
         this.selectedMethodIds = filtered.map((iqc) => iqc.method.id);
         if (this.selectedMethod) {
@@ -279,22 +288,30 @@ export class SettingsQgeneratorSystemsComponent implements OnInit {
     }
   }
 
+  public selectApplication(application: Application): void {
+    console.log(application);
+    this.selectedApplication = application;
+    this.selectedApplicationId = application.id;
+
+    // TODO: Need to query here
+
+    // this.getInjectionConditionsQCByInstrument();
+    if (this.methodsPanel) {
+      this.methodsPanel.open();
+    }
+    //     // if (this.volumesPanel) {
+    //   this.volumesPanel.open();
+    // }
+  }
+
   public selectInstrument(instrument: Instrument): void {
     this.selectedInstrument = instrument;
     this.selectedInstrumentId = instrument.id;
     this.dataInstruments.patchValue({ method: instrument.method, path: instrument.path });
-    this.applicationService.getByInstrumentId(instrument.id).subscribe(
-      (res) => {
-        this.selectedApplicationIds = res.map((app) => app.id);
-      },
-      (err) => {
-        console.error(err);
-      }
-    );
 
     this.getInjectionConditionsQCByInstrument();
-    if (this.methodsPanel) {
-      this.methodsPanel.open();
+    if (this.appsPanel) {
+      this.appsPanel.open();
     }
     //     // if (this.volumesPanel) {
     //   this.volumesPanel.open();
