@@ -14,7 +14,10 @@
 
     <p>{{ chart.description }}</p>
 
-    <pre>{{ chart.parameters | json }}</pre>
+    <div
+      class="plot-container"
+      [id]="getChartDomId(chart)">
+    </div>
 
   </div>
 
