@@ -1,0 +1,10 @@
+.dynamic-charts-container {
+  padding: 1rem;
+}
+
+.chart-card {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}

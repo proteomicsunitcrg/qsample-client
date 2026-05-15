@@ -1,0 +1,21 @@
+<div class="dynamic-charts-container">
+
+  <div *ngIf="loading">
+    Loading charts...
+  </div>
+
+  <div *ngIf="error">
+    {{ error }}
+  </div>
+
+  <div *ngFor="let chart of charts" class="chart-card">
+
+    <h3>{{ chart.title }}</h3>
+
+    <p>{{ chart.description }}</p>
+
+    <pre>{{ chart.parameters | json }}</pre>
+
+  </div>
+
+</div>
