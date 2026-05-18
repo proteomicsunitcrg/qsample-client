@@ -19,7 +19,6 @@ import { DashboardWetlabComponent } from './dashboard/dashboard-wetlab/dashboard
 import { DashboardMainComponent } from './dashboard/dashboard-main/dashboard-main.component';
 import { DashboardRequestNextflowComponent } from './dashboard/dashboard-request-nextflow/dashboard-request-nextflow.component';
 import { SharedModule } from '../shared.module';
-import { DynamicChartComponent } from './dynamic-chart/dynamic-chart.component';
 
 @NgModule({
   imports: [
@@ -36,7 +35,6 @@ import { DynamicChartComponent } from './dynamic-chart/dynamic-chart.component';
     TopBarComponent,
     HomePageComponent,
     MainRequestsComponent,
-
     MainWetlabComponent,
     WetlabListComponent,
     ThemeSelectorComponent,
@@ -45,7 +43,6 @@ import { DynamicChartComponent } from './dynamic-chart/dynamic-chart.component';
     DashboardWetlabComponent,
     DashboardMainComponent,
     DashboardRequestNextflowComponent,
-    DynamicChartComponent
   ],
   providers: [
     RequestService

@@ -26,6 +26,7 @@ import { RequestPcaComponent } from './request-pca/request-pca.component';
 import { RequestPlotFileinfoComponent } from './request-plot-fileinfo/request-plot-fileinfo.component';
 import { RequestPlotModificationsComponent } from './request-plot-modifications/request-plot-modifications.component';
 import { RequestDendogramComponent } from './request-dendogram/request-dendogram.component';
+import { DynamicChartComponent } from '../page/dynamic-chart/dynamic-chart.component'; 
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { RequestDendogramComponent } from './request-dendogram/request-dendogram
     RequestPcaComponent,
     RequestPlotFileinfoComponent,
     RequestPlotModificationsComponent,
-    RequestDendogramComponent
+    RequestDendogramComponent,
+    DynamicChartComponent
   ],
   imports: [
     FlexLayoutModule,

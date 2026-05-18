@@ -4,6 +4,11 @@ import { Observable } from 'rxjs';
 
 import { ChartConfig } from '../models/chart-config.model';
 
+export interface ChartDataPoint {
+  label: string;
+  value: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,6 +21,12 @@ export class ChartService {
   getChartsByPage(pageName: string): Observable<ChartConfig[]> {
     return this.http.get<ChartConfig[]>(
       `${this.apiUrl}/page/${pageName}`
+    );
+  }
+
+  getChartData(dataSourceKey: string, requestCode: string): Observable<ChartDataPoint[]> {
+    return this.http.get<ChartDataPoint[]>(
+      `${this.apiUrl}/data/${dataSourceKey}/request/${requestCode}`
     );
   }
 }

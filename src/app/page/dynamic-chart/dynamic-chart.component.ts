@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { ChartService } from '../../services/chart.service';
+import { ChartService, ChartDataPoint } from '../../services/chart.service';
 import { ChartConfig } from '../../models/chart-config.model';
 
 declare var Plotly: any;
@@ -13,43 +13,37 @@ declare var Plotly: any;
 export class DynamicChartComponent implements OnInit {
 
   @Input() pageName!: string;
+  @Input() requestCode!: string;
 
   charts: ChartConfig[] = [];
-
   loading = false;
-
   error: string | null = null;
-
   chartDomPrefix = 'dynamicChart';
 
-  constructor(
-    private chartService: ChartService
-  ) { }
+  constructor(private chartService: ChartService) { }
 
   ngOnInit(): void {
     this.loadCharts();
   }
 
   loadCharts(): void {
-
     this.loading = true;
     this.error = null;
 
-    this.chartService.getChartsByPage(this.pageName)
-      .subscribe({
-        next: (charts) => {
-          this.charts = charts;
-          this.loading = false;
+    this.chartService.getChartsByPage(this.pageName).subscribe({
+      next: (charts) => {
+        this.charts = charts;
+        this.loading = false;
 
-          setTimeout(() => {
-            this.charts.forEach(chart => this.renderChart(chart));
-          }, 0);
-        },
-        error: () => {
-          this.error = 'Failed to load charts';
-          this.loading = false;
-        }
-      });
+        setTimeout(() => {
+          this.charts.forEach(chart => this.renderChart(chart));
+        }, 0);
+      },
+      error: () => {
+        this.error = 'Failed to load charts';
+        this.loading = false;
+      }
+    });
   }
 
   getChartDomId(chart: ChartConfig): string {
@@ -57,21 +51,26 @@ export class DynamicChartComponent implements OnInit {
   }
 
   renderChart(chart: ChartConfig): void {
-
     if (chart.library !== 'plotly') {
       return;
     }
 
-    if (chart.chartType === 'bar') {
-      this.renderBarChart(chart);
-    }
+    this.chartService.getChartData(chart.dataSourceKey, this.requestCode).subscribe({
+      next: (dataPoints) => {
+        if (chart.chartType === 'bar') {
+          this.renderBarChart(chart, dataPoints);
+        }
+      },
+      error: () => {
+        this.error = `Failed to load data for chart ${chart.name}`;
+      }
+    });
   }
 
-  renderBarChart(chart: ChartConfig): void {
-
+  renderBarChart(chart: ChartConfig, dataPoints: ChartDataPoint[]): void {
     const data = [{
-      x: ['Open', 'Closed', 'Pending'],
-      y: [10, 20, 5],
+      x: dataPoints.map(point => point.label),
+      y: dataPoints.map(point => point.value),
       type: 'bar'
     }];
 
