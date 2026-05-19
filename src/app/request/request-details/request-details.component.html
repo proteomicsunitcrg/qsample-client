@@ -52,9 +52,10 @@
             <div fxFlex>
               <app-request-plot-request></app-request-plot-request>
               <app-dynamic-chart
-                *ngIf="requestCode"
+                *ngIf="requestCode && application && application.id"
                 pageName="request_details"
-                [requestCode]="requestCode">
+                [requestCode]="requestCode"
+                [applicationId]="application.id">
               </app-dynamic-chart>
             </div>
           </div>

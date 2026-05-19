@@ -29,4 +29,24 @@ export class ChartService {
       `${this.apiUrl}/data/${dataSourceKey}/request/${requestCode}`
     );
   }
+
+  getChartsByPageAndApplication(
+    pageName: string,
+    applicationId: number
+  ): Observable<ChartConfig[]> {
+    return this.http.get<ChartConfig[]>(
+      `${this.apiUrl}/page/${pageName}/application/${applicationId}`
+    );
+  }
+
+  getChartsByPageAndRequest(
+  pageName: string,
+  requestCode: string
+  ): Observable<ChartConfig[]> {
+
+    return this.http.get<ChartConfig[]>(
+      `${this.apiUrl}/page/${pageName}/request/${requestCode}`
+    );
+  }
+  
 }

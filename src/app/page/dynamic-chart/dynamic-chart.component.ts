@@ -14,6 +14,7 @@ export class DynamicChartComponent implements OnInit {
 
   @Input() pageName!: string;
   @Input() requestCode!: string;
+  @Input() applicationId!: number;
 
   charts: ChartConfig[] = [];
   loading = false;
@@ -30,7 +31,13 @@ export class DynamicChartComponent implements OnInit {
     this.loading = true;
     this.error = null;
 
-    this.chartService.getChartsByPage(this.pageName).subscribe({
+    const request$ = this.applicationId
+      ? this.chartService.getChartsByPageAndApplication(this.pageName, this.applicationId)
+      : this.requestCode
+        ? this.chartService.getChartsByPageAndRequest(this.pageName, this.requestCode)
+        : this.chartService.getChartsByPage(this.pageName);
+
+    request$.subscribe({
       next: (charts) => {
         this.charts = charts;
         this.loading = false;
