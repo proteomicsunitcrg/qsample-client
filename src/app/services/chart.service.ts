@@ -9,6 +9,12 @@ export interface ChartDataPoint {
   value: number;
 }
 
+export interface ChartSeriesDataPoint {
+  label: string;
+  series: string;
+  value: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -24,9 +30,12 @@ export class ChartService {
     );
   }
 
-  getChartData(dataSourceKey: string, requestCode: string): Observable<ChartDataPoint[]> {
-    return this.http.get<ChartDataPoint[]>(
-      `${this.apiUrl}/data/${dataSourceKey}/request/${requestCode}`
+  getChartsByPageAndRequest(
+    pageName: string,
+    requestCode: string
+  ): Observable<ChartConfig[]> {
+    return this.http.get<ChartConfig[]>(
+      `${this.apiUrl}/page/${pageName}/request/${requestCode}`
     );
   }
 
@@ -39,14 +48,23 @@ export class ChartService {
     );
   }
 
-  getChartsByPageAndRequest(
-  pageName: string,
-  requestCode: string
-  ): Observable<ChartConfig[]> {
-
-    return this.http.get<ChartConfig[]>(
-      `${this.apiUrl}/page/${pageName}/request/${requestCode}`
+  getChartData(
+    dataSourceKey: string,
+    requestCode: string,
+    order: string
+  ): Observable<ChartDataPoint[]> {
+    return this.http.get<ChartDataPoint[]>(
+      `${this.apiUrl}/data/${dataSourceKey}/request/${requestCode}?order=${order}`
     );
   }
-  
+
+  getStackedChartData(
+    dataSourceKey: string,
+    requestCode: string,
+    order: string
+  ): Observable<ChartSeriesDataPoint[]> {
+    return this.http.get<ChartSeriesDataPoint[]>(
+      `${this.apiUrl}/stacked-data/${dataSourceKey}/request/${requestCode}?order=${order}`
+    );
+  }
 }
