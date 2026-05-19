@@ -8,17 +8,23 @@
     {{ error }}
   </div>
 
-  <div *ngFor="let chart of charts" class="notFound">
+  <mat-card *ngFor="let chart of charts" class="dynamic-chart-card">
 
-    <h3>{{ chart.title }}</h3>
-
-    <p>{{ chart.description }}</p>
+    <h3>
+      <span class="title">{{ chart.title }}</span>
+      <span
+        class="request-help material-icons"
+        *ngIf="chart.description"
+        matTooltip="{{ chart.description }}">
+        help
+      </span>
+    </h3>
 
     <div
       class="plot-container"
       [id]="getChartDomId(chart)">
     </div>
 
-  </div>
+  </mat-card>
 
 </div>

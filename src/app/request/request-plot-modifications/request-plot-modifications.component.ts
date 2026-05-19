@@ -167,6 +167,12 @@ export class RequestPlotModificationsComponent implements OnInit, OnDestroy {
       this.layout = LAYOUTLIGHTGROUP;
     }
     const config = { responsive: true };
+    this.layout = {
+      ...this.layout,
+      autosize: true,
+      width: undefined
+    };
+
     Plotly.react(`Graph${this.randString}`, traces, this.layout, config);
     setTimeout(() => {
       // The timeout is necessary because the PLOT isnt instant

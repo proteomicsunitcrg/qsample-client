@@ -109,6 +109,13 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
     } else {
       this.layout = LAYOUTLIGHTHEATMAP;
     }
+    this.layout = {
+      ...this.layout,
+      autosize: true,
+      width: 900,
+      height: 700
+    };
+
     Plotly.newPlot(`heatMap`, data, this.layout, { responsive: true });
   }
 
