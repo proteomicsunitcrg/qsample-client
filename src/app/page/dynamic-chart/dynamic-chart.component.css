@@ -1,15 +1,17 @@
 .dynamic-charts-container {
-  width: 100%;
+  width: 560px;
 }
 
-.chart-card {
-  padding: 16px;
-  margin-bottom: 20px;
-  background: white;
-  border-radius: 4px;
+.notFound {
+  width: 560px;
+  height: 480px;
+  line-height: normal;
+  text-align: center;
+  border-radius: 5px;
+  overflow: hidden;
 }
 
 .plot-container {
-  width: 100%;
-  min-height: 400px;
+  width: 560px;
+  height: 400px;
 }

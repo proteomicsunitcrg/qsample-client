@@ -13,58 +13,102 @@
           <mat-icon class="cursor" *ngIf="!isFav">star_border_round</mat-icon>
           <mat-icon class="cursor" *ngIf="isFav" style="color: gold;">star</mat-icon>
         </button>
-        <!--
-        <button mat-icon-button [disabled] = "!isFav" (click)="removeOrAddToNotify()" matTooltip="Send an email when a file enters">
-          <mat-icon class="cursor" *ngIf="!isNotify">notifications_outlined</mat-icon>
-          <mat-icon class="cursor" *ngIf="isNotify">notifications_active</mat-icon>
+
+        <button *ngIf="!local" style="float: right;" mat-raised-button (click)="goToQGenerator()">
+          QGenerator
         </button>
-        -->
-        <button *ngIf="!local" style="float: right;" mat-raised-button (click)="goToQGenerator()">QGenerator</button>
       </div>
     </h1>
-
   </section>
+
   <div fxLayout="row" fxLayout.lt-lg="column">
+
     <div fxLayout="column" fxLayoutGap="2vw" style="margin-top: 10px;">
+
       <div>
-        <app-request-details-panel [request]="request" style=""></app-request-details-panel>
+        <app-request-details-panel [request]="request"></app-request-details-panel>
       </div>
+
       <div *ngIf="!isQcloud2FilesDisabled">
-        <app-request-qcloud2-files style="" [request]="requestCode">
+        <app-request-qcloud2-files [request]="requestCode">
         </app-request-qcloud2-files>
       </div>
+
     </div>
+
     <div fxFlex>
+
       <mat-card style="margin-left: 10px; margin-right: 10px; margin-top: 10px;">
+
         <mat-card-title>
           Request plots
         </mat-card-title>
+
         <mat-card-content>
-	  <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutAlign="start start" fxLayoutGap="2vw">
-            <div fxLayout="column" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxFlex.lt-lg="100">
-              <div fxFlex.sm="100" fxFlex.xs="100" fxFlex.lt-lg="100" [ngStyle.sm]="{'width.%': 200}">
-                <app-request-plot-file-list [requestCode]="requestCode" *ngIf="requestCode" ></app-request-plot-file-list>
+
+          <div
+            fxLayout="row"
+            fxLayout.lt-lg="column"
+            fxLayoutAlign="start start"
+            fxLayoutGap="2vw">
+
+            <div
+              fxLayout="column"
+              fxLayout.md="row"
+              fxLayout.sm="column"
+              fxLayout.xs="column"
+              fxFlex.lt-lg="100">
+
+              <div
+                fxFlex.sm="100"
+                fxFlex.xs="100"
+                fxFlex.lt-lg="100"
+                [ngStyle.sm]="{'width.%': 200}">
+
+                <app-request-plot-file-list
+                  [requestCode]="requestCode"
+                  *ngIf="requestCode">
+                </app-request-plot-file-list>
+
               </div>
-              <div ffxFlex.sm="100" fxFlex.xs="100" fxFlex.lt-lg="100" [ngStyle.sm]="{'width.%': 200}" *ngIf="application && application.applicationConstraint.showQuantificationAndContaminantList">
-                <app-request-quantification></app-request-quantification>
+
+              <div
+                ffxFlex.sm="100"
+                fxFlex.xs="100"
+                fxFlex.lt-lg="100"
+                [ngStyle.sm]="{'width.%': 200}"
+                *ngIf="application && application.applicationConstraint.showQuantificationAndContaminantList">
+
+                <app-request-quantification>
+                </app-request-quantification>
+
               </div>
+
             </div>
-            <div fxFlex>
-              <app-request-plot-request></app-request-plot-request>
-              <app-dynamic-chart
-                *ngIf="requestCode && application && application.id"
-                pageName="request_details"
-                [requestCode]="requestCode"
-                [applicationId]="application.id">
-              </app-dynamic-chart>
+
+            <div fxFlex style="min-width: 0; max-width: 100%;">
+              <app-request-plot-request>
+              </app-request-plot-request>
             </div>
+
           </div>
+
         </mat-card-content>
+
       </mat-card>
+
     </div>
+
   </div>
+
   <div fxLayout="row" *ngIf="isInternal">
     <!-- <app-request-wetlab-main style="width: 100%; margin-top: 3%;"></app-request-wetlab-main> -->
   </div>
+
 </div>
-<mat-progress-spinner [mode]="'indeterminate'" *ngIf="isLoading" class="center"></mat-progress-spinner>
+
+<mat-progress-spinner
+  [mode]="'indeterminate'"
+  *ngIf="isLoading"
+  class="center">
+</mat-progress-spinner>

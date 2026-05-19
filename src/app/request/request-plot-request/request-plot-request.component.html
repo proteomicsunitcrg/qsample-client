@@ -45,9 +45,19 @@
     [type]="'histones-tailored'">
   </app-request-plot-modifications>
 
+  <!-- Dynamic charts -->
+
+  <app-dynamic-chart
+    *ngIf="requestCode && application && application.id"
+    pageName="request_details"
+    [requestCode]="requestCode"
+    [applicationId]="application.id">
+  </app-dynamic-chart>
+
 </div>
 
 <!-- Statistical charts still legacy -->
+
 <app-request-heatmap
   [requestCode]="requestCode"
   *ngIf="requestCode && application && application.applicationConstraint.showQuantificationHeatMap"
