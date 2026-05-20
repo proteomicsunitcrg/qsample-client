@@ -172,7 +172,6 @@ export class DynamicChartComponent implements OnInit {
     }];
 
     const layout = {
-      title: chart.title,
       yaxis: {
         exponentformat: 'E',
         showexponent: 'all',
@@ -280,7 +279,6 @@ export class DynamicChartComponent implements OnInit {
     });
 
     const layout = {
-      title: chart.title,
       yaxis: {
         exponentformat: 'E',
         showexponent: 'all',
