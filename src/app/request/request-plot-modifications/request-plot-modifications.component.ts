@@ -121,6 +121,7 @@ export class RequestPlotModificationsComponent implements OnInit, OnDestroy {
     fileParts.shift();
     fileParts.shift();
     filename = fileParts.join('_');
+    filename = filename.replace(/\.raw$/i, "");
     return filename;
   }
   private plotGraph(): void {
@@ -132,32 +133,44 @@ export class RequestPlotModificationsComponent implements OnInit, OnDestroy {
       return;
     }
     this.allFiles.forEach((file) => {
-      if (this.checkFileInList(file)) {
-        filenames.push(this.parseFilename(file.filename));
-        const orderedCopy = file.modificationRelation;
-        orderedCopy.sort((a, b) => (a.id > b.id ? 1 : -1)); // we need the copy because it came unordered from the backend
-        orderedCopy.forEach((modRel) => {
-          orderedCopy.sort();
-          let found = false;
-          for (let mod of traces) {
-            if (mod.name == modRel.modification.name) {
-              mod.y.push(modRel.value.toFixed(2));
-              found = true;
-            }
+    if (this.checkFileInList(file)) {
+      filenames.push(this.parseFilename(file.filename));
+
+      traces.forEach(trace => {
+        trace.y.push(0);
+      });
+
+      const orderedCopy = file.modificationRelation;
+      orderedCopy.sort((a, b) => (a.id > b.id ? 1 : -1));
+
+      orderedCopy.forEach((modRel) => {
+        if (modRel.modification.type !== this.type) {
+          return;
+        }
+
+        let found = false;
+
+        for (let mod of traces) {
+          if (mod.name === modRel.modification.name) {
+            mod.y[filenames.length - 1] = Number(modRel.value.toFixed(2));
+            found = true;
           }
-          let legend = [];
-          if (!found && modRel.modification.type == this.type) {
-            traces.push({
-              name: modRel.modification.name,
-              y: [modRel.value.toFixed(2)],
-              x: filenames,
-              // x: this.removeRequestCode(filenames, this.requestCode),
-              type: 'bar',
-            });
-          }
-        });
-      }
-    });
+        }
+
+        if (!found) {
+          const yValues = new Array(filenames.length).fill(0);
+          yValues[filenames.length - 1] = Number(modRel.value.toFixed(2));
+
+          traces.push({
+            name: modRel.modification.name,
+            y: yValues,
+            x: filenames,
+            type: 'bar',
+          });
+        }
+      });
+    }
+  });
     // // Check current theme
     if (this.themeColor === 'dark-theme') {
       this.layout = LAYOUTDARKGROUP;
@@ -166,14 +179,18 @@ export class RequestPlotModificationsComponent implements OnInit, OnDestroy {
     } else {
       this.layout = LAYOUTLIGHTGROUP;
     }
+    traces.forEach(trace => {
+      trace.x = filenames;
+    });
+
     const config = { responsive: true };
     this.layout = {
       ...this.layout,
       autosize: true,
-      width: undefined
+      width: 900
     };
 
-    Plotly.react(`Graph${this.randString}`, traces, this.layout, config);
+    Plotly.newPlot(`Graph${this.randString}`, traces, this.layout, config);
     setTimeout(() => {
       // The timeout is necessary because the PLOT isnt instant
       const plotsSVG = document.getElementsByClassName('main-svg'); // the only way because this inst plotly native LUL

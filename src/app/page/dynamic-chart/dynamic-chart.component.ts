@@ -160,8 +160,9 @@ export class DynamicChartComponent implements OnInit {
   ): void {
 
     const data = [{
-      x: dataPoints.map(point => point.label),
+      x: dataPoints.map(point => this.parseFilename(point.label)),
       y: dataPoints.map(point => point.value),
+      customdata: dataPoints.map(point => point.checksum),
       type: 'bar'
     }];
 
@@ -183,6 +184,11 @@ export class DynamicChartComponent implements OnInit {
       config
     );
 
+    const plot = document.getElementById(this.getChartDomId(chart)) as any;
+    plot.on('plotly_click', (eventData) => {
+      this.plotService.getChecksumFromPlotlyClickEvent(eventData);
+    });
+
   }
 
   renderStackedBarChart(
@@ -190,9 +196,21 @@ export class DynamicChartComponent implements OnInit {
     dataPoints: ChartSeriesDataPoint[]
   ): void {
 
-    const seriesNames = Array.from(
+    let seriesNames = Array.from(
       new Set(dataPoints.map(point => point.series))
     );
+
+    if (chart.dataSourceKey === 'missed_cleavages') {
+      seriesNames = seriesNames
+        .filter(series => series === '0' || series === '1')
+        .sort((a, b) => Number(b) - Number(a));
+    }
+
+    if (chart.dataSourceKey === 'precursors_by_charge') {
+      seriesNames = seriesNames
+        .filter(series => series === '+2' || series === '+3' || series === '+4')
+        .sort((a, b) => Number(b.replace('+', '')) - Number(a.replace('+', '')));
+    }
 
     const labels = Array.from(
       new Set(
@@ -219,6 +237,15 @@ export class DynamicChartComponent implements OnInit {
         }),
 
         name: seriesName,
+
+        customdata: labels.map(label => {
+          const match = dataPoints.find(
+            point =>
+              this.parseFilename(point.label) === label &&
+              point.series === seriesName
+          );
+          return match ? match.checksum : null;
+        }),
         type: 'bar'
 
       };
@@ -244,16 +271,27 @@ export class DynamicChartComponent implements OnInit {
       config
     );
 
+    const plot = document.getElementById(this.getChartDomId(chart)) as any;
+    plot.on('plotly_click', (eventData) => {
+      this.plotService.getChecksumFromPlotlyClickEvent(eventData);
+    });
+
   }
 
   parseFilename(filename: string): string {
+
+    if (!filename) {
+      return filename;
+    }
 
     const fileParts = filename.split('_');
 
     fileParts.shift();
     fileParts.shift();
 
-    return fileParts.join('_');
+    return fileParts
+      .join('_')
+      .replace(/\.raw$/i, '');
 
   }
 

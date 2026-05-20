@@ -84,9 +84,9 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
       {
         z: this.data.map((item) => item.map((value) => value.toFixed(2))),
         // x: this.selectedSamples.map(item => `sample ${item.filename.split('_')[2]}`),
-        x: this.filenames.map((item) => item.split('_').splice(2).join('_')),
+        x: this.filenames.map((item) => this.parseFilename(item)),
         // y: this.selectedSamples.map(item => `sample ${item.filename.split('_')[2]}`),
-        y: this.filenames.map((item) => item.split('_').splice(2).join('_')),
+        y: this.filenames.map((item) => this.parseFilename(item)),
         w: 'cac',
         type: 'heatmap',
         hoverongaps: false,
@@ -196,4 +196,14 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
     }
     this.getHeatMapData();
   }
+  private parseFilename(filename: string): string {
+    if (!filename) {
+      return filename;
+    }
+    const fileParts = filename.split('_');
+    fileParts.shift();
+    fileParts.shift();
+    return fileParts.join('_').replace(/\.raw$/i, "");
+  }
+
 }

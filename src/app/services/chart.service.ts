@@ -7,12 +7,14 @@ import { ChartConfig } from '../models/chart-config.model';
 export interface ChartDataPoint {
   label: string;
   value: number;
+  checksum: string;
 }
 
 export interface ChartSeriesDataPoint {
   label: string;
   series: string;
   value: number;
+  checksum: string;
 }
 
 @Injectable({
