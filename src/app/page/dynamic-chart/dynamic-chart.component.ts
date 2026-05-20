@@ -163,11 +163,18 @@ export class DynamicChartComponent implements OnInit {
       x: dataPoints.map(point => this.parseFilename(point.label)),
       y: dataPoints.map(point => point.value),
       customdata: dataPoints.map(point => point.checksum),
+text: dataPoints.map(point => point.value),
+hovertemplate: '%{text}<extra></extra>',
       type: 'bar'
     }];
 
     const layout = {
       title: chart.title,
+      yaxis: {
+        exponentformat: 'E',
+        showexponent: 'all',
+        tickformat: '.0e',
+      },
       height: chart.parameters && chart.parameters.height
         ? chart.parameters.height
         : 400
@@ -225,7 +232,6 @@ export class DynamicChartComponent implements OnInit {
         x: labels,
 
         y: labels.map(label => {
-
           const match = dataPoints.find(
             point =>
               this.parseFilename(point.label) === label &&
@@ -233,7 +239,6 @@ export class DynamicChartComponent implements OnInit {
           );
 
           return match ? match.value : 0;
-
         }),
 
         name: seriesName,
@@ -244,8 +249,22 @@ export class DynamicChartComponent implements OnInit {
               this.parseFilename(point.label) === label &&
               point.series === seriesName
           );
+
           return match ? match.checksum : null;
         }),
+
+        text: labels.map(label => {
+          const match = dataPoints.find(
+            point =>
+              this.parseFilename(point.label) === label &&
+              point.series === seriesName
+          );
+
+          return match ? match.value : 0;
+        }),
+
+        hovertemplate: '%{text}<extra></extra>',
+
         type: 'bar'
 
       };
@@ -254,6 +273,11 @@ export class DynamicChartComponent implements OnInit {
 
     const layout = {
       title: chart.title,
+      yaxis: {
+        exponentformat: 'E',
+        showexponent: 'all',
+        tickformat: '.0e',
+      },
       barmode: 'stack',
       height: chart.parameters && chart.parameters.height
         ? chart.parameters.height
