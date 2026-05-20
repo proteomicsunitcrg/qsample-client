@@ -24,7 +24,10 @@ export class PlotService {
 
   public getChecksumFromPlotlyClickEvent(data: any): void {
     // We retrieve checksum from customdata Plotly attribute
-    const checksum = data.points[0].customdata;
+    const customdata = data.points[0].customdata;
+    const checksum = Array.isArray(customdata)
+      ? customdata[0]
+      : customdata;
     this.sendselectedChecksum(checksum);
   }
 

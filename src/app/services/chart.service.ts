@@ -8,6 +8,7 @@ export interface ChartDataPoint {
   label: string;
   value: number;
   checksum: string;
+  creationDate: string;
 }
 
 export interface ChartSeriesDataPoint {
@@ -15,6 +16,7 @@ export interface ChartSeriesDataPoint {
   series: string;
   value: number;
   checksum: string;
+  creationDate: string;
 }
 
 @Injectable({

@@ -162,9 +162,12 @@ export class DynamicChartComponent implements OnInit {
     const data = [{
       x: dataPoints.map(point => this.parseFilename(point.label)),
       y: dataPoints.map(point => point.value),
-      customdata: dataPoints.map(point => point.checksum),
-text: dataPoints.map(point => point.value),
-hovertemplate: '%{text}<extra></extra>',
+      customdata: dataPoints.map(point => [
+        point.checksum,
+        point.creationDate
+      ]),
+      text: dataPoints.map(point => point.value),
+      hovertemplate: 'Value: %{text}<br>Date: %{customdata[1]}<extra></extra>',
       type: 'bar'
     }];
 
@@ -250,7 +253,9 @@ hovertemplate: '%{text}<extra></extra>',
               point.series === seriesName
           );
 
-          return match ? match.checksum : null;
+          return match
+            ? [match.checksum, match.creationDate]
+            : null;
         }),
 
         text: labels.map(label => {
@@ -263,7 +268,10 @@ hovertemplate: '%{text}<extra></extra>',
           return match ? match.value : 0;
         }),
 
-        hovertemplate: '%{text}<extra></extra>',
+        hovertemplate:
+          seriesName === seriesNames[0]
+            ? 'Value: %{text}<br>Date: %{customdata[1]}<extra></extra>'
+            : 'Value: %{text}<extra></extra>',
 
         type: 'bar'
 
