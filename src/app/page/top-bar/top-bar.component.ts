@@ -68,4 +68,7 @@ export class TopBarComponent implements OnInit {
     this.router.navigate(['/favorite']);
   }
 
+  public goToChartSettings(): void {
+    this.router.navigate(['/settings/qsample/charts']);
+  }
 }

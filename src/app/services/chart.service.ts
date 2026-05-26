@@ -19,6 +19,24 @@ export interface ChartSeriesDataPoint {
   creationDate: string;
 }
 
+export interface ApplicationChartConfig {
+  id: number;
+  applicationId: number;
+  chartId: number;
+  chartName: string;
+  chartTitle: string;
+  chartType: string;
+  dataSourceKey: string;
+  enabled: boolean;
+  orderIndex: number;
+}
+
+export interface ApplicationChartConfigSave {
+  chartId: number;
+  enabled: boolean;
+  orderIndex: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -49,6 +67,33 @@ export class ChartService {
   ): Observable<ChartConfig[]> {
     return this.http.get<ChartConfig[]>(
       `${this.apiUrl}/page/${pageName}/application/${applicationId}`
+    );
+  }
+
+  getApplicationChartConfig(
+    applicationId: number
+  ): Observable<ApplicationChartConfig[]> {
+    return this.http.get<ApplicationChartConfig[]>(
+      `${this.apiUrl}/application-config/${applicationId}`
+    );
+  }
+
+  initializeApplicationChartConfig(
+    applicationId: number
+  ): Observable<ApplicationChartConfig[]> {
+    return this.http.post<ApplicationChartConfig[]>(
+      `${this.apiUrl}/application-config/${applicationId}/initialize`,
+      {}
+    );
+  }
+
+  saveApplicationChartConfig(
+    applicationId: number,
+    configs: ApplicationChartConfigSave[]
+  ): Observable<ApplicationChartConfig[]> {
+    return this.http.post<ApplicationChartConfig[]>(
+      `${this.apiUrl}/application-config/${applicationId}`,
+      configs
     );
   }
 

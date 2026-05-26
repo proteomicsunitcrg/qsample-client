@@ -9,6 +9,8 @@ import { SettingsMainComponent } from './settings-main/settings-main.component';
 import { SettingsRouter } from './settings.router';
 import { SettingsSidebarComponent } from './settings-sidebar/settings-sidebar.component';
 import { SettingsAddUserComponent } from './settings-adduser/settings-adduser.component';
+import { SettingsQsampleChartsComponent } from './qsample-charts/settings-qsample-charts.component';
+
 import {
   SettingsUserComponent,
   UserChangePasswordDialogComponent,
@@ -51,6 +53,7 @@ import { SettingsLocalRequestCreatorComponent } from './local/settings-local-req
     SettingsQgeneratorSystemsQcComponent,
     SettingsLocalRequestComponent,
     SettingsLocalRequestCreatorComponent,
+    SettingsQsampleChartsComponent,
   ],
   imports: [
     FlexLayoutModule,

@@ -17,6 +17,7 @@ import { SettingsQgeneratorMethodsCreatorComponent } from './method/settings-qge
 import { SettingsQgeneratorSystemsQcComponent } from './system/settings-qgenerator-systems-qc/settings-qgenerator-systems-qc.component';
 import { SettingsLocalRequestComponent } from './local/settings-local-request/settings-local-request.component';
 import { SettingsLocalRequestCreatorComponent } from './local/settings-local-request-creator/settings-local-request-creator.component';
+import { SettingsQsampleChartsComponent } from './qsample-charts/settings-qsample-charts.component';
 
 const routes: Routes = [
   {
@@ -33,7 +34,7 @@ const routes: Routes = [
       { path: 'QGenerator/methods/editor/:id', component: SettingsQgeneratorMethodsCreatorComponent },
       { path: 'local/request', component: SettingsLocalRequestComponent },
       { path: 'local/request/editor/:id', component: SettingsLocalRequestCreatorComponent },
-
+      { path: 'qsample/charts', component: SettingsQsampleChartsComponent },
     ]
   },
 ];
