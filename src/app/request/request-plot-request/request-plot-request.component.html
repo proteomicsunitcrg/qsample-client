@@ -1,6 +1,7 @@
 <div *ngIf="requestCode != undefined" fxLayout="column">
 
-  <!-- Legacy plots not migrated yet -->
+  <!-- Legacy plots disabled.
+       These plots are now controlled by dynamic charts when available.
 
   <app-request-plot-fileinfo
     [requestCode]="requestCode"
@@ -44,6 +45,8 @@
     [name]="'N-term PIC'"
     [type]="'histones-tailored'">
   </app-request-plot-modifications>
+
+  -->
 
   <!-- Dynamic charts -->
 
