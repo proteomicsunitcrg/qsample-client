@@ -32,6 +32,7 @@ import { SettingsQgeneratorSystemsQcComponent } from './system/settings-qgenerat
 import { InjectionConditionsQCDialogComponent } from './system/settings-qgenerator-systems-qc/dialog/injection-conditions-dialog-qc.component';
 import { SettingsLocalRequestComponent } from './local/settings-local-request/settings-local-request.component';
 import { SettingsLocalRequestCreatorComponent } from './local/settings-local-request-creator/settings-local-request-creator.component';
+import { ApplicationChartEditorComponent } from './qsample-charts/application-chart-editor/application-chart-editor.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { SettingsLocalRequestCreatorComponent } from './local/settings-local-req
     SettingsLocalRequestComponent,
     SettingsLocalRequestCreatorComponent,
     SettingsQsampleChartsComponent,
+    ApplicationChartEditorComponent,
   ],
   imports: [
     FlexLayoutModule,

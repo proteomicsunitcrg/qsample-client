@@ -1,0 +1,78 @@
+<div style="margin-left: 20px;">
+  <mat-card>
+    <mat-card-title>
+      Chart settings
+    </mat-card-title>
+
+    <mat-card-content>
+      <p *ngIf="application">
+        Application: <strong>{{application.name}}</strong>
+      </p>
+
+      <button mat-raised-button color="primary" (click)="initializeCharts()">
+        Initialize charts
+      </button>
+
+      <button mat-raised-button color="accent" (click)="saveCharts()" style="margin-left: 10px;"
+        [disabled]="chartConfigs.length === 0">
+        Save
+      </button>
+
+      <button mat-raised-button color="basic" (click)="goBack()" style="margin-left: 10px;">
+        Go back
+      </button>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card style="margin-top: 20px;">
+    <mat-card-title>
+      Charts
+    </mat-card-title>
+
+    <mat-card-content>
+      <p *ngIf="chartConfigs.length === 0">
+        No chart configuration found. Click <strong>Initialize charts</strong> to create it.
+      </p>
+
+      <table *ngIf="chartConfigs.length > 0" style="width: 100%;" mat-table [dataSource]="chartConfigs">
+
+        <ng-container matColumnDef="enabled">
+          <th mat-header-cell *matHeaderCellDef> Enabled </th>
+          <td mat-cell *matCellDef="let chart">
+            <mat-checkbox [(ngModel)]="chart.enabled"></mat-checkbox>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="orderIndex">
+          <th mat-header-cell *matHeaderCellDef> Order </th>
+          <td mat-cell *matCellDef="let chart">
+            {{chart.orderIndex}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="chartTitle">
+          <th mat-header-cell *matHeaderCellDef> Chart </th>
+          <td mat-cell *matCellDef="let chart">
+            {{chart.chartTitle}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> Move </th>
+          <td mat-cell *matCellDef="let chart; let i = index">
+            <button mat-icon-button (click)="moveChartUp(i)" [disabled]="i === 0">
+              <mat-icon>keyboard_arrow_up</mat-icon>
+            </button>
+
+            <button mat-icon-button (click)="moveChartDown(i)" [disabled]="i === chartConfigs.length - 1">
+              <mat-icon>keyboard_arrow_down</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div>
