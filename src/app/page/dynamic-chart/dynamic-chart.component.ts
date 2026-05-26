@@ -30,6 +30,7 @@ export class DynamicChartComponent implements OnInit {
   currentOrder = 'filename';
 
   stackedChartKeys = [
+    'secondary_reactions',
     'missed_cleavages',
     'precursors_by_charge'
   ];
@@ -43,7 +44,7 @@ export class DynamicChartComponent implements OnInit {
 
     this.plotService.selectedOrder.subscribe(order => {
 
-    this.currentOrder =
+      this.currentOrder =
         order === 'name' ? 'filename' : (order || 'filename');
 
       console.log('Dynamic chart order:', order, '=>', this.currentOrder);
@@ -154,29 +155,89 @@ export class DynamicChartComponent implements OnInit {
     return this.stackedChartKeys.indexOf(chart.dataSourceKey) !== -1;
   }
 
+  private isPercentChart(chart: ChartConfig): boolean {
+    return chart.dataSourceKey === 'secondary_reactions';
+  }
+
+  private shouldParseFilename(chart: ChartConfig): boolean {
+    return chart.dataSourceKey !== 'secondary_reactions'
+      || this.isStackedChart(chart);
+  }
+
+  private formatLabel(chart: ChartConfig, label: string): string {
+    if (!label) {
+      return '';
+    }
+
+    return this.shouldParseFilename(chart)
+      ? this.parseFilename(label)
+      : label;
+  }
+
+  private getYAxisLayout(chart: ChartConfig): any {
+    if (this.isPercentChart(chart)) {
+      return {
+        title: '% PSM',
+        ticksuffix: '%',
+        tickformat: '.0f'
+      };
+    }
+
+    return {
+      exponentformat: 'E',
+      showexponent: 'all',
+      tickformat: '.0e'
+    };
+  }
+
+  private getHoverTemplate(
+    chart: ChartConfig,
+    dataPoints: ChartDataPoint[]
+  ): string {
+    const hasCreationDate = dataPoints.some(point => point.creationDate);
+    const valueLabel = this.isPercentChart(chart)
+      ? 'Value: %{text}%'
+      : 'Value: %{text}';
+
+    return hasCreationDate
+      ? `${valueLabel}<br>Date: %{customdata[1]}<extra></extra>`
+      : `${valueLabel}<extra></extra>`;
+  }
+
+  private hasClickableChecksum(
+    dataPoints: Array<{ checksum: string }>
+  ): boolean {
+    return dataPoints.some(point => !!point.checksum);
+  }
+
+  private formatHoverValue(chart: ChartConfig, value: number): string {
+    if (this.isPercentChart(chart)) {
+      return `${value.toFixed(2)}%`;
+    }
+
+    return `${value}`;
+  }
+
   renderBarChart(
     chart: ChartConfig,
     dataPoints: ChartDataPoint[]
   ): void {
 
     const data = [{
-      x: dataPoints.map(point => this.parseFilename(point.label)),
+      x: dataPoints.map(point => this.formatLabel(chart, point.label)),
       y: dataPoints.map(point => point.value),
       customdata: dataPoints.map(point => [
         point.checksum,
         point.creationDate
       ]),
       text: dataPoints.map(point => point.value),
-      hovertemplate: 'Value: %{text}<br>Date: %{customdata[1]}<extra></extra>',
+      hovertemplate: this.getHoverTemplate(chart, dataPoints),
       type: 'bar'
     }];
 
     const layout = {
-      yaxis: {
-        exponentformat: 'E',
-        showexponent: 'all',
-        tickformat: '.0e',
-      },
+      autosize: true,
+      yaxis: this.getYAxisLayout(chart),
       height: chart.parameters && chart.parameters.height
         ? chart.parameters.height
         : 400
@@ -193,10 +254,15 @@ export class DynamicChartComponent implements OnInit {
       config
     );
 
-    const plot = document.getElementById(this.getChartDomId(chart)) as any;
-    plot.on('plotly_click', (eventData) => {
-      this.plotService.getChecksumFromPlotlyClickEvent(eventData);
-    });
+    if (this.hasClickableChecksum(dataPoints)) {
+      const plot = document.getElementById(this.getChartDomId(chart)) as any;
+
+      if (plot) {
+        plot.on('plotly_click', (eventData) => {
+          this.plotService.getChecksumFromPlotlyClickEvent(eventData);
+        });
+      }
+    }
 
   }
 
@@ -223,7 +289,7 @@ export class DynamicChartComponent implements OnInit {
 
     const labels = Array.from(
       new Set(
-        dataPoints.map(point => this.parseFilename(point.label))
+        dataPoints.map(point => this.formatLabel(chart, point.label))
       )
     );
 
@@ -236,7 +302,7 @@ export class DynamicChartComponent implements OnInit {
         y: labels.map(label => {
           const match = dataPoints.find(
             point =>
-              this.parseFilename(point.label) === label &&
+              this.formatLabel(chart, point.label) === label &&
               point.series === seriesName
           );
 
@@ -248,43 +314,44 @@ export class DynamicChartComponent implements OnInit {
         customdata: labels.map(label => {
           const match = dataPoints.find(
             point =>
-              this.parseFilename(point.label) === label &&
+              this.formatLabel(chart, point.label) === label &&
               point.series === seriesName
           );
 
           return match
             ? [match.checksum, match.creationDate]
-            : null;
+            : ['', ''];
         }),
 
         text: labels.map(label => {
           const match = dataPoints.find(
             point =>
-              this.parseFilename(point.label) === label &&
+              this.formatLabel(chart, point.label) === label &&
               point.series === seriesName
           );
 
-          return match ? match.value : 0;
+          if (!match) {
+            return '';
+          }
+
+          const value = this.formatHoverValue(chart, match.value);
+
+          return match.creationDate
+            ? `Value: ${value}<br>Date: ${match.creationDate}`
+            : `Value: ${value}`;
         }),
 
-        hovertemplate:
-          seriesName === seriesNames[0]
-            ? 'Value: %{text}<br>Date: %{customdata[1]}<extra></extra>'
-            : 'Value: %{text}<extra></extra>',
+        hoverinfo: 'text',
 
         type: 'bar'
-
       };
 
     });
 
     const layout = {
-      yaxis: {
-        exponentformat: 'E',
-        showexponent: 'all',
-        tickformat: '.0e',
-      },
+      autosize: true,
       barmode: 'stack',
+      yaxis: this.getYAxisLayout(chart),
       height: chart.parameters && chart.parameters.height
         ? chart.parameters.height
         : 400
@@ -301,27 +368,32 @@ export class DynamicChartComponent implements OnInit {
       config
     );
 
-    const plot = document.getElementById(this.getChartDomId(chart)) as any;
-    plot.on('plotly_click', (eventData) => {
-      this.plotService.getChecksumFromPlotlyClickEvent(eventData);
-    });
+    if (this.hasClickableChecksum(dataPoints)) {
+      const plot = document.getElementById(this.getChartDomId(chart)) as any;
+
+      if (plot) {
+        plot.on('plotly_click', (eventData) => {
+          this.plotService.getChecksumFromPlotlyClickEvent(eventData);
+        });
+      }
+    }
 
   }
 
   parseFilename(filename: string): string {
 
     if (!filename) {
-      return filename;
+      return '';
     }
 
-    const fileParts = filename.split('_');
+    const filenameWithoutRaw = filename.replace(/\.raw$/i, '');
+    const tokens = filenameWithoutRaw.split('_');
 
-    fileParts.shift();
-    fileParts.shift();
+    if (tokens.length <= 2) {
+      return filenameWithoutRaw;
+    }
 
-    return fileParts
-      .join('_')
-      .replace(/\.raw$/i, '');
+    return tokens.slice(2).join('_');
 
   }
 
