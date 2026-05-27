@@ -69,8 +69,9 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
                     }
                   },
                   (err) => {
-                    // If not found in Agendo we try to retrieve it what we can from local using requestCode
-                    this.handleByRequestCode(params.apiKey);
+                    this.request = null;
+                    this.requestCode = null;
+                    this.application = null;
                     this.isLoading = false;
                     this.isAgendoDown = true;
                     console.error(err);
@@ -192,12 +193,12 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
         }
       },
       (err) => {
-        if (requestCode) {
-          this.isAgendoDown = true;
-          this.handleByRequestCode(requestCode);
-        } else {
-          console.error(err);
-        }
+        this.request = null;
+        this.requestCode = null;
+        this.application = null;
+        this.isLoading = false;
+        this.isAgendoDown = true;
+        console.error(err);
       }
     );
   }
