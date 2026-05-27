@@ -9,27 +9,27 @@ export class SessionStorage {
   constructor(private httpClient: HttpClient) {}
 
   public storeRequests(requests: MiniRequest[]): void {
-    let storeRequests = {};
+    let storedRequests = {};
+
+    if (sessionStorage.getItem('requests')) {
+      storedRequests = JSON.parse(sessionStorage.getItem('requests'));
+    }
+
     for (const request of requests) {
-      storeRequests[request.lastField] = request;
+      storedRequests[request.lastField] = request;
     }
 
-    let currentCount = 0;
-    if (sessionStorage.getItem('requests_count')) {
-      currentCount = parseInt(sessionStorage.getItem('requests_count'), 10);
-    }
-
-    if (currentCount < requests.length) {
-      sessionStorage.setItem('requests_count', requests.length.toString());
-      sessionStorage.setItem('requests', JSON.stringify(storeRequests));
-    }
+    sessionStorage.setItem('requests', JSON.stringify(storedRequests));
+    sessionStorage.setItem('requests_count', Object.keys(storedRequests).length.toString());
   }
 
   public getRequestsJson(): object {
     let requests = null;
+
     if (sessionStorage.getItem('requests')) {
       requests = JSON.parse(sessionStorage.getItem('requests'));
     }
+
     return requests;
   }
 }

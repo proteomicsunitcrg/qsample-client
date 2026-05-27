@@ -74,3 +74,26 @@
     grid-template-columns: 1fr;
   }
 }
+
+.home-page-tabs ::ng-deep .mat-form-field.mat-focused .mat-form-field-ripple {
+  background-color: #0d47a1 !important;
+}
+
+.home-page-tabs ::ng-deep .mat-form-field.mat-focused .mat-form-field-label {
+  color: #0d47a1 !important;
+}
+
+.home-page-tabs ::ng-deep .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+  color: #0d47a1 !important;
+}
+
+.home-page-tabs ::ng-deep .mat-select-arrow,
+.home-page-tabs ::ng-deep .mat-datepicker-toggle-active,
+.home-page-tabs ::ng-deep .mat-form-field.mat-focused.mat-primary .mat-select-arrow {
+  color: #0d47a1 !important;
+}
+
+.home-page-tabs ::ng-deep .mat-checkbox-checked.mat-primary .mat-checkbox-background,
+.home-page-tabs ::ng-deep .mat-checkbox-indeterminate.mat-primary .mat-checkbox-background {
+  background-color: #0d47a1 !important;
+}

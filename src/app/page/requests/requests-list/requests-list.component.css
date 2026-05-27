@@ -276,3 +276,14 @@
 .request-data-missing {
   color: #9e9e9e;
 }
+
+..mat-column-hasData {
+  width: 64px;
+  min-width: 64px;
+  text-align: center;
+  padding-right: 18px;
+}
+
+.mat-column-type {
+  padding-left: 8px;
+}
