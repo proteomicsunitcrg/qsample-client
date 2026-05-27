@@ -180,6 +180,10 @@ export class RequestsListComponent implements OnInit {
     }
   }
 
+  public navigateToRequestCode(requestCode: string): void {
+    this.router.navigate(['/request', requestCode]);
+  }
+
   public getAllRequestsInternal(): void {
     this.finding = true;
     this.agendoStatus = 'checking';

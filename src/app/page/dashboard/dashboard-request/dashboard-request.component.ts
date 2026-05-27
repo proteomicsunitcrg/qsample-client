@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { FileService } from '../../../services/file.service';
 
 @Component({
@@ -11,8 +12,6 @@ import { FileService } from '../../../services/file.service';
 })
 export class DashboardRequestComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-
-  constructor(private fileService: FileService) {}
 
   datasource: MatTableDataSource<any>;
 
@@ -30,10 +29,20 @@ export class DashboardRequestComponent implements OnInit {
   });
 
   filename = '';
+
   code = '';
+
+  constructor(
+    private fileService: FileService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.getAllRequestFiles();
+  }
+
+  public navigateToRequestCode(requestCode: string): void {
+    this.router.navigate(['/request', requestCode]);
   }
 
   public getAllRequestFiles(): void {

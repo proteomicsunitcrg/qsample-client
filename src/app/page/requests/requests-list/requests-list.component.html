@@ -205,8 +205,19 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
         Request code
       </th>
+
       <td mat-cell *matCellDef="let entry">
-        {{entry.lastField}}
+        <a
+          *ngIf="!settingsMode"
+          class="request-code-link"
+          href="javascript:void(0)"
+          (click)="navigateToRequestCode(entry.lastField); $event.stopPropagation()">
+          {{entry.lastField}}
+        </a>
+
+        <span *ngIf="settingsMode">
+          {{entry.lastField}}
+        </span>
       </td>
     </ng-container>
 
@@ -214,7 +225,7 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
         Application
       </th>
-      <td mat-cell *matCellDef="let entry" [matTooltip]="entry.type">
+      <td mat-cell *matCellDef="let entry">
         {{ (entry.type.length > 50) ? (entry.type | slice:0:50) + '...' : (entry.type) }}
       </td>
     </ng-container>
@@ -246,7 +257,12 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-    <tr mat-row (click)="handleClick(myRowData)" *matRowDef="let myRowData; columns: columnsToDisplay"></tr>
+    <tr
+      mat-row
+      [class.settings-clickable-row]="settingsMode"
+      (click)="settingsMode ? handleClick(myRowData) : null"
+      *matRowDef="let myRowData; columns: columnsToDisplay">
+    </tr>
 
   </table>
 

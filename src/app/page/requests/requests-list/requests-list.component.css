@@ -242,3 +242,23 @@
     width: 100%;
   }
 }
+
+.request-code-link {
+  color: #0d47a1;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.request-code-link:hover {
+  text-decoration: underline;
+}
+
+.settings-clickable-row {
+  cursor: pointer;
+}
+
+.requests-load-card,
+.requests-filter-card {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.10);
+}
+

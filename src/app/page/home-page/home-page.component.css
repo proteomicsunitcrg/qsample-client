@@ -27,3 +27,20 @@
 .home-page-tabs ::ng-deep .mat-tab-label {
   font-weight: 600;
 }
+
+.home-page-tabs ::ng-deep .mat-datepicker-toggle-active {
+  color: #0d47a1;
+}
+
+::ng-deep .mat-calendar-body-selected {
+  background-color: #0d47a1 !important;
+  color: #ffffff !important;
+}
+
+::ng-deep .mat-calendar-body-today:not(.mat-calendar-body-selected) {
+  border-color: #0d47a1 !important;
+}
+
+::ng-deep .mat-calendar-body-cell-content.mat-focus-indicator:hover {
+  background-color: rgba(13, 71, 161, 0.12);
+}
