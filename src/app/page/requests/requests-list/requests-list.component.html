@@ -197,7 +197,7 @@
     [dataSource]="dataSource"
     class="requests-table"
     matSort
-    matSortActive="creationDate"
+    matSortActive="hasData"
     matSortDirection="desc"
     [class.hide]="finding || !allRequests || allRequests.length === 0">
 
@@ -218,6 +218,28 @@
         <span *ngIf="settingsMode">
           {{entry.lastField}}
         </span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="hasData">
+      <th mat-header-cell *matHeaderCellDef>
+        Data
+      </th>
+
+      <td mat-cell *matCellDef="let entry">
+        <mat-icon
+          *ngIf="entry.hasData"
+          class="request-data-icon request-data-available"
+          matTooltip="QSample data available">
+          check_circle
+        </mat-icon>
+
+        <mat-icon
+          *ngIf="!entry.hasData"
+          class="request-data-icon request-data-missing"
+          matTooltip="No QSample data available">
+          remove_circle_outline
+        </mat-icon>
       </td>
     </ng-container>
 

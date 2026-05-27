@@ -40,7 +40,7 @@ export class RequestsListComponent implements OnInit {
 
   agendoStatus: 'idle' | 'checking' | 'online' | 'offline' = 'idle';
 
-  columnsToDisplay = ['code', 'type', 'creatorName', 'creationDate', 'status'];
+  columnsToDisplay = ['code', 'hasData', 'type', 'creatorName', 'creationDate', 'status'];
 
   filteredValues = {};
 
@@ -84,7 +84,7 @@ export class RequestsListComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.setFilterPredicate();
-
+    this.setSortData();
     this.getAllRequests();
   }
 
@@ -195,7 +195,7 @@ export class RequestsListComponent implements OnInit {
 
     this.requestService.getAllRequestsInternal(this.showAll, this.range.controls.start.value, datePlusOne).subscribe(
       (res) => {
-        this.allRequests = res;
+        this.allRequests = this.sortRequestsByDataAndDate(res);
         this.dataSource = new MatTableDataSource<MiniRequest>(this.allRequests);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -232,6 +232,7 @@ export class RequestsListComponent implements OnInit {
         this.resetAllFilters();
         this.finding = false;
         this.agendoStatus = 'online';
+        this.setSortData();
       },
       (err) => {
         this.allRequests = [];
@@ -244,6 +245,19 @@ export class RequestsListComponent implements OnInit {
         console.error(err);
       }
     );
+  }
+
+  private sortRequestsByDataAndDate(requests: MiniRequest[]): MiniRequest[] {
+    return requests.sort((a, b) => {
+      if (a.hasData !== b.hasData) {
+        return a.hasData ? -1 : 1;
+      }
+
+      const dateA = new Date(a.creationDate).getTime();
+      const dateB = new Date(b.creationDate).getTime();
+
+      return dateB - dateA;
+    });
   }
 
   public getAllCheckBoxChange(): void {
@@ -266,6 +280,29 @@ export class RequestsListComponent implements OnInit {
         this.getAllRequests();
       }
     });
+  }
+
+  private setSortData(): void {
+    if (!this.dataSource) {
+      return;
+    }
+
+    this.dataSource.sortData = (data: MiniRequest[], sort) => {
+      return data.sort((a, b) => {
+        if (sort.active === 'hasData') {
+          if (a.hasData !== b.hasData) {
+            return a.hasData ? -1 : 1;
+          }
+
+          const dateA = new Date(a.creationDate).getTime();
+          const dateB = new Date(b.creationDate).getTime();
+
+          return dateB - dateA;
+        }
+
+        return 0;
+      });
+    };
   }
 
   handleClick(row: MiniRequest): void {
