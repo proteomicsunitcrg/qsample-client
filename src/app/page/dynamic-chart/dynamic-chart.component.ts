@@ -23,6 +23,7 @@ export class DynamicChartComponent implements OnInit {
   @Input() applicationId!: number;
 
   charts: ChartConfig[] = [];
+  chartsWithoutData: { [key: number]: boolean } = {};
   loading = false;
   error: string | null = null;
   chartDomPrefix = 'dynamicChart';
@@ -31,6 +32,7 @@ export class DynamicChartComponent implements OnInit {
 
   stackedChartKeys = [
     'secondary_reactions',
+    'modification_sites',
     'missed_cleavages',
     'precursors_by_charge'
   ];
@@ -76,6 +78,7 @@ export class DynamicChartComponent implements OnInit {
       next: (charts) => {
 
         this.charts = charts;
+        this.chartsWithoutData = {};
         this.loading = false;
 
         setTimeout(() => {
@@ -113,6 +116,11 @@ export class DynamicChartComponent implements OnInit {
 
         next: (dataPoints) => {
 
+          if (!dataPoints || dataPoints.length === 0) {
+            this.chartsWithoutData[chart.id] = true;
+            return;
+          }
+
           if (chart.chartType === 'bar') {
             this.renderStackedBarChart(chart, dataPoints);
           }
@@ -136,6 +144,11 @@ export class DynamicChartComponent implements OnInit {
     ).subscribe({
 
       next: (dataPoints) => {
+
+          if (!dataPoints || dataPoints.length === 0) {
+            this.chartsWithoutData[chart.id] = true;
+            return;
+          }
 
         if (chart.chartType === 'bar') {
           this.renderBarChart(chart, dataPoints);
