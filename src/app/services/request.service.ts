@@ -50,6 +50,10 @@ export class RequestService {
     return this.http.get<any>(`${this.apiPrefix}api/request/getByRequestCode/${requestCode}`);
   }
 
+  public getAgendoStatus(): Observable<any> {
+    return this.http.get<any>(`${this.apiPrefix}api/agendo/status`);
+}
+
   public getRequestPlotName(csId: number, paramId: string): Observable<string> {
     const requestOptions: object = {
       /* other options here */
