@@ -90,3 +90,8 @@
     transform: rotate(360deg);
   }
 }
+
+.agendo-idle {
+  background: #eef3f7;
+  color: #455a64;
+}

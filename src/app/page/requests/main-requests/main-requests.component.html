@@ -1,44 +1,11 @@
 <mat-card class="requests-main-card">
 
   <div class="requests-header">
-    <div>
-      <mat-card-title>
-        Requests
-      </mat-card-title>
-    </div>
-
-    <div
-      class="agendo-status-pill"
-      [ngClass]="{
-        'agendo-online': agendoOnline === true,
-        'agendo-offline': agendoOnline === false,
-        'agendo-checking': agendoOnline === null
-      }">
-
-      <mat-icon *ngIf="agendoOnline === true">cloud_done</mat-icon>
-      <mat-icon *ngIf="agendoOnline === false">cloud_off</mat-icon>
-      <mat-icon *ngIf="agendoOnline === null" class="agendo-spin">sync</mat-icon>
-
-      <span *ngIf="agendoOnline === true">Agendo online</span>
-      <span *ngIf="agendoOnline === false">Agendo offline</span>
-      <span *ngIf="agendoOnline === null">Checking Agendo</span>
-    </div>
+    <mat-card-title>
+      Requests
+    </mat-card-title>
   </div>
 
-  <div class="agendo-offline-panel" *ngIf="agendoOnline === false">
-    <mat-icon>warning</mat-icon>
-
-    <div>
-      <h3>Requests are temporarily unavailable</h3>
-      <p>
-        Agendo cannot be reached right now, so QSample will not load the requests list
-        to avoid showing incomplete information.
-      </p>
-    </div>
-  </div>
-
-  <div *ngIf="agendoOnline === true">
-    <app-requests-list [settingsMode]="false"></app-requests-list>
-  </div>
+  <app-requests-list [settingsMode]="false"></app-requests-list>
 
 </mat-card>
