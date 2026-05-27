@@ -1,6 +1,9 @@
 <div class="home-page-tabs" *ngIf="isInternal">
 
-  <mat-tab-group animationDuration="200ms" mat-align-tabs="start">
+  <mat-tab-group
+    animationDuration="200ms"
+    mat-align-tabs="start"
+    [(selectedIndex)]="selectedTabIndex">
 
     <mat-tab label="Requests">
       <div class="home-tab-content">
@@ -10,7 +13,17 @@
 
     <mat-tab label="Sample preparation QC">
       <div class="home-tab-content">
-        <app-main-wetlab></app-main-wetlab>
+        <div class="home-qc-grid">
+
+          <div class="home-qc-left">
+            <app-main-wetlab></app-main-wetlab>
+          </div>
+
+          <div class="home-qc-right">
+            <app-dashboard-wetlab></app-dashboard-wetlab>
+          </div>
+
+        </div>
       </div>
     </mat-tab>
 

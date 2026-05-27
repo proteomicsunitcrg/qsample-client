@@ -15,66 +15,66 @@ export class DashboardWetlabComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  constructor(private wetLabService: WetLabService, private fileService: FileService, private wetlabService: WetLabService) { }
-
-
   datasource: MatTableDataSource<any>;
 
   columnsToDisplay = ['creation_date', 'filename'];
 
-  allWetlabs: WetLab[] = []
+  allWetlabs: WetLab[] = [];
+
+  allWetlabsOption = new WetLab(0, null, 'All', null, null);
+
+  wetlab = this.allWetlabsOption;
 
   today = new Date();
 
-  title: string;
+  threeMonthsAgo = new Date(new Date().setMonth(this.today.getMonth() - 3));
 
-  monthAgo = new Date(new Date().setMonth(this.today.getMonth() - 6));
+  title = 'Recently processed sample preparation QC files';
 
   range = new FormGroup({
-    start: new FormControl(this.monthAgo),
+    start: new FormControl(this.threeMonthsAgo),
     end: new FormControl(this.today),
     filename: new FormControl(''),
     code: new FormControl('')
   });
 
   filename = '';
-  wetlab = new WetLab(0, null, null, null, null);
+
+  constructor(
+    private wetLabService: WetLabService,
+    private fileService: FileService
+  ) { }
 
   ngOnInit(): void {
-
-    this.title = 'Last processed sample preparation QC files';
-
-  // if ( ! window['env']['local_requests']  ) { # TODO: Migrate
-    if ( this.wetLabService.apiPrefix.includes('qsample.crg.eu') ) {
-      // this.title = window['env']['general-wetlab-production']; # TODO: Migrate
-      this.title = 'Last processed wetlab files';
-    }
-
-    this.getAllWetlabs()
+    this.getAllWetlabs();
     this.getAllWetlabFiles();
   }
 
   public getAllWetlabFiles(): void {
-    if (this.wetlab === undefined) {
-      this.wetlab.id = 0;
-    }
-    this.fileService.getWetlabFilesDashboard(this.today, this.monthAgo, this.filename, this.wetlab.id).subscribe(
-      res => {
+    const wetlabId = this.wetlab && this.wetlab.id ? this.wetlab.id : 0;
+
+    this.fileService.getWetlabFilesDashboard(
+      this.range.controls.end.value,
+      this.range.controls.start.value,
+      this.filename,
+      wetlabId
+    ).subscribe(
+      (res) => {
         this.datasource = new MatTableDataSource(res);
         this.datasource.paginator = this.paginator;
       },
-      err => {
+      (err) => {
         console.error(err);
       }
     );
   }
 
   public getAllWetlabs(): void {
-    this.wetlabService.getWetlabLists().subscribe(
-      res => {
+    this.wetLabService.getWetlabLists().subscribe(
+      (res) => {
         this.allWetlabs = res;
       },
-      err => {
+      (err) => {
         console.error(err);
       }
     );

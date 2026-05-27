@@ -84,6 +84,8 @@ export class RequestsListComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.setFilterPredicate();
+
+    this.getAllRequests();
   }
 
   private resetAllFilters(): void {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { WetLabService } from '../../services/wetlab.service';
 import { WetLab } from '../../models/WetLab';
+import { WetLabService } from '../../services/wetlab.service';
 
 @Component({
   selector: 'app-wetlab-details',
@@ -9,28 +9,34 @@ import { WetLab } from '../../models/WetLab';
   styleUrls: ['./wetlab-details.component.css'],
 })
 export class WetlabDetailsComponent implements OnInit {
-  constructor(
-    private activeRouter: ActivatedRoute,
-    private wetLabService: WetLabService,
-    private router: Router
-  ) {}
+  apiKey: string;
 
   wetlab = new WetLab(null, null, null, null, null);
 
+  constructor(
+    private route: ActivatedRoute,
+    private wetLabService: WetLabService,
+    private router: Router
+  ) { }
+
   ngOnInit(): void {
-    this.activeRouter.params.subscribe((params) => {
-      this.wetLabService.getByApiKey(params.apiKey).subscribe(
-        (res) => {
-          this.wetlab = res;
-        },
-        (err) => {
-          console.error(err);
-        }
-      );
-    });
+    this.apiKey = this.route.snapshot.params.apiKey;
+
+    this.wetLabService.getByApiKey(this.apiKey).subscribe(
+      (res) => {
+        this.wetlab = res;
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
   }
 
   public goBack(): void {
-    this.router.navigate(['']);
+    this.router.navigate([''], {
+      queryParams: {
+        tab: 'sample-qc'
+      }
+    });
   }
 }

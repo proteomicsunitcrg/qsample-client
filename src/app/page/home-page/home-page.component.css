@@ -1,11 +1,3 @@
-.container {
-    width: 100%; /*can be in percentage also.*/
-    height: auto;
-    margin: 0 auto;
-    padding: 10px;
-    position: relative;
-}
-
 .home-page-tabs {
   margin: 10px;
 }
@@ -43,4 +35,42 @@
 
 ::ng-deep .mat-calendar-body-cell-content.mat-focus-indicator:hover {
   background-color: rgba(13, 71, 161, 0.12);
+}
+
+.home-qc-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.home-qc-left,
+.home-qc-right {
+  min-width: 0;
+}
+
+.home-qc-left app-main-wetlab,
+.home-qc-right app-dashboard-wetlab {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.home-qc-left ::ng-deep .sample-qc-card,
+.home-qc-right ::ng-deep .recent-wetlab-files-card {
+  width: 100%;
+  height: 100%;
+}
+
+.home-qc-left ::ng-deep .sample-qc-card mat-card,
+.home-qc-right ::ng-deep .recent-wetlab-files-card mat-card {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1200px) {
+  .home-qc-grid {
+    grid-template-columns: 1fr;
+  }
 }
