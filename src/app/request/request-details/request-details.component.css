@@ -14,3 +14,91 @@
   font-size: 150%;
   text-align: center;
 }
+
+.agendo-status-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  max-width: 900px;
+  margin: 24px auto 28px auto;
+  padding: 18px 22px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.10);
+}
+
+.agendo-offline {
+  background: #fff4e5;
+  border-left: 6px solid #f57c00;
+  color: #4e342e;
+}
+
+.agendo-status-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ef6c00;
+}
+
+.agendo-status-icon mat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+}
+
+.agendo-status-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.agendo-status-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.agendo-status-message {
+  font-size: 14px;
+  color: #5d4037;
+}
+
+.agendo-offline-card {
+  max-width: 900px;
+  margin: 0 auto 32px auto;
+}
+
+.agendo-offline-card mat-card {
+  border-radius: 10px;
+}
+
+.agendo-offline-card-content {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  padding: 20px;
+}
+
+.agendo-offline-card-content mat-icon {
+  font-size: 42px;
+  width: 42px;
+  height: 42px;
+  color: #757575;
+  margin-top: 4px;
+}
+
+.agendo-offline-card-content h2 {
+  margin: 0 0 8px 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.agendo-offline-card-content p {
+  margin: 0 0 8px 0;
+  font-size: 15px;
+  color: #555;
+  line-height: 1.45;
+}
+
+.agendo-offline-hint {
+  color: #777;
+  font-style: italic;
+}

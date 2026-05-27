@@ -1,114 +1,155 @@
-<div fxLayout="column">
+<div fxLayout="column" class="request-details-page">
 
-  <div id="agendoDown" *ngIf="isAgendoDown">Agendo is Down</div>
-
-  <section class="mat-typography title-group">
-    <h1 style="margin: 20px;">
-      <div *ngIf="requestCode != undefined">
-        <span class="material-icons cursor" (click)="goBack()">
-          arrow_back_ios
-        </span>
-        {{requestCode}}
-        <button mat-icon-button (click)="removeOrAddToFavorites()">
-          <mat-icon class="cursor" *ngIf="!isFav">star_border_round</mat-icon>
-          <mat-icon class="cursor" *ngIf="isFav" style="color: gold;">star</mat-icon>
-        </button>
-
-        <button *ngIf="!local" style="float: right;" mat-raised-button (click)="goToQGenerator()">
-          QGenerator
-        </button>
-      </div>
-    </h1>
-  </section>
-
-  <div fxLayout="row" fxLayout.lt-lg="column">
-
-    <div fxLayout="column" fxLayoutGap="2vw" style="margin-top: 10px;">
-
-      <div>
-        <app-request-details-panel [request]="request"></app-request-details-panel>
-      </div>
-
-      <div *ngIf="!isQcloud2FilesDisabled">
-        <app-request-qcloud2-files [request]="requestCode">
-        </app-request-qcloud2-files>
-      </div>
-
+  <div class="agendo-status-banner agendo-offline" *ngIf="isAgendoDown">
+    <div class="agendo-status-icon">
+      <mat-icon>cloud_off</mat-icon>
     </div>
 
-    <div fxFlex>
+    <div class="agendo-status-content">
+      <div class="agendo-status-title">
+        Agendo temporarily unavailable
+      </div>
 
-      <mat-card style="margin-left: 10px; margin-right: 10px; margin-top: 10px;">
+      <div class="agendo-status-message">
+        Offline status detected
+      </div>
+    </div>
+  </div>
 
-        <mat-card-title>
-          Request plots
-        </mat-card-title>
+  <div class="agendo-offline-card" *ngIf="isAgendoDown">
+    <mat-card>
+      <div class="agendo-offline-card-content">
+        <mat-icon>sync_problem</mat-icon>
 
-        <mat-card-content>
+        <div>
+          <h2>Request details are temporarily unavailable</h2>
 
-          <div
-            fxLayout="row"
-            fxLayout.lt-lg="column"
-            fxLayoutAlign="start start"
-            fxLayoutGap="2vw">
+          <p>
+            QSample could not retrieve the request metadata from Agendo.
+            To avoid showing incomplete or incorrect information, this request view has been paused.
+          </p>
+
+          <p class="agendo-offline-hint">
+            Please try again later or check Agendo connectivity.
+          </p>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+
+  <ng-container *ngIf="!isAgendoDown">
+
+    <section class="mat-typography title-group">
+      <h1 style="margin: 20px;">
+        <div *ngIf="requestCode != undefined">
+          <span class="material-icons cursor" (click)="goBack()">
+            arrow_back_ios
+          </span>
+
+          {{requestCode}}
+
+          <button mat-icon-button (click)="removeOrAddToFavorites()">
+            <mat-icon class="cursor" *ngIf="!isFav">star_border_round</mat-icon>
+            <mat-icon class="cursor" *ngIf="isFav" style="color: gold;">star</mat-icon>
+          </button>
+
+          <button *ngIf="!local" style="float: right;" mat-raised-button (click)="goToQGenerator()">
+            QGenerator
+          </button>
+        </div>
+      </h1>
+    </section>
+
+    <div fxLayout="row" fxLayout.lt-lg="column">
+
+      <div fxLayout="column" fxLayoutGap="2vw" style="margin-top: 10px;">
+
+        <div>
+          <app-request-details-panel [request]="request"></app-request-details-panel>
+        </div>
+
+        <div *ngIf="!isQcloud2FilesDisabled">
+          <app-request-qcloud2-files [request]="requestCode">
+          </app-request-qcloud2-files>
+        </div>
+
+      </div>
+
+      <div fxFlex>
+
+        <mat-card style="margin-left: 10px; margin-right: 10px; margin-top: 10px;">
+
+          <mat-card-title>
+            Request plots
+          </mat-card-title>
+
+          <mat-card-content>
 
             <div
-              fxLayout="column"
-              fxLayout.md="row"
-              fxLayout.sm="column"
-              fxLayout.xs="column"
-              fxFlex.lt-lg="100">
+              fxLayout="row"
+              fxLayout.lt-lg="column"
+              fxLayoutAlign="start start"
+              fxLayoutGap="2vw">
 
               <div
-                fxFlex.sm="100"
-                fxFlex.xs="100"
-                fxFlex.lt-lg="100"
-                [ngStyle.sm]="{'width.%': 200}">
+                fxLayout="column"
+                fxLayout.md="row"
+                fxLayout.sm="column"
+                fxLayout.xs="column"
+                fxFlex.lt-lg="100">
 
-                <app-request-plot-file-list
-                  [requestCode]="requestCode"
-                  *ngIf="requestCode">
-                </app-request-plot-file-list>
+                <div
+                  fxFlex.sm="100"
+                  fxFlex.xs="100"
+                  fxFlex.lt-lg="100"
+                  [ngStyle.sm]="{'width.%': 200}">
+
+                  <app-request-plot-file-list
+                    [requestCode]="requestCode"
+                    *ngIf="requestCode">
+                  </app-request-plot-file-list>
+
+                </div>
+
+                <div
+                  ffxFlex.sm="100"
+                  fxFlex.xs="100"
+                  fxFlex.lt-lg="100"
+                  [ngStyle.sm]="{'width.%': 200}"
+                  *ngIf="application && application.applicationConstraint.showQuantificationAndContaminantList">
+
+                  <app-request-quantification>
+                  </app-request-quantification>
+
+                </div>
 
               </div>
 
-              <div
-                ffxFlex.sm="100"
-                fxFlex.xs="100"
-                fxFlex.lt-lg="100"
-                [ngStyle.sm]="{'width.%': 200}"
-                *ngIf="application && application.applicationConstraint.showQuantificationAndContaminantList">
-
-                <app-request-quantification>
-                </app-request-quantification>
-
+              <div fxFlex style="min-width: 0; max-width: 100%;">
+                <app-request-plot-request>
+                </app-request-plot-request>
               </div>
 
             </div>
 
-            <div fxFlex style="min-width: 0; max-width: 100%;">
-              <app-request-plot-request>
-              </app-request-plot-request>
-            </div>
+          </mat-card-content>
 
-          </div>
+        </mat-card>
 
-        </mat-card-content>
-
-      </mat-card>
+      </div>
 
     </div>
 
-  </div>
+    <div fxLayout="row" *ngIf="isInternal">
+      <!-- <app-request-wetlab-main style="width: 100%; margin-top: 3%;"></app-request-wetlab-main> -->
+    </div>
 
-  <div fxLayout="row" *ngIf="isInternal">
-    <!-- <app-request-wetlab-main style="width: 100%; margin-top: 3%;"></app-request-wetlab-main> -->
-  </div>
+  </ng-container>
 
 </div>
 
 <mat-progress-spinner
   [mode]="'indeterminate'"
-  *ngIf="isLoading"
+  *ngIf="isLoading && !isAgendoDown"
   class="center">
 </mat-progress-spinner>
