@@ -13,85 +13,20 @@
   margin-bottom: 18px;
 }
 
-.agendo-status-pill {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 14px;
-  border-radius: 999px;
-  font-size: 14px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.agendo-status-pill mat-icon {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
-}
-
-.agendo-online {
-  background: #e8f5e9;
-  color: #1b5e20;
-}
-
-.agendo-offline {
-  background: #fff4e5;
-  color: #e65100;
-}
-
-.agendo-checking {
-  background: #eeeeee;
-  color: #616161;
-}
-
-.agendo-offline-panel {
-  display: flex;
-  align-items: flex-start;
+.requests-main-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 18px;
-  padding: 22px;
-  margin-top: 8px;
-  border-radius: 12px;
-  background: #fafafa;
-  border: 1px solid #eeeeee;
-  color: #424242;
+  align-items: start;
 }
 
-.agendo-offline-panel mat-icon {
-  color: #f57c00;
-  font-size: 38px;
-  width: 38px;
-  height: 38px;
+.requests-main-left,
+.requests-main-right {
+  min-width: 0;
 }
 
-.agendo-offline-panel h3 {
-  margin: 0 0 8px 0;
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.agendo-offline-panel p {
-  margin: 0;
-  font-size: 15px;
-  color: #616161;
-  line-height: 1.45;
-}
-
-.agendo-spin {
-  animation: agendo-spin 1s linear infinite;
-}
-
-@keyframes agendo-spin {
-  from {
-    transform: rotate(0deg);
+@media (max-width: 1200px) {
+  .requests-main-grid {
+    grid-template-columns: 1fr;
   }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.agendo-idle {
-  background: #eef3f7;
-  color: #455a64;
 }

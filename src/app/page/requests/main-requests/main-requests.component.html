@@ -6,6 +6,16 @@
     </mat-card-title>
   </div>
 
-  <app-requests-list [settingsMode]="false"></app-requests-list>
+  <div class="requests-main-grid">
+
+    <div class="requests-main-left">
+      <app-requests-list [settingsMode]="false"></app-requests-list>
+    </div>
+
+    <div class="requests-main-right">
+      <app-dashboard-request></app-dashboard-request>
+    </div>
+
+  </div>
 
 </mat-card>
