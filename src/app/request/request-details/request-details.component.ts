@@ -50,21 +50,29 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
                 this.handleByRequestId(this.requestId, params.apiKey);
                 this.isLoading = false;
               } else {
-                // Get currentDate
-                let currentDate = new Date();
-                let allYears = 10; // TODO: To handle in a different way
-                let previousDate = this.subtractYears(currentDate, allYears);
+                const requestYear = this.extractYearFromRequestCode(params.apiKey);
+                let previousDate: Date;
+                let currentDate: Date;
+
+                if (requestYear) {
+                  previousDate = new Date(requestYear, 0, 1);
+                  currentDate = new Date(requestYear, 11, 31);
+                } else {
+                  currentDate = new Date();
+                  previousDate = this.subtractYears(currentDate, 1);
+                }
 
                 this.requestService.getAllRequestsInternal(true, previousDate, currentDate).subscribe(
                   (res) => {
                     this.sessionStorageService.storeRequests(res);
                     let requests = this.sessionStorageService.getRequestsJson();
+
                     if (requests.hasOwnProperty(params.apiKey)) {
                       this.requestId = requests[params.apiKey]['id'];
                       this.isLoading = false;
                       this.handleByRequestId(this.requestId);
                     } else {
-                      alert('Request not found in Agendo!'); // TODO: Handle in a dialog.
+                      alert('Request not found in Agendo!');
                       this.isLoading = false;
                     }
                   },
@@ -77,7 +85,6 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
                     console.error(err);
                   }
                 );
-                // Try this: https://stackoverflow.com/questions/69197245/reacjs-popup-how-do-i-trigger-a-popup-without-it-being-click-hover
               }
             }
           },
@@ -160,6 +167,16 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
         console.error(err);
       }
     );
+  }
+
+  private extractYearFromRequestCode(requestCode: string): number | null {
+    const match = requestCode.match(/^(\d{4})/);
+
+    if (!match) {
+      return null;
+    }
+
+    return Number(match[1]);
   }
 
   private handleByRequestId(requestId: number, requestCode?: string): void {
