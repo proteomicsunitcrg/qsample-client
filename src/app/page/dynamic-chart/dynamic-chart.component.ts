@@ -33,6 +33,9 @@ export class DynamicChartComponent implements OnInit {
   stackedChartKeys = [
     'secondary_reactions',
     'modification_sites',
+    'modified_peptides',
+    'percentage_propionyl',
+    'percentage_pic',
     'missed_cleavages',
     'precursors_by_charge'
   ];
