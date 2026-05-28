@@ -124,17 +124,35 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
     this.quantificationService
       .getHeatMap(this.requestCode, this.listOfChecksum, this.sliderValue, this.order)
       .subscribe(
-        (res) => {
-          if (res == null) {
+          (res) => {
+          const hasData =
+            res &&
+            res.data &&
+            res.names &&
+            res.data.length > 0 &&
+            res.names.length > 0;
+
+          if (!hasData) {
             this.nothingFound = true;
-          } else {
-            this.nothingFound = false;
+            this.loading = false;
+            this.data = [];
+            this.filenames = [];
+
+            if (this.Graph && this.Graph.nativeElement) {
+              Plotly.purge(this.Graph.nativeElement);
+            }
+
+            return;
           }
+
+          this.nothingFound = false;
           this.data = res.data;
           this.filenames = res.names;
           this.drawHeatMap();
         },
         (err) => {
+          this.nothingFound = true;
+          this.loading = false;
           console.error(err);
         }
       );

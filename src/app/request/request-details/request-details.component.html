@@ -123,6 +123,29 @@
 
                 </div>
 
+                <div
+                  fxFlex.sm="100"
+                  fxFlex.xs="100"
+                  fxFlex.lt-lg="100"
+                  [ngStyle.sm]="{'width.%': 200}"
+                  *ngIf="application
+                    && !application.applicationConstraint.showQuantificationAndContaminantList
+                    && !application.applicationConstraint.showQuantificationHeatMap">
+
+                  <mat-card style="margin-top: 1vh; margin-bottom: 1vh; margin-left: 1vw;">
+                    <mat-card-title>
+                      Quantification
+                    </mat-card-title>
+
+                    <mat-card-content>
+                      <p>
+                        Quantification data is not available for this request type.
+                      </p>
+                    </mat-card-content>
+                  </mat-card>
+
+                </div>
+
               </div>
 
               <div fxFlex style="min-width: 0; max-width: 100%;">

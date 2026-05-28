@@ -23,11 +23,26 @@ export class PlotService {
   }
 
   public getChecksumFromPlotlyClickEvent(data: any): void {
-    // We retrieve checksum from customdata Plotly attribute
-    const customdata = data.points[0].customdata;
+    if (!data || !data.points || data.points.length === 0) {
+      return;
+    }
+
+    const point = data.points[0];
+
+    let customdata = point.customdata;
+
+    if (!customdata && point.data && point.data.customdata) {
+      const pointIndex = point.pointIndex !== undefined ? point.pointIndex : point.pointNumber;
+      customdata = point.data.customdata[pointIndex];
+    }
+
     const checksum = Array.isArray(customdata)
       ? customdata[0]
       : customdata;
+
+    if (!checksum) {
+      return;
+    }
     this.sendselectedChecksum(checksum);
   }
 
