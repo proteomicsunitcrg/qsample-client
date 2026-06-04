@@ -234,6 +234,30 @@ export class DynamicChartComponent implements OnInit {
     return `${value}`;
   }
 
+  private renderPlotlyChart(
+    chart: ChartConfig,
+    data: any[],
+    layout: any,
+    config: any
+  ): void {
+    const plotId = this.getChartDomId(chart);
+
+    Plotly.react(
+      plotId,
+      data,
+      layout,
+      config
+    );
+
+    setTimeout(() => {
+      const plot = document.getElementById(plotId);
+
+      if (plot && Plotly.Plots && Plotly.Plots.resize) {
+        Plotly.Plots.resize(plot);
+      }
+    }, 0);
+  }
+
   renderBarChart(
     chart: ChartConfig,
     dataPoints: ChartDataPoint[]
@@ -263,8 +287,8 @@ export class DynamicChartComponent implements OnInit {
       responsive: true
     };
 
-    Plotly.react(
-      this.getChartDomId(chart),
+    this.renderPlotlyChart(
+      chart,
       data,
       layout,
       config
@@ -377,8 +401,8 @@ export class DynamicChartComponent implements OnInit {
       responsive: true
     };
 
-    Plotly.react(
-      this.getChartDomId(chart),
+    this.renderPlotlyChart(
+      chart,
       data,
       layout,
       config
