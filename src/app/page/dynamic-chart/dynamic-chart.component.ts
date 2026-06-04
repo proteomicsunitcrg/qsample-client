@@ -202,7 +202,7 @@ export class DynamicChartComponent implements OnInit {
     return {
       exponentformat: 'E',
       showexponent: 'all',
-      tickformat: '.0e'
+      tickformat: '.2e'
     };
   }
 
