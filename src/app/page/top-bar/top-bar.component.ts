@@ -61,7 +61,10 @@ export class TopBarComponent implements OnInit {
   }
 
   public goToHelp(): void {
-    this.router.navigate(['/help']);
+    window.open(
+      'https://github.com/proteomicsunitcrg/atlas/wiki/4.-QC-parameters-list',
+      '_blank'
+    );
   }
 
   public goToFavorites(): void {
