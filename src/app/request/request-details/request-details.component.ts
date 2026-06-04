@@ -133,13 +133,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
   }
 
   public goToQGenerator(): void {
-    let apiKey = this.requestCode;
-
-    if (this.requestId) {
-      apiKey += '|' + String(this.requestId);
-    }
-
-    this.router.navigate(['/request/QGenerator', apiKey]);
+    window.open('https://qgenerator.crg.eu', '_blank');
   }
 
   private getApplicationInformation(): void {
