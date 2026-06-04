@@ -234,6 +234,66 @@ export class DynamicChartComponent implements OnInit {
     return `${value}`;
   }
 
+  private isProteinGroupsChart(chart: ChartConfig): boolean {
+    return chart.dataSourceKey === '5008da3a-dbcd-49c3-a008-db34c4b0bb39'
+      || chart.name === 'identified_protein_groups';
+  }
+
+  private getSampleGroupFromLabel(label: string): string {
+    if (!label) {
+      return '';
+    }
+
+    const match = label.match(/(?:^|_)(\d{3})_\d{2}(?:_|\.|$)/);
+
+    return match ? match[1] : '';
+  }
+
+  private getProteinGroupBarColors(chart: ChartConfig, labels: string[]): string | string[] {
+    const defaultColor = '#1f77b4';
+
+    if (!this.isProteinGroupsChart(chart)) {
+      return defaultColor;
+    }
+
+    const groups = labels.map(label => this.getSampleGroupFromLabel(label));
+    const groupCounts = groups.reduce((counts, group) => {
+      if (group) {
+        counts[group] = (counts[group] || 0) + 1;
+      }
+
+      return counts;
+    }, {} as { [key: string]: number });
+
+    const replicatedGroups = Object.keys(groupCounts)
+      .filter(group => groupCounts[group] > 1);
+
+    if (replicatedGroups.length === 0) {
+      return defaultColor;
+    }
+
+    const palette = [
+      '#08306b',
+      '#08519c',
+      '#2171b5',
+      '#4292c6',
+      '#6baed6',
+      '#9ecae1',
+      '#c6dbef',
+      '#deebf7'
+    ];
+
+    return groups.map(group => {
+      if (!group || replicatedGroups.indexOf(group) === -1) {
+        return defaultColor;
+      }
+
+      const index = replicatedGroups.indexOf(group) % palette.length;
+
+      return palette[index];
+    });
+  }
+
   private renderPlotlyChart(
     chart: ChartConfig,
     data: any[],
@@ -263,9 +323,14 @@ export class DynamicChartComponent implements OnInit {
     dataPoints: ChartDataPoint[]
   ): void {
 
+    const labels = dataPoints.map(point => this.formatLabel(chart, point.label));
+
     const data = [{
-      x: dataPoints.map(point => this.formatLabel(chart, point.label)),
+      x: labels,
       y: dataPoints.map(point => point.value),
+      marker: {
+        color: this.getProteinGroupBarColors(chart, labels)
+      },
       customdata: dataPoints.map(point => [
         point.checksum,
         point.creationDate
