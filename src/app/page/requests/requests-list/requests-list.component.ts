@@ -59,6 +59,8 @@ export class RequestsListComponent implements OnInit {
 
   year: number;
 
+  private readonly requestDateRangeStorageKey = 'qsample.requests.dateRange';
+
   @Input('settingsMode') settingsMode: boolean;
 
   constructor(
@@ -85,6 +87,7 @@ export class RequestsListComponent implements OnInit {
     this.dataSource.sort = this.sort;
     this.setFilterPredicate();
     this.setSortData();
+    this.restoreDateRange();
     this.getAllRequests();
   }
 
@@ -174,7 +177,45 @@ export class RequestsListComponent implements OnInit {
     this.getAllRequests();
   }
 
+  private restoreDateRange(): void {
+    const savedRange = window.sessionStorage.getItem(this.requestDateRangeStorageKey);
+
+    if (!savedRange) {
+      return;
+    }
+
+    try {
+      const parsedRange = JSON.parse(savedRange);
+
+      if (parsedRange && parsedRange.start && parsedRange.end) {
+        this.range.controls.start.setValue(new Date(parsedRange.start));
+        this.range.controls.end.setValue(new Date(parsedRange.end));
+      }
+    } catch (err) {
+      window.sessionStorage.removeItem(this.requestDateRangeStorageKey);
+    }
+  }
+
+  private storeCurrentDateRange(): void {
+    const start = this.range.controls.start.value;
+    const end = this.range.controls.end.value;
+
+    if (!start || !end) {
+      return;
+    }
+
+    window.sessionStorage.setItem(
+      this.requestDateRangeStorageKey,
+      JSON.stringify({
+        start: new Date(start).toISOString(),
+        end: new Date(end).toISOString(),
+      })
+    );
+  }
+
   public getAllRequests(): void {
+    this.storeCurrentDateRange();
+
     if (this.isInternal) {
       this.getAllRequestsInternal();
     } else {
