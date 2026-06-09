@@ -34,3 +34,32 @@
     grid-template-columns: 1fr;
   }
 }
+
+.wetlab-tabs-bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 10px 10px 0 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.wetlab-tab-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 24px;
+  color: rgba(0, 0, 0, 0.87);
+  text-decoration: none;
+  cursor: pointer;
+  opacity: 0.72;
+}
+
+.wetlab-tab-link:hover {
+  opacity: 1;
+}
+
+.wetlab-tab-active {
+  opacity: 1;
+  border-bottom: 2px solid #3f51b5;
+  font-weight: 600;
+}

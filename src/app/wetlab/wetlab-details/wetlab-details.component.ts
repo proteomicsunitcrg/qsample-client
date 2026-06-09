@@ -20,8 +20,13 @@ export class WetlabDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.apiKey = this.route.snapshot.params.apiKey;
+    this.route.params.subscribe((params) => {
+      this.apiKey = params.apiKey;
+      this.loadWetlab();
+    });
+  }
 
+  private loadWetlab(): void {
     this.wetLabService.getByApiKey(this.apiKey).subscribe(
       (res) => {
         this.wetlab = res;

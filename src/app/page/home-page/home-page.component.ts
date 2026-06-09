@@ -31,6 +31,8 @@ export class HomePageComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       if (params.tab === 'sample-qc') {
         this.selectedTabIndex = 1;
+      } else if (params.tab === 'processing-logs') {
+        this.selectedTabIndex = 2;
       } else {
         this.selectedTabIndex = 0;
       }

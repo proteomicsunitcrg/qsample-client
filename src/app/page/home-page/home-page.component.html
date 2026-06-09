@@ -13,7 +13,25 @@
 
     <mat-tab label="Sample preparation QC">
       <div class="home-tab-content">
-        <app-main-wetlab></app-main-wetlab>
+        <div class="home-sample-qc-layout">
+
+          <div class="home-sample-qc-left">
+            <app-main-wetlab></app-main-wetlab>
+          </div>
+
+          <div class="home-sample-qc-right">
+            <mat-card class="home-sample-qc-placeholder">
+              <mat-card-title>
+                Sample preparation QC
+              </mat-card-title>
+
+              <mat-card-content>
+                Select a QC method from the menu on the left to display the date selector and charts.
+              </mat-card-content>
+            </mat-card>
+          </div>
+
+        </div>
       </div>
     </mat-tab>
 

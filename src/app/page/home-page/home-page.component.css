@@ -97,3 +97,25 @@
 .home-page-tabs ::ng-deep .mat-checkbox-indeterminate.mat-primary .mat-checkbox-background {
   background-color: #0d47a1 !important;
 }
+.home-sample-qc-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.5fr) minmax(760px, 2fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.home-sample-qc-left,
+.home-sample-qc-right {
+  min-width: 0;
+}
+
+.home-sample-qc-placeholder {
+  border-radius: 12px;
+  min-height: 180px;
+}
+
+@media (max-width: 1200px) {
+  .home-sample-qc-layout {
+    grid-template-columns: 1fr;
+  }
+}
