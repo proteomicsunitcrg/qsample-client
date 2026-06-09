@@ -119,3 +119,26 @@
     grid-template-columns: 1fr;
   }
 }
+
+.home-qc-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.home-qc-left,
+.home-qc-right {
+  min-width: 0;
+}
+
+.home-qc-left > *,
+.home-qc-right > * {
+  height: 100%;
+}
+
+@media (max-width: 1200px) {
+  .home-qc-grid {
+    grid-template-columns: 1fr;
+  }
+}
