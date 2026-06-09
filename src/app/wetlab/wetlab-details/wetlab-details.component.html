@@ -1,19 +1,26 @@
-<section class="mat-typography title-group">
-  <h1 style="margin: 20px;">
-    <span class="material-icons cursor" (click)="goBack()">
-      arrow_back_ios
-    </span>
-    {{wetlab.name}}
-  </h1>
-  <mat-divider></mat-divider>
-</section>
+<mat-card class="wetlab-details-card">
 
-<div style="margin-top: 20px;" fxLayout="row" ffxLayoutGap="32px" fxLayoutAlign="space-between">
-  <app-date-selector fxFlex="15%"></app-date-selector>
-  <div fxFlex="100%" fxLayout="column" fxLayoutAlign="space-evenly" style="margin: 0 5em;">
-    <ng-container *ngFor="let plot of wetlab.plot">
-      <app-wetlab-plot fxFlex="0 1 calc(100% - 32px)" fxFlex.lt-md="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%"
-        [plot]="plot" [wetlab]="wetlab" style="margin-bottom: 5em;"></app-wetlab-plot>
-    </ng-container>
+  <mat-card-title>
+    {{wetlab.name}}
+  </mat-card-title>
+
+  <mat-divider></mat-divider>
+
+  <div class="wetlab-details-content">
+
+    <div class="wetlab-date-panel">
+      <app-date-selector></app-date-selector>
+    </div>
+
+    <div class="wetlab-charts-panel">
+      <ng-container *ngFor="let plot of wetlab.plot">
+        <app-wetlab-plot
+          [plot]="plot"
+          [wetlab]="wetlab">
+        </app-wetlab-plot>
+      </ng-container>
+    </div>
+
   </div>
-</div>
+
+</mat-card>
