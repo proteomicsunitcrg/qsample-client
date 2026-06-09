@@ -58,6 +58,10 @@ export class WetlabMainComponent implements OnInit {
   }
 
   public navigate(wetLab: WetLab): void {
-    this.router.navigate(['/wetlab/plot', wetLab.apiKey]);
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree(['/wetlab/plot', wetLab.apiKey])
+    );
+
+    window.open(url, '_blank');
   }
 }
