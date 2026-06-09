@@ -1,0 +1,36 @@
+.wetlab-main-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.5fr) minmax(760px, 2fr);
+  gap: 18px;
+  align-items: start;
+  margin: 10px;
+}
+
+.wetlab-main-left,
+.wetlab-main-right {
+  min-width: 0;
+}
+
+.wetlab-menu-card {
+  border-radius: 12px;
+}
+
+.wetlab-blocks {
+  margin-top: 12px;
+}
+
+.wetlab-category h2 {
+  margin: 18px 0 4px 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.wetlab-category:first-child h2 {
+  margin-top: 8px;
+}
+
+@media (max-width: 1200px) {
+  .wetlab-main-layout {
+    grid-template-columns: 1fr;
+  }
+}
