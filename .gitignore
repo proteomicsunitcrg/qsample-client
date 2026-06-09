@@ -47,3 +47,4 @@ Thumbs.db
 
 #doc
 documentation
+/src/assets/env.js
