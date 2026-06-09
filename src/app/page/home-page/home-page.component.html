@@ -13,10 +13,16 @@
 
     <mat-tab label="Sample preparation QC">
       <div class="home-tab-content">
+        <app-main-wetlab></app-main-wetlab>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Processing logs">
+      <div class="home-tab-content">
         <div class="home-qc-grid">
 
           <div class="home-qc-left">
-            <app-main-wetlab></app-main-wetlab>
+            <app-dashboard-request></app-dashboard-request>
           </div>
 
           <div class="home-qc-right">
@@ -31,7 +37,7 @@
 
 </div>
 
-<app-dashboard-main></app-dashboard-main>
+<!-- <app-dashboard-main></app-dashboard-main> -->
 
 <!-- EXTERNAL USERS, WIP -->
 <div

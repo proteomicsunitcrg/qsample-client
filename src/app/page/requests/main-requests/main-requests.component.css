@@ -12,21 +12,3 @@
   gap: 16px;
   margin-bottom: 18px;
 }
-
-.requests-main-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 18px;
-  align-items: start;
-}
-
-.requests-main-left,
-.requests-main-right {
-  min-width: 0;
-}
-
-@media (max-width: 1200px) {
-  .requests-main-grid {
-    grid-template-columns: 1fr;
-  }
-}

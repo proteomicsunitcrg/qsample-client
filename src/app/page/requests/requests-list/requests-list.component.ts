@@ -224,7 +224,11 @@ export class RequestsListComponent implements OnInit {
   }
 
   public navigateToRequestCode(requestCode: string): void {
-    this.router.navigate(['/request', requestCode]);
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree(['/request', requestCode])
+    );
+
+    window.open(url, '_blank');
   }
 
   public getAllRequestsInternal(): void {

@@ -1,5 +1,7 @@
 <div class="requests-layout">
 
+  <div class="requests-left-column">
+
   <section class="requests-load-card">
     <div class="requests-load-header">
       <div>
@@ -83,6 +85,14 @@
         mat-stroked-button
         class="requests-quick-button"
         [disabled]="finding"
+        (click)="searchLastMonths(3)">
+        Last 3 months
+      </button>
+
+      <button
+        mat-stroked-button
+        class="requests-quick-button"
+        [disabled]="finding"
         (click)="searchLastMonths(6)">
         Last 6 months
       </button>
@@ -104,7 +114,7 @@
     <div class="requests-section-title">
       <h3>Filter loaded requests</h3>
 
-      <span *ngIf="allRequests && allRequests.length > 0">
+      <span *ngIf="!finding && allRequests && allRequests.length > 0">
         {{allRequests.length}} requests loaded
       </span>
 
@@ -186,12 +196,19 @@
     </div>
   </div>
 
+  </div>
+
+  <div class="requests-right-column">
   <mat-progress-spinner
     [mode]="'indeterminate'"
     *ngIf="finding"
     class="center">
   </mat-progress-spinner>
 
+    <div class="requests-table-header" *ngIf="!finding && allRequests && allRequests.length > 0">
+      <h3>Loaded requests</h3>
+      <span>{{allRequests.length}} requests loaded</span>
+    </div>
   <table
     mat-table
     [dataSource]="dataSource"
@@ -289,9 +306,10 @@
   </table>
 
   <mat-paginator
-    *ngIf="allRequests && allRequests.length > 0"
+    *ngIf="!finding && allRequests && allRequests.length > 0"
     [pageSizeOptions]="[5, 10, 20]"
     showFirstLastButtons>
   </mat-paginator>
 
+  </div>
 </div>
