@@ -1,0 +1,15 @@
+.dynamic-charts-container {
+  width: 100%;
+}
+
+.dynamic-chart-card {
+  width: 100%;
+  margin-bottom: 24px;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.plot-container {
+  width: 100%;
+  min-height: 400px;
+}

@@ -1,0 +1,16 @@
+
+.week {
+  accent-color: #0d47a1;
+}
+
+::ng-deep app-date-selector .mat-form-field.mat-focused .mat-form-field-ripple {
+  background-color: #0d47a1;
+}
+
+::ng-deep app-date-selector .mat-form-field.mat-focused .mat-form-field-label {
+  color: #0d47a1;
+}
+
+::ng-deep app-date-selector .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+  color: #0d47a1;
+}

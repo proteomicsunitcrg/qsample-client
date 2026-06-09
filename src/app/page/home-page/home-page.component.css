@@ -1,7 +1,144 @@
-.container {
-    width: 100%; /*can be in percentage also.*/
-    height: auto;
-    margin: 0 auto;
-    padding: 10px;
-    position: relative;
+.home-page-tabs {
+  margin: 10px;
+}
+
+.home-tab-content {
+  padding-top: 10px;
+}
+
+.home-page-tabs ::ng-deep .mat-tab-group.mat-primary .mat-ink-bar,
+.home-page-tabs ::ng-deep .mat-tab-nav-bar.mat-primary .mat-ink-bar {
+  background-color: #0d47a1;
+}
+
+.home-page-tabs ::ng-deep .mat-tab-label.mat-tab-label-active {
+  color: #0d47a1;
+  opacity: 1;
+}
+
+.home-page-tabs ::ng-deep .mat-tab-label {
+  font-weight: 600;
+}
+
+.home-page-tabs ::ng-deep .mat-datepicker-toggle-active {
+  color: #0d47a1;
+}
+
+::ng-deep .mat-calendar-body-selected {
+  background-color: #0d47a1 !important;
+  color: #ffffff !important;
+}
+
+::ng-deep .mat-calendar-body-today:not(.mat-calendar-body-selected) {
+  border-color: #0d47a1 !important;
+}
+
+::ng-deep .mat-calendar-body-cell-content.mat-focus-indicator:hover {
+  background-color: rgba(13, 71, 161, 0.12);
+}
+
+.home-qc-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.home-qc-left,
+.home-qc-right {
+  min-width: 0;
+}
+
+.home-qc-left app-main-wetlab,
+.home-qc-right app-dashboard-wetlab {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.home-qc-left ::ng-deep .sample-qc-card,
+.home-qc-right ::ng-deep .recent-wetlab-files-card {
+  width: 100%;
+  height: 100%;
+}
+
+.home-qc-left ::ng-deep .sample-qc-card mat-card,
+.home-qc-right ::ng-deep .recent-wetlab-files-card mat-card {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1200px) {
+  .home-qc-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.home-page-tabs ::ng-deep .mat-form-field.mat-focused .mat-form-field-ripple {
+  background-color: #0d47a1 !important;
+}
+
+.home-page-tabs ::ng-deep .mat-form-field.mat-focused .mat-form-field-label {
+  color: #0d47a1 !important;
+}
+
+.home-page-tabs ::ng-deep .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+  color: #0d47a1 !important;
+}
+
+.home-page-tabs ::ng-deep .mat-select-arrow,
+.home-page-tabs ::ng-deep .mat-datepicker-toggle-active,
+.home-page-tabs ::ng-deep .mat-form-field.mat-focused.mat-primary .mat-select-arrow {
+  color: #0d47a1 !important;
+}
+
+.home-page-tabs ::ng-deep .mat-checkbox-checked.mat-primary .mat-checkbox-background,
+.home-page-tabs ::ng-deep .mat-checkbox-indeterminate.mat-primary .mat-checkbox-background {
+  background-color: #0d47a1 !important;
+}
+.home-sample-qc-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.5fr) minmax(760px, 2fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.home-sample-qc-left,
+.home-sample-qc-right {
+  min-width: 0;
+}
+
+.home-sample-qc-placeholder {
+  border-radius: 12px;
+  min-height: 180px;
+}
+
+@media (max-width: 1200px) {
+  .home-sample-qc-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.home-qc-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.home-qc-left,
+.home-qc-right {
+  min-width: 0;
+}
+
+.home-qc-left > *,
+.home-qc-right > * {
+  height: 100%;
+}
+
+@media (max-width: 1200px) {
+  .home-qc-grid {
+    grid-template-columns: 1fr;
+  }
 }

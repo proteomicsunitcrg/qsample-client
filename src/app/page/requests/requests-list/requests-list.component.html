@@ -1,92 +1,315 @@
-      <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutAlign="space-around center" fxLayoutGap="32px"
-        fxLayoutAlign="flex-start">
-        <mat-form-field appearance="fill">
-          <mat-label>Status</mat-label>
-          <mat-select (selectionChange)="applyFilterStatus($event.value)" [(ngModel)]="statusFilter" [disabled]="finding">
-            <mat-option value="">None</mat-option>
-            <mat-option *ngFor="let status of requestStatusValuesKeys()" [value]="status">
-              {{status}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput (keyup)="applyFilterClass($event.target.value.trim())" placeholder="Application"
-            [(ngModel)]="classFilter" [disabled]="finding">
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput (keyup)="applyFilterCode($event.target.value.trim())" placeholder="Request code"
-            [(ngModel)]="lastFieldFilter" [disabled]="finding">
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput (keyup)="applyFilterCreator($event.target.value.trim())" placeholder="Creator"
-            [(ngModel)]="creatorFilter" [disabled]="finding">
-        </mat-form-field>
-        <!-- <mat-form-field> -->
-        <!-- </mat-form-field> -->
+<div class="requests-layout">
+
+  <div class="requests-left-column">
+
+  <section class="requests-load-card">
+    <div class="requests-load-header">
+      <div>
+        <h2>Load requests from Agendo</h2>
+        <p>
+          Select a date range or use a quick search shortcut.
+        </p>
       </div>
-      <mat-form-field appearance="fill">
-        <mat-label>Enter a date range</mat-label>
-        <mat-date-range-input [formGroup]="range" [rangePicker]="picker" [disabled]="finding">
-          <input matStartDate formControlName="start" placeholder="Start date">
-          <input matEndDate formControlName="end" placeholder="End date">
-        </mat-date-range-input>
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-date-range-picker #picker></mat-date-range-picker>
-        <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
-        <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+
+      <div
+        class="agendo-status-pill"
+        [ngClass]="{
+          'agendo-idle': agendoStatus === 'idle',
+          'agendo-checking': agendoStatus === 'checking',
+          'agendo-online': agendoStatus === 'online',
+          'agendo-offline': agendoStatus === 'offline'
+        }">
+
+        <mat-icon *ngIf="agendoStatus === 'idle'">manage_search</mat-icon>
+        <mat-icon *ngIf="agendoStatus === 'checking'" class="agendo-spin">sync</mat-icon>
+        <mat-icon *ngIf="agendoStatus === 'online'">cloud_done</mat-icon>
+        <mat-icon *ngIf="agendoStatus === 'offline'">cloud_off</mat-icon>
+
+        <span *ngIf="agendoStatus === 'idle'">Checked on search</span>
+        <span *ngIf="agendoStatus === 'checking'">Checking Agendo</span>
+        <span *ngIf="agendoStatus === 'online'">Agendo online</span>
+        <span *ngIf="agendoStatus === 'offline'">Agendo offline</span>
+      </div>
+    </div>
+
+    <div class="requests-load-actions">
+
+      <mat-form-field appearance="fill" class="requests-date-field">
+        <mat-label>Start date</mat-label>
+        <input
+          matInput
+          [matDatepicker]="startPicker"
+          [formControl]="range.controls.start"
+          [disabled]="finding">
+        <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+        <mat-datepicker #startPicker></mat-datepicker>
+
+        <mat-error *ngIf="range.controls.start.hasError('matDatepickerParse')">
+          Invalid start date
+        </mat-error>
       </mat-form-field>
-        <span class="material-icons" style="cursor: pointer;" matTooltip="Dates range should be according the request creation date and not the data acquisition">
-          help
-        </span>
-      <!-- <button mat-stroked-button style="margin-left: 20px;" (click)="openDialog()" [disabled]="finding">Years</button> -->
-      <button mat-mini-fab color="primary" aria-label="find by date range" [disabled]="finding"
-        style="margin-left: 20px; margin-right: 20px;" [disabled]="range.invalid" (click)="getAllRequests()">
+
+      <mat-form-field appearance="fill" class="requests-date-field">
+        <mat-label>End date</mat-label>
+        <input
+          matInput
+          [matDatepicker]="endPicker"
+          [formControl]="range.controls.end"
+          [disabled]="finding">
+        <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+        <mat-datepicker #endPicker></mat-datepicker>
+
+        <mat-error *ngIf="range.controls.end.hasError('matDatepickerParse')">
+          Invalid end date
+        </mat-error>
+      </mat-form-field>
+
+      <button
+        mat-raised-button
+        color="primary"
+        class="requests-main-search-button"
+        [disabled]="finding || range.invalid"
+        (click)="getAllRequests()">
         <mat-icon>search</mat-icon>
+        Search selected range
       </button>
-      <mat-checkbox (change)="getAllCheckBoxChange()" matInput [(ngModel)]="showAll" [disabled]="finding">Show all
-        <span class="material-icons" matTooltip="If it's not checked hides rejected, completed, created, cancelled and draft requests">
-          help
+
+    </div>
+
+    <div class="requests-quick-actions">
+      <span class="requests-quick-label">
+        Quick search
+      </span>
+
+      <button
+        mat-stroked-button
+        class="requests-quick-button"
+        [disabled]="finding"
+        (click)="searchLastMonths(3)">
+        Last 3 months
+      </button>
+
+      <button
+        mat-stroked-button
+        class="requests-quick-button"
+        [disabled]="finding"
+        (click)="searchLastMonths(6)">
+        Last 6 months
+      </button>
+
+      <button
+        mat-stroked-button
+        class="requests-quick-button"
+        [disabled]="finding"
+        (click)="searchLastMonths(24)">
+        Last 2 years
+      </button>
+    </div>
+  </section>
+
+  <section
+    class="requests-filter-card"
+    [class.requests-filter-disabled]="!allRequests || allRequests.length === 0">
+
+    <div class="requests-section-title">
+      <h3>Filter loaded requests</h3>
+
+      <span *ngIf="!finding && allRequests && allRequests.length > 0">
+        {{allRequests.length}} requests loaded
+      </span>
+
+      <span *ngIf="!allRequests || allRequests.length === 0">
+        Load requests first
+      </span>
+    </div>
+
+    <div class="requests-filter-grid">
+
+      <mat-form-field appearance="fill">
+        <mat-label>Status</mat-label>
+        <mat-select
+          (selectionChange)="applyFilterStatus($event.value)"
+          [(ngModel)]="statusFilter"
+          [disabled]="finding || !allRequests || allRequests.length === 0">
+          <mat-option value="">None</mat-option>
+          <mat-option *ngFor="let status of requestStatusValuesKeys()" [value]="status">
+            {{status}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input
+          matInput
+          (keyup)="applyFilterClass($event.target.value.trim())"
+          placeholder="Application"
+          [(ngModel)]="classFilter"
+          [disabled]="finding || !allRequests || allRequests.length === 0">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input
+          matInput
+          (keyup)="applyFilterCode($event.target.value.trim())"
+          placeholder="Request code"
+          [(ngModel)]="lastFieldFilter"
+          [disabled]="finding || !allRequests || allRequests.length === 0">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input
+          matInput
+          (keyup)="applyFilterCreator($event.target.value.trim())"
+          placeholder="Creator"
+          [(ngModel)]="creatorFilter"
+          [disabled]="finding || !allRequests || allRequests.length === 0">
+      </mat-form-field>
+
+    </div>
+  </section>
+
+  <div
+    class="requests-empty-state"
+    *ngIf="allRequests && allRequests.length === 0 && !finding && agendoStatus !== 'offline'">
+
+    <mat-icon>manage_search</mat-icon>
+
+    <div>
+      <h3>No requests loaded yet</h3>
+      <p>
+        Choose a date range and click Search. QSample will contact Agendo only when you start a search.
+      </p>
+    </div>
+  </div>
+
+  <div
+    class="requests-offline-state"
+    *ngIf="allRequests && allRequests.length === 0 && !finding && agendoStatus === 'offline'">
+
+    <mat-icon>warning</mat-icon>
+
+    <div>
+      <h3>Requests are temporarily unavailable</h3>
+      <p>
+        Agendo cannot be reached right now. Please try again later or reduce the date range.
+      </p>
+    </div>
+  </div>
+
+  </div>
+
+  <div class="requests-right-column">
+  <mat-progress-spinner
+    [mode]="'indeterminate'"
+    *ngIf="finding"
+    class="center">
+  </mat-progress-spinner>
+
+    <div class="requests-table-header" *ngIf="!finding && allRequests && allRequests.length > 0">
+      <h3>Loaded requests</h3>
+      <span>{{allRequests.length}} requests loaded</span>
+    </div>
+  <table
+    mat-table
+    [dataSource]="dataSource"
+    class="requests-table"
+    matSort
+    matSortActive="hasData"
+    matSortDirection="desc"
+    [class.hide]="finding || !allRequests || allRequests.length === 0">
+
+    <ng-container matColumnDef="code">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        Request code
+      </th>
+
+      <td mat-cell *matCellDef="let entry">
+        <a
+          *ngIf="!settingsMode"
+          class="request-code-link"
+          href="javascript:void(0)"
+          (click)="navigateToRequestCode(entry.lastField); $event.stopPropagation()">
+          {{entry.lastField}}
+        </a>
+
+        <span *ngIf="settingsMode">
+          {{entry.lastField}}
         </span>
-      </mat-checkbox>
-      <table mat-table [dataSource]="dataSource" style="width: 100%;" matSort matSortActive="creationDate"
-        matSortDirection="desc" [class.hide]="finding">
-        <ng-container matColumnDef="code">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Request code </th>
-          <td mat-cell *matCellDef="let entry"> {{entry.lastField}} </td>
-        </ng-container>
-        <ng-container matColumnDef="type">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Application </th>
-          <td mat-cell *matCellDef="let entry" [matTooltip]="entry.type">
-            {{ (entry.type.length>50)? (entry.type | slice:0:50)+'...':(entry.type) }} </td>
-          <!--Very proud of this KEKW-->
-        </ng-container>
-        <ng-container matColumnDef="creatorName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Creator </th>
-          <td mat-cell *matCellDef="let entry" [innerHTML]="entry.creatorName"> </td>
-          <!--Because agendo returns the accetns encoded-->
-        </ng-container>
-        <ng-container matColumnDef="creationDate">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Request date </th>
-          <td mat-cell *matCellDef="let entry"> {{entry.creationDate | date:'YYYY-MM-dd'}} </td>
-        </ng-container>
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-          <td mat-cell *matCellDef="let entry"> {{entry.status}} </td>
-        </ng-container>
-        <!-- <ng-container matColumnDef="hasData">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Data </th>
-          <td mat-cell *matCellDef="let entry">
-            <span class="material-icons" *ngIf="entry.hasData">
-              done
-            </span>
-            <span class="material-icons" *ngIf="!entry.hasData">
-              clear
-            </span>
-          </td>
-        </ng-container> -->
-        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-        <tr mat-row (click)="handleClick(myRowData)" *matRowDef="let myRowData; columns: columnsToDisplay"></tr>
-      </table>
-      <mat-progress-spinner [mode]="'indeterminate'" *ngIf="!allRequests" class="center"></mat-progress-spinner>
-      <mat-progress-spinner [mode]="'indeterminate'" *ngIf="finding &&  allRequests" class="center"></mat-progress-spinner>
-      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="hasData">
+      <th mat-header-cell *matHeaderCellDef>
+        Data
+      </th>
+
+      <td mat-cell *matCellDef="let entry">
+        <mat-icon
+          *ngIf="entry.hasData"
+          class="request-data-icon request-data-available"
+          matTooltip="QSample data available">
+          check_circle
+        </mat-icon>
+
+        <mat-icon
+          *ngIf="!entry.hasData"
+          class="request-data-icon request-data-missing"
+          matTooltip="No QSample data available">
+          remove_circle_outline
+        </mat-icon>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="type">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        Application
+      </th>
+      <td mat-cell *matCellDef="let entry">
+        {{ (entry.type.length > 50) ? (entry.type | slice:0:50) + '...' : (entry.type) }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="creatorName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        Creator
+      </th>
+      <td mat-cell *matCellDef="let entry" [innerHTML]="entry.creatorName">
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="creationDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        Request date
+      </th>
+      <td mat-cell *matCellDef="let entry">
+        {{entry.creationDate | date:'YYYY-MM-dd'}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        Status
+      </th>
+      <td mat-cell *matCellDef="let entry">
+        {{entry.status}}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr
+      mat-row
+      [class.settings-clickable-row]="settingsMode"
+      (click)="settingsMode ? handleClick(myRowData) : null"
+      *matRowDef="let myRowData; columns: columnsToDisplay">
+    </tr>
+
+  </table>
+
+  <mat-paginator
+    *ngIf="!finding && allRequests && allRequests.length > 0"
+    [pageSizeOptions]="[5, 10, 20]"
+    showFirstLastButtons>
+  </mat-paginator>
+
+  </div>
+</div>

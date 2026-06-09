@@ -1,11 +1,27 @@
+<h2 mat-dialog-title>Request details</h2>
+
 <mat-dialog-content>
-    <mat-list>
-        <mat-list-item *ngFor="let field of item.fields">
-            <div *ngIf="field.name != ''">
-                <p>
-                    <span style="font-weight: bold;">{{field.name}}: </span> {{field.value}}
-                </p>
-            </div>
-        </mat-list-item>
-    </mat-list>
+  <div *ngIf="getVisibleFields().length === 0" class="request-dialog-empty">
+    No additional request details available.
+  </div>
+
+  <div
+    *ngFor="let field of getVisibleFields()"
+    class="request-dialog-field"
+    [class.request-dialog-field-important]="isImportantField(field)">
+
+    <div class="request-dialog-field-name">
+      {{field.name}}
+    </div>
+
+    <div
+      class="request-dialog-field-value"
+      [innerText]="formatFieldValue(field.value)">
+    </div>
+
+  </div>
 </mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

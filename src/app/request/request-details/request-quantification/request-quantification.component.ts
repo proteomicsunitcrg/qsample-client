@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import { RequestFile } from '../../../models/RequestFile';
 import { FileService } from '../../../services/file.service';
 import { PlotService } from '../../../services/plot.service';
@@ -13,7 +13,6 @@ import { QuantificationService } from '../../../services/quantification.service'
 })
 export class RequestQuantificationComponent implements OnInit, OnDestroy {
 
-  // Subscription to update the plot on list change
   selectedChecksumSubscription$: Subscription;
 
   selectedChecksum: string;
@@ -28,11 +27,21 @@ export class RequestQuantificationComponent implements OnInit, OnDestroy {
 
   nothingSelected = true;
 
+  loading = false;
+
+  quantificationChecked = false;
+
   proteinsEmpty = false;
 
   contaminantsEmpty = false;
 
-  constructor(private quantificationService: QuantificationService, private plotService: PlotService, private fileService: FileService) { }
+  noQuantificationData = false;
+
+  constructor(
+    private quantificationService: QuantificationService,
+    private plotService: PlotService,
+    private fileService: FileService
+  ) { }
 
   ngOnInit(): void {
     this.subscribeToChecksumChanges();
@@ -42,56 +51,59 @@ export class RequestQuantificationComponent implements OnInit, OnDestroy {
     this.selectedChecksumSubscription$.unsubscribe();
   }
 
-
-  /**
-   * Subscribes to list display changes
-   */
   private subscribeToChecksumChanges(): void {
     this.selectedChecksumSubscription$ = this.plotService.selectedChecksum.subscribe(
       checksum => {
+
+        if (!checksum) {
+          return;
+        }
+
         this.selectedChecksum = checksum;
+        this.nothingSelected = false;
+        this.loading = true;
+        this.quantificationChecked = false;
+        this.proteinsEmpty = false;
+        this.contaminantsEmpty = false;
+        this.noQuantificationData = false;
+
         this.getFileInfo();
-        this.getQuantificationByFileChecksum();
-        this.getQuantificationContaminantByFileChecksum();
+        this.getQuantificationData();
       }
     );
   }
 
-  private getQuantificationByFileChecksum() {
-    this.quantificationService.getQuantificationByFileChecksumAndContaminant(this.selectedChecksum, false).subscribe(
+  private getQuantificationData(): void {
+    forkJoin({
+      proteins: this.quantificationService.getQuantificationByFileChecksumAndContaminant(this.selectedChecksum, false),
+      contaminants: this.quantificationService.getQuantificationByFileChecksumAndContaminant(this.selectedChecksum, true)
+    }).subscribe(
       res => {
-        if (res.length === 0) {
-          this.proteinsEmpty = true;
-        } else {
-          this.proteinsEmpty = false;
-        }
-        this.dataSource = new MatTableDataSource(res);
-        this.nothingSelected = false;
+        const proteins = res.proteins || [];
+        const contaminants = res.contaminants || [];
+
+        this.proteinsEmpty = proteins.length === 0;
+        this.contaminantsEmpty = contaminants.length === 0;
+        this.noQuantificationData = this.proteinsEmpty && this.contaminantsEmpty;
+
+        this.dataSource = new MatTableDataSource(proteins);
+        this.dataSourceContaminants = new MatTableDataSource(contaminants);
+
+        this.quantificationChecked = true;
+        this.loading = false;
       },
       err => {
+        this.proteinsEmpty = true;
+        this.contaminantsEmpty = true;
+        this.noQuantificationData = true;
+        this.quantificationChecked = true;
+        this.loading = false;
         console.error(err);
       }
     );
   }
 
-  private getQuantificationContaminantByFileChecksum() {
-    this.quantificationService.getQuantificationByFileChecksumAndContaminant(this.selectedChecksum, true).subscribe(
-      res => {
-        if (res.length === 0) {
-          this.contaminantsEmpty = true;
-        } else {
-          this.contaminantsEmpty = false;
-        }
-        this.dataSourceContaminants = new MatTableDataSource(res);
-        this.nothingSelected = false;
-      },
-      err => {
-        console.error(err);
-      }
-    );
-  }
-
-  private getFileInfo() {
+  private getFileInfo(): void {
     this.fileService.getRequestFileByChecksum(this.selectedChecksum).subscribe(
       res => {
         this.file = res;

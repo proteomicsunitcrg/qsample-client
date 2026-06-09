@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { RequestPanelDialogComponent } from './dialog/request-panel-dialog.component';
 import { RequestService } from 'src/app/services/request.service';
@@ -36,5 +36,15 @@ export class RequestDetailsPanelComponent implements OnInit {
         item: request,
       },
     });
+  }
+
+  public getFieldValue(fieldName: string): string {
+    if (!this.request || !this.request.fields) {
+      return '';
+    }
+
+    const field = this.request.fields.find((item: any) => item.name === fieldName);
+
+    return field && field.value ? field.value : '';
   }
 }

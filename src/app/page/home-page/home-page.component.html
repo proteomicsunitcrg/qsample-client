@@ -1,18 +1,73 @@
-<div fxLayout="row" fxLayout.lt="row" fxLayout.md="column" fxLayout.sm="column"  fxLayout.xs="column"  fxLayoutAlign="center" fxLayoutGap="3px" fxLayoutGap.xs="0!"  *ngIf="isInternal">
-    <div fxFlex.gt-md = "50">
-    <!-- <div fxFlex.gt-md = "100"> -->
-        <app-main-requests></app-main-requests>
-    </div>
-    <div fxFlex.gt-md = "50">
-        <app-main-wetlab></app-main-wetlab>
-    </div>
-</div>
-<app-dashboard-main></app-dashboard-main>
+<div class="home-page-tabs" *ngIf="isInternal">
 
+  <mat-tab-group
+    animationDuration="200ms"
+    mat-align-tabs="start"
+    [(selectedIndex)]="selectedTabIndex">
+
+    <mat-tab label="Requests">
+      <div class="home-tab-content">
+        <app-main-requests></app-main-requests>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Sample preparation QC">
+      <div class="home-tab-content">
+        <div class="home-sample-qc-layout">
+
+          <div class="home-sample-qc-left">
+            <app-main-wetlab></app-main-wetlab>
+          </div>
+
+          <div class="home-sample-qc-right">
+            <mat-card class="home-sample-qc-placeholder">
+              <mat-card-title>
+                Sample preparation QC
+              </mat-card-title>
+
+              <mat-card-content>
+                Select a QC method from the menu on the left to display the date selector and charts.
+              </mat-card-content>
+            </mat-card>
+          </div>
+
+        </div>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Processing logs">
+      <div class="home-tab-content">
+        <div class="home-qc-grid">
+
+          <div class="home-qc-left">
+            <app-dashboard-request></app-dashboard-request>
+          </div>
+
+          <div class="home-qc-right">
+            <app-dashboard-wetlab></app-dashboard-wetlab>
+          </div>
+
+        </div>
+      </div>
+    </mat-tab>
+
+  </mat-tab-group>
+
+</div>
+
+<!-- <app-dashboard-main></app-dashboard-main> -->
 
 <!-- EXTERNAL USERS, WIP -->
-<div fxLayout fxLayout.lt-md="column" fxLayoutAlign="center" fxLayoutGap="3px" fxLayoutGap.xs="0!" *ngIf="!isInternal">
-    <div fxFlex="98%">
-        <app-main-requests></app-main-requests>
-    </div>
+<div
+  fxLayout
+  fxLayout.lt-md="column"
+  fxLayoutAlign="center"
+  fxLayoutGap="3px"
+  fxLayoutGap.xs="0!"
+  *ngIf="!isInternal">
+
+  <div fxFlex="98%">
+    <app-main-requests></app-main-requests>
+  </div>
+
 </div>

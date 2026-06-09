@@ -1,7 +1,32 @@
-.title {
-    border-left: 10px solid blue;
+.wetlab-details-card {
+  border-radius: 12px;
+}
+
+.wetlab-details-content {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.25fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+  margin-top: 18px;
+}
+
+.wetlab-date-panel,
+.wetlab-charts-panel {
+  min-width: 0;
+}
+
+.wetlab-charts-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
 }
 
 .cursor {
-    cursor: pointer;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .wetlab-details-content {
+    grid-template-columns: 1fr;
+  }
 }

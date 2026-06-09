@@ -1,20 +1,36 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row class="mat-elevation-z5">
-    <span class="pointer top-logo"><img (click)="goToHomePage()" src="assets/logo-qsample.png" alt="QSample logo"></span>
+    <span class="pointer top-logo">
+      <img (click)="goToHomePage()" src="assets/logo-qsample.png" alt="QSample logo">
+    </span>
+
     <span class="spacer"></span>
+
     <button mat-icon-button (click)="goToFavorites()">
       <mat-icon>star</mat-icon>
     </button>
+
     <app-theme-selector></app-theme-selector>
+
+    <button mat-icon-button
+            (click)="goToChartSettings()"
+            *ngIf="isManager"
+            matTooltip="QSample chart settings">
+      <mat-icon>tune</mat-icon>
+    </button>
+
     <button mat-icon-button (click)="goToRequestSettings()" *ngIf="isManager && isLocalMode">
       <mat-icon>science</mat-icon>
     </button>
+
     <button mat-icon-button (click)="goToUserPage()" *ngIf="isManager">
       <mat-icon>group</mat-icon>
     </button>
+
     <button mat-icon-button (click)="goToHelp()" *ngIf="!isLocalMode">
       <mat-icon>help</mat-icon>
     </button>
+
     <button mat-icon-button (click)="logout()">
       <mat-icon>exit_to_app</mat-icon>
     </button>

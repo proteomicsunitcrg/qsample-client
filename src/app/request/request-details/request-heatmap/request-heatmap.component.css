@@ -8,8 +8,9 @@
 
 .notFound {
   /* background-color: #424242; */
-  width: 560px;
-  height: 480px;
+  width: 100%;
+  max-width: 900px;
+  min-height: 480px;
   line-height: 480px;
   text-align: center;
   /* color: #fff; */

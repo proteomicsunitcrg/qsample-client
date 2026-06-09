@@ -1,21 +1,14 @@
-tr {
-    cursor: pointer;
+.requests-main-card {
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 12px;
 }
 
-.vertical-center {
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
-}
-
-.center {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.hide {
-  display: none;
+.requests-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
 }

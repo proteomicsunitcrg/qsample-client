@@ -1,1 +1,50 @@
-<router-outlet></router-outlet>
+<div class="wetlab-tabs-bar">
+  <a class="wetlab-tab-link" routerLink="/">
+    Requests
+  </a>
+
+  <a class="wetlab-tab-link wetlab-tab-active">
+    Sample preparation QC
+  </a>
+
+  <a class="wetlab-tab-link" routerLink="/" [queryParams]="{tab: 'processing-logs'}">
+    Processing logs
+  </a>
+</div>
+
+<div class="wetlab-main-layout">
+
+  <div class="wetlab-main-left">
+    <mat-card class="wetlab-menu-card">
+
+      <mat-card-title>
+        {{ title }}
+      </mat-card-title>
+
+      <div class="wetlab-blocks">
+        <div *ngFor="let block of Categories" class="wetlab-category">
+          <h2>{{ block.name }}</h2>
+
+          <mat-card-content>
+            <mat-nav-list>
+              <ng-container *ngFor="let item of WetLabs">
+                <a
+                  mat-list-item
+                  (click)="navigate(item)"
+                  *ngIf="block.id === item.wetlabCategory.id">
+                  {{ item.name }}
+                </a>
+              </ng-container>
+            </mat-nav-list>
+          </mat-card-content>
+        </div>
+      </div>
+
+    </mat-card>
+  </div>
+
+  <div class="wetlab-main-right">
+    <router-outlet></router-outlet>
+  </div>
+
+</div>

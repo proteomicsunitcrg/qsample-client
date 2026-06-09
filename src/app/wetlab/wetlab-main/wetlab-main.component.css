@@ -1,0 +1,65 @@
+.wetlab-main-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.5fr) minmax(760px, 2fr);
+  gap: 18px;
+  align-items: start;
+  margin: 10px;
+}
+
+.wetlab-main-left,
+.wetlab-main-right {
+  min-width: 0;
+}
+
+.wetlab-menu-card {
+  border-radius: 12px;
+}
+
+.wetlab-blocks {
+  margin-top: 12px;
+}
+
+.wetlab-category h2 {
+  margin: 18px 0 4px 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.wetlab-category:first-child h2 {
+  margin-top: 8px;
+}
+
+@media (max-width: 1200px) {
+  .wetlab-main-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.wetlab-tabs-bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 10px 10px 0 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.wetlab-tab-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 24px;
+  color: rgba(0, 0, 0, 0.87);
+  text-decoration: none;
+  cursor: pointer;
+  opacity: 0.72;
+}
+
+.wetlab-tab-link:hover {
+  opacity: 1;
+}
+
+.wetlab-tab-active {
+  opacity: 1;
+  border-bottom: 2px solid #3f51b5;
+  font-weight: 600;
+}

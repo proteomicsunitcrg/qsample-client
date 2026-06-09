@@ -112,7 +112,11 @@ export class WetlabListComponent implements OnInit {
   }
 
   public navigate(wetLab: WetLab) {
-    this.router.navigate(['/wetlab/plot', wetLab.apiKey]);
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree(['/wetlab/plot', wetLab.apiKey])
+    );
+
+    window.open(url, '_blank');
   }
 
   public navigateToGuideset() {

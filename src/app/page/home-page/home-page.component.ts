@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { Subscription } from 'rxjs';
 import { TokenStorageService } from '../../services/token-storage.service';
@@ -10,14 +11,32 @@ import { TokenStorageService } from '../../services/token-storage.service';
 })
 export class HomePageComponent implements OnInit {
 
-  constructor(private authService: AuthService, private tokenStorageService: TokenStorageService) {
+  subscription: Subscription;
+
+  isInternal = false;
+
+  selectedTabIndex = 0;
+
+  constructor(
+    private authService: AuthService,
+    private tokenStorageService: TokenStorageService,
+    private route: ActivatedRoute
+  ) {
     this.subscription = this.authService.getIsInternal().subscribe(res => this.isInternal = res);
   }
 
-  subscription: Subscription;
-  isInternal = false;
   ngOnInit(): void {
     this.authService.updateIsInternal(this.tokenStorageService.isInternalUser());
+
+    this.route.queryParams.subscribe(params => {
+      if (params.tab === 'sample-qc') {
+        this.selectedTabIndex = 1;
+      } else if (params.tab === 'processing-logs') {
+        this.selectedTabIndex = 2;
+      } else {
+        this.selectedTabIndex = 0;
+      }
+    });
   }
 
 }

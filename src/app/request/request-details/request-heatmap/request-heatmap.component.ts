@@ -84,9 +84,9 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
       {
         z: this.data.map((item) => item.map((value) => value.toFixed(2))),
         // x: this.selectedSamples.map(item => `sample ${item.filename.split('_')[2]}`),
-        x: this.filenames.map((item) => item.split('_').splice(2).join('_')),
+        x: this.filenames.map((item) => this.parseFilename(item)),
         // y: this.selectedSamples.map(item => `sample ${item.filename.split('_')[2]}`),
-        y: this.filenames.map((item) => item.split('_').splice(2).join('_')),
+        y: this.filenames.map((item) => this.parseFilename(item)),
         w: 'cac',
         type: 'heatmap',
         hoverongaps: false,
@@ -109,6 +109,13 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
     } else {
       this.layout = LAYOUTLIGHTHEATMAP;
     }
+    this.layout = {
+      ...this.layout,
+      autosize: true,
+      width: 900,
+      height: 700
+    };
+
     Plotly.newPlot(`heatMap`, data, this.layout, { responsive: true });
   }
 
@@ -117,17 +124,35 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
     this.quantificationService
       .getHeatMap(this.requestCode, this.listOfChecksum, this.sliderValue, this.order)
       .subscribe(
-        (res) => {
-          if (res == null) {
+          (res) => {
+          const hasData =
+            res &&
+            res.data &&
+            res.names &&
+            res.data.length > 0 &&
+            res.names.length > 0;
+
+          if (!hasData) {
             this.nothingFound = true;
-          } else {
-            this.nothingFound = false;
+            this.loading = false;
+            this.data = [];
+            this.filenames = [];
+
+            if (this.Graph && this.Graph.nativeElement) {
+              Plotly.purge(this.Graph.nativeElement);
+            }
+
+            return;
           }
+
+          this.nothingFound = false;
           this.data = res.data;
           this.filenames = res.names;
           this.drawHeatMap();
         },
         (err) => {
+          this.nothingFound = true;
+          this.loading = false;
           console.error(err);
         }
       );
@@ -189,4 +214,14 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
     }
     this.getHeatMapData();
   }
+  private parseFilename(filename: string): string {
+    if (!filename) {
+      return filename;
+    }
+    const fileParts = filename.split('_');
+    fileParts.shift();
+    fileParts.shift();
+    return fileParts.join('_').replace(/\.raw$/i, "");
+  }
+
 }

@@ -1,0 +1,31 @@
+<div class="dynamic-charts-container">
+
+  <div *ngIf="loading">
+    Loading charts...
+  </div>
+
+  <div *ngIf="error">
+    {{ error }}
+  </div>
+
+  <mat-card *ngFor="let chart of charts" class="dynamic-chart-card">
+
+    <h3>
+      <span class="title">{{ chart.title }}</span>
+    </h3>
+
+    <div
+      *ngIf="chartsWithoutData[chart.id]"
+      class="no-data-message">
+      No data available for this chart.
+    </div>
+
+    <div
+      *ngIf="!chartsWithoutData[chart.id]"
+      class="plot-container"
+      [id]="getChartDomId(chart)">
+    </div>
+
+  </mat-card>
+
+</div>

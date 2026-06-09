@@ -38,26 +38,28 @@ export class RequestsListComponent implements OnInit {
 
   isInternal: boolean;
 
-  // columnsToDisplay = ['code', 'type', 'creatorName', 'creationDate', 'status', 'hasData'];
+  agendoStatus: 'idle' | 'checking' | 'online' | 'offline' = 'idle';
 
-  columnsToDisplay = ['code', 'type', 'creatorName', 'creationDate', 'status'];
+  columnsToDisplay = ['code', 'hasData', 'type', 'creatorName', 'creationDate', 'status'];
 
   filteredValues = {};
 
-  showAll = true;
+  showAll = false;
 
   today = new Date();
 
-  monthAgo = new Date(new Date().setMonth(this.today.getMonth() - 6));
+  threeMonthsAgo = new Date(new Date().setMonth(this.today.getMonth() - 3));
 
   finding = false;
 
   range = new FormGroup({
-    start: new FormControl(this.monthAgo),
+    start: new FormControl(this.threeMonthsAgo),
     end: new FormControl(this.today),
   });
 
   year: number;
+
+  private readonly requestDateRangeStorageKey = 'qsample.requests.dateRange';
 
   @Input('settingsMode') settingsMode: boolean;
 
@@ -72,149 +74,148 @@ export class RequestsListComponent implements OnInit {
   }
 
   requestStatusValues = RequestStatus;
+
   requestStatusValuesKeys(): Array<string> {
     const keys = Object.keys(this.requestStatusValues);
     return keys.slice(keys.length / 2);
   }
 
   ngOnInit(): void {
+    this.allRequests = [];
+    this.dataSource = new MatTableDataSource<MiniRequest>([]);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.setFilterPredicate();
+    this.setSortData();
+    this.restoreDateRange();
     this.getAllRequests();
   }
 
-  private resetAllFilters(): any {
+  private resetAllFilters(): void {
     this.classFilter = '';
     this.statusFilter = '';
     this.creatorFilter = '';
     this.lastFieldFilter = '';
   }
 
-  applyFilterStatus(filterValue: string) {
-    const tableFilters = [];
-    tableFilters.push(
-      {
-        id: 'type',
-        value: this.classFilter,
-      },
-      {
-        id: 'status',
-        value: filterValue,
-      },
-      {
-        id: 'creatorName',
-        value: this.creatorFilter,
-      },
-      {
-        id: 'lastField',
-        value: this.lastFieldFilter,
-      }
-    );
-    this.dataSource.filter = JSON.stringify(tableFilters);
-  }
-
-  applyFilterClass(filterValue: string) {
-    const tableFilters = [];
-    tableFilters.push(
-      {
-        id: 'type',
-        value: filterValue,
-      },
-      {
-        id: 'status',
-        value: this.statusFilter,
-      },
-      {
-        id: 'creatorName',
-        value: this.creatorFilter,
-      },
-      {
-        id: 'lastField',
-        value: this.lastFieldFilter,
-      }
-    );
-    this.dataSource.filter = JSON.stringify(tableFilters);
-  }
-
-  applyFilterCreator(filterValue: string) {
-    const tableFilters = [];
-    tableFilters.push(
-      {
-        id: 'type',
-        value: this.classFilter,
-      },
-      {
-        id: 'status',
-        value: this.statusFilter,
-      },
-      {
-        id: 'creatorName',
-        value: filterValue,
-      },
-      {
-        id: 'lastField',
-        value: this.lastFieldFilter,
-      }
-    );
-    this.dataSource.filter = JSON.stringify(tableFilters);
-  }
-
-  applyFilterCode(filterValue: string) {
-    const tableFilters = [];
-    tableFilters.push(
-      {
-        id: 'type',
-        value: this.classFilter,
-      },
-      {
-        id: 'status',
-        value: this.statusFilter,
-      },
-      {
-        id: 'creatorName',
-        value: this.creatorFilter,
-      },
-      {
-        id: 'lastField',
-        value: filterValue,
-      }
-    );
-    // console.log(tableFilters);
-    this.dataSource.filter = JSON.stringify(tableFilters);
-  }
-
-  private goTo(request): void {
-    if (request.lastField === '') {
-      alert('Request not available yet'); // TODO: Change to a proper dialog
-    } else {
-      this.router.navigate(['/request', request.lastField]);
-    }
-  }
-
-  private goToRequestEditor(request): void {
-    this.router.navigate(['/settings/local/request/editor', request.lastField]);
-  }
-
-  public handleClick(request): void {
-    if (!this.settingsMode) {
-      this.goTo(request);
-    } else {
-      this.goToRequestEditor(request);
-    }
-  }
-
-  private predicate() {
-    this.dataSource.filterPredicate = (data: any, filtersJson: string) => {
-      const matchFilter = [];
+  private setFilterPredicate(): void {
+    this.dataSource.filterPredicate = (data: MiniRequest, filtersJson: string): boolean => {
       const filters = JSON.parse(filtersJson);
-      filters.forEach((filter) => {
-        const val = data[filter.id] === null ? '' : data[filter.id];
-        matchFilter.push(val.toLowerCase().includes(filter.value.toLowerCase()));
+
+      return filters.every((filter) => {
+        const value = filter.value ? filter.value.toString().toLowerCase() : '';
+
+        if (!value) {
+          return true;
+        }
+
+        if (!data[filter.id]) {
+          return false;
+        }
+
+        return data[filter.id].toString().toLowerCase().indexOf(value) !== -1;
       });
-      return matchFilter.every(Boolean);
     };
   }
 
+  private applyFilters(): void {
+    if (!this.dataSource) {
+      return;
+    }
+
+    const tableFilters = [
+      {
+        id: 'type',
+        value: this.classFilter,
+      },
+      {
+        id: 'status',
+        value: this.statusFilter,
+      },
+      {
+        id: 'creatorName',
+        value: this.creatorFilter,
+      },
+      {
+        id: 'lastField',
+        value: this.lastFieldFilter,
+      },
+    ];
+
+    this.dataSource.filter = JSON.stringify(tableFilters);
+  }
+
+  applyFilterStatus(filterValue: string): void {
+    this.statusFilter = filterValue;
+    this.applyFilters();
+  }
+
+  applyFilterClass(filterValue: string): void {
+    this.classFilter = filterValue;
+    this.applyFilters();
+  }
+
+  applyFilterCreator(filterValue: string): void {
+    this.creatorFilter = filterValue;
+    this.applyFilters();
+  }
+
+  applyFilterCode(filterValue: string): void {
+    this.lastFieldFilter = filterValue;
+    this.applyFilters();
+  }
+
+  public searchLastMonths(months: number): void {
+    const endDate = new Date();
+    const startDate = new Date();
+
+    startDate.setMonth(endDate.getMonth() - months);
+
+    this.range.controls.start.setValue(startDate);
+    this.range.controls.end.setValue(endDate);
+
+    this.getAllRequests();
+  }
+
+  private restoreDateRange(): void {
+    const savedRange = window.sessionStorage.getItem(this.requestDateRangeStorageKey);
+
+    if (!savedRange) {
+      return;
+    }
+
+    try {
+      const parsedRange = JSON.parse(savedRange);
+
+      if (parsedRange && parsedRange.start && parsedRange.end) {
+        this.range.controls.start.setValue(new Date(parsedRange.start));
+        this.range.controls.end.setValue(new Date(parsedRange.end));
+      }
+    } catch (err) {
+      window.sessionStorage.removeItem(this.requestDateRangeStorageKey);
+    }
+  }
+
+  private storeCurrentDateRange(): void {
+    const start = this.range.controls.start.value;
+    const end = this.range.controls.end.value;
+
+    if (!start || !end) {
+      return;
+    }
+
+    window.sessionStorage.setItem(
+      this.requestDateRangeStorageKey,
+      JSON.stringify({
+        start: new Date(start).toISOString(),
+        end: new Date(end).toISOString(),
+      })
+    );
+  }
+
   public getAllRequests(): void {
-    this.resetAllFilters();
+    this.storeCurrentDateRange();
+
     if (this.isInternal) {
       this.getAllRequestsInternal();
     } else {
@@ -222,80 +223,143 @@ export class RequestsListComponent implements OnInit {
     }
   }
 
-  /**
-   *
-   */
+  public navigateToRequestCode(requestCode: string): void {
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree(['/request', requestCode])
+    );
+
+    window.open(url, '_blank');
+  }
+
   public getAllRequestsInternal(): void {
-    const datePlusOne = new Date(this.range.controls.end.value.getTime() + 1000 * 60 * 60 * 24);
     this.finding = true;
+    this.agendoStatus = 'checking';
+
+    const datePlusOne = new Date(this.range.controls.end.value);
+    datePlusOne.setDate(datePlusOne.getDate() + 1);
+
     this.requestService.getAllRequestsInternal(this.showAll, this.range.controls.start.value, datePlusOne).subscribe(
       (res) => {
-        this.finding = false;
-        this.allRequests = res;
-        // Commented since lastField is already clean
-        // for (const request of this.allRequests) {
-        //   if (!request.local) {
-        //     request.lastField = this.getRequestCodeFromRequest(request.lastField);
-        //   }
-        // }
-
-        this.sessionStorageService.storeRequests(this.allRequests);
-        this.dataSource = new MatTableDataSource(res);
+        this.allRequests = this.sortRequestsByDataAndDate(res);
+        this.dataSource = new MatTableDataSource<MiniRequest>(this.allRequests);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-        this.predicate();
+        this.setFilterPredicate();
+        this.resetAllFilters();
+        this.sessionStorageService.storeRequests(this.allRequests);
+        this.finding = false;
+        this.agendoStatus = 'online';
       },
       (err) => {
+        this.allRequests = [];
+        this.dataSource = new MatTableDataSource<MiniRequest>([]);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.setFilterPredicate();
+        this.finding = false;
+        this.agendoStatus = 'offline';
         console.error(err);
       }
     );
   }
-  // private getRequestCodeFromRequest(request: any): string {
-  //   try {
-  //     const cac = JSON.parse(request);
-  //     return cac[0][0].value.split('|')[0];
-  //   } catch (error) {
-  //     return 'none';
-  //   }
-  // }
 
   private getAllRequestsExternal(): void {
+    this.finding = true;
+    this.agendoStatus = 'checking';
+
     this.requestService.getAllRequestsExternal().subscribe(
       (res) => {
-        this.dataSource = new MatTableDataSource(res);
+        this.allRequests = res;
+        this.dataSource = new MatTableDataSource<MiniRequest>(this.allRequests);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-        this.predicate();
+        this.setFilterPredicate();
+        this.resetAllFilters();
+        this.finding = false;
+        this.agendoStatus = 'online';
+        this.setSortData();
       },
       (err) => {
+        this.allRequests = [];
+        this.dataSource = new MatTableDataSource<MiniRequest>([]);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.setFilterPredicate();
+        this.finding = false;
+        this.agendoStatus = 'offline';
         console.error(err);
       }
     );
+  }
+
+  private sortRequestsByDataAndDate(requests: MiniRequest[]): MiniRequest[] {
+    return requests.sort((a, b) => {
+      if (a.hasData !== b.hasData) {
+        return a.hasData ? -1 : 1;
+      }
+
+      const dateA = new Date(a.creationDate).getTime();
+      const dateB = new Date(b.creationDate).getTime();
+
+      return dateB - dateA;
+    });
   }
 
   public getAllCheckBoxChange(): void {
-    this.getAllRequestsInternal();
-    this.resetAllFilters();
+    if (this.allRequests && this.allRequests.length > 0) {
+      this.getAllRequestsInternal();
+    }
   }
 
   public openDialog(): void {
     const dialogRef = this.dialog.open(RequestListYearSelectorDialog, {
-      data: {},
-      width: '35%',
+      width: '250px',
+      data: {
+        year: this.year,
+      },
     });
+
     dialogRef.afterClosed().subscribe((result) => {
-      if (result != undefined) {
+      if (result) {
         this.year = result;
-        this.setYear(result);
+        this.getAllRequests();
       }
     });
   }
 
-  private setYear(year: number) {
-    const starDate = new Date(new Date().setFullYear(year, 0, 1));
-    const endDate = new Date(new Date().setFullYear(year, 11, 31));
-    this.range.controls.start.setValue(starDate);
-    this.range.controls.end.setValue(endDate);
-    this.getAllRequests();
+  private setSortData(): void {
+    if (!this.dataSource) {
+      return;
+    }
+
+    this.dataSource.sortData = (data: MiniRequest[], sort) => {
+      return data.sort((a, b) => {
+        if (sort.active === 'hasData') {
+          if (a.hasData !== b.hasData) {
+            return a.hasData ? -1 : 1;
+          }
+
+          const dateA = new Date(a.creationDate).getTime();
+          const dateB = new Date(b.creationDate).getTime();
+
+          return dateB - dateA;
+        }
+
+        return 0;
+      });
+    };
+  }
+
+  handleClick(row: MiniRequest): void {
+    if (this.settingsMode) {
+      this.router.navigate(['/settings/local/request', row.id]);
+      return;
+    }
+
+    if (row.id) {
+      this.router.navigate(['/request', row.id + '|' + row.lastField]);
+    } else {
+      this.router.navigate(['/request', row.lastField]);
+    }
   }
 }

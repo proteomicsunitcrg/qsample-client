@@ -20,9 +20,6 @@ import { DashboardMainComponent } from './dashboard/dashboard-main/dashboard-mai
 import { DashboardRequestNextflowComponent } from './dashboard/dashboard-request-nextflow/dashboard-request-nextflow.component';
 import { SharedModule } from '../shared.module';
 
-
-
-
 @NgModule({
   imports: [
     CommonModule,
@@ -38,7 +35,6 @@ import { SharedModule } from '../shared.module';
     TopBarComponent,
     HomePageComponent,
     MainRequestsComponent,
-    
     MainWetlabComponent,
     WetlabListComponent,
     ThemeSelectorComponent,
