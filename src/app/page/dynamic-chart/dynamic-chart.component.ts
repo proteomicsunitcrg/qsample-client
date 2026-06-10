@@ -47,22 +47,17 @@ export class DynamicChartComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     this.plotService.selectedOrder.subscribe(order => {
-
       this.currentOrder =
         order === 'name' ? 'filename' : (order || 'filename');
 
       console.log('Dynamic chart order:', order, '=>', this.currentOrder);
 
       this.loadCharts();
-
     });
-
   }
 
   loadCharts(): void {
-
     this.loading = true;
     this.error = null;
 
@@ -80,7 +75,6 @@ export class DynamicChartComponent implements OnInit {
 
     request$.subscribe({
       next: (charts) => {
-
         this.charts = charts;
         this.chartsWithoutData = {};
         this.loading = false;
@@ -88,16 +82,12 @@ export class DynamicChartComponent implements OnInit {
         setTimeout(() => {
           this.charts.forEach(chart => this.renderChart(chart));
         }, 0);
-
       },
       error: () => {
-
         this.error = 'Failed to load charts';
         this.loading = false;
-
       }
     });
-
   }
 
   getChartDomId(chart: ChartConfig): string {
@@ -105,21 +95,17 @@ export class DynamicChartComponent implements OnInit {
   }
 
   renderChart(chart: ChartConfig): void {
-
     if (chart.library !== 'plotly') {
       return;
     }
 
     if (this.isStackedChart(chart)) {
-
       this.chartService.getStackedChartData(
         chart.dataSourceKey,
         this.requestCode,
         this.currentOrder
       ).subscribe({
-
         next: (dataPoints) => {
-
           if (!dataPoints || !dataPoints.some(point => this.hasRenderableValue(point.value))) {
             this.chartsWithoutData[chart.id] = true;
             return;
@@ -128,17 +114,13 @@ export class DynamicChartComponent implements OnInit {
           if (chart.chartType === 'bar') {
             this.renderStackedBarChart(chart, dataPoints);
           }
-
         },
-
         error: () => {
           this.error = `Failed to load stacked data for chart ${chart.name}`;
         }
-
       });
 
       return;
-
     }
 
     this.chartService.getChartData(
@@ -146,9 +128,7 @@ export class DynamicChartComponent implements OnInit {
       this.requestCode,
       this.currentOrder
     ).subscribe({
-
       next: (dataPoints) => {
-
         if (!dataPoints || !dataPoints.some(point => this.hasRenderableValue(point.value))) {
           this.chartsWithoutData[chart.id] = true;
           return;
@@ -157,15 +137,11 @@ export class DynamicChartComponent implements OnInit {
         if (chart.chartType === 'bar') {
           this.renderBarChart(chart, dataPoints);
         }
-
       },
-
       error: () => {
         this.error = `Failed to load data for chart ${chart.name}`;
       }
-
     });
-
   }
 
   isStackedChart(chart: ChartConfig): boolean {
@@ -182,33 +158,6 @@ export class DynamicChartComponent implements OnInit {
       || this.isStackedChart(chart);
   }
 
-  private getStackedSeriesColor(chart: ChartConfig, seriesName: string): string | null {
-    if (chart.dataSourceKey !== 'polymer_contaminants') {
-      return null;
-    }
-
-    const polymerColors: { [key: string]: string } = {
-      'IGEPAL CA-630 (NP-40)': '#7f3b08',
-      'Tween-80': '#6a3d9a',
-      'Tween-60': '#e31a1c',
-      'Tween-40': '#33a02c',
-      'Tween-20': '#ff7f00',
-      'Polysiloxane': '#1f78b4',
-      'Triton X-101 (Reduced)': '#00a6ca',
-      'Triton X-101': '#b2df8a',
-      'Triton X-100 (Reduced, Na)': '#636363',
-      'Triton X-100 (Na)': '#f781bf',
-      'Triton X-100 (Reduced)': '#a65628',
-      'Triton X-100': '#cab2d6',
-      'PPG': '#fb9a99',
-      'PEG+3H': '#008837',
-      'PEG+2H': '#fdbf6f',
-      'PEG+1H': '#08519c'
-    };
-
-    return polymerColors[seriesName] || null;
-  }
-
   private formatLabel(chart: ChartConfig, label: string): string {
     if (!label) {
       return '';
@@ -223,12 +172,15 @@ export class DynamicChartComponent implements OnInit {
     if (this.isPercentChart(chart)) {
       return {
         ticksuffix: '%',
-        tickformat: '.0f'
+        tickformat: '.1f'
       };
     }
 
     if (chart.name === 'identified_protein_groups' ||
-      chart.dataSourceKey === '5008da3a-dbcd-49c3-a008-db34c4b0bb39') {
+      chart.name === 'identified_peptides' ||
+      chart.dataSourceKey === '5008da3a-dbcd-49c3-a008-db34c4b0bb39' ||
+      chart.dataSourceKey === 'missed_cleavages' ||
+      chart.dataSourceKey === 'precursors_by_charge') {
       return {
         tickformat: 'd'
       };
@@ -267,8 +219,22 @@ export class DynamicChartComponent implements OnInit {
       : 'Value: %{text}';
 
     return hasCreationDate
-      ? `${valueLabel}<br>Date: %{customdata[1]}<extra>%{x}</extra>`
-      : `${valueLabel}<extra>%{x}</extra>`;
+      ? `${valueLabel}<br>Date: %{customdata[1]}<extra>%{customdata[2]}</extra>`
+      : `${valueLabel}<extra>%{customdata[2]}</extra>`;
+  }
+
+  private getStackedHoverTemplate(
+    chart: ChartConfig,
+    dataPoints: Array<{ creationDate: string | null }>
+  ): string {
+    const hasCreationDate = dataPoints.some(point => point.creationDate);
+    const valueLabel = this.isPercentChart(chart)
+      ? 'Value: %{text}%'
+      : 'Value: %{text}';
+
+    return hasCreationDate
+      ? `${valueLabel}<br>Series: %{fullData.name}<br>Date: %{customdata[1]}<extra>%{customdata[2]}</extra>`
+      : `${valueLabel}<br>Series: %{fullData.name}<extra>%{customdata[2]}</extra>`;
   }
 
   private hasClickableChecksum(
@@ -316,14 +282,22 @@ export class DynamicChartComponent implements OnInit {
     }
 
     const palette = [
-      '#08306b',
-      '#08519c',
-      '#2171b5',
-      '#4292c6',
+      '#1f77b4',
+      '#ff7f0e',
+      '#2ca02c',
       '#6baed6',
+      '#ffbb78',
+      '#98df8a',
+      '#08519c',
+      '#e6550d',
+      '#238b45',
       '#9ecae1',
-      '#c6dbef',
-      '#deebf7'
+      '#fdae6b',
+      '#a1d99b',
+      '#08306b',
+      '#a63603',
+      '#006d2c',
+      '#c6dbef'
     ];
 
     return groups.map(group => {
@@ -335,6 +309,38 @@ export class DynamicChartComponent implements OnInit {
 
       return palette[index];
     });
+  }
+
+  private getStackedSeriesColor(chart: ChartConfig, seriesIndex: number): string | null {
+    const styledStackedCharts = [
+      'secondary_reactions',
+      'polymer_contaminants'
+    ];
+
+    if (styledStackedCharts.indexOf(chart.dataSourceKey) === -1) {
+      return null;
+    }
+
+    const palette = [
+      '#4E79A7',
+      '#F28E2B',
+      '#59A14F',
+      '#E15759',
+      '#76B7B2',
+      '#EDC948',
+      '#B07AA1',
+      '#FF9DA7',
+      '#9C755F',
+      '#BAB0AC',
+      '#86BCB6',
+      '#D37295',
+      '#A0CBE8',
+      '#FFBE7D',
+      '#8CD17D',
+      '#F1CE63'
+    ];
+
+    return palette[seriesIndex % palette.length];
   }
 
   private renderPlotlyChart(
@@ -365,7 +371,6 @@ export class DynamicChartComponent implements OnInit {
     chart: ChartConfig,
     dataPoints: ChartDataPoint[]
   ): void {
-
     const labels = dataPoints.map(point => this.formatLabel(chart, point.label));
 
     const data = [{
@@ -376,7 +381,8 @@ export class DynamicChartComponent implements OnInit {
       },
       customdata: dataPoints.map(point => [
         point.checksum,
-        point.creationDate
+        point.creationDate,
+        point.label
       ]),
       text: dataPoints.map(point =>
         this.hasRenderableValue(point.value)
@@ -416,14 +422,12 @@ export class DynamicChartComponent implements OnInit {
         });
       }
     }
-
   }
 
   renderStackedBarChart(
     chart: ChartConfig,
     dataPoints: ChartSeriesDataPoint[]
   ): void {
-
     let seriesNames = Array.from(
       new Set(dataPoints.map(point => point.series))
     );
@@ -451,10 +455,10 @@ export class DynamicChartComponent implements OnInit {
       )
     );
 
-    const data = seriesNames.map(seriesName => {
+    const data = seriesNames.map((seriesName, seriesIndex) => {
+      const seriesColor = this.getStackedSeriesColor(chart, seriesIndex);
 
       const trace: any = {
-
         x: labels,
 
         y: labels.map(label => {
@@ -477,8 +481,8 @@ export class DynamicChartComponent implements OnInit {
           );
 
           return match && this.hasRenderableValue(match.value)
-            ? [match.checksum, match.creationDate]
-            : ['', ''];
+            ? [match.checksum, match.creationDate, match.label]
+            : ['', '', ''];
         }),
 
         text: labels.map(label => {
@@ -493,19 +497,16 @@ export class DynamicChartComponent implements OnInit {
             : null;
         }),
 
-        hovertemplate: this.getHoverTemplate(chart, dataPoints),
+        hovertemplate: this.getStackedHoverTemplate(chart, dataPoints),
 
         type: 'bar'
       };
-
-      const seriesColor = this.getStackedSeriesColor(chart, seriesName);
 
       if (seriesColor) {
         trace.marker = { color: seriesColor };
       }
 
       return trace;
-
     });
 
     const layout = {
@@ -543,11 +544,9 @@ export class DynamicChartComponent implements OnInit {
         });
       }
     }
-
   }
 
   parseFilename(filename: string): string {
-
     if (!filename) {
       return '';
     }
@@ -560,7 +559,6 @@ export class DynamicChartComponent implements OnInit {
     }
 
     return tokens.slice(2).join('_');
-
   }
 
 }
