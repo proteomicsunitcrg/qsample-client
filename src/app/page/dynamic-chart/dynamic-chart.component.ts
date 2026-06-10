@@ -37,7 +37,8 @@ export class DynamicChartComponent implements OnInit {
     'percentage_propionyl',
     'percentage_pic',
     'missed_cleavages',
-    'precursors_by_charge'
+    'precursors_by_charge',
+    'polymer_contaminants'
   ];
 
   constructor(
@@ -119,7 +120,7 @@ export class DynamicChartComponent implements OnInit {
 
         next: (dataPoints) => {
 
-          if (!dataPoints || dataPoints.length === 0) {
+          if (!dataPoints || !dataPoints.some(point => this.hasRenderableValue(point.value))) {
             this.chartsWithoutData[chart.id] = true;
             return;
           }
@@ -148,10 +149,10 @@ export class DynamicChartComponent implements OnInit {
 
       next: (dataPoints) => {
 
-          if (!dataPoints || dataPoints.length === 0) {
-            this.chartsWithoutData[chart.id] = true;
-            return;
-          }
+        if (!dataPoints || !dataPoints.some(point => this.hasRenderableValue(point.value))) {
+          this.chartsWithoutData[chart.id] = true;
+          return;
+        }
 
         if (chart.chartType === 'bar') {
           this.renderBarChart(chart, dataPoints);
@@ -172,12 +173,40 @@ export class DynamicChartComponent implements OnInit {
   }
 
   private isPercentChart(chart: ChartConfig): boolean {
-    return chart.dataSourceKey === 'secondary_reactions';
+    return chart.dataSourceKey === 'secondary_reactions' ||
+      chart.dataSourceKey === 'polymer_contaminants';
   }
 
   private shouldParseFilename(chart: ChartConfig): boolean {
     return chart.dataSourceKey !== 'secondary_reactions'
       || this.isStackedChart(chart);
+  }
+
+  private getStackedSeriesColor(chart: ChartConfig, seriesName: string): string | null {
+    if (chart.dataSourceKey !== 'polymer_contaminants') {
+      return null;
+    }
+
+    const polymerColors: { [key: string]: string } = {
+      'IGEPAL CA-630 (NP-40)': '#7f3b08',
+      'Tween-80': '#6a3d9a',
+      'Tween-60': '#e31a1c',
+      'Tween-40': '#33a02c',
+      'Tween-20': '#ff7f00',
+      'Polysiloxane': '#1f78b4',
+      'Triton X-101 (Reduced)': '#00a6ca',
+      'Triton X-101': '#b2df8a',
+      'Triton X-100 (Reduced, Na)': '#636363',
+      'Triton X-100 (Na)': '#f781bf',
+      'Triton X-100 (Reduced)': '#a65628',
+      'Triton X-100': '#cab2d6',
+      'PPG': '#fb9a99',
+      'PEG+3H': '#008837',
+      'PEG+2H': '#fdbf6f',
+      'PEG+1H': '#08519c'
+    };
+
+    return polymerColors[seriesName] || null;
   }
 
   private formatLabel(chart: ChartConfig, label: string): string {
@@ -193,22 +222,44 @@ export class DynamicChartComponent implements OnInit {
   private getYAxisLayout(chart: ChartConfig): any {
     if (this.isPercentChart(chart)) {
       return {
-        title: '% PSM',
         ticksuffix: '%',
         tickformat: '.0f'
       };
     }
 
+    if (chart.name === 'identified_protein_groups' ||
+      chart.dataSourceKey === '5008da3a-dbcd-49c3-a008-db34c4b0bb39') {
+      return {
+        tickformat: 'd'
+      };
+    }
+
     return {
-      exponentformat: 'E',
+      exponentformat: 'power',
       showexponent: 'all',
-      tickformat: '.2e'
+      tickformat: '.0e'
     };
+  }
+
+  private hasRenderableValue(value: number): boolean {
+    return Number(value) !== 0;
+  }
+
+  private getRenderableValue(value: number): number | null {
+    return this.hasRenderableValue(value) ? value : null;
+  }
+
+  private formatHoverValue(chart: ChartConfig, value: number): string {
+    if (this.isPercentChart(chart)) {
+      return value.toFixed(2);
+    }
+
+    return `${value}`;
   }
 
   private getHoverTemplate(
     chart: ChartConfig,
-    dataPoints: ChartDataPoint[]
+    dataPoints: Array<{ creationDate: string | null }>
   ): string {
     const hasCreationDate = dataPoints.some(point => point.creationDate);
     const valueLabel = this.isPercentChart(chart)
@@ -216,22 +267,14 @@ export class DynamicChartComponent implements OnInit {
       : 'Value: %{text}';
 
     return hasCreationDate
-      ? `${valueLabel}<br>Date: %{customdata[1]}<extra></extra>`
-      : `${valueLabel}<extra></extra>`;
+      ? `${valueLabel}<br>Date: %{customdata[1]}<extra>%{x}</extra>`
+      : `${valueLabel}<extra>%{x}</extra>`;
   }
 
   private hasClickableChecksum(
     dataPoints: Array<{ checksum: string }>
   ): boolean {
     return dataPoints.some(point => !!point.checksum);
-  }
-
-  private formatHoverValue(chart: ChartConfig, value: number): string {
-    if (this.isPercentChart(chart)) {
-      return `${value.toFixed(2)}%`;
-    }
-
-    return `${value}`;
   }
 
   private isProteinGroupsChart(chart: ChartConfig): boolean {
@@ -327,7 +370,7 @@ export class DynamicChartComponent implements OnInit {
 
     const data = [{
       x: labels,
-      y: dataPoints.map(point => point.value),
+      y: dataPoints.map(point => this.getRenderableValue(point.value)),
       marker: {
         color: this.getProteinGroupBarColors(chart, labels)
       },
@@ -335,13 +378,18 @@ export class DynamicChartComponent implements OnInit {
         point.checksum,
         point.creationDate
       ]),
-      text: dataPoints.map(point => point.value),
+      text: dataPoints.map(point =>
+        this.hasRenderableValue(point.value)
+          ? this.formatHoverValue(chart, point.value)
+          : null
+      ),
       hovertemplate: this.getHoverTemplate(chart, dataPoints),
       type: 'bar'
     }];
 
     const layout = {
       autosize: true,
+      hovermode: 'closest',
       yaxis: this.getYAxisLayout(chart),
       height: chart.parameters && chart.parameters.height
         ? chart.parameters.height
@@ -381,16 +429,21 @@ export class DynamicChartComponent implements OnInit {
     );
 
     if (chart.dataSourceKey === 'missed_cleavages') {
-      seriesNames = seriesNames
-        .filter(series => series === '0' || series === '1')
-        .sort((a, b) => Number(b) - Number(a));
+      seriesNames = ['2', '1', '0']
+        .filter(series => seriesNames.includes(series));
     }
 
     if (chart.dataSourceKey === 'precursors_by_charge') {
-      seriesNames = seriesNames
-        .filter(series => series === '+2' || series === '+3' || series === '+4')
-        .sort((a, b) => Number(b.replace('+', '')) - Number(a.replace('+', '')));
+      seriesNames = ['+4', '+3', '+2']
+        .filter(series => seriesNames.includes(series));
     }
+
+    seriesNames = seriesNames.filter(seriesName =>
+      dataPoints.some(point =>
+        point.series === seriesName &&
+        this.hasRenderableValue(point.value)
+      )
+    );
 
     const labels = Array.from(
       new Set(
@@ -400,7 +453,7 @@ export class DynamicChartComponent implements OnInit {
 
     const data = seriesNames.map(seriesName => {
 
-      return {
+      const trace: any = {
 
         x: labels,
 
@@ -411,7 +464,7 @@ export class DynamicChartComponent implements OnInit {
               point.series === seriesName
           );
 
-          return match ? match.value : 0;
+          return match ? this.getRenderableValue(match.value) : null;
         }),
 
         name: seriesName,
@@ -423,7 +476,7 @@ export class DynamicChartComponent implements OnInit {
               point.series === seriesName
           );
 
-          return match
+          return match && this.hasRenderableValue(match.value)
             ? [match.checksum, match.creationDate]
             : ['', ''];
         }),
@@ -435,27 +488,30 @@ export class DynamicChartComponent implements OnInit {
               point.series === seriesName
           );
 
-          if (!match) {
-            return '';
-          }
-
-          const value = this.formatHoverValue(chart, match.value);
-
-          return match.creationDate
-            ? `Value: ${value}<br>Date: ${match.creationDate}`
-            : `Value: ${value}`;
+          return match && this.hasRenderableValue(match.value)
+            ? this.formatHoverValue(chart, match.value)
+            : null;
         }),
 
-        hoverinfo: 'text',
+        hovertemplate: this.getHoverTemplate(chart, dataPoints),
 
         type: 'bar'
       };
+
+      const seriesColor = this.getStackedSeriesColor(chart, seriesName);
+
+      if (seriesColor) {
+        trace.marker = { color: seriesColor };
+      }
+
+      return trace;
 
     });
 
     const layout = {
       autosize: true,
       barmode: 'stack',
+      hovermode: 'closest',
       yaxis: this.getYAxisLayout(chart),
       height: chart.parameters && chart.parameters.height
         ? chart.parameters.height
@@ -466,9 +522,14 @@ export class DynamicChartComponent implements OnInit {
       responsive: true
     };
 
+    const plotData = chart.dataSourceKey === 'missed_cleavages' ||
+      chart.dataSourceKey === 'precursors_by_charge'
+      ? [...data].reverse()
+      : data;
+
     this.renderPlotlyChart(
       chart,
-      data,
+      plotData,
       layout,
       config
     );
