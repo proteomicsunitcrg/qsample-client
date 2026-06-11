@@ -244,6 +244,7 @@ export class RequestsListComponent implements OnInit {
         this.dataSource = new MatTableDataSource<MiniRequest>(this.allRequests);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.setSortData();
         this.setFilterPredicate();
         this.resetAllFilters();
         this.sessionStorageService.storeRequests(this.allRequests);
@@ -333,10 +334,12 @@ export class RequestsListComponent implements OnInit {
     }
 
     this.dataSource.sortData = (data: MiniRequest[], sort) => {
+      const direction = sort.direction === 'asc' ? 1 : -1;
+
       return data.sort((a, b) => {
-        if (sort.active === 'hasData') {
+        if (sort.active === 'hasData' || !sort.active || sort.direction === '') {
           if (a.hasData !== b.hasData) {
-            return a.hasData ? -1 : 1;
+            return (a.hasData ? 1 : -1) * direction;
           }
 
           const dateA = new Date(a.creationDate).getTime();
@@ -345,7 +348,31 @@ export class RequestsListComponent implements OnInit {
           return dateB - dateA;
         }
 
-        return 0;
+        if (sort.active === 'creationDate') {
+          const dateA = new Date(a.creationDate).getTime();
+          const dateB = new Date(b.creationDate).getTime();
+
+          return (dateA - dateB) * direction;
+        }
+
+        const valueA = sort.active === 'code' ? a.lastField : a[sort.active];
+        const valueB = sort.active === 'code' ? b.lastField : b[sort.active];
+
+        const textA = valueA ? valueA.toString().toLowerCase() : '';
+        const textB = valueB ? valueB.toString().toLowerCase() : '';
+
+        if (textA < textB) {
+          return -1 * direction;
+        }
+
+        if (textA > textB) {
+          return 1 * direction;
+        }
+
+        const dateA = new Date(a.creationDate).getTime();
+        const dateB = new Date(b.creationDate).getTime();
+
+        return dateB - dateA;
       });
     };
   }
