@@ -37,6 +37,21 @@ export interface ApplicationChartConfigSave {
   orderIndex: number;
 }
 
+export interface WetlabPlotConfig {
+  id: number;
+  wetlabId: number;
+  plotId: number;
+  plotName: string;
+  enabled: boolean;
+  orderIndex: number;
+}
+
+export interface WetlabPlotConfigSave {
+  plotId: number;
+  enabled: boolean;
+  orderIndex: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -93,6 +108,33 @@ export class ChartService {
   ): Observable<ApplicationChartConfig[]> {
     return this.http.post<ApplicationChartConfig[]>(
       `${this.apiUrl}/application-config/${applicationId}`,
+      configs
+    );
+  }
+
+  getWetlabPlotConfig(
+    wetlabId: number
+  ): Observable<WetlabPlotConfig[]> {
+    return this.http.get<WetlabPlotConfig[]>(
+      `${this.apiUrl}/wetlab-config/${wetlabId}`
+    );
+  }
+
+  initializeWetlabPlotConfig(
+    wetlabId: number
+  ): Observable<WetlabPlotConfig[]> {
+    return this.http.post<WetlabPlotConfig[]>(
+      `${this.apiUrl}/wetlab-config/${wetlabId}/initialize`,
+      {}
+    );
+  }
+
+  saveWetlabPlotConfig(
+    wetlabId: number,
+    configs: WetlabPlotConfigSave[]
+  ): Observable<WetlabPlotConfig[]> {
+    return this.http.post<WetlabPlotConfig[]>(
+      `${this.apiUrl}/wetlab-config/${wetlabId}`,
       configs
     );
   }
