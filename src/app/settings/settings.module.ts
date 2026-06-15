@@ -33,6 +33,7 @@ import { InjectionConditionsQCDialogComponent } from './system/settings-qgenerat
 import { SettingsLocalRequestComponent } from './local/settings-local-request/settings-local-request.component';
 import { SettingsLocalRequestCreatorComponent } from './local/settings-local-request-creator/settings-local-request-creator.component';
 import { ApplicationChartEditorComponent } from './qsample-charts/application-chart-editor/application-chart-editor.component';
+import { WetlabChartEditorComponent } from './qsample-charts/wetlab-chart-editor/wetlab-chart-editor.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { ApplicationChartEditorComponent } from './qsample-charts/application-ch
     SettingsLocalRequestCreatorComponent,
     SettingsQsampleChartsComponent,
     ApplicationChartEditorComponent,
+    WetlabChartEditorComponent,
   ],
   imports: [
     FlexLayoutModule,

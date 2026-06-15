@@ -5,9 +5,9 @@
     </mat-card-title>
 
     <mat-card-content>
-      <p>Select an application to configure its visible charts and order.</p>
+      <p>Applications</p>
 
-      <table style="width: 100%;" mat-table [dataSource]="dataSource">
+      <table style="width: 100%;" mat-table [dataSource]="applicationDataSource">
 
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef> Application </th>
@@ -18,6 +18,36 @@
           <th mat-header-cell *matHeaderCellDef> Action </th>
           <td mat-cell *matCellDef="let application">
             <button mat-raised-button color="primary" (click)="editCharts(application)">
+              Edit charts
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card style="margin-top: 20px;">
+    <mat-card-title>
+      Sample preparation QC chart settings
+    </mat-card-title>
+
+    <mat-card-content>
+      <p>WetLab QC types</p>
+
+      <table style="width: 100%;" mat-table [dataSource]="wetlabDataSource">
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> WetLab </th>
+          <td mat-cell *matCellDef="let wetlab"> {{wetlab.name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef> Action </th>
+          <td mat-cell *matCellDef="let wetlab">
+            <button mat-raised-button color="primary" (click)="editWetlabCharts(wetlab)">
               Edit charts
             </button>
           </td>

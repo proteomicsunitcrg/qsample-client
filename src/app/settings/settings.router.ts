@@ -19,6 +19,7 @@ import { SettingsLocalRequestComponent } from './local/settings-local-request/se
 import { SettingsLocalRequestCreatorComponent } from './local/settings-local-request-creator/settings-local-request-creator.component';
 import { SettingsQsampleChartsComponent } from './qsample-charts/settings-qsample-charts.component';
 import { ApplicationChartEditorComponent } from './qsample-charts/application-chart-editor/application-chart-editor.component';
+import { WetlabChartEditorComponent } from './qsample-charts/wetlab-chart-editor/wetlab-chart-editor.component';
 
 const routes: Routes = [
   {
@@ -37,6 +38,7 @@ const routes: Routes = [
       { path: 'local/request/editor/:id', component: SettingsLocalRequestCreatorComponent },
       { path: 'qsample/charts', component: SettingsQsampleChartsComponent },
       { path: 'qsample/charts/application/:id', component: ApplicationChartEditorComponent },
+      { path: 'qsample/charts/wetlab/:id', component: WetlabChartEditorComponent },
     ]
   },
 ];
