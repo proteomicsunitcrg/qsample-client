@@ -31,6 +31,77 @@ export interface ApplicationChartConfig {
   orderIndex: number;
 }
 
+export interface ChartDefinition {
+  id: number;
+  name: string;
+  title: string;
+  description: string;
+  chartType: string;
+  library: string;
+  dataSourceKey: string;
+  active: boolean;
+}
+
+export interface ChartParameter {
+  key: string;
+  value: string;
+  type: string;
+  description?: string;
+}
+
+export interface ChartDefinitionDetail extends ChartDefinition {
+  parameters: ChartParameter[];
+}
+
+export interface ChartParameterSave {
+  key: string;
+  value: string;
+  type: string;
+  description?: string;
+}
+
+export interface ChartDefinitionSave {
+  name: string;
+  title: string;
+  description: string;
+  chartType: string;
+  library: string;
+  dataSourceKey: string;
+  active: boolean;
+  parameters: ChartParameterSave[];
+}
+
+export interface ChartDataSourceContext {
+  id: number;
+  name: string;
+  abbreviated: string;
+}
+
+export interface ChartDataSource {
+  id: number;
+  name: string;
+  apiKey: string;
+  paramId: number;
+  paramName: string;
+  contextSources: ChartDataSourceContext[];
+}
+
+export interface ChartDataSourceOption {
+  id: number;
+  name: string;
+}
+
+export interface ChartDataSourceOptions {
+  params: ChartDataSourceOption[];
+  contextSources: ChartDataSourceContext[];
+}
+
+export interface ChartDataSourceSave {
+  name: string;
+  paramId: number;
+  contextSourceIds: number[];
+}
+
 export interface ApplicationChartConfigSave {
   chartId: number;
   enabled: boolean;
@@ -64,6 +135,72 @@ export class ChartService {
   getChartsByPage(pageName: string): Observable<ChartConfig[]> {
     return this.http.get<ChartConfig[]>(
       `${this.apiUrl}/page/${pageName}`
+    );
+  }
+
+  createChart(chart: ChartDefinitionSave): Observable<ChartDefinition> {
+    return this.http.post<ChartDefinition>(
+      this.apiUrl,
+      chart
+    );
+  }
+
+  getChart(chartId: number): Observable<ChartDefinitionDetail> {
+    return this.http.get<ChartDefinitionDetail>(
+      `${this.apiUrl}/${chartId}`
+    );
+  }
+
+  updateChart(
+    chartId: number,
+    chart: ChartDefinitionSave
+  ): Observable<ChartDefinitionDetail> {
+    return this.http.put<ChartDefinitionDetail>(
+      `${this.apiUrl}/${chartId}`,
+      chart
+    );
+  }
+
+  deleteChart(chartId: number): Observable<void> {
+    return this.http.delete<void>(
+      `${this.apiUrl}/${chartId}`
+    );
+  }
+
+  getChartDataSources(): Observable<ChartDataSource[]> {
+    return this.http.get<ChartDataSource[]>(
+      `${this.apiUrl}/data-sources`
+    );
+  }
+
+  getChartDataSource(dataSourceId: number): Observable<ChartDataSource> {
+    return this.http.get<ChartDataSource>(
+      `${this.apiUrl}/data-sources/${dataSourceId}`
+    );
+  }
+
+  getChartDataSourceOptions(): Observable<ChartDataSourceOptions> {
+    return this.http.get<ChartDataSourceOptions>(
+      `${this.apiUrl}/data-source-options`
+    );
+  }
+
+  createChartDataSource(
+    dataSource: ChartDataSourceSave
+  ): Observable<ChartDataSource> {
+    return this.http.post<ChartDataSource>(
+      `${this.apiUrl}/data-sources`,
+      dataSource
+    );
+  }
+
+  updateChartDataSource(
+    dataSourceId: number,
+    dataSource: ChartDataSourceSave
+  ): Observable<ChartDataSource> {
+    return this.http.put<ChartDataSource>(
+      `${this.apiUrl}/data-sources/${dataSourceId}`,
+      dataSource
     );
   }
 
