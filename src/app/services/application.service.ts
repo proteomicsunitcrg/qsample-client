@@ -39,11 +39,15 @@ export class ApplicationService {
   }
 
 
-  public getAppMessage(msg: String) {
+  public getAppMessage(msg: string) {
     let output = "";
-    if ( window['env']['messages'].hasOwnProperty(msg) ) {
-      output = window['env']['messages'][msg];
+    const env = (window as any).env;
+    const messages = env && env.messages ? env.messages : null;
+
+    if (messages && Object.prototype.hasOwnProperty.call(messages, msg)) {
+      output = messages[msg];
     }
+
     return output;
   }
 
