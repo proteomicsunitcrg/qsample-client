@@ -184,7 +184,7 @@
 
   <div
     class="requests-offline-state"
-    *ngIf="allRequests && allRequests.length === 0 && !finding && agendoStatus === 'offline'">
+    *ngIf="allRequests && allRequests.length === 0 && !finding && requestLoadError === 'agendo'">
 
     <mat-icon>warning</mat-icon>
 
@@ -192,6 +192,34 @@
       <h3>Requests are temporarily unavailable</h3>
       <p>
         Agendo cannot be reached right now. Please try again later or reduce the date range.
+      </p>
+    </div>
+  </div>
+
+  <div
+    class="requests-offline-state"
+    *ngIf="allRequests && allRequests.length === 0 && !finding && requestLoadError === 'auth'">
+
+    <mat-icon>lock</mat-icon>
+
+    <div>
+      <h3>Session expired or insufficient permissions</h3>
+      <p>
+        QSample could not load requests because your session is no longer valid or your user is not allowed to access this list.
+      </p>
+    </div>
+  </div>
+
+  <div
+    class="requests-offline-state"
+    *ngIf="allRequests && allRequests.length === 0 && !finding && requestLoadError === 'generic'">
+
+    <mat-icon>error_outline</mat-icon>
+
+    <div>
+      <h3>Request loading failed</h3>
+      <p>
+        The backend responded with an unexpected error. Check the server logs for the failing request.
       </p>
     </div>
   </div>
