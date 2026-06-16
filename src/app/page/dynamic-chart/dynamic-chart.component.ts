@@ -90,7 +90,7 @@ export class DynamicChartComponent implements OnInit {
 
     if (this.isStackedChart(chart)) {
       this.chartService.getStackedChartData(
-        chart.dataSourceKey,
+        chart.id,
         this.requestCode,
         this.currentOrder
       ).subscribe({
@@ -113,7 +113,7 @@ export class DynamicChartComponent implements OnInit {
     }
 
     this.chartService.getChartData(
-      chart.dataSourceKey,
+      chart.id,
       this.requestCode,
       this.currentOrder
     ).subscribe({

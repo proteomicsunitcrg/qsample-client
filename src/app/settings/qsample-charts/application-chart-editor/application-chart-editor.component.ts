@@ -44,6 +44,11 @@ export class ApplicationChartEditorComponent implements OnInit {
   columnsToDisplay = ['enabled', 'orderIndex', 'chartTitle', 'actions'];
   dataSourceColumnsToDisplay = ['name', 'param', 'contextSources', 'actions'];
   parameterTypes = ['string', 'number', 'boolean'];
+  chartTypes = ['bar'];
+  chartModes = [
+    { value: 'SIMPLE_BAR', label: 'Simple bar' },
+    { value: 'STACKED_BAR', label: 'Stacked bar' }
+  ];
 
   constructor(
     private activeRoute: ActivatedRoute,
@@ -512,7 +517,8 @@ export class ApplicationChartEditorComponent implements OnInit {
       name: '',
       title: '',
       description: '',
-      chartType: '',
+      chartType: 'bar',
+      chartMode: 'SIMPLE_BAR',
       library: 'plotly',
       dataSourceKey: '',
       active: true,
@@ -548,6 +554,7 @@ export class ApplicationChartEditorComponent implements OnInit {
       title: this.newChart.title.trim(),
       description: this.newChart.description.trim(),
       chartType: this.newChart.chartType.trim(),
+      chartMode: this.normalizeChartMode(this.newChart.chartMode),
       library: this.newChart.library.trim(),
       dataSourceKey: this.newChart.dataSourceKey.trim(),
       parameters: this.newChart.parameters
@@ -590,6 +597,10 @@ export class ApplicationChartEditorComponent implements OnInit {
     return value ? value.trim().toLowerCase() : '';
   }
 
+  private normalizeChartMode(chartMode: string): string {
+    return chartMode === 'STACKED_BAR' ? 'STACKED_BAR' : 'SIMPLE_BAR';
+  }
+
   private sameNumberArray(left: number[], right: number[]): boolean {
     if (left.length !== right.length) {
       return false;
@@ -610,6 +621,7 @@ export class ApplicationChartEditorComponent implements OnInit {
       title: chart.title,
       description: chart.description || '',
       chartType: chart.chartType,
+      chartMode: this.normalizeChartMode(chart.chartMode),
       library: chart.library,
       dataSourceKey: chart.dataSourceKey,
       active: chart.active,

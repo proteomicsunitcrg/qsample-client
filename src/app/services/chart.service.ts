@@ -37,6 +37,7 @@ export interface ChartDefinition {
   title: string;
   description: string;
   chartType: string;
+  chartMode: string;
   library: string;
   dataSourceKey: string;
   active: boolean;
@@ -65,6 +66,7 @@ export interface ChartDefinitionSave {
   title: string;
   description: string;
   chartType: string;
+  chartMode: string;
   library: string;
   dataSourceKey: string;
   active: boolean;
@@ -277,22 +279,22 @@ export class ChartService {
   }
 
   getChartData(
-    dataSourceKey: string,
+    chartId: number,
     requestCode: string,
     order: string
   ): Observable<ChartDataPoint[]> {
     return this.http.get<ChartDataPoint[]>(
-      `${this.apiUrl}/data/${dataSourceKey}/request/${requestCode}?order=${order}`
+      `${this.apiUrl}/data/chart/${chartId}/request/${requestCode}?order=${order}`
     );
   }
 
   getStackedChartData(
-    dataSourceKey: string,
+    chartId: number,
     requestCode: string,
     order: string
   ): Observable<ChartSeriesDataPoint[]> {
     return this.http.get<ChartSeriesDataPoint[]>(
-      `${this.apiUrl}/stacked-data/${dataSourceKey}/request/${requestCode}?order=${order}`
+      `${this.apiUrl}/stacked-data/chart/${chartId}/request/${requestCode}?order=${order}`
     );
   }
 }

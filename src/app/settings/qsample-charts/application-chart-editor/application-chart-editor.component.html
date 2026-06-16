@@ -121,7 +121,20 @@
 
         <mat-form-field appearance="fill" style="min-width: 180px; flex: 1 1 180px;">
           <mat-label>Chart type</mat-label>
-          <input matInput [(ngModel)]="newChart.chartType" name="chartType" placeholder="bar" required>
+          <mat-select [(ngModel)]="newChart.chartType" name="chartType" required>
+            <mat-option *ngFor="let chartType of chartTypes" [value]="chartType">
+              {{chartType}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 200px; flex: 1 1 200px;">
+          <mat-label>Chart mode</mat-label>
+          <mat-select [(ngModel)]="newChart.chartMode" name="chartMode" required>
+            <mat-option *ngFor="let chartMode of chartModes" [value]="chartMode.value">
+              {{chartMode.label}}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="fill" style="min-width: 260px; flex: 2 1 260px;">
