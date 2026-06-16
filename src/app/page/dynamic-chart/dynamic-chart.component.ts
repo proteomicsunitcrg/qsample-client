@@ -30,17 +30,6 @@ export class DynamicChartComponent implements OnInit {
 
   currentOrder = 'filename';
 
-  stackedChartKeys = [
-    'secondary_reactions',
-    'modification_sites',
-    'modified_peptides',
-    'percentage_propionyl',
-    'percentage_pic',
-    'missed_cleavages',
-    'precursors_by_charge',
-    'polymer_contaminants'
-  ];
-
   constructor(
     private chartService: ChartService,
     private plotService: PlotService
@@ -145,7 +134,7 @@ export class DynamicChartComponent implements OnInit {
   }
 
   isStackedChart(chart: ChartConfig): boolean {
-    return this.stackedChartKeys.indexOf(chart.dataSourceKey) !== -1;
+    return chart.chartMode === 'STACKED_BAR';
   }
 
   private isPercentChart(chart: ChartConfig): boolean {

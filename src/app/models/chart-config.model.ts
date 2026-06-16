@@ -6,6 +6,7 @@ export interface ChartConfig {
   chartType: string;
   library: string;
   dataSourceKey: string;
+  chartMode: string;
   active: boolean;
   parameters: { [key: string]: any };
 }
