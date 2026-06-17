@@ -1,1 +1,85 @@
+:host {
+  --qsample-blue: #1143A8;
+  --qsample-blue-dark: #0d347f;
+  --qsample-blue-light: #BEE0FF;
+  --qsample-blue-soft: #eaf5ff;
+  --qsample-blue-border: #8dbdeb;
+  --qsample-text: #1f2a44;
+}
 
+.qsample-button.qsample-button-primary {
+  background-color: var(--qsample-blue) !important;
+  color: #ffffff !important;
+}
+
+.qsample-button.qsample-button-primary:hover:not([disabled]) {
+  background-color: var(--qsample-blue-dark) !important;
+}
+
+.qsample-button.qsample-button-primary[disabled] {
+  background-color: #b8c5dd !important;
+  color: #ffffff !important;
+}
+
+.qsample-button.qsample-button-secondary {
+  border: 1px solid var(--qsample-blue-border) !important;
+  background-color: var(--qsample-blue-soft) !important;
+  color: var(--qsample-blue) !important;
+}
+
+.qsample-button.qsample-button-secondary:hover:not([disabled]) {
+  background-color: var(--qsample-blue-light) !important;
+}
+
+.qsample-link-button,
+.qsample-icon-button {
+  color: var(--qsample-blue) !important;
+}
+
+.qsample-link-button:hover,
+.qsample-icon-button:hover {
+  background-color: var(--qsample-blue-soft) !important;
+}
+
+/* Material highlights scoped to Chart settings */
+:host ::ng-deep .mat-form-field.mat-focused .mat-form-field-label {
+  color: var(--qsample-blue) !important;
+}
+
+:host ::ng-deep .mat-form-field.mat-focused .mat-form-field-ripple {
+  background-color: var(--qsample-blue) !important;
+}
+
+:host ::ng-deep .mat-form-field.mat-focused.mat-primary .mat-select-arrow,
+:host ::ng-deep .mat-primary .mat-option.mat-selected:not(.mat-option-disabled),
+:host ::ng-deep .mat-option.mat-selected:not(.mat-option-disabled) {
+  color: var(--qsample-blue) !important;
+}
+
+:host ::ng-deep .mat-checkbox-checked.mat-primary .mat-checkbox-background,
+:host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background,
+:host ::ng-deep .mat-checkbox-indeterminate.mat-primary .mat-checkbox-background,
+:host ::ng-deep .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+  background-color: var(--qsample-blue) !important;
+}
+
+:host ::ng-deep .mat-checkbox-checked:not(.mat-checkbox-disabled).mat-primary .mat-ripple-element,
+:host ::ng-deep .mat-checkbox-checked:not(.mat-checkbox-disabled).mat-accent .mat-ripple-element {
+  background-color: var(--qsample-blue) !important;
+}
+
+:host ::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+  background-color: var(--qsample-blue) !important;
+}
+
+:host ::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+  background-color: var(--qsample-blue-border) !important;
+}
+
+:host ::ng-deep .mat-ink-bar {
+  background-color: var(--qsample-blue) !important;
+}
+
+:host ::ng-deep .mat-tab-label-active {
+  color: var(--qsample-blue) !important;
+}

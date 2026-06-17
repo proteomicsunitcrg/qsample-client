@@ -9,18 +9,76 @@
         WetLab: <strong>{{wetlab.name}}</strong>
       </p>
 
-      <button mat-raised-button color="primary" (click)="initializePlots()">
+      <button mat-raised-button class="qsample-button qsample-button-primary" (click)="initializePlots()">
         Initialize charts
       </button>
 
-      <button mat-raised-button color="accent" (click)="savePlots()" style="margin-left: 10px;"
+      <button mat-raised-button class="qsample-button qsample-button-primary" (click)="savePlots()" style="margin-left: 10px;"
         [disabled]="plotConfigs.length === 0">
         Save
       </button>
 
-      <button mat-raised-button color="basic" (click)="goBack()" style="margin-left: 10px;">
+      <button mat-raised-button class="qsample-button qsample-button-secondary" (click)="goBack()" style="margin-left: 10px;">
         Go back
       </button>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card style="margin-top: 20px;">
+    <mat-card-title>
+      {{editingPlotId ? 'Edit WetLab data source' : 'Create WetLab data source'}}
+    </mat-card-title>
+
+    <mat-card-content>
+      <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center;">
+        <mat-form-field appearance="fill" style="min-width: 220px; flex: 1 1 220px;">
+          <mat-label>Name</mat-label>
+          <input
+            matInput
+            [(ngModel)]="dataSourceForm.name"
+            name="wetlabDataSourceName"
+            placeholder="Sequence coverage">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 220px; flex: 1 1 220px;">
+          <mat-label>Param</mat-label>
+          <mat-select [(ngModel)]="dataSourceForm.paramId" name="wetlabDataSourceParam">
+            <mat-option *ngFor="let param of dataSourceOptions?.params" [value]="param.id">
+              {{param.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 260px; flex: 2 1 260px;">
+          <mat-label>Context sources</mat-label>
+          <mat-select
+            [(ngModel)]="dataSourceForm.contextSourceIds"
+            name="wetlabDataSourceContextSources"
+            multiple>
+            <mat-option *ngFor="let contextSource of dataSourceOptions?.contextSources" [value]="contextSource.id">
+              {{getContextSourceLabel(contextSource)}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button
+          mat-raised-button
+          class="qsample-button qsample-button-primary"
+          type="button"
+          (click)="saveDataSource()"
+          [disabled]="!canSaveDataSource()">
+          {{editingPlotId ? 'Update data source' : 'Create data source'}}
+        </button>
+
+        <button
+          *ngIf="editingPlotId"
+          mat-button
+          class="qsample-link-button"
+          type="button"
+          (click)="cancelDataSourceEdit()">
+          Cancel
+        </button>
+      </div>
     </mat-card-content>
   </mat-card>
 
@@ -58,14 +116,22 @@
         </ng-container>
 
         <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef> Move </th>
+          <th mat-header-cell *matHeaderCellDef> Actions </th>
           <td mat-cell *matCellDef="let plot; let i = index">
-            <button mat-icon-button (click)="movePlotUp(i)" [disabled]="i === 0">
+            <button mat-icon-button class="qsample-icon-button" (click)="movePlotUp(i)" [disabled]="i === 0">
               <mat-icon>keyboard_arrow_up</mat-icon>
             </button>
 
-            <button mat-icon-button (click)="movePlotDown(i)" [disabled]="i === plotConfigs.length - 1">
+            <button mat-icon-button class="qsample-icon-button" (click)="movePlotDown(i)" [disabled]="i === plotConfigs.length - 1">
               <mat-icon>keyboard_arrow_down</mat-icon>
+            </button>
+
+            <button mat-icon-button class="qsample-icon-button" (click)="editDataSource(plot)" type="button">
+              <mat-icon>edit</mat-icon>
+            </button>
+
+            <button mat-icon-button class="qsample-icon-button" (click)="unlinkDataSource(plot)" type="button">
+              <mat-icon>delete</mat-icon>
             </button>
           </td>
         </ng-container>
