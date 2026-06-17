@@ -212,6 +212,46 @@ export class ChartService {
     );
   }
 
+  linkWetlabDataSource(
+    wetlabId: number,
+    plotId: number
+  ): Observable<WetlabPlotConfig> {
+    return this.http.post<WetlabPlotConfig>(
+      `${this.apiUrl}/wetlabs/${wetlabId}/data-sources/${plotId}`,
+      {}
+    );
+  }
+
+  createWetlabDataSource(
+    wetlabId: number,
+    dataSource: ChartDataSourceSave
+  ): Observable<WetlabPlotConfig> {
+    return this.http.post<WetlabPlotConfig>(
+      `${this.apiUrl}/wetlabs/${wetlabId}/data-sources`,
+      dataSource
+    );
+  }
+
+  updateWetlabDataSource(
+    wetlabId: number,
+    plotId: number,
+    dataSource: ChartDataSourceSave
+  ): Observable<WetlabPlotConfig> {
+    return this.http.put<WetlabPlotConfig>(
+      `${this.apiUrl}/wetlabs/${wetlabId}/data-sources/${plotId}`,
+      dataSource
+    );
+  }
+
+  unlinkWetlabDataSource(
+    wetlabId: number,
+    plotId: number
+  ): Observable<void> {
+    return this.http.delete<void>(
+      `${this.apiUrl}/wetlabs/${wetlabId}/data-sources/${plotId}`
+    );
+  }
+
   getChartsByPageAndRequest(
     pageName: string,
     requestCode: string
