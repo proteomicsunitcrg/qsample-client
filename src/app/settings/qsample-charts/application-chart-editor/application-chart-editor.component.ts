@@ -31,6 +31,7 @@ export class ApplicationChartEditorComponent implements OnInit {
   chartConfigs: ApplicationChartConfig[] = [];
   pageCharts: ChartConfig[] = [];
   dataSources: ChartDataSource[] = [];
+  dataSourcesLoaded = false;
   dataSourceOptions: ChartDataSourceOptions = {
     params: [],
     contextSources: []
@@ -78,9 +79,11 @@ export class ApplicationChartEditorComponent implements OnInit {
     this.chartService.getChartDataSources().subscribe(
       res => {
         this.dataSources = this.sortDataSources(res);
+        this.dataSourcesLoaded = true;
       },
       err => {
         console.error(err);
+        this.dataSourcesLoaded = true;
         this.openSnackBar('Error loading data sources', 'Close');
       }
     );
@@ -435,6 +438,16 @@ export class ApplicationChartEditorComponent implements OnInit {
     }
 
     return `${contextSource.name} (${contextSource.abbreviated})`;
+  }
+
+  public hasLegacyDataSourceSelection(): boolean {
+    return this.dataSourcesLoaded
+      && this.hasValue(this.newChart.dataSourceKey)
+      && !this.dataSources.some(dataSource => dataSource.apiKey === this.newChart.dataSourceKey);
+  }
+
+  public getLegacyDataSourceLabel(): string {
+    return `Legacy/special: ${this.newChart.dataSourceKey}`;
   }
 
   public getDataSourceLabel(dataSource: ChartDataSource): string {

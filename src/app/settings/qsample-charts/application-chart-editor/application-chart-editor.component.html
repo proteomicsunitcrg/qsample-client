@@ -140,10 +140,16 @@
         <mat-form-field appearance="fill" style="min-width: 260px; flex: 2 1 260px;">
           <mat-label>Data source</mat-label>
           <mat-select [(ngModel)]="newChart.dataSourceKey" name="dataSourceKey" required>
+            <mat-option *ngIf="hasLegacyDataSourceSelection()" [value]="newChart.dataSourceKey">
+              {{getLegacyDataSourceLabel()}}
+            </mat-option>
             <mat-option *ngFor="let dataSource of dataSources" [value]="dataSource.apiKey">
               {{getDataSourceLabel(dataSource)}}
             </mat-option>
           </mat-select>
+          <mat-hint *ngIf="hasLegacyDataSourceSelection()">
+            This chart uses a legacy/special backend provider, not a dynamic data source.
+          </mat-hint>
         </mat-form-field>
 
         <mat-form-field appearance="fill" style="min-width: 180px; flex: 1 1 180px;">
