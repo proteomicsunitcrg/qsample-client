@@ -206,6 +206,12 @@ export class ChartService {
     );
   }
 
+  deleteChartDataSource(dataSourceId: number): Observable<void> {
+    return this.http.delete<void>(
+      `${this.apiUrl}/data-sources/${dataSourceId}`
+    );
+  }
+
   getChartsByPageAndRequest(
     pageName: string,
     requestCode: string

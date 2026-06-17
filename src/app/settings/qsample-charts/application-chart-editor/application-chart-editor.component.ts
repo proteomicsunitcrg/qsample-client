@@ -261,6 +261,29 @@ export class ApplicationChartEditorComponent implements OnInit {
     );
   }
 
+  public deleteDataSource(dataSource: ChartDataSource): void {
+    if (!window.confirm(`Delete data source "${dataSource.name}"?`)) {
+      return;
+    }
+
+    this.chartService.deleteChartDataSource(dataSource.id).subscribe(
+      () => {
+        if (this.editingDataSourceId === dataSource.id) {
+          this.cancelDataSourceEdit();
+        }
+
+        this.loadDataSources();
+      },
+      error => {
+        const message = error && error.error && error.error.message
+          ? error.error.message
+          : 'Error deleting data source';
+
+        window.alert(message);
+      }
+    );
+  }
+
   public editDataSource(dataSource: ChartDataSource): void {
     this.editingDataSourceId = dataSource.id;
     this.newDataSource = {
