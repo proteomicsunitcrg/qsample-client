@@ -9,16 +9,16 @@
         Application: <strong>{{application.name}}</strong>
       </p>
 
-      <button mat-raised-button color="primary" (click)="initializeCharts()">
+      <button mat-raised-button class="qsample-button qsample-button-primary" (click)="initializeCharts()">
         Initialize charts
       </button>
 
-      <button mat-raised-button color="accent" (click)="saveCharts()" style="margin-left: 10px;"
+      <button mat-raised-button class="qsample-button qsample-button-primary" (click)="saveCharts()" style="margin-left: 10px;"
         [disabled]="chartConfigs.length === 0">
         Save
       </button>
 
-      <button mat-raised-button color="basic" (click)="goBack()" style="margin-left: 10px;">
+      <button mat-raised-button class="qsample-button qsample-button-secondary" (click)="goBack()" style="margin-left: 10px;">
         Go back
       </button>
     </mat-card-content>
@@ -56,12 +56,12 @@
           </mat-select>
         </mat-form-field>
 
-        <button mat-raised-button color="primary" (click)="saveDataSource()" type="button"
+        <button mat-raised-button class="qsample-button qsample-button-primary" (click)="saveDataSource()" type="button"
           [disabled]="!canSaveDataSource()">
           {{ isCreatingDataSource ? 'Saving...' : (editingDataSourceId ? 'Update data source' : 'Create data source') }}
         </button>
 
-        <button *ngIf="editingDataSourceId" mat-button (click)="cancelDataSourceEdit()" type="button">
+        <button *ngIf="editingDataSourceId" mat-button class="qsample-link-button" (click)="cancelDataSourceEdit()" type="button">
           Cancel
         </button>
 
@@ -90,7 +90,7 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef> Actions </th>
           <td mat-cell *matCellDef="let dataSource">
-            <button mat-icon-button color="primary" (click)="editDataSource(dataSource)" type="button">
+            <button mat-icon-button class="qsample-icon-button" (click)="editDataSource(dataSource)" type="button">
               <mat-icon>edit</mat-icon>
             </button>
           </td>
@@ -215,17 +215,17 @@
           <input matInput [(ngModel)]="parameter.description" [name]="'parameterDescription' + i">
         </mat-form-field>
 
-        <button mat-icon-button color="warn" (click)="removeParameter(i)" type="button">
+        <button mat-icon-button class="qsample-icon-button" (click)="removeParameter(i)" type="button">
           <mat-icon>delete</mat-icon>
         </button>
       </div>
 
       <div style="margin-top: 16px;">
-        <button mat-stroked-button color="primary" (click)="addParameter()" type="button">
+        <button mat-stroked-button class="qsample-button qsample-button-secondary" (click)="addParameter()" type="button">
           Add parameter
         </button>
 
-        <button mat-raised-button color="primary" (click)="createChart()" type="button" style="margin-left: 10px;"
+        <button mat-raised-button class="qsample-button qsample-button-primary" (click)="createChart()" type="button" style="margin-left: 10px;"
           [disabled]="!canCreateChart()">
           {{ editingChartId ? 'Update chart' : 'Create chart' }}
         </button>
@@ -281,11 +281,11 @@
               <mat-icon>keyboard_arrow_down</mat-icon>
             </button>
 
-            <button mat-icon-button color="primary" (click)="editChart(chart.chartId)">
+            <button mat-icon-button class="qsample-icon-button" (click)="editChart(chart.chartId)">
               <mat-icon>edit</mat-icon>
             </button>
 
-            <button mat-icon-button color="warn" (click)="deleteChart(chart)">
+            <button mat-icon-button class="qsample-icon-button" (click)="deleteChart(chart)">
               <mat-icon>delete</mat-icon>
             </button>
           </td>
