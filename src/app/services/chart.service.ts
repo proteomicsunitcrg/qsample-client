@@ -31,6 +31,18 @@ export interface ApplicationChartConfig {
   orderIndex: number;
 }
 
+export interface WetlabChartConfig {
+  id: number;
+  wetlabId: number;
+  chartId: number;
+  chartName: string;
+  chartTitle: string;
+  chartType: string;
+  dataSourceKey: string;
+  enabled: boolean;
+  orderIndex: number;
+}
+
 export interface ChartDefinition {
   id: number;
   name: string;
@@ -105,6 +117,12 @@ export interface ChartDataSourceSave {
 }
 
 export interface ApplicationChartConfigSave {
+  chartId: number;
+  enabled: boolean;
+  orderIndex: number;
+}
+
+export interface WetlabChartConfigSave {
   chartId: number;
   enabled: boolean;
   orderIndex: number;
@@ -293,6 +311,24 @@ export class ChartService {
   ): Observable<ApplicationChartConfig[]> {
     return this.http.post<ApplicationChartConfig[]>(
       `${this.apiUrl}/application-config/${applicationId}`,
+      configs
+    );
+  }
+
+  getWetlabChartConfig(
+    wetlabId: number
+  ): Observable<WetlabChartConfig[]> {
+    return this.http.get<WetlabChartConfig[]>(
+      `${this.apiUrl}/wetlab-chart-config/${wetlabId}`
+    );
+  }
+
+  saveWetlabChartConfig(
+    wetlabId: number,
+    configs: WetlabChartConfigSave[]
+  ): Observable<WetlabChartConfig[]> {
+    return this.http.post<WetlabChartConfig[]>(
+      `${this.apiUrl}/wetlab-chart-config/${wetlabId}`,
       configs
     );
   }

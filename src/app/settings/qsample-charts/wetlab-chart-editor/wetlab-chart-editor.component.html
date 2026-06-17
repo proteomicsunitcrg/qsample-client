@@ -9,12 +9,8 @@
         WetLab: <strong>{{wetlab.name}}</strong>
       </p>
 
-      <button mat-raised-button class="qsample-button qsample-button-primary" (click)="initializePlots()">
-        Initialize charts
-      </button>
-
-      <button mat-raised-button class="qsample-button qsample-button-primary" (click)="savePlots()" style="margin-left: 10px;"
-        [disabled]="plotConfigs.length === 0">
+      <button mat-raised-button class="qsample-button qsample-button-primary" (click)="saveCharts()"
+        [disabled]="chartConfigs.length === 0">
         Save
       </button>
 
@@ -33,17 +29,14 @@
       <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center;">
         <mat-form-field appearance="fill" style="min-width: 220px; flex: 1 1 220px;">
           <mat-label>Name</mat-label>
-          <input
-            matInput
-            [(ngModel)]="dataSourceForm.name"
-            name="wetlabDataSourceName"
-            placeholder="Sequence coverage">
+          <input matInput [(ngModel)]="dataSourceForm.name" name="wetlabDataSourceName" placeholder="Sequence coverage"
+            [disabled]="isCreatingDataSource">
         </mat-form-field>
 
         <mat-form-field appearance="fill" style="min-width: 220px; flex: 1 1 220px;">
           <mat-label>Param</mat-label>
-          <mat-select [(ngModel)]="dataSourceForm.paramId" name="wetlabDataSourceParam">
-            <mat-option *ngFor="let param of dataSourceOptions?.params" [value]="param.id">
+          <mat-select [(ngModel)]="dataSourceForm.paramId" name="wetlabDataSourceParam" [disabled]="isCreatingDataSource">
+            <mat-option *ngFor="let param of dataSourceOptions.params" [value]="param.id">
               {{param.name}}
             </mat-option>
           </mat-select>
@@ -51,31 +44,159 @@
 
         <mat-form-field appearance="fill" style="min-width: 260px; flex: 2 1 260px;">
           <mat-label>Context sources</mat-label>
-          <mat-select
-            [(ngModel)]="dataSourceForm.contextSourceIds"
-            name="wetlabDataSourceContextSources"
-            multiple>
-            <mat-option *ngFor="let contextSource of dataSourceOptions?.contextSources" [value]="contextSource.id">
+          <mat-select [(ngModel)]="dataSourceForm.contextSourceIds" name="wetlabDataSourceContextSources" multiple
+            [disabled]="isCreatingDataSource">
+            <mat-option *ngFor="let contextSource of dataSourceOptions.contextSources" [value]="contextSource.id">
               {{getContextSourceLabel(contextSource)}}
             </mat-option>
           </mat-select>
         </mat-form-field>
 
-        <button
-          mat-raised-button
-          class="qsample-button qsample-button-primary"
-          type="button"
-          (click)="saveDataSource()"
+        <button mat-raised-button class="qsample-button qsample-button-primary" type="button" (click)="saveDataSource()"
           [disabled]="!canSaveDataSource()">
-          {{editingPlotId ? 'Update data source' : 'Create data source'}}
+          {{ isCreatingDataSource ? 'Saving...' : (editingPlotId ? 'Update data source' : 'Create data source') }}
         </button>
 
-        <button
-          *ngIf="editingPlotId"
-          mat-button
-          class="qsample-link-button"
-          type="button"
-          (click)="cancelDataSourceEdit()">
+        <button *ngIf="editingPlotId" mat-button class="qsample-link-button" type="button" (click)="cancelDataSourceEdit()">
+          Cancel
+        </button>
+
+        <div *ngIf="hasBlockingDataSourceDuplicate()" style="flex: 1 1 100%; color: #b71c1c; margin-top: -6px;">
+          This data source already exists. Select it from Data source in the chart form.
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card style="margin-top: 20px;">
+    <mat-card-title>
+      {{ editingChartId ? 'Edit WetLab chart' : 'Create WetLab chart' }}
+    </mat-card-title>
+
+    <mat-card-content>
+      <div style="display: flex; flex-wrap: wrap; gap: 16px;">
+        <mat-form-field appearance="fill" style="min-width: 220px; flex: 1 1 220px;">
+          <mat-label>Name</mat-label>
+          <input matInput [(ngModel)]="newChart.name" name="chartName" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 220px; flex: 1 1 220px;">
+          <mat-label>Title</mat-label>
+          <input matInput [(ngModel)]="newChart.title" name="chartTitle" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 180px; flex: 1 1 180px;">
+          <mat-label>Chart type</mat-label>
+          <mat-select [(ngModel)]="newChart.chartType" name="chartType" required>
+            <mat-option *ngFor="let chartType of chartTypes" [value]="chartType">
+              {{chartType}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 200px; flex: 1 1 200px;">
+          <mat-label>Chart mode</mat-label>
+          <mat-select [(ngModel)]="newChart.chartMode" name="chartMode" required>
+            <mat-option *ngFor="let chartMode of chartModes" [value]="chartMode.value">
+              {{chartMode.label}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 260px; flex: 2 1 260px;">
+          <mat-label>Data source</mat-label>
+          <mat-select [(ngModel)]="newChart.dataSourceKey" name="dataSourceKey" required>
+            <mat-option *ngIf="hasLegacyDataSourceSelection()" [value]="newChart.dataSourceKey">
+              {{getLegacyDataSourceLabel()}}
+            </mat-option>
+            <mat-option *ngFor="let dataSource of dataSources" [value]="dataSource.apiKey">
+              {{getDataSourceLabel(dataSource)}}
+            </mat-option>
+          </mat-select>
+          <mat-hint *ngIf="hasLegacyDataSourceSelection()">
+            This chart uses a legacy/special backend provider, not a dynamic data source.
+          </mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 180px; flex: 1 1 180px;">
+          <mat-label>Library</mat-label>
+          <input matInput [(ngModel)]="newChart.library" name="chartLibrary" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 220px; flex: 1 1 220px;">
+          <mat-label>Y axis format</mat-label>
+          <mat-select [(ngModel)]="newChartYAxisFormat" name="chartYAxisFormat">
+            <mat-option *ngFor="let yAxisFormat of yAxisFormats" [value]="yAxisFormat.value">
+              {{yAxisFormat.label}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 200px; flex: 1 1 200px;">
+          <mat-label>Y axis unit / suffix</mat-label>
+          <input matInput [(ngModel)]="newChartYAxisUnit" name="chartYAxisUnit" placeholder="%, TIC, peptides...">
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="fill" style="width: 100%; margin-top: 8px;">
+        <mat-label>Description</mat-label>
+        <textarea matInput [(ngModel)]="newChart.description" name="chartDescription" rows="3"></textarea>
+      </mat-form-field>
+
+      <div style="margin-top: 8px;">
+        <mat-checkbox [(ngModel)]="newChart.active" name="chartActive">Active</mat-checkbox>
+      </div>
+
+      <div style="margin-top: 20px;">
+        <strong>Parameters</strong>
+      </div>
+
+      <p *ngIf="newChart.parameters.length === 0" style="margin-top: 8px;">
+        No parameters added yet.
+      </p>
+
+      <div *ngFor="let parameter of newChart.parameters; let i = index"
+        style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; margin-top: 12px;">
+        <mat-form-field appearance="fill" style="min-width: 180px; flex: 1 1 180px;">
+          <mat-label>Key</mat-label>
+          <input matInput [(ngModel)]="parameter.key" [name]="'parameterKey' + i">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 180px; flex: 1 1 180px;">
+          <mat-label>Value</mat-label>
+          <input matInput [(ngModel)]="parameter.value" [name]="'parameterValue' + i">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 160px; flex: 1 1 160px;">
+          <mat-label>Type</mat-label>
+          <mat-select [(ngModel)]="parameter.type" [name]="'parameterType' + i">
+            <mat-option *ngFor="let type of parameterTypes" [value]="type">
+              {{type}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 220px; flex: 1 1 220px;">
+          <mat-label>Description</mat-label>
+          <input matInput [(ngModel)]="parameter.description" [name]="'parameterDescription' + i">
+        </mat-form-field>
+
+        <button mat-icon-button class="qsample-icon-button" (click)="removeParameter(i)" type="button">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+
+      <div style="margin-top: 16px;">
+        <button mat-stroked-button class="qsample-button qsample-button-secondary" (click)="addParameter()" type="button">
+          Add parameter
+        </button>
+
+        <button mat-raised-button class="qsample-button qsample-button-primary" (click)="createChart()" type="button" style="margin-left: 10px;"
+          [disabled]="!canCreateChart()">
+          {{ editingChartId ? 'Update chart' : 'Create chart' }}
+        </button>
+
+        <button *ngIf="editingChartId" mat-button class="qsample-link-button" (click)="cancelEdit()" type="button" style="margin-left: 10px;">
           Cancel
         </button>
       </div>
@@ -88,56 +209,55 @@
     </mat-card-title>
 
     <mat-card-content>
-      <p *ngIf="plotConfigs.length === 0">
-        No WetLab chart configuration found. Click <strong>Initialize charts</strong> to create it.
+      <p *ngIf="chartConfigs.length === 0">
+        No chart configuration found yet. Create a chart and save it to assign it to this WetLab.
       </p>
 
-      <table *ngIf="plotConfigs.length > 0" style="width: 100%;" mat-table [dataSource]="plotConfigs">
-
+      <table *ngIf="chartConfigs.length > 0" style="width: 100%;" mat-table [dataSource]="chartConfigs">
         <ng-container matColumnDef="enabled">
           <th mat-header-cell *matHeaderCellDef> Enabled </th>
-          <td mat-cell *matCellDef="let plot">
-            <mat-checkbox [(ngModel)]="plot.enabled"></mat-checkbox>
+          <td mat-cell *matCellDef="let chart">
+            <mat-checkbox [(ngModel)]="chart.enabled"></mat-checkbox>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="orderIndex">
           <th mat-header-cell *matHeaderCellDef> Order </th>
-          <td mat-cell *matCellDef="let plot">
-            {{plot.orderIndex}}
+          <td mat-cell *matCellDef="let chart">
+            {{chart.orderIndex}}
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="plotName">
+        <ng-container matColumnDef="chartTitle">
           <th mat-header-cell *matHeaderCellDef> Chart </th>
-          <td mat-cell *matCellDef="let plot">
-            {{plot.plotName}}
+          <td mat-cell *matCellDef="let chart">
+            {{chart.chartTitle}}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef> Actions </th>
-          <td mat-cell *matCellDef="let plot; let i = index">
-            <button mat-icon-button class="qsample-icon-button" (click)="movePlotUp(i)" [disabled]="i === 0">
+          <td mat-cell *matCellDef="let chart; let i = index">
+            <button mat-icon-button class="qsample-icon-button" (click)="moveChartUp(i)" [disabled]="i === 0">
               <mat-icon>keyboard_arrow_up</mat-icon>
             </button>
 
-            <button mat-icon-button class="qsample-icon-button" (click)="movePlotDown(i)" [disabled]="i === plotConfigs.length - 1">
+            <button mat-icon-button class="qsample-icon-button" (click)="moveChartDown(i)" [disabled]="i === chartConfigs.length - 1">
               <mat-icon>keyboard_arrow_down</mat-icon>
             </button>
 
-            <button mat-icon-button class="qsample-icon-button" (click)="editDataSource(plot)" type="button">
+            <button mat-icon-button class="qsample-icon-button" (click)="editChart(chart.chartId)" type="button">
               <mat-icon>edit</mat-icon>
             </button>
 
-            <button mat-icon-button class="qsample-icon-button" (click)="unlinkDataSource(plot)" type="button">
+            <button mat-icon-button class="qsample-icon-button" (click)="deleteChart(chart)" type="button">
               <mat-icon>delete</mat-icon>
             </button>
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-        <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
+        <tr mat-header-row *matHeaderRowDef="chartColumnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let row; columns: chartColumnsToDisplay"></tr>
       </table>
     </mat-card-content>
   </mat-card>
