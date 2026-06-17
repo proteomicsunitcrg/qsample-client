@@ -50,6 +50,13 @@ export class ApplicationChartEditorComponent implements OnInit {
     { value: 'SIMPLE_BAR', label: 'Simple bar' },
     { value: 'STACKED_BAR', label: 'Stacked bar' }
   ];
+  yAxisFormats = [
+    { value: 'auto', label: 'Auto' },
+    { value: 'normal', label: 'Normal number' },
+    { value: 'scientific', label: 'Scientific notation' }
+  ];
+  newChartYAxisFormat = 'auto';
+  newChartYAxisUnit = '';
 
   constructor(
     private activeRoute: ActivatedRoute,
@@ -570,16 +577,41 @@ export class ApplicationChartEditorComponent implements OnInit {
       chartMode: this.normalizeChartMode(this.newChart.chartMode),
       library: this.newChart.library.trim(),
       dataSourceKey: this.newChart.dataSourceKey.trim(),
-      parameters: this.newChart.parameters
-        .filter(parameter => parameter.key.trim().length > 0)
-        .map(parameter => ({
-          ...parameter,
-          key: parameter.key.trim(),
-          value: parameter.value.trim(),
-          type: parameter.type.trim(),
-          description: parameter.description ? parameter.description.trim() : ''
-        }))
+      parameters: this.buildChartParameters()
     };
+  }
+
+  private buildChartParameters(): ChartParameterSave[] {
+    const parameters = this.newChart.parameters
+      .filter(parameter => parameter.key.trim().length > 0)
+      .filter(parameter => !['yAxisFormat', 'yAxisUnit'].includes(parameter.key.trim()))
+      .map(parameter => ({
+        ...parameter,
+        key: parameter.key.trim(),
+        value: parameter.value.trim(),
+        type: parameter.type.trim(),
+        description: parameter.description ? parameter.description.trim() : ''
+      }));
+
+    if (this.newChartYAxisFormat && this.newChartYAxisFormat !== 'auto') {
+      parameters.push({
+        key: 'yAxisFormat',
+        value: this.newChartYAxisFormat,
+        type: 'string',
+        description: 'Y axis value format'
+      });
+    }
+
+    if (this.hasValue(this.newChartYAxisUnit)) {
+      parameters.push({
+        key: 'yAxisUnit',
+        value: this.newChartYAxisUnit.trim(),
+        type: 'string',
+        description: 'Y axis unit suffix'
+      });
+    }
+
+    return parameters;
   }
 
   private getDuplicateDataSource(): ChartDataSource | null {
@@ -629,6 +661,9 @@ export class ApplicationChartEditorComponent implements OnInit {
   }
 
   private toChartForm(chart: ChartDefinitionDetail): ChartDefinitionSave {
+    this.newChartYAxisFormat = this.normalizeYAxisFormat(this.getChartParameterValue(chart, 'yAxisFormat'));
+    this.newChartYAxisUnit = this.getChartParameterValue(chart, 'yAxisUnit');
+
     return {
       name: chart.name,
       title: chart.title,
@@ -638,13 +673,27 @@ export class ApplicationChartEditorComponent implements OnInit {
       library: chart.library,
       dataSourceKey: chart.dataSourceKey,
       active: chart.active,
-      parameters: (chart.parameters || []).map(parameter => ({
-        key: parameter.key,
-        value: parameter.value || '',
-        type: parameter.type || 'string',
-        description: parameter.description || ''
-      }))
+      parameters: (chart.parameters || [])
+        .filter(parameter => !['yAxisFormat', 'yAxisUnit'].includes(parameter.key))
+        .map(parameter => ({
+          key: parameter.key,
+          value: parameter.value || '',
+          type: parameter.type || 'string',
+          description: parameter.description || ''
+        }))
     };
+  }
+
+  private getChartParameterValue(chart: ChartDefinitionDetail, key: string): string {
+    const parameter = (chart.parameters || []).find(item => item.key === key);
+
+    return parameter && parameter.value ? parameter.value.trim() : '';
+  }
+
+  private normalizeYAxisFormat(value: string): string {
+    return ['normal', 'scientific'].includes(value)
+      ? value
+      : 'auto';
   }
 
   private resetDataSourceForm(): void {
@@ -655,6 +704,8 @@ export class ApplicationChartEditorComponent implements OnInit {
   private resetChartForm(): void {
     this.editingChartId = null;
     this.newChart = this.createEmptyChart();
+    this.newChartYAxisFormat = 'auto';
+    this.newChartYAxisUnit = '';
   }
 
 }

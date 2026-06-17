@@ -158,6 +158,30 @@ export class DynamicChartComponent implements OnInit {
   }
 
   private getYAxisLayout(chart: ChartConfig): any {
+    const yAxisFormat = this.getChartParameter(chart, 'yAxisFormat');
+    const yAxisUnit = this.getChartParameter(chart, 'yAxisUnit');
+    const layout = this.getDefaultYAxisLayout(chart);
+
+    if (yAxisFormat === 'normal') {
+      delete layout.exponentformat;
+      delete layout.showexponent;
+      layout.tickformat = '.0f';
+    }
+
+    if (yAxisFormat === 'scientific') {
+      layout.exponentformat = 'power';
+      layout.showexponent = 'all';
+      layout.tickformat = '.0e';
+    }
+
+    if (yAxisUnit) {
+      layout.ticksuffix = this.formatYAxisSuffix(yAxisUnit);
+    }
+
+    return layout;
+  }
+
+  private getDefaultYAxisLayout(chart: ChartConfig): any {
     if (this.isPercentChart(chart)) {
       return {
         ticksuffix: '%',
@@ -180,6 +204,22 @@ export class DynamicChartComponent implements OnInit {
       showexponent: 'all',
       tickformat: '.0e'
     };
+  }
+
+  private getChartParameter(chart: ChartConfig, key: string): string {
+    if (!chart.parameters || chart.parameters[key] === undefined || chart.parameters[key] === null) {
+      return '';
+    }
+
+    return String(chart.parameters[key]).trim();
+  }
+
+  private formatYAxisSuffix(unit: string): string {
+    const normalizedUnit = unit.trim();
+
+    return normalizedUnit.startsWith('%')
+      ? normalizedUnit
+      : ` ${normalizedUnit}`;
   }
 
   private hasRenderableValue(value: number): boolean {

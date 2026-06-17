@@ -156,6 +156,20 @@
           <mat-label>Library</mat-label>
           <input matInput [(ngModel)]="newChart.library" name="chartLibrary" required>
         </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 220px; flex: 1 1 220px;">
+          <mat-label>Y axis format</mat-label>
+          <mat-select [(ngModel)]="newChartYAxisFormat" name="chartYAxisFormat">
+            <mat-option *ngFor="let yAxisFormat of yAxisFormats" [value]="yAxisFormat.value">
+              {{yAxisFormat.label}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 200px; flex: 1 1 200px;">
+          <mat-label>Y axis unit / suffix</mat-label>
+          <input matInput [(ngModel)]="newChartYAxisUnit" name="chartYAxisUnit" placeholder="%, TIC, peptides...">
+        </mat-form-field>
       </div>
 
       <mat-form-field appearance="fill" style="width: 100%; margin-top: 8px;">
