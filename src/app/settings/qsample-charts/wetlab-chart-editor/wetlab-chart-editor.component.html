@@ -240,7 +240,7 @@
 
         <button mat-raised-button class="qsample-button qsample-button-primary" (click)="createChart()" type="button" style="margin-left: 10px;"
           [disabled]="!canCreateChart()">
-          {{ editingChartId ? 'Update chart' : 'Create chart' }}
+          {{ editingChartId ? 'Update & Save' : 'Create & Save' }}
         </button>
 
         <button *ngIf="editingChartId" mat-button class="qsample-link-button" (click)="cancelEdit()" type="button" style="margin-left: 10px;">

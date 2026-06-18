@@ -177,7 +177,7 @@ export class WetlabChartEditorComponent implements OnInit {
                 }
               : config
           );
-          this.openSnackBar('Chart updated', 'Close');
+          this.openSnackBar('Chart updated. Saving configuration...', 'Close');
         } else {
           this.ensurePageChartIncluded(chart);
           this.chartConfigs = [
@@ -194,9 +194,10 @@ export class WetlabChartEditorComponent implements OnInit {
               orderIndex: this.chartConfigs.length + 1
             }
           ];
-          this.openSnackBar('Chart created. Save to assign it to this WetLab', 'Close');
+          this.openSnackBar('Chart created. Saving configuration...', 'Close');
         }
 
+        this.saveCharts();
         this.resetChartForm();
       },
       err => {
