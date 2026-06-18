@@ -47,6 +47,7 @@ export class WetlabChartEditorComponent implements OnInit {
   newChart: ChartDefinitionSave = this.createEmptyChart();
 
   chartColumnsToDisplay = ['enabled', 'orderIndex', 'chartTitle', 'actions'];
+  dataSourceColumnsToDisplay = ['name', 'param', 'contextSources', 'actions'];
 
   parameterTypes = ['string', 'number', 'boolean'];
   chartTypes = ['bar'];
@@ -258,6 +259,33 @@ export class WetlabChartEditorComponent implements OnInit {
   public cancelDataSourceEdit(): void {
     this.editingPlotId = undefined;
     this.dataSourceForm = this.createEmptyDataSource();
+  }
+
+  public editDataSource(dataSource: ChartDataSource): void {
+    this.editingPlotId = dataSource.id;
+    this.dataSourceForm = {
+      name: dataSource.name,
+      paramId: dataSource.paramId,
+      contextSourceIds: this.getNormalizedContextSourceIds(dataSource.contextSources.map(contextSource => contextSource.id))
+    };
+  }
+
+  public deleteDataSource(dataSource: ChartDataSource): void {
+    if (!confirm(`Delete data source "${dataSource.name}"?`)) {
+      return;
+    }
+
+    this.chartService.deleteChartDataSource(dataSource.id).subscribe(
+      () => {
+        this.cancelDataSourceEdit();
+        this.loadDataSources();
+        this.openSnackBar('Data source deleted', 'Close');
+      },
+      err => {
+        console.error(err);
+        this.openSnackBar('Error deleting data source', 'Close');
+      }
+    );
   }
 
   public editChart(chartId: number): void {

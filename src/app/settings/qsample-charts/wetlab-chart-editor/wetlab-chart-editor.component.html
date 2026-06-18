@@ -65,6 +65,38 @@
           This data source already exists. Select it from Data source in the chart form.
         </div>
       </div>
+
+      <table mat-table [dataSource]="dataSources" style="width: 100%; margin-top: 24px;">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let dataSource">{{dataSource.name}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="param">
+          <th mat-header-cell *matHeaderCellDef>Param</th>
+          <td mat-cell *matCellDef="let dataSource">{{dataSource.paramName}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="contextSources">
+          <th mat-header-cell *matHeaderCellDef>Context sources</th>
+          <td mat-cell *matCellDef="let dataSource">{{getDataSourceContextLabel(dataSource)}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let dataSource">
+            <button mat-icon-button class="qsample-icon-button" (click)="editDataSource(dataSource)" type="button">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button class="qsample-icon-button" (click)="deleteDataSource(dataSource)" type="button">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="dataSourceColumnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let row; columns: dataSourceColumnsToDisplay;"></tr>
+      </table>
     </mat-card-content>
   </mat-card>
 
