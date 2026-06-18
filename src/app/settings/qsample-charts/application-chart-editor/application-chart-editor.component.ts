@@ -185,9 +185,9 @@ export class ApplicationChartEditorComponent implements OnInit {
                 }
               : config
           );
-          this.openSnackBar('Chart updated', 'Close');
+          this.openSnackBar('Chart updated. Saving configuration...', 'Close');
         } else {
-            this.ensurePageChartIncluded(chart);
+          this.ensurePageChartIncluded(chart);
           this.chartConfigs = [
             ...this.chartConfigs,
             {
@@ -202,9 +202,10 @@ export class ApplicationChartEditorComponent implements OnInit {
               orderIndex: this.chartConfigs.length + 1
             }
           ];
-          this.openSnackBar('Chart created. Save to assign it to this application', 'Close');
+          this.openSnackBar('Chart created. Saving configuration...', 'Close');
         }
 
+        this.saveCharts();
         this.resetChartForm();
       },
       err => {
