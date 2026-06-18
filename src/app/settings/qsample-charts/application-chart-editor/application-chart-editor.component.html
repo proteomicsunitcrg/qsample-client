@@ -9,8 +9,8 @@
         Application: <strong>{{application.name}}</strong>
       </p>
 
-      <button mat-raised-button class="qsample-button qsample-button-primary" (click)="initializeCharts()">
-        Initialize charts
+      <button mat-stroked-button class="qsample-button qsample-button-secondary" (click)="initializeCharts()">
+        Reset to default charts
       </button>
 
       <button mat-raised-button class="qsample-button qsample-button-primary" (click)="saveCharts()" style="margin-left: 10px;"
@@ -263,7 +263,7 @@
 
     <mat-card-content>
       <p *ngIf="chartConfigs.length === 0">
-        No chart configuration found yet. Create a chart or click <strong>Initialize charts</strong> to load the active defaults.
+        No chart configuration found yet. Create a chart or click <strong>Reset to default charts</strong> to load the active defaults.
       </p>
 
       <table *ngIf="chartConfigs.length > 0" style="width: 100%;" mat-table [dataSource]="chartConfigs">
