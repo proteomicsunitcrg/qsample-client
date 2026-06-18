@@ -108,14 +108,29 @@
     <mat-card-content>
       <div style="display: flex; flex-wrap: wrap; gap: 16px;">
         <mat-form-field appearance="fill" style="min-width: 220px; flex: 1 1 220px;">
-          <mat-label>Name</mat-label>
-          <input matInput [(ngModel)]="newChart.name" name="chartName" required>
+          <mat-label>Title</mat-label>
+          <input
+            matInput
+            [(ngModel)]="newChart.title"
+            name="chartTitle"
+            required
+            (ngModelChange)="updateGeneratedChartName()">
         </mat-form-field>
 
         <mat-form-field appearance="fill" style="min-width: 220px; flex: 1 1 220px;">
-          <mat-label>Title</mat-label>
-          <input matInput [(ngModel)]="newChart.title" name="chartTitle" required>
+          <mat-label>Generated name</mat-label>
+          <input
+            matInput
+            [ngModel]="newChart.name"
+            name="chartName"
+            readonly>
         </mat-form-field>
+
+        <div
+          *ngIf="hasDuplicateGeneratedChartName()"
+          style="color: #f44336; width: 100%; margin-top: -8px; margin-bottom: 8px;">
+          A chart with this generated name already exists. Please choose a different title.
+        </div>
 
         <mat-form-field appearance="fill" style="min-width: 180px; flex: 1 1 180px;">
           <mat-label>Chart type</mat-label>

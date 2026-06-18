@@ -434,11 +434,14 @@ export class ApplicationChartEditorComponent implements OnInit {
   }
 
   public canCreateChart(): boolean {
+    this.updateGeneratedChartName();
+
     return this.hasValue(this.newChart.name)
       && this.hasValue(this.newChart.title)
       && this.hasValue(this.newChart.chartType)
       && this.hasValue(this.newChart.dataSourceKey)
-      && this.hasValue(this.newChart.library);
+      && this.hasValue(this.newChart.library)
+      && !this.hasDuplicateGeneratedChartName();
   }
 
   public canSaveDataSource(): boolean {
@@ -586,14 +589,43 @@ export class ApplicationChartEditorComponent implements OnInit {
     };
   }
 
+  public updateGeneratedChartName(): void {
+    this.newChart.name = this.generateChartNameFromTitle(this.newChart.title);
+  }
+
+  public hasDuplicateGeneratedChartName(): boolean {
+    const generatedName = this.normalizeValue(this.newChart.name);
+
+    if (!generatedName) {
+      return false;
+    }
+
+    return this.chartConfigs.some(
+      chart => this.normalizeValue(chart.chartName) === generatedName
+        && chart.chartId !== this.editingChartId
+    );
+  }
+
+  private generateChartNameFromTitle(title?: string | null): string {
+    return (title || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '_')
+      .replace(/^_+|_+$/g, '')
+      .replace(/_+/g, '_');
+  }
+
   private hasValue(value: string): boolean {
     return !!value && value.trim().length > 0;
   }
 
   private buildChartPayload(): ChartDefinitionSave {
+    const generatedName = this.generateChartNameFromTitle(this.newChart.title);
+
     return {
       ...this.newChart,
-      name: this.newChart.name.trim(),
+      name: generatedName,
       title: this.newChart.title.trim(),
       description: this.newChart.description.trim(),
       chartType: this.newChart.chartType.trim(),
