@@ -9,18 +9,250 @@
         Application: <strong>{{application.name}}</strong>
       </p>
 
-      <button mat-raised-button color="primary" (click)="initializeCharts()">
-        Initialize charts
+      <button mat-stroked-button class="qsample-button qsample-button-secondary" (click)="initializeCharts()">
+        Reset to default charts
       </button>
 
-      <button mat-raised-button color="accent" (click)="saveCharts()" style="margin-left: 10px;"
+      <button mat-raised-button class="qsample-button qsample-button-primary" (click)="saveCharts()" style="margin-left: 10px;"
         [disabled]="chartConfigs.length === 0">
         Save
       </button>
 
-      <button mat-raised-button color="basic" (click)="goBack()" style="margin-left: 10px;">
+      <button mat-raised-button class="qsample-button qsample-button-secondary" (click)="goBack()" style="margin-left: 10px;">
         Go back
       </button>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card style="margin-top: 20px;">
+    <mat-card-title>
+      {{ editingDataSourceId ? 'Edit data source' : 'Create data source' }}
+    </mat-card-title>
+
+    <mat-card-content>
+      <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center;">
+        <mat-form-field appearance="fill" style="min-width: 220px; flex: 1 1 220px;">
+          <mat-label>Name</mat-label>
+          <input matInput [(ngModel)]="newDataSource.name" name="dataSourceName" placeholder="Sequence coverage"
+            [disabled]="isCreatingDataSource">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 220px; flex: 1 1 220px;">
+          <mat-label>Param</mat-label>
+          <mat-select [(ngModel)]="newDataSource.paramId" name="dataSourceParam" [disabled]="isCreatingDataSource">
+            <mat-option *ngFor="let param of dataSourceOptions.params" [value]="param.id">
+              {{param.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 260px; flex: 2 1 260px;">
+          <mat-label>Context sources</mat-label>
+          <mat-select [(ngModel)]="newDataSource.contextSourceIds" name="dataSourceContextSources" multiple
+            [disabled]="isCreatingDataSource">
+            <mat-option *ngFor="let contextSource of dataSourceOptions.contextSources" [value]="contextSource.id">
+              {{getContextSourceLabel(contextSource)}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-raised-button class="qsample-button qsample-button-primary" (click)="saveDataSource()" type="button"
+          [disabled]="!canSaveDataSource()">
+          {{ isCreatingDataSource ? 'Saving...' : (editingDataSourceId ? 'Update data source' : 'Create data source') }}
+        </button>
+
+        <button *ngIf="editingDataSourceId" mat-button class="qsample-link-button" (click)="cancelDataSourceEdit()" type="button">
+          Cancel
+        </button>
+
+        <div *ngIf="hasBlockingDataSourceDuplicate()"
+          style="flex: 1 1 100%; color: #b71c1c; margin-top: -6px;">
+          This data source already exists. Select it from Data source in the chart form.
+        </div>
+      </div>
+
+      <table *ngIf="dataSources.length > 0" style="width: 100%; margin-top: 16px;" mat-table [dataSource]="dataSources">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Name </th>
+          <td mat-cell *matCellDef="let dataSource"> {{dataSource.name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="param">
+          <th mat-header-cell *matHeaderCellDef> Param </th>
+          <td mat-cell *matCellDef="let dataSource"> {{dataSource.paramName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="contextSources">
+          <th mat-header-cell *matHeaderCellDef> Context sources </th>
+          <td mat-cell *matCellDef="let dataSource"> {{getDataSourceContextLabel(dataSource)}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> Actions </th>
+          <td mat-cell *matCellDef="let dataSource">
+            <button mat-icon-button class="qsample-icon-button" (click)="editDataSource(dataSource)" type="button">
+              <mat-icon>edit</mat-icon>
+            </button>
+
+            <button mat-icon-button class="qsample-icon-button" (click)="deleteDataSource(dataSource)" type="button">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="dataSourceColumnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let row; columns: dataSourceColumnsToDisplay;"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card style="margin-top: 20px;">
+    <mat-card-title>
+      {{ editingChartId ? 'Edit chart' : 'Create chart' }}
+    </mat-card-title>
+
+    <mat-card-content>
+      <div style="display: flex; flex-wrap: wrap; gap: 16px;">
+        <mat-form-field appearance="fill" style="min-width: 220px; flex: 1 1 220px;">
+          <mat-label>Title</mat-label>
+          <input
+            matInput
+            [(ngModel)]="newChart.title"
+            name="chartTitle"
+            required
+            (ngModelChange)="updateGeneratedChartName()">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 220px; flex: 1 1 220px;">
+          <mat-label>Generated name</mat-label>
+          <input
+            matInput
+            [ngModel]="newChart.name"
+            name="chartName"
+            readonly>
+        </mat-form-field>
+
+        <div
+          *ngIf="hasDuplicateGeneratedChartName()"
+          style="color: #f44336; width: 100%; margin-top: -8px; margin-bottom: 8px;">
+          A chart with this generated name already exists. Please choose a different title.
+        </div>
+
+        <mat-form-field appearance="fill" style="min-width: 180px; flex: 1 1 180px;">
+          <mat-label>Chart type</mat-label>
+          <mat-select [(ngModel)]="newChart.chartType" name="chartType" required>
+            <mat-option *ngFor="let chartType of chartTypes" [value]="chartType">
+              {{chartType}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 200px; flex: 1 1 200px;">
+          <mat-label>Chart mode</mat-label>
+          <mat-select [(ngModel)]="newChart.chartMode" name="chartMode" required>
+            <mat-option *ngFor="let chartMode of chartModes" [value]="chartMode.value">
+              {{chartMode.label}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 260px; flex: 2 1 260px;">
+          <mat-label>Data source</mat-label>
+          <mat-select [(ngModel)]="newChart.dataSourceKey" name="dataSourceKey" required>
+            <mat-option *ngIf="hasLegacyDataSourceSelection()" [value]="newChart.dataSourceKey">
+              {{getLegacyDataSourceLabel()}}
+            </mat-option>
+            <mat-option *ngFor="let dataSource of dataSources" [value]="dataSource.apiKey">
+              {{getDataSourceLabel(dataSource)}}
+            </mat-option>
+          </mat-select>
+          <mat-hint *ngIf="hasLegacyDataSourceSelection()">
+            This chart uses a legacy/special backend provider, not a dynamic data source.
+          </mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 180px; flex: 1 1 180px;">
+          <mat-label>Library</mat-label>
+          <input matInput [(ngModel)]="newChart.library" name="chartLibrary" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 220px; flex: 1 1 220px;">
+          <mat-label>Y axis format</mat-label>
+          <mat-select [(ngModel)]="newChartYAxisFormat" name="chartYAxisFormat">
+            <mat-option *ngFor="let yAxisFormat of yAxisFormats" [value]="yAxisFormat.value">
+              {{yAxisFormat.label}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 200px; flex: 1 1 200px;">
+          <mat-label>Y axis unit / suffix</mat-label>
+          <input matInput [(ngModel)]="newChartYAxisUnit" name="chartYAxisUnit" placeholder="%, TIC, peptides...">
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="fill" style="width: 100%; margin-top: 8px;">
+        <mat-label>Description</mat-label>
+        <textarea matInput [(ngModel)]="newChart.description" name="chartDescription" rows="3"></textarea>
+      </mat-form-field>
+
+      <div style="margin-top: 8px;">
+        <mat-checkbox [(ngModel)]="newChart.active" name="chartActive">Active</mat-checkbox>
+      </div>
+
+      <div style="margin-top: 20px;">
+        <strong>Parameters</strong>
+      </div>
+
+      <p *ngIf="newChart.parameters.length === 0" style="margin-top: 8px;">
+        No parameters added yet.
+      </p>
+
+      <div *ngFor="let parameter of newChart.parameters; let i = index"
+        style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; margin-top: 12px;">
+        <mat-form-field appearance="fill" style="min-width: 180px; flex: 1 1 180px;">
+          <mat-label>Key</mat-label>
+          <input matInput [(ngModel)]="parameter.key" [name]="'parameterKey' + i">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 180px; flex: 1 1 180px;">
+          <mat-label>Value</mat-label>
+          <input matInput [(ngModel)]="parameter.value" [name]="'parameterValue' + i">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 160px; flex: 1 1 160px;">
+          <mat-label>Type</mat-label>
+          <mat-select [(ngModel)]="parameter.type" [name]="'parameterType' + i">
+            <mat-option *ngFor="let type of parameterTypes" [value]="type">
+              {{type}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 220px; flex: 1 1 220px;">
+          <mat-label>Description</mat-label>
+          <input matInput [(ngModel)]="parameter.description" [name]="'parameterDescription' + i">
+        </mat-form-field>
+
+        <button mat-icon-button class="qsample-icon-button" (click)="removeParameter(i)" type="button">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+
+      <div style="margin-top: 16px;">
+        <button mat-stroked-button class="qsample-button qsample-button-secondary" (click)="addParameter()" type="button">
+          Add parameter
+        </button>
+
+        <button mat-raised-button class="qsample-button qsample-button-primary" (click)="createChart()" type="button" style="margin-left: 10px;"
+          [disabled]="!canCreateChart()">
+          {{ editingChartId ? 'Update & Save' : 'Create & Save' }}
+        </button>
+
+        <button *ngIf="editingChartId" mat-button (click)="cancelEdit()" type="button" style="margin-left: 10px;">
+          Cancel
+        </button>
+      </div>
     </mat-card-content>
   </mat-card>
 
@@ -31,7 +263,7 @@
 
     <mat-card-content>
       <p *ngIf="chartConfigs.length === 0">
-        No chart configuration found. Click <strong>Initialize charts</strong> to create it.
+        No chart configuration found yet. Create a chart or click <strong>Reset to default charts</strong> to load the active defaults.
       </p>
 
       <table *ngIf="chartConfigs.length > 0" style="width: 100%;" mat-table [dataSource]="chartConfigs">
@@ -58,7 +290,7 @@
         </ng-container>
 
         <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef> Move </th>
+          <th mat-header-cell *matHeaderCellDef> Actions </th>
           <td mat-cell *matCellDef="let chart; let i = index">
             <button mat-icon-button (click)="moveChartUp(i)" [disabled]="i === 0">
               <mat-icon>keyboard_arrow_up</mat-icon>
@@ -66,6 +298,14 @@
 
             <button mat-icon-button (click)="moveChartDown(i)" [disabled]="i === chartConfigs.length - 1">
               <mat-icon>keyboard_arrow_down</mat-icon>
+            </button>
+
+            <button mat-icon-button class="qsample-icon-button" (click)="editChart(chart.chartId)">
+              <mat-icon>edit</mat-icon>
+            </button>
+
+            <button mat-icon-button class="qsample-icon-button" (click)="deleteChart(chart)">
+              <mat-icon>delete</mat-icon>
             </button>
           </td>
         </ng-container>

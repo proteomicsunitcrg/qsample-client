@@ -21,6 +21,7 @@ export class DynamicChartComponent implements OnInit {
   @Input() pageName!: string;
   @Input() requestCode!: string;
   @Input() applicationId!: number;
+  @Input() wetlabId!: number;
 
   charts: ChartConfig[] = [];
   chartsWithoutData: { [key: number]: boolean } = {};
@@ -29,17 +30,6 @@ export class DynamicChartComponent implements OnInit {
   chartDomPrefix = 'dynamicChart';
 
   currentOrder = 'filename';
-
-  stackedChartKeys = [
-    'secondary_reactions',
-    'modification_sites',
-    'modified_peptides',
-    'percentage_propionyl',
-    'percentage_pic',
-    'missed_cleavages',
-    'precursors_by_charge',
-    'polymer_contaminants'
-  ];
 
   constructor(
     private chartService: ChartService,
@@ -61,12 +51,17 @@ export class DynamicChartComponent implements OnInit {
     this.loading = true;
     this.error = null;
 
-    const request$ = this.applicationId
-      ? this.chartService.getChartsByPageAndApplication(
+    const request$ = this.wetlabId
+      ? this.chartService.getChartsByPageAndWetlab(
           this.pageName,
-          this.applicationId
+          this.wetlabId
         )
-      : this.requestCode
+      : this.applicationId
+        ? this.chartService.getChartsByPageAndApplication(
+            this.pageName,
+            this.applicationId
+          )
+        : this.requestCode
         ? this.chartService.getChartsByPageAndRequest(
             this.pageName,
             this.requestCode
@@ -101,7 +96,7 @@ export class DynamicChartComponent implements OnInit {
 
     if (this.isStackedChart(chart)) {
       this.chartService.getStackedChartData(
-        chart.dataSourceKey,
+        chart.id,
         this.requestCode,
         this.currentOrder
       ).subscribe({
@@ -123,11 +118,18 @@ export class DynamicChartComponent implements OnInit {
       return;
     }
 
-    this.chartService.getChartData(
-      chart.dataSourceKey,
-      this.requestCode,
-      this.currentOrder
-    ).subscribe({
+    const data$ = this.wetlabId
+      ? this.chartService.getWetlabChartData(
+          chart.id,
+          this.wetlabId
+        )
+      : this.chartService.getChartData(
+          chart.id,
+          this.requestCode,
+          this.currentOrder
+        );
+
+    data$.subscribe({
       next: (dataPoints) => {
         if (!dataPoints || !dataPoints.some(point => this.hasRenderableValue(point.value))) {
           this.chartsWithoutData[chart.id] = true;
@@ -145,7 +147,7 @@ export class DynamicChartComponent implements OnInit {
   }
 
   isStackedChart(chart: ChartConfig): boolean {
-    return this.stackedChartKeys.indexOf(chart.dataSourceKey) !== -1;
+    return chart.chartMode === 'STACKED_BAR';
   }
 
   private isPercentChart(chart: ChartConfig): boolean {
@@ -169,6 +171,30 @@ export class DynamicChartComponent implements OnInit {
   }
 
   private getYAxisLayout(chart: ChartConfig): any {
+    const yAxisFormat = this.getChartParameter(chart, 'yAxisFormat');
+    const yAxisUnit = this.getChartParameter(chart, 'yAxisUnit');
+    const layout = this.getDefaultYAxisLayout(chart);
+
+    if (yAxisFormat === 'normal') {
+      delete layout.exponentformat;
+      delete layout.showexponent;
+      layout.tickformat = '.0f';
+    }
+
+    if (yAxisFormat === 'scientific') {
+      layout.exponentformat = 'power';
+      layout.showexponent = 'all';
+      layout.tickformat = '.0e';
+    }
+
+    if (yAxisUnit) {
+      layout.ticksuffix = this.formatYAxisSuffix(yAxisUnit);
+    }
+
+    return layout;
+  }
+
+  private getDefaultYAxisLayout(chart: ChartConfig): any {
     if (this.isPercentChart(chart)) {
       return {
         ticksuffix: '%',
@@ -191,6 +217,22 @@ export class DynamicChartComponent implements OnInit {
       showexponent: 'all',
       tickformat: '.0e'
     };
+  }
+
+  private getChartParameter(chart: ChartConfig, key: string): string {
+    if (!chart.parameters || chart.parameters[key] === undefined || chart.parameters[key] === null) {
+      return '';
+    }
+
+    return String(chart.parameters[key]).trim();
+  }
+
+  private formatYAxisSuffix(unit: string): string {
+    const normalizedUnit = unit.trim();
+
+    return normalizedUnit.startsWith('%')
+      ? normalizedUnit
+      : ` ${normalizedUnit}`;
   }
 
   private hasRenderableValue(value: number): boolean {

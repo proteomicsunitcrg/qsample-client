@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { RequestService } from '../../../services/request.service';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
+import { HttpErrorResponse } from '@angular/common/http';
 import { FormControl, FormGroup } from '@angular/forms';
 import { RequestStatus } from '../../../models/RequestStatus';
 import { MatPaginator } from '@angular/material/paginator';
@@ -39,6 +40,7 @@ export class RequestsListComponent implements OnInit {
   isInternal: boolean;
 
   agendoStatus: 'idle' | 'checking' | 'online' | 'offline' = 'idle';
+  requestLoadError: 'none' | 'auth' | 'agendo' | 'generic' = 'none';
 
   columnsToDisplay = ['code', 'hasData', 'type', 'creatorName', 'creationDate', 'status'];
 
@@ -234,6 +236,7 @@ export class RequestsListComponent implements OnInit {
   public getAllRequestsInternal(): void {
     this.finding = true;
     this.agendoStatus = 'checking';
+    this.requestLoadError = 'none';
 
     const datePlusOne = new Date(this.range.controls.end.value);
     datePlusOne.setDate(datePlusOne.getDate() + 1);
@@ -250,6 +253,7 @@ export class RequestsListComponent implements OnInit {
         this.sessionStorageService.storeRequests(this.allRequests);
         this.finding = false;
         this.agendoStatus = 'online';
+        this.requestLoadError = 'none';
       },
       (err) => {
         this.allRequests = [];
@@ -258,7 +262,7 @@ export class RequestsListComponent implements OnInit {
         this.dataSource.sort = this.sort;
         this.setFilterPredicate();
         this.finding = false;
-        this.agendoStatus = 'offline';
+        this.setRequestLoadError(err);
         console.error(err);
       }
     );
@@ -267,6 +271,7 @@ export class RequestsListComponent implements OnInit {
   private getAllRequestsExternal(): void {
     this.finding = true;
     this.agendoStatus = 'checking';
+    this.requestLoadError = 'none';
 
     this.requestService.getAllRequestsExternal().subscribe(
       (res) => {
@@ -278,6 +283,7 @@ export class RequestsListComponent implements OnInit {
         this.resetAllFilters();
         this.finding = false;
         this.agendoStatus = 'online';
+        this.requestLoadError = 'none';
         this.setSortData();
       },
       (err) => {
@@ -287,10 +293,29 @@ export class RequestsListComponent implements OnInit {
         this.dataSource.sort = this.sort;
         this.setFilterPredicate();
         this.finding = false;
-        this.agendoStatus = 'offline';
+        this.setRequestLoadError(err);
         console.error(err);
       }
     );
+  }
+
+  private setRequestLoadError(err: unknown): void {
+    if (err instanceof HttpErrorResponse) {
+      if (err.status === 401 || err.status === 403) {
+        this.requestLoadError = 'auth';
+        this.agendoStatus = 'idle';
+        return;
+      }
+
+      if (err.status === 0 || err.status >= 502) {
+        this.requestLoadError = 'agendo';
+        this.agendoStatus = 'offline';
+        return;
+      }
+    }
+
+    this.requestLoadError = 'generic';
+    this.agendoStatus = 'idle';
   }
 
   private sortRequestsByDataAndDate(requests: MiniRequest[]): MiniRequest[] {
