@@ -288,6 +288,15 @@ export class ChartService {
     );
   }
 
+  getChartsByPageAndWetlab(
+    pageName: string,
+    wetlabId: number
+  ): Observable<ChartConfig[]> {
+    return this.http.get<ChartConfig[]>(
+      `${this.apiUrl}/page/${pageName}/wetlab/${wetlabId}`
+    );
+  }
+
   getApplicationChartConfig(
     applicationId: number
   ): Observable<ApplicationChartConfig[]> {
@@ -367,6 +376,15 @@ export class ChartService {
   ): Observable<ChartDataPoint[]> {
     return this.http.get<ChartDataPoint[]>(
       `${this.apiUrl}/data/chart/${chartId}/request/${requestCode}?order=${order}`
+    );
+  }
+
+  getWetlabChartData(
+    chartId: number,
+    wetlabId: number
+  ): Observable<ChartDataPoint[]> {
+    return this.http.get<ChartDataPoint[]>(
+      `${this.apiUrl}/data/chart/${chartId}/wetlab/${wetlabId}`
     );
   }
 

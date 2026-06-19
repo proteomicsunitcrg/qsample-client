@@ -5,9 +5,10 @@ import { RequestsListComponent } from './page/requests/requests-list/requests-li
 import { AngularMaterialModule } from './angular-material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { DynamicChartComponent } from './page/dynamic-chart/dynamic-chart.component';
 @NgModule({
   imports: [CommonModule, AngularMaterialModule, FormsModule, ReactiveFormsModule, FlexLayoutModule],
-  declarations: [WetlabPlotComponent, RequestsListComponent],
-  exports: [WetlabPlotComponent, RequestsListComponent]
+  declarations: [WetlabPlotComponent, RequestsListComponent, DynamicChartComponent],
+  exports: [WetlabPlotComponent, RequestsListComponent, DynamicChartComponent]
 })
 export class SharedModule { }

@@ -13,12 +13,11 @@
     </div>
 
     <div class="wetlab-charts-panel">
-      <ng-container *ngFor="let plot of wetlab.plot">
-        <app-wetlab-plot
-          [plot]="plot"
-          [wetlab]="wetlab">
-        </app-wetlab-plot>
-      </ng-container>
+      <app-dynamic-chart
+        *ngIf="wetlab && wetlab.id"
+        pageName="request_details"
+        [wetlabId]="wetlab.id">
+      </app-dynamic-chart>
     </div>
 
   </div>

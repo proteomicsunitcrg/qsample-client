@@ -21,6 +21,7 @@ export class DynamicChartComponent implements OnInit {
   @Input() pageName!: string;
   @Input() requestCode!: string;
   @Input() applicationId!: number;
+  @Input() wetlabId!: number;
 
   charts: ChartConfig[] = [];
   chartsWithoutData: { [key: number]: boolean } = {};
@@ -50,12 +51,17 @@ export class DynamicChartComponent implements OnInit {
     this.loading = true;
     this.error = null;
 
-    const request$ = this.applicationId
-      ? this.chartService.getChartsByPageAndApplication(
+    const request$ = this.wetlabId
+      ? this.chartService.getChartsByPageAndWetlab(
           this.pageName,
-          this.applicationId
+          this.wetlabId
         )
-      : this.requestCode
+      : this.applicationId
+        ? this.chartService.getChartsByPageAndApplication(
+            this.pageName,
+            this.applicationId
+          )
+        : this.requestCode
         ? this.chartService.getChartsByPageAndRequest(
             this.pageName,
             this.requestCode
@@ -112,11 +118,18 @@ export class DynamicChartComponent implements OnInit {
       return;
     }
 
-    this.chartService.getChartData(
-      chart.id,
-      this.requestCode,
-      this.currentOrder
-    ).subscribe({
+    const data$ = this.wetlabId
+      ? this.chartService.getWetlabChartData(
+          chart.id,
+          this.wetlabId
+        )
+      : this.chartService.getChartData(
+          chart.id,
+          this.requestCode,
+          this.currentOrder
+        );
+
+    data$.subscribe({
       next: (dataPoints) => {
         if (!dataPoints || !dataPoints.some(point => this.hasRenderableValue(point.value))) {
           this.chartsWithoutData[chart.id] = true;

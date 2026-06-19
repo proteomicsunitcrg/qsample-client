@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { map } from 'rxjs/operators';
 
 import { WetLab } from '../../../models/WetLab';
 import { ChartConfig } from '../../../models/chart-config.model';
@@ -232,8 +233,8 @@ export class WetlabChartEditorComponent implements OnInit {
     };
 
     const action$ = this.editingPlotId
-      ? this.chartService.updateWetlabDataSource(this.wetlabId, this.editingPlotId, dataSource)
-      : this.chartService.createWetlabDataSource(this.wetlabId, dataSource);
+      ? this.chartService.updateChartDataSource(this.editingPlotId, dataSource).pipe(map(() => undefined))
+      : this.chartService.createWetlabDataSource(this.wetlabId, dataSource).pipe(map(() => undefined));
 
     action$.subscribe(
       () => {
