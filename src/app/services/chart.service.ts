@@ -9,6 +9,8 @@ export interface ChartDataPoint {
   value: number;
   checksum: string;
   creationDate: string;
+  std?: number;
+  replicateFiles?: string[];
 }
 
 export interface ChartSeriesDataPoint {
@@ -381,10 +383,16 @@ export class ChartService {
 
   getWetlabChartData(
     chartId: number,
-    wetlabId: number
+    wetlabId: number,
+    startDate?: String,
+    endDate?: String
   ): Observable<ChartDataPoint[]> {
+    const suffix = startDate && endDate
+      ? `?startDate=${encodeURIComponent(String(startDate))}&endDate=${encodeURIComponent(String(endDate))}`
+      : '';
+
     return this.http.get<ChartDataPoint[]>(
-      `${this.apiUrl}/data/chart/${chartId}/wetlab/${wetlabId}`
+      `${this.apiUrl}/data/chart/${chartId}/wetlab/${wetlabId}${suffix}`
     );
   }
 

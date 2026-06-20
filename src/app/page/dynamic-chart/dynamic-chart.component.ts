@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { PlotService } from '../../services/plot.service';
+import { DataService } from '../../services/data.service';
 
 import {
   ChartService,
@@ -30,11 +31,20 @@ export class DynamicChartComponent implements OnInit {
   chartDomPrefix = 'dynamicChart';
 
   currentOrder = 'filename';
+  wetlabStartDate: string = this.getOneYearAgoDate();
+  wetlabEndDate: string = new Date().toISOString();
 
   constructor(
     private chartService: ChartService,
-    private plotService: PlotService
+    private plotService: PlotService,
+    private dataService: DataService
   ) { }
+
+  private getOneYearAgoDate(): string {
+    const date = new Date();
+    date.setFullYear(date.getFullYear() - 1);
+    return date.toISOString();
+  }
 
   ngOnInit(): void {
     this.plotService.selectedOrder.subscribe(order => {
@@ -45,6 +55,14 @@ export class DynamicChartComponent implements OnInit {
 
       this.loadCharts();
     });
+
+    if (this.wetlabId) {
+      this.dataService.selectedDates$.subscribe(dates => {
+        this.wetlabStartDate = String(dates[0]);
+        this.wetlabEndDate = String(dates[1]);
+        this.loadCharts();
+      });
+    }
   }
 
   loadCharts(): void {
@@ -94,7 +112,7 @@ export class DynamicChartComponent implements OnInit {
       return;
     }
 
-    if (this.isStackedChart(chart)) {
+    if (this.isStackedChart(chart) && !this.wetlabId) {
       this.chartService.getStackedChartData(
         chart.id,
         this.requestCode,
@@ -121,7 +139,9 @@ export class DynamicChartComponent implements OnInit {
     const data$ = this.wetlabId
       ? this.chartService.getWetlabChartData(
           chart.id,
-          this.wetlabId
+          this.wetlabId,
+          this.wetlabStartDate,
+          this.wetlabEndDate
         )
       : this.chartService.getChartData(
           chart.id,
@@ -244,11 +264,7 @@ export class DynamicChartComponent implements OnInit {
   }
 
   private formatHoverValue(chart: ChartConfig, value: number): string {
-    if (this.isPercentChart(chart)) {
-      return value.toFixed(2);
-    }
-
-    return `${value}`;
+    return Number(value).toFixed(2);
   }
 
   private getHoverTemplate(
@@ -261,8 +277,8 @@ export class DynamicChartComponent implements OnInit {
       : 'Value: %{text}';
 
     return hasCreationDate
-      ? `${valueLabel}<br>Date: %{customdata[1]}<extra>%{customdata[2]}</extra>`
-      : `${valueLabel}<extra>%{customdata[2]}</extra>`;
+      ? `${valueLabel}<br>Date: %{customdata[1]}<br>%{customdata[3]}<extra>%{customdata[2]}</extra>`
+      : `${valueLabel}<br>%{customdata[3]}<extra>%{customdata[2]}</extra>`;
   }
 
   private getStackedHoverTemplate(
@@ -421,10 +437,21 @@ export class DynamicChartComponent implements OnInit {
       marker: {
         color: this.getProteinGroupBarColors(chart, labels)
       },
+      error_y: {
+        type: 'data',
+        array: dataPoints.map(point => point.std || 0),
+        visible: dataPoints.some(point => !!point.std),
+        color: '#d62728',
+        thickness: 2,
+        width: 4
+      },
       customdata: dataPoints.map(point => [
         point.checksum,
         point.creationDate,
-        point.label
+        point.label,
+        point.replicateFiles && point.replicateFiles.length
+          ? point.replicateFiles.join('<br>')
+          : ''
       ]),
       text: dataPoints.map(point =>
         this.hasRenderableValue(point.value)
@@ -438,6 +465,11 @@ export class DynamicChartComponent implements OnInit {
     const layout = {
       autosize: true,
       hovermode: 'closest',
+      xaxis: {
+        type: 'category',
+        categoryorder: 'array',
+        categoryarray: labels
+      },
       yaxis: this.getYAxisLayout(chart),
       height: chart.parameters && chart.parameters.height
         ? chart.parameters.height
