@@ -324,11 +324,16 @@ export class RequestsListComponent implements OnInit {
         return a.hasData ? -1 : 1;
       }
 
-      const dateA = new Date(a.creationDate).getTime();
-      const dateB = new Date(b.creationDate).getTime();
+      const dateA = this.getRequestSortDate(a);
+      const dateB = this.getRequestSortDate(b);
 
       return dateB - dateA;
     });
+  }
+
+  private getRequestSortDate(request: MiniRequest): number {
+    const date = request.lastProcessedFileDate || request.creationDate;
+    return new Date(date).getTime();
   }
 
   public getAllCheckBoxChange(): void {
@@ -367,8 +372,8 @@ export class RequestsListComponent implements OnInit {
             return (a.hasData ? 1 : -1) * direction;
           }
 
-          const dateA = new Date(a.creationDate).getTime();
-          const dateB = new Date(b.creationDate).getTime();
+          const dateA = this.getRequestSortDate(a);
+          const dateB = this.getRequestSortDate(b);
 
           return dateB - dateA;
         }

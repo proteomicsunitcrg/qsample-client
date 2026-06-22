@@ -9,7 +9,8 @@ export class MiniRequest {
   type: string;
   lastField: string;
   hasData: boolean;
-  local: boolean
+  local: boolean;
+  lastProcessedFileDate: string;
 
   // TODO: lastField should be changed as requestCode or ref
   constructor(id: number, creationDate: string, creatorMail: string, creatorName: string,
