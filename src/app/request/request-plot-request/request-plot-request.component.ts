@@ -14,7 +14,7 @@ export class RequestPlotRequestComponent implements OnInit, OnDestroy {
 
   applicationSubcription: Subscription;
 
-  requestCode: any;
+  @Input() requestCode: any;
   @Input() applicationId: number;
 
   application: Application;

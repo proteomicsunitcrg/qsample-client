@@ -235,7 +235,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
             id: null,
             ref: requestCode,
             localCode: requestCode,
-            classs: 'User tailored request (Proteomics)',
+            classs: this.getFallbackApplicationName(requestCode),
             created_by: {
               name: 'Not available in Agendo',
               email: ''
@@ -249,6 +249,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
           this.checkIfRequestIsFavoriteByRequestCode(this.requestCode);
           this.requestService.changeRequestCode(this.requestCode);
           this.getApplicationInformation();
+          this.isAgendoDown = true;
           this.isLoading = false;
         } else {
           alert('Request not found in Agendo and no QSample data found!');
@@ -265,27 +266,46 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
     );
   }
 
+  private getFallbackApplicationName(requestCode: string): string {
+    const match = requestCode.match(/^\d{4}([A-Z]{2})/);
+    const requestType = match ? match[1] : '';
+
+    switch (requestType) {
+      case 'NK':
+        return 'Proteome label-free quantification (DIA)';
+      case 'NQ':
+        return 'Proteome label-free quantification (DDA)';
+      default:
+        return 'User tailored request (Proteomics)';
+    }
+  }
+
   private handleByRequestCode(requestCode: string): void {
     this.requestService.getRequestDetailsByRequestCode(requestCode).subscribe(
       (res) => {
+        if (!res) {
+          this.handleQSampleOnlyRequest(requestCode);
+          return;
+        }
+
         this.request = res;
         this.requestCode = requestCode;
         this.checkIfRequestIsFavoriteByRequestCode(this.requestCode);
 
         this.local = true;
 
-        if (this.request) {
-          this.request.created_by = {};
-          this.request.created_by.name = this.request.creator;
-          this.request.created_by.email = this.request.creator;
-          this.request.date_created = this.request.creation_date;
-        }
+        this.request.created_by = {};
+        this.request.created_by.name = this.request.creator;
+        this.request.created_by.email = this.request.creator;
+        this.request.date_created = this.request.creation_date;
 
         this.requestService.changeRequestCode(this.requestCode);
         this.getApplicationInformation();
+        this.isLoading = false;
       },
       (err) => {
         console.error(err);
+        this.handleQSampleOnlyRequest(requestCode);
       }
     );
   }

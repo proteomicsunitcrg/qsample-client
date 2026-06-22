@@ -16,7 +16,7 @@
     </div>
   </div>
 
-  <div class="agendo-offline-card" *ngIf="isAgendoDown">
+  <div class="agendo-offline-card" *ngIf="isAgendoDown && !requestCode">
     <mat-card>
       <div class="agendo-offline-card-content">
         <mat-icon>sync_problem</mat-icon>
@@ -37,7 +37,7 @@
     </mat-card>
   </div>
 
-  <ng-container *ngIf="!isAgendoDown">
+  <ng-container *ngIf="requestCode">
 
     <section class="mat-typography title-group">
       <h1 style="margin: 20px;">
@@ -149,7 +149,8 @@
               </div>
 
               <div fxFlex style="min-width: 0; max-width: 100%;">
-                <app-request-plot-request>
+                <app-request-plot-request
+                  [requestCode]="requestCode">
                 </app-request-plot-request>
               </div>
 
