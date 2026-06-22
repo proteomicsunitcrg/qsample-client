@@ -1,6 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { PlotService } from '../../services/plot.service';
 import { DataService } from '../../services/data.service';
+import { RequestService } from '../../services/request.service';
 import { Subscription } from 'rxjs';
 
 import {
@@ -37,11 +38,13 @@ export class DynamicChartComponent implements OnInit, OnDestroy {
   selectedSampleChecksums: Set<string> | null = null;
   private subscriptions = new Subscription();
   private chartDataCache: { [key: number]: Array<ChartDataPoint | ChartSeriesDataPoint> } = {};
+  private requestSamples: any[] = [];
 
   constructor(
     private chartService: ChartService,
     private plotService: PlotService,
-    private dataService: DataService
+    private dataService: DataService,
+    private requestService: RequestService
   ) { }
 
   private getOneYearAgoDate(): string {
@@ -60,6 +63,13 @@ export class DynamicChartComponent implements OnInit, OnDestroy {
 
         this.chartDataCache = {};
         this.loadCharts();
+      })
+    );
+
+    this.subscriptions.add(
+      this.requestService.currentRequestSamples.subscribe(samples => {
+        this.requestSamples = samples || [];
+        this.renderChartsFromCache();
       })
     );
 
@@ -398,6 +408,60 @@ export class DynamicChartComponent implements OnInit, OnDestroy {
     return match ? match[1] : '';
   }
 
+  private getConditionFromLabel(label: string): string | null {
+    if (!label || !this.requestSamples || this.requestSamples.length === 0) {
+      return null;
+    }
+
+    const matches = this.requestSamples.filter(sample =>
+      sample &&
+      sample.code &&
+      label.indexOf(sample.code) !== -1
+    );
+
+    if (matches.length !== 1) {
+      return null;
+    }
+
+    const condition = matches[0]?.values?.[2]?.value;
+
+    return condition ? String(condition).trim() : null;
+  }
+
+  private getConditionColor(condition: string): string {
+    const palette = [
+      '#001f54',
+      '#00509d',
+      '#0077b6',
+      '#00a6d6',
+      '#48cae4',
+      '#90e0ef',
+      '#caf0f8',
+      '#003566',
+      '#0096c7'
+    ];
+
+    let hash = 0;
+    for (let i = 0; i < condition.length; i++) {
+      hash = ((hash << 5) - hash) + condition.charCodeAt(i);
+      hash = hash & hash;
+    }
+
+    return palette[Math.abs(hash) % palette.length];
+  }
+
+  private getConditionBarColors(dataPoints: ChartDataPoint[]): string | string[] | null {
+    const conditions = dataPoints.map(point => this.getConditionFromLabel(point.label));
+
+    if (!conditions.length || !conditions.every(condition => !!condition)) {
+      return null;
+    }
+
+    return conditions.map(condition =>
+      condition ? this.getConditionColor(condition) : '#1f77b4'
+    );
+  }
+
   private getProteinGroupBarColors(chart: ChartConfig, labels: string[]): string | string[] {
     const defaultColor = '#1f77b4';
 
@@ -517,7 +581,7 @@ export class DynamicChartComponent implements OnInit, OnDestroy {
       x: labels,
       y: dataPoints.map(point => this.getRenderableValue(point.value)),
       marker: {
-        color: this.getProteinGroupBarColors(chart, labels)
+        color: this.getConditionBarColors(dataPoints) || this.getProteinGroupBarColors(chart, labels)
       },
       error_y: {
         type: 'data',

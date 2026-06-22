@@ -202,11 +202,13 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
           }
 
           this.requestService.changeRequestCode(this.requestCode);
+          this.requestService.changeCurrentRequestSamples(this.request.samples || []);
           this.getApplicationInformation();
         } else {
           this.local = false;
           this.requestCode = this.request.ref;
           this.requestService.changeRequestCode(this.requestCode);
+          this.requestService.changeCurrentRequestSamples(this.request.samples || []);
           this.getApplicationInformation();
         }
 
@@ -248,6 +250,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
 
           this.checkIfRequestIsFavoriteByRequestCode(this.requestCode);
           this.requestService.changeRequestCode(this.requestCode);
+          this.requestService.changeCurrentRequestSamples([]);
           this.getApplicationInformation();
           this.isAgendoDown = true;
           this.isLoading = false;
@@ -300,6 +303,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
         this.request.date_created = this.request.creation_date;
 
         this.requestService.changeRequestCode(this.requestCode);
+        this.requestService.changeCurrentRequestSamples(this.request.samples || []);
         this.getApplicationInformation();
         this.isLoading = false;
       },

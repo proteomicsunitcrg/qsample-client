@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { MiniRequest } from '../models/MiniRequest';
 import { Application } from '../models/Application';
 import { RequestLocal } from '../models/RequestLocal';
@@ -17,6 +17,8 @@ export class RequestService {
 
   public currentApplication = new Subject<Application>();
 
+  public currentRequestSamples = new BehaviorSubject<any[]>([]);
+
   params = new HttpParams();
 
   httpOptions = {
@@ -29,6 +31,10 @@ export class RequestService {
 
   public changeCurrentApplication(value: Application) {
     this.currentApplication.next(value);
+  }
+
+  public changeCurrentRequestSamples(value: any[]) {
+    this.currentRequestSamples.next(value || []);
   }
 
   public getAllRequestsInternal(showAll: boolean, startDate: Date, endDate: Date): Observable<MiniRequest[]> {
