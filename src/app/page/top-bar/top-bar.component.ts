@@ -16,6 +16,7 @@ export class TopBarComponent implements OnInit {
 
   isAdmin = false;
   isManager = false;
+  isSuperAdmin = false;
   isLocalMode = false;
 
   constructor(private requestService: RequestService, private tokenService: TokenStorageService, private router: Router,
@@ -37,6 +38,7 @@ export class TopBarComponent implements OnInit {
 
     this.authService.updateIsAdmin(this.tokenStorageService.isAdminUser());
     this.authService.updateIsManager(this.tokenStorageService.isManagerUser());
+    this.isSuperAdmin = this.tokenStorageService.isSuperAdminUser();
   }
 
   public goToHomePage(): void {

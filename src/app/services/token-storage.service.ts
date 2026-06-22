@@ -49,6 +49,18 @@ export class TokenStorageService {
     return admin;
   }
 
+  public isSuperAdminUser(): boolean {
+    const token = this.getUser();
+    if (!token || !token.roles) {
+      return false;
+    }
+    for (const element of token.roles) {
+      if (element === 'ROLE_SUPER_ADMIN') {
+        return true;
+      }
+    }
+    return false;
+  }
 
   public isManagerUser(): boolean {
     let manager = false;
