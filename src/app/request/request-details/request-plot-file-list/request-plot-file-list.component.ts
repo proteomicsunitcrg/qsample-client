@@ -76,9 +76,14 @@ export class RequestPlotFileListComponent implements OnInit, OnDestroy {
   public applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+
+    const filteredSamples = this.dataSource.filteredData || this.files;
+    this.selectedSamples = filteredSamples.map((file) => Object.assign({}, file));
+    this.plotService.sendselectedSamples([...this.selectedSamples]);
   }
 
   public checkIfElementSelected(element: RequestFile): boolean {
