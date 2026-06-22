@@ -57,6 +57,8 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
 
   loading = false;
 
+  heatMapLoaded = false;
+
   filenames: string[] = [];
 
   // Var to handle the plot layout
@@ -165,11 +167,19 @@ export class RequestHeatmapComponent implements OnInit, OnDestroy {
     this.fileListChangesSubscription$ = this.plotService.selectedSamples.subscribe((list) => {
       this.selectedSamples = list;
       this.listOfChecksum = this.selectedSamples.map((item) => item.checksum);
-      this.getHeatMapData();
+
+      if (!this.heatMapLoaded) {
+        this.heatMapLoaded = true;
+        this.getHeatMapData();
+      }
     });
   }
 
   public sliderChange(): void {
+    this.getHeatMapData();
+  }
+
+  public reloadHeatMap(): void {
     this.getHeatMapData();
   }
 

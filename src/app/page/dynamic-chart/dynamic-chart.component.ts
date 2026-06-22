@@ -36,6 +36,7 @@ export class DynamicChartComponent implements OnInit, OnDestroy {
   wetlabEndDate: string = new Date().toISOString();
   selectedSampleChecksums: Set<string> | null = null;
   private subscriptions = new Subscription();
+  private chartDataCache: { [key: number]: Array<ChartDataPoint | ChartSeriesDataPoint> } = {};
 
   constructor(
     private chartService: ChartService,
@@ -57,6 +58,7 @@ export class DynamicChartComponent implements OnInit, OnDestroy {
 
         console.log('Dynamic chart order:', order, '=>', this.currentOrder);
 
+        this.chartDataCache = {};
         this.loadCharts();
       })
     );
@@ -69,7 +71,7 @@ export class DynamicChartComponent implements OnInit, OnDestroy {
             .filter(checksum => !!checksum)
         );
 
-        this.loadCharts();
+        this.renderChartsFromCache();
       })
     );
 
@@ -142,6 +144,7 @@ export class DynamicChartComponent implements OnInit, OnDestroy {
         this.currentOrder
       ).subscribe({
         next: (dataPoints) => {
+          this.chartDataCache[chart.id] = dataPoints || [];
           const filteredDataPoints = this.filterDataPointsBySelectedSamples(dataPoints);
 
           if (!filteredDataPoints || !filteredDataPoints.some(point => this.hasRenderableValue(point.value))) {
@@ -176,6 +179,7 @@ export class DynamicChartComponent implements OnInit, OnDestroy {
 
     data$.subscribe({
       next: (dataPoints) => {
+        this.chartDataCache[chart.id] = dataPoints || [];
         const filteredDataPoints = this.filterDataPointsBySelectedSamples(dataPoints);
 
         if (!filteredDataPoints || !filteredDataPoints.some(point => this.hasRenderableValue(point.value))) {
@@ -284,6 +288,42 @@ export class DynamicChartComponent implements OnInit, OnDestroy {
 
   private hasRenderableValue(value: number): boolean {
     return Number(value) !== 0;
+  }
+
+  private renderChartsFromCache(): void {
+    if (!this.charts || this.charts.length === 0) {
+      return;
+    }
+
+    this.charts.forEach(chart => this.renderChartFromCache(chart));
+  }
+
+  private renderChartFromCache(chart: ChartConfig): void {
+    const dataPoints = this.chartDataCache[chart.id];
+
+    if (!dataPoints) {
+      return;
+    }
+
+    const filteredDataPoints = this.filterDataPointsBySelectedSamples(dataPoints);
+
+    if (!filteredDataPoints || !filteredDataPoints.some(point => this.hasRenderableValue(point.value))) {
+      this.chartsWithoutData[chart.id] = true;
+      return;
+    }
+
+    this.chartsWithoutData[chart.id] = false;
+
+    if (chart.chartType !== 'bar') {
+      return;
+    }
+
+    if (this.isStackedChart(chart) && !this.wetlabId) {
+      this.renderStackedBarChart(chart, filteredDataPoints as ChartSeriesDataPoint[]);
+      return;
+    }
+
+    this.renderBarChart(chart, filteredDataPoints as ChartDataPoint[]);
   }
 
   private filterDataPointsBySelectedSamples<T extends ChartDataPoint | ChartSeriesDataPoint>(dataPoints: T[]): T[] {
