@@ -59,7 +59,29 @@
 }
 
 .wetlab-tab-active {
+  color: rgb(13, 71, 161);
   opacity: 1;
-  border-bottom: 2px solid #3f51b5;
+  border-bottom: 2px solid rgb(13, 71, 161);
+  font-size: 14px;
   font-weight: 600;
+  line-height: 20px;
+}
+
+.wetlab-menu-card a.mat-list-item,
+.wetlab-menu-card a.mat-list-item:visited,
+.wetlab-menu-card a.mat-list-item:active,
+.wetlab-menu-card a.mat-list-item:focus,
+.wetlab-menu-card a.mat-list-item.cdk-focused,
+.wetlab-menu-card a.mat-list-item.cdk-program-focused {
+  color: rgb(13, 71, 161);
+  text-decoration: none;
+}
+
+.wetlab-menu-card a.mat-list-item:hover {
+  color: rgb(13, 71, 161);
+  background: rgba(13, 71, 161, 0.04);
+}
+
+:host ::ng-deep .wetlab-menu-card a.mat-list-item .mat-list-item-content {
+  color: inherit;
 }
