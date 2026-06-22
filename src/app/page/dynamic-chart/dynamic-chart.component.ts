@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { PlotService } from '../../services/plot.service';
 import { DataService } from '../../services/data.service';
+import { Subscription } from 'rxjs';
 
 import {
   ChartService,
@@ -17,7 +18,7 @@ declare var Plotly: any;
   templateUrl: './dynamic-chart.component.html',
   styleUrls: ['./dynamic-chart.component.css']
 })
-export class DynamicChartComponent implements OnInit {
+export class DynamicChartComponent implements OnInit, OnDestroy {
 
   @Input() pageName!: string;
   @Input() requestCode!: string;
@@ -33,6 +34,8 @@ export class DynamicChartComponent implements OnInit {
   currentOrder = 'filename';
   wetlabStartDate: string = this.getOneYearAgoDate();
   wetlabEndDate: string = new Date().toISOString();
+  selectedSampleChecksums: Set<string> | null = null;
+  private subscriptions = new Subscription();
 
   constructor(
     private chartService: ChartService,
@@ -47,22 +50,42 @@ export class DynamicChartComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.plotService.selectedOrder.subscribe(order => {
-      this.currentOrder =
-        order === 'name' ? 'filename' : (order || 'filename');
+    this.subscriptions.add(
+      this.plotService.selectedOrder.subscribe(order => {
+        this.currentOrder =
+          order === 'name' ? 'filename' : (order || 'filename');
 
-      console.log('Dynamic chart order:', order, '=>', this.currentOrder);
+        console.log('Dynamic chart order:', order, '=>', this.currentOrder);
 
-      this.loadCharts();
-    });
+        this.loadCharts();
+      })
+    );
+
+    this.subscriptions.add(
+      this.plotService.selectedSamples.subscribe(samples => {
+        this.selectedSampleChecksums = new Set(
+          (samples || [])
+            .map(sample => sample && sample.checksum)
+            .filter(checksum => !!checksum)
+        );
+
+        this.loadCharts();
+      })
+    );
 
     if (this.wetlabId) {
-      this.dataService.selectedDates$.subscribe(dates => {
-        this.wetlabStartDate = String(dates[0]);
-        this.wetlabEndDate = String(dates[1]);
-        this.loadCharts();
-      });
+      this.subscriptions.add(
+        this.dataService.selectedDates$.subscribe(dates => {
+          this.wetlabStartDate = String(dates[0]);
+          this.wetlabEndDate = String(dates[1]);
+          this.loadCharts();
+        })
+      );
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   loadCharts(): void {
@@ -119,13 +142,15 @@ export class DynamicChartComponent implements OnInit {
         this.currentOrder
       ).subscribe({
         next: (dataPoints) => {
-          if (!dataPoints || !dataPoints.some(point => this.hasRenderableValue(point.value))) {
+          const filteredDataPoints = this.filterDataPointsBySelectedSamples(dataPoints);
+
+          if (!filteredDataPoints || !filteredDataPoints.some(point => this.hasRenderableValue(point.value))) {
             this.chartsWithoutData[chart.id] = true;
             return;
           }
 
           if (chart.chartType === 'bar') {
-            this.renderStackedBarChart(chart, dataPoints);
+            this.renderStackedBarChart(chart, filteredDataPoints);
           }
         },
         error: () => {
@@ -151,13 +176,15 @@ export class DynamicChartComponent implements OnInit {
 
     data$.subscribe({
       next: (dataPoints) => {
-        if (!dataPoints || !dataPoints.some(point => this.hasRenderableValue(point.value))) {
+        const filteredDataPoints = this.filterDataPointsBySelectedSamples(dataPoints);
+
+        if (!filteredDataPoints || !filteredDataPoints.some(point => this.hasRenderableValue(point.value))) {
           this.chartsWithoutData[chart.id] = true;
           return;
         }
 
         if (chart.chartType === 'bar') {
-          this.renderBarChart(chart, dataPoints);
+          this.renderBarChart(chart, filteredDataPoints);
         }
       },
       error: () => {
@@ -257,6 +284,21 @@ export class DynamicChartComponent implements OnInit {
 
   private hasRenderableValue(value: number): boolean {
     return Number(value) !== 0;
+  }
+
+  private filterDataPointsBySelectedSamples<T extends ChartDataPoint | ChartSeriesDataPoint>(dataPoints: T[]): T[] {
+    if (this.selectedSampleChecksums === null) {
+      return dataPoints;
+    }
+
+    return (dataPoints || []).filter(point => {
+      const checksum = this.getDataPointChecksum(point);
+      return checksum && this.selectedSampleChecksums!.has(checksum);
+    });
+  }
+
+  private getDataPointChecksum(point: any): string {
+    return point?.checksum || point?.fileChecksum || point?.file?.checksum || '';
   }
 
   private getRenderableValue(value: number): number | null {

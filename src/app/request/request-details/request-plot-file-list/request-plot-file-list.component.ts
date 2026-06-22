@@ -3,7 +3,6 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { FileService } from '../../../services/file.service';
-import { File } from '../../../models/File';
 import { RequestFile } from '../../../models/RequestFile';
 import { PlotService } from '../../../services/plot.service';
 import { Subscription } from 'rxjs';
@@ -24,7 +23,7 @@ export class RequestPlotFileListComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<any>;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   columnsToDisplay = ['show'];
-  selectedSamples: File[] = [];
+  selectedSamples: RequestFile[] = [];
 
   orderSubscription$: Subscription;
   order: string;
@@ -59,17 +58,19 @@ export class RequestPlotFileListComponent implements OnInit, OnDestroy {
     );
   }
 
-  public listChange(file: File, $event: MatCheckboxChange): void {
+  public listChange(file: RequestFile, $event: MatCheckboxChange): void {
     if ($event.checked) {
-      this.selectedSamples.push(file);
+      if (!this.selectedSamples.find((i) => i.checksum === file.checksum)) {
+        this.selectedSamples.push(file);
+      }
       this.selectedSamples.sort((a, b) => a.filename.localeCompare(b.filename));
     } else {
-      this.selectedSamples.splice(
-        this.selectedSamples.findIndex((i) => i.id === file.id),
-        1
-      );
+      const index = this.selectedSamples.findIndex((i) => i.checksum === file.checksum);
+      if (index !== -1) {
+        this.selectedSamples.splice(index, 1);
+      }
     }
-    this.plotService.sendselectedSamples(this.selectedSamples);
+    this.plotService.sendselectedSamples([...this.selectedSamples]);
   }
 
   public applyFilter(event: Event): void {
@@ -81,12 +82,8 @@ export class RequestPlotFileListComponent implements OnInit, OnDestroy {
   }
 
   public checkIfElementSelected(element: RequestFile): boolean {
-    //TODO. This function is called everytime the DOM updates so is inneficient
-    if (this.selectedSamples.find((e) => e.id === element.id)) {
-      return true;
-    } else {
-      return false;
-    }
+    // TODO. This function is called every time the DOM updates so it is inefficient.
+    return !!this.selectedSamples.find((e) => e.checksum === element.checksum);
   }
 
   private subscribeToOrder(): void {
