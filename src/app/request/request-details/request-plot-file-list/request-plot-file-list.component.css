@@ -1,0 +1,8 @@
+.qsample-active-order {
+  color: rgb(13, 71, 161);
+  font-weight: 600;
+}
+
+.qsample-active-order:hover {
+  background: rgba(13, 71, 161, 0.04);
+}
