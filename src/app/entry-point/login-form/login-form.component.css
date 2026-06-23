@@ -33,3 +33,7 @@ mat-card-footer {
     margin: auto;
     text-align: center;
 }
+
+button[color="primary"].btn-block {
+  color: #fff;
+}
