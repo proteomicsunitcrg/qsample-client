@@ -308,6 +308,14 @@ export class DynamicChartComponent implements OnInit, OnDestroy {
     this.charts.forEach(chart => this.renderChartFromCache(chart));
   }
 
+  private clearPlotlyChart(chart: ChartConfig): void {
+    const plot = document.getElementById(this.getChartDomId(chart));
+
+    if (plot) {
+      Plotly.purge(plot);
+    }
+  }
+
   private renderChartFromCache(chart: ChartConfig): void {
     const dataPoints = this.chartDataCache[chart.id];
 
@@ -319,21 +327,24 @@ export class DynamicChartComponent implements OnInit, OnDestroy {
 
     if (!filteredDataPoints || !filteredDataPoints.some(point => this.hasRenderableValue(point.value))) {
       this.chartsWithoutData[chart.id] = true;
+      this.clearPlotlyChart(chart);
       return;
     }
 
-    this.chartsWithoutData[chart.id] = false;
+    delete this.chartsWithoutData[chart.id];
 
-    if (chart.chartType !== 'bar') {
-      return;
-    }
+    setTimeout(() => {
+      if (chart.chartType !== 'bar') {
+        return;
+      }
 
-    if (this.isStackedChart(chart) && !this.wetlabId) {
-      this.renderStackedBarChart(chart, filteredDataPoints as ChartSeriesDataPoint[]);
-      return;
-    }
+      if (this.isStackedChart(chart) && !this.wetlabId) {
+        this.renderStackedBarChart(chart, filteredDataPoints as ChartSeriesDataPoint[]);
+        return;
+      }
 
-    this.renderBarChart(chart, filteredDataPoints as ChartDataPoint[]);
+      this.renderBarChart(chart, filteredDataPoints as ChartDataPoint[]);
+    }, 0);
   }
 
   private filterDataPointsBySelectedSamples<T extends ChartDataPoint | ChartSeriesDataPoint>(dataPoints: T[]): T[] {
@@ -638,6 +649,7 @@ export class DynamicChartComponent implements OnInit, OnDestroy {
       const plot = document.getElementById(this.getChartDomId(chart)) as any;
 
       if (plot) {
+        plot.removeAllListeners && plot.removeAllListeners('plotly_click');
         plot.on('plotly_click', (eventData) => {
           this.plotService.getChecksumFromPlotlyClickEvent(eventData);
         });
@@ -760,6 +772,7 @@ export class DynamicChartComponent implements OnInit, OnDestroy {
       const plot = document.getElementById(this.getChartDomId(chart)) as any;
 
       if (plot) {
+        plot.removeAllListeners && plot.removeAllListeners('plotly_click');
         plot.on('plotly_click', (eventData) => {
           this.plotService.getChecksumFromPlotlyClickEvent(eventData);
         });
