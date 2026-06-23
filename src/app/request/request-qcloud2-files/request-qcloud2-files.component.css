@@ -16,4 +16,10 @@
 
 .allow-cr {
     white-space: pre-line;
+    text-align: left;
+    max-width: 900px !important;
+    line-height: 1.5;
+    font-family: monospace;
+    font-size: 12px;
+    padding: 8px;
 }

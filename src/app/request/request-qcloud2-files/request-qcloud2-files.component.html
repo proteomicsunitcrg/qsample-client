@@ -1,6 +1,6 @@
 <mat-card style="margin-left: 1vw; margin-right: 1vw;">
   <mat-card-title>
-    QCloud2 related files
+    QCloud related files
   </mat-card-title>
   <mat-card-subtitle style="color: red; cursor: pointer;" *ngIf="errorCounter != 0" (click)="openDialog()">
     Found {{errorCounter}} files with non-conformities
@@ -22,7 +22,7 @@
           <th mat-header-cell *matHeaderCellDef> Conformity </th>
           <td mat-cell *matCellDef="let entry"> <span class="material-icons align"
               [class.warning]="entry.conformity === 'WARNING'" [class.danger]="entry.conformity === 'DANGER'"
-              [class.ok]="entry.conformity === 'OK'" [matTooltip]="entry.conformityError" [matTooltipPosition]="'right'"
+              [class.ok]="entry.conformity === 'OK'" [matTooltip]="formatConformityErrors(entry.conformityError)" [matTooltipPosition]="'right'"
               [matTooltipClass]="'allow-cr'">
               fiber_manual_record
             </span> </td>

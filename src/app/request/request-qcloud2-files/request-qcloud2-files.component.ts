@@ -48,6 +48,9 @@ export class RequestQcloud2FilesComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
+    if (this.requestCode) {
+      this.getQCloud2Files();
+    }
   }
 
   ngOnDestroy(): void {
@@ -84,6 +87,25 @@ export class RequestQcloud2FilesComponent implements OnInit, OnDestroy {
       width: '35%'
     });
   }
+
+  public formatConformityErrors(errors: string[]): string {
+    if (!errors || errors.length === 0) {
+      return '';
+    }
+
+    return errors.map(error => {
+      const match = error.match(/^(WARNING|DANGER):\s*([0-9.]+)\s*in\s*(.+)\s+(Retention time|Peak area)$/);
+
+      if (!match) {
+        return error;
+      }
+
+      return `❌ ${match[4]}
+Delta: ${match[2]}
+Peptide: ${match[3]}`;
+    }).join('\n\n');
+  }
+
 
   public goToQCloud2(file: QCloud2File): void {
     const win = window.open(`https://qcloud2.crg.eu/application/view/instrument/${file.lsApiKey}?checksum=${file.checksum}`, '_blank');
