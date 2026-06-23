@@ -428,26 +428,19 @@ export class DynamicChartComponent implements OnInit, OnDestroy {
     return condition ? String(condition).trim() : null;
   }
 
-  private getConditionColor(condition: string): string {
+  private getConditionColor(index: number): string {
     const palette = [
       '#001f54',
-      '#00509d',
-      '#0077b6',
       '#00a6d6',
-      '#48cae4',
-      '#90e0ef',
-      '#caf0f8',
       '#003566',
-      '#0096c7'
+      '#48cae4',
+      '#00509d',
+      '#90e0ef',
+      '#0077b6',
+      '#caf0f8'
     ];
 
-    let hash = 0;
-    for (let i = 0; i < condition.length; i++) {
-      hash = ((hash << 5) - hash) + condition.charCodeAt(i);
-      hash = hash & hash;
-    }
-
-    return palette[Math.abs(hash) % palette.length];
+    return palette[index % palette.length];
   }
 
   private getConditionBarColors(dataPoints: ChartDataPoint[]): string | string[] | null {
@@ -457,8 +450,16 @@ export class DynamicChartComponent implements OnInit, OnDestroy {
       return null;
     }
 
+    const uniqueConditions = conditions.filter(
+      (condition, index) => conditions.indexOf(condition) === index
+    );
+
+    if (uniqueConditions.length < 2) {
+      return null;
+    }
+
     return conditions.map(condition =>
-      condition ? this.getConditionColor(condition) : '#1f77b4'
+      this.getConditionColor(uniqueConditions.indexOf(condition))
     );
   }
 
