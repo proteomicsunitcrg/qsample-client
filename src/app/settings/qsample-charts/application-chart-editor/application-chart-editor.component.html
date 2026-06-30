@@ -50,7 +50,7 @@
       </div>
 
       <div *ngIf="lastCreatedContextSourceApiKey"
-        style="margin-top: 20px; padding: 16px; background: #e8f5e9; border-radius: 4px;">
+        style="margin-top: 20px; padding: 16px; background: #e3f2fd; border-radius: 4px;">
         <strong>Context source created</strong>
 
         <mat-form-field appearance="fill" style="width: 100%; margin-top: 12px;">
@@ -67,7 +67,7 @@
         <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
           <strong>Existing context sources</strong>
 
-          <mat-form-field appearance="outline" style="width: 320px; margin: 0;">
+          <mat-form-field class="context-source-search" appearance="outline" style="width: 320px; margin: 0;">
             <mat-label>Search</mat-label>
             <input matInput
               [(ngModel)]="contextSourceFilter"

@@ -83,3 +83,11 @@
 :host ::ng-deep .mat-tab-label-active {
   color: var(--qsample-blue) !important;
 }
+
+.context-source-search ::ng-deep .mat-form-field-outline-thick {
+  color: #0d47a1 !important;
+}
+
+.context-source-search ::ng-deep .mat-form-field-label {
+  color: #0d47a1 !important;
+}
