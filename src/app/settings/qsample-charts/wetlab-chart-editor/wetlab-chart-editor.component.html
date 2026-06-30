@@ -44,6 +44,86 @@
           {{ isCreatingContextSource ? 'Saving...' : 'Create context source' }}
         </button>
       </div>
+
+      <div *ngIf="lastCreatedContextSourceApiKey"
+        style="margin-top: 20px; padding: 16px; background: #e8f5e9; border-radius: 4px;">
+        <strong>Context source created</strong>
+
+        <mat-form-field appearance="fill" style="width: 100%; margin-top: 12px;">
+          <mat-label>API key</mat-label>
+          <input matInput readonly [value]="lastCreatedContextSourceApiKey">
+          <button mat-icon-button matSuffix type="button"
+            (click)="copyContextSourceApiKey(lastCreatedContextSourceApiKey)">
+            <mat-icon>content_copy</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="contextSources.length > 0" style="margin-top: 16px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+          <strong>Existing context sources</strong>
+
+          <mat-form-field appearance="outline" style="width: 320px; margin: 0;">
+            <mat-label>Search</mat-label>
+            <input matInput
+              [(ngModel)]="contextSourceFilter"
+              name="wetlabContextSourceFilter"
+              placeholder="Name, abbreviated or API key"
+              (ngModelChange)="applyContextSourceFilter()">
+          </mat-form-field>
+        </div>
+
+        <table style="width: 100%; margin-top: 8px;" mat-table [dataSource]="pagedContextSources">
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Name </th>
+            <td mat-cell *matCellDef="let contextSource"> {{contextSource.name}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="abbreviated">
+            <th mat-header-cell *matHeaderCellDef> Abbreviated </th>
+            <td mat-cell *matCellDef="let contextSource"> {{contextSource.abbreviated}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="apiKey">
+            <th mat-header-cell *matHeaderCellDef> API key </th>
+            <td mat-cell *matCellDef="let contextSource">
+              <input matInput readonly [value]="contextSource.apiKey"
+                style="width: 360px; max-width: 100%; font-size: 12px;">
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> Actions </th>
+            <td mat-cell *matCellDef="let contextSource">
+              <button mat-icon-button class="qsample-icon-button" type="button"
+                (click)="copyContextSourceApiKey(contextSource.apiKey)">
+                <mat-icon>content_copy</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="contextSourceColumnsToDisplay"></tr>
+          <tr mat-row *matRowDef="let row; columns: contextSourceColumnsToDisplay;"></tr>
+        </table>
+
+        <div style="display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin-top: 8px;">
+          <button mat-button type="button"
+            (click)="previousContextSourcePage()"
+            [disabled]="contextSourcePageIndex === 0">
+            Previous
+          </button>
+
+          <span style="font-size: 12px;">
+            Page {{contextSourcePageIndex + 1}} / {{getContextSourcePageCount()}}
+          </span>
+
+          <button mat-button type="button"
+            (click)="nextContextSourcePage()"
+            [disabled]="contextSourcePageIndex >= getContextSourcePageCount() - 1">
+            Next
+          </button>
+        </div>
+      </div>
     </mat-card-content>
   </mat-card>
 

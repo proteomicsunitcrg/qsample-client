@@ -11,6 +11,7 @@ import {
   ChartDataSource,
   ChartDataSourceOptions,
   ChartDataSourceSave,
+  ContextSource,
   ContextSourceSave,
   ChartDefinitionDetail,
   ChartDefinitionSave,
@@ -47,6 +48,14 @@ export class ApplicationChartEditorComponent implements OnInit {
 
   columnsToDisplay = ['enabled', 'orderIndex', 'chartTitle', 'actions'];
   dataSourceColumnsToDisplay = ['name', 'param', 'contextSources', 'actions'];
+  contextSourceColumnsToDisplay = ['name', 'abbreviated', 'apiKey', 'actions'];
+  contextSources: ContextSource[] = [];
+  pagedContextSources: ContextSource[] = [];
+  contextSourcePageIndex = 0;
+  contextSourcePageSize = 5;
+  contextSourceFilter = '';
+  filteredContextSources: ContextSource[] = [];
+  lastCreatedContextSourceApiKey: string | null = null;
   parameterTypes = ['string', 'number', 'boolean'];
   chartTypes = ['bar'];
   chartModes = [
@@ -78,6 +87,7 @@ export class ApplicationChartEditorComponent implements OnInit {
         this.loadChartConfigs();
         this.loadDataSources();
         this.loadDataSourceOptions();
+        this.loadContextSources();
       },
       err => {
         console.error(err);
@@ -114,6 +124,21 @@ export class ApplicationChartEditorComponent implements OnInit {
       err => {
         console.error(err);
         this.openSnackBar('Error loading data source options', 'Close');
+      }
+    );
+  }
+
+  private loadContextSources(): void {
+    this.chartService.getContextSources().subscribe(
+      res => {
+        this.contextSources = [...res].sort((left, right) =>
+          this.getContextSourceLabel(left).localeCompare(this.getContextSourceLabel(right))
+        );
+        this.applyContextSourceFilter();
+      },
+      err => {
+        console.error(err);
+        this.openSnackBar('Error loading context sources', 'Close');
       }
     );
   }
@@ -248,6 +273,14 @@ export class ApplicationChartEditorComponent implements OnInit {
           contextSource.id
         ];
 
+        this.lastCreatedContextSourceApiKey = contextSource.apiKey;
+        this.contextSources = [
+          ...this.contextSources,
+          contextSource
+        ].sort((left, right) =>
+          this.getContextSourceLabel(left).localeCompare(this.getContextSourceLabel(right))
+        );
+        this.applyContextSourceFilter();
         this.resetContextSourceForm();
         this.openSnackBar('Context source created', 'Close');
         this.isCreatingContextSource = false;
@@ -598,6 +631,73 @@ export class ApplicationChartEditorComponent implements OnInit {
 
   public goBack(): void {
     this.router.navigate(['/settings/qsample/charts']);
+  }
+
+  public getContextSourcePageCount(): number {
+    return Math.max(1, Math.ceil(this.filteredContextSources.length / this.contextSourcePageSize));
+  }
+
+  public previousContextSourcePage(): void {
+    if (this.contextSourcePageIndex === 0) {
+      return;
+    }
+
+    this.contextSourcePageIndex--;
+    this.updatePagedContextSources();
+  }
+
+  public nextContextSourcePage(): void {
+    if (this.contextSourcePageIndex >= this.getContextSourcePageCount() - 1) {
+      return;
+    }
+
+    this.contextSourcePageIndex++;
+    this.updatePagedContextSources();
+  }
+
+  public applyContextSourceFilter(): void {
+    const filter = this.contextSourceFilter.trim().toLowerCase();
+
+    this.filteredContextSources = this.contextSources.filter(contextSource => {
+      if (!filter) {
+        return true;
+      }
+
+      return [
+        contextSource.name,
+        contextSource.abbreviated,
+        contextSource.apiKey
+      ]
+        .filter(value => !!value)
+        .some(value => value.toLowerCase().includes(filter));
+    });
+
+    this.contextSourcePageIndex = 0;
+    this.updatePagedContextSources();
+  }
+
+  private updatePagedContextSources(): void {
+    const start = this.contextSourcePageIndex * this.contextSourcePageSize;
+    this.pagedContextSources = this.filteredContextSources.slice(start, start + this.contextSourcePageSize);
+  }
+
+  public copyContextSourceApiKey(apiKey: string): void {
+    if (!apiKey) {
+      return;
+    }
+
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(apiKey);
+    } else {
+      const input = document.createElement('textarea');
+      input.value = apiKey;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+    }
+
+    this.openSnackBar('API key copied to clipboard', 'Close');
   }
 
   private openSnackBar(message: string, action: string): void {
