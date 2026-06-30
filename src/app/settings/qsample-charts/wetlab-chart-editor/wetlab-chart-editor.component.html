@@ -22,6 +22,33 @@
 
   <mat-card style="margin-top: 20px;">
     <mat-card-title>
+      Create context source
+    </mat-card-title>
+
+    <mat-card-content>
+      <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center;">
+        <mat-form-field appearance="fill" style="min-width: 220px; flex: 1 1 220px;">
+          <mat-label>Name</mat-label>
+          <input matInput [(ngModel)]="newContextSource.name" name="wetlabContextSourceName" placeholder="Sequence coverage"
+            [disabled]="isCreatingContextSource">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 220px; flex: 1 1 220px;">
+          <mat-label>Abbreviated</mat-label>
+          <input matInput [(ngModel)]="newContextSource.abbreviated" name="wetlabContextSourceAbbreviated" placeholder="Seq. coverage"
+            [disabled]="isCreatingContextSource">
+        </mat-form-field>
+
+        <button mat-raised-button class="qsample-button qsample-button-primary" type="button"
+          (click)="createContextSource()" [disabled]="!canCreateContextSource()">
+          {{ isCreatingContextSource ? 'Saving...' : 'Create context source' }}
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card style="margin-top: 20px;">
+    <mat-card-title>
       {{editingPlotId ? 'Edit WetLab data source' : 'Create WetLab data source'}}
     </mat-card-title>
 

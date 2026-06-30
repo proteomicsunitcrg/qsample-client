@@ -10,6 +10,7 @@ import {
   ChartDataSource,
   ChartDataSourceOptions,
   ChartDataSourceSave,
+  ContextSourceSave,
   ChartDefinitionDetail,
   ChartDefinitionSave,
   ChartParameterSave,
@@ -45,6 +46,8 @@ export class WetlabChartEditorComponent implements OnInit {
   isCreatingDataSource = false;
 
   dataSourceForm: ChartDataSourceSave = this.createEmptyDataSource();
+  newContextSource: ContextSourceSave = this.createEmptyContextSource();
+  isCreatingContextSource = false;
   newChart: ChartDefinitionSave = this.createEmptyChart();
 
   chartColumnsToDisplay = ['enabled', 'orderIndex', 'chartTitle', 'actions'];
@@ -547,6 +550,52 @@ export class WetlabChartEditorComponent implements OnInit {
       dataSourceKey: '',
       active: true,
       parameters: []
+    };
+  }
+
+  public createContextSource(): void {
+    if (!this.canCreateContextSource()) {
+      return;
+    }
+
+    this.isCreatingContextSource = true;
+
+    this.chartService.createContextSource(this.newContextSource).subscribe(
+      contextSource => {
+        this.dataSourceOptions.contextSources = [
+          ...this.dataSourceOptions.contextSources,
+          contextSource
+        ].sort((a, b) =>
+          this.getContextSourceLabel(a).localeCompare(this.getContextSourceLabel(b))
+        );
+
+        this.dataSourceForm.contextSourceIds = [
+          ...this.dataSourceForm.contextSourceIds,
+          contextSource.id
+        ];
+
+        this.newContextSource = this.createEmptyContextSource();
+        this.isCreatingContextSource = false;
+
+        this.openSnackBar('Context source created', 'Close');
+      },
+      err => {
+        console.error(err);
+        this.isCreatingContextSource = false;
+        this.openSnackBar('Error creating context source', 'Close');
+      }
+    );
+  }
+
+  public canCreateContextSource(): boolean {
+    return this.newContextSource.name.trim().length > 0
+      && !this.isCreatingContextSource;
+  }
+
+  private createEmptyContextSource(): ContextSourceSave {
+    return {
+      name: '',
+      abbreviated: ''
     };
   }
 

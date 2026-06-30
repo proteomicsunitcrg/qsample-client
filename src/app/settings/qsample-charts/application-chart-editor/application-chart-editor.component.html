@@ -26,6 +26,33 @@
 
   <mat-card style="margin-top: 20px;">
     <mat-card-title>
+      Create context source
+    </mat-card-title>
+
+    <mat-card-content>
+      <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center;">
+        <mat-form-field appearance="fill" style="min-width: 220px; flex: 1 1 220px;">
+          <mat-label>Name</mat-label>
+          <input matInput [(ngModel)]="newContextSource.name" name="contextSourceName" placeholder="PTM enrichment (%)"
+            [disabled]="isCreatingContextSource">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="min-width: 220px; flex: 1 1 220px;">
+          <mat-label>Abbreviated</mat-label>
+          <input matInput [(ngModel)]="newContextSource.abbreviated" name="contextSourceAbbreviated" placeholder="PTM enrichment"
+            [disabled]="isCreatingContextSource">
+        </mat-form-field>
+
+        <button mat-raised-button class="qsample-button qsample-button-primary" (click)="saveContextSource()" type="button"
+          [disabled]="!canSaveContextSource()">
+          {{ isCreatingContextSource ? 'Saving...' : 'Create context source' }}
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card style="margin-top: 20px;">
+    <mat-card-title>
       {{ editingDataSourceId ? 'Edit data source' : 'Create data source' }}
     </mat-card-title>
 

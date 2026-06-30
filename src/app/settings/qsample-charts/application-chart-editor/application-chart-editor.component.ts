@@ -11,6 +11,7 @@ import {
   ChartDataSource,
   ChartDataSourceOptions,
   ChartDataSourceSave,
+  ContextSourceSave,
   ChartDefinitionDetail,
   ChartDefinitionSave,
   ChartParameterSave,
@@ -37,10 +38,12 @@ export class ApplicationChartEditorComponent implements OnInit {
     contextSources: []
   };
   newDataSource: ChartDataSourceSave = this.createEmptyDataSource();
+  newContextSource: ContextSourceSave = this.createEmptyContextSource();
   newChart: ChartDefinitionSave = this.createEmptyChart();
   editingDataSourceId: number | null = null;
   editingChartId: number | null = null;
   isCreatingDataSource = false;
+  isCreatingContextSource = false;
 
   columnsToDisplay = ['enabled', 'orderIndex', 'chartTitle', 'actions'];
   dataSourceColumnsToDisplay = ['name', 'param', 'contextSources', 'actions'];
@@ -214,6 +217,45 @@ export class ApplicationChartEditorComponent implements OnInit {
           this.editingChartId ? 'Error updating chart' : 'Error creating chart',
           'Close'
         );
+      }
+    );
+  }
+
+  public saveContextSource(): void {
+    this.isCreatingContextSource = true;
+
+    const payload: ContextSourceSave = {
+      name: this.newContextSource.name.trim(),
+      abbreviated: this.hasValue(this.newContextSource.abbreviated)
+        ? this.newContextSource.abbreviated.trim()
+        : this.newContextSource.name.trim()
+    };
+
+    this.chartService.createContextSource(payload).subscribe(
+      contextSource => {
+        this.dataSourceOptions = {
+          ...this.dataSourceOptions,
+          contextSources: [
+            ...this.dataSourceOptions.contextSources,
+            contextSource
+          ].sort((left, right) =>
+            this.getContextSourceLabel(left).localeCompare(this.getContextSourceLabel(right))
+          )
+        };
+
+        this.newDataSource.contextSourceIds = [
+          ...this.getNormalizedContextSourceIds(this.newDataSource.contextSourceIds),
+          contextSource.id
+        ];
+
+        this.resetContextSourceForm();
+        this.openSnackBar('Context source created', 'Close');
+        this.isCreatingContextSource = false;
+      },
+      err => {
+        console.error(err);
+        this.openSnackBar('Error creating context source', 'Close');
+        this.isCreatingContextSource = false;
       }
     );
   }
@@ -445,6 +487,11 @@ export class ApplicationChartEditorComponent implements OnInit {
       && !this.hasDuplicateGeneratedChartName();
   }
 
+  public canSaveContextSource(): boolean {
+    return this.hasValue(this.newContextSource.name)
+      && !this.isCreatingContextSource;
+  }
+
   public canSaveDataSource(): boolean {
     const duplicateDataSource = this.getDuplicateDataSource();
 
@@ -570,6 +617,17 @@ export class ApplicationChartEditorComponent implements OnInit {
       dataSourceKey: '',
       active: true,
       parameters: []
+    };
+  }
+
+  private resetContextSourceForm(): void {
+    this.newContextSource = this.createEmptyContextSource();
+  }
+
+  private createEmptyContextSource(): ContextSourceSave {
+    return {
+      name: '',
+      abbreviated: ''
     };
   }
 

@@ -112,6 +112,15 @@ export interface ChartDataSourceOptions {
   contextSources: ChartDataSourceContext[];
 }
 
+export interface ContextSource extends ChartDataSourceContext {
+  apiKey: string;
+}
+
+export interface ContextSourceSave {
+  name: string;
+  abbreviated: string;
+}
+
 export interface ChartDataSourceSave {
   name: string;
   paramId: number;
@@ -151,6 +160,7 @@ export interface WetlabPlotConfigSave {
 export class ChartService {
 
   private apiUrl = '/api/charts';
+  private contextSourcesApiUrl = '/api/context-sources';
 
   constructor(private http: HttpClient) { }
 
@@ -204,6 +214,21 @@ export class ChartService {
   getChartDataSourceOptions(): Observable<ChartDataSourceOptions> {
     return this.http.get<ChartDataSourceOptions>(
       `${this.apiUrl}/data-source-options`
+    );
+  }
+
+  getContextSources(): Observable<ContextSource[]> {
+    return this.http.get<ContextSource[]>(
+      this.contextSourcesApiUrl
+    );
+  }
+
+  createContextSource(
+    contextSource: ContextSourceSave
+  ): Observable<ContextSource> {
+    return this.http.post<ContextSource>(
+      this.contextSourcesApiUrl,
+      contextSource
     );
   }
 
