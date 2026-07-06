@@ -170,14 +170,14 @@
 
   <div
     class="requests-empty-state"
-    *ngIf="allRequests && allRequests.length === 0 && !finding && agendoStatus !== 'offline'">
+    *ngIf="allRequests && allRequests.length === 0 && !finding && requestLoadError === 'none'">
 
     <mat-icon>manage_search</mat-icon>
 
     <div>
-      <h3>No requests loaded yet</h3>
+      <h3>No requests found</h3>
       <p>
-        Choose a date range and click Search. QSample will contact Agendo only when you start a search.
+        No Agendo requests match the selected date range. Try a wider range or one of the quick search shortcuts above.
       </p>
     </div>
   </div>
