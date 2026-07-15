@@ -608,7 +608,9 @@ export class DynamicChartComponent implements OnInit, OnDestroy {
         point.creationDate,
         point.label,
         point.replicateFiles && point.replicateFiles.length
-          ? point.replicateFiles.join('<br>')
+          ? point.replicateFiles
+              .map(rf => `${rf.filename}: ${this.formatHoverValue(chart, rf.value)}`)
+              .join('<br>')
           : ''
       ]),
       text: dataPoints.map(point =>

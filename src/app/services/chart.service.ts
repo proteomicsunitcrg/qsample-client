@@ -4,13 +4,18 @@ import { Observable } from 'rxjs';
 
 import { ChartConfig } from '../models/chart-config.model';
 
+export interface ReplicateFile {
+  filename: string;
+  value: number;
+}
+
 export interface ChartDataPoint {
   label: string;
   value: number;
   checksum: string;
   creationDate: string;
   std?: number;
-  replicateFiles?: string[];
+  replicateFiles?: ReplicateFile[];
 }
 
 export interface ChartSeriesDataPoint {
