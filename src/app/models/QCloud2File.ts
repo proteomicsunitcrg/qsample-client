@@ -3,11 +3,11 @@ export class QCloud2File extends File {
 
   conformity: string;
   ls: string;
-  conformityError: string;
+  conformityError: string[];
   lsApiKey: string;
 
   constructor(id: number, checksum: string, creationDate: Date, filename: string,
-    conformity: string, ls: string, conformityError: string, lsApiKey: string) {
+    conformity: string, ls: string, conformityError: string[], lsApiKey: string) {
     super(id, checksum, creationDate, filename);
     this.conformity = conformity;
     this.ls = ls;

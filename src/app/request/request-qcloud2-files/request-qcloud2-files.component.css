@@ -1,5 +1,5 @@
 .warning {
-    color: yellow !important;
+    color: orange !important;
 }
 
 .danger {
@@ -12,6 +12,40 @@
 
 .align {
     vertical-align: middle
+}
+
+.non-conformity-banner {
+    cursor: pointer;
+}
+
+.non-conformity-banner .hint {
+    font-size: 0.85em;
+    font-weight: normal;
+    opacity: 0.75;
+}
+
+.non-conformity-banner.danger-banner {
+    color: red;
+}
+
+.non-conformity-banner.danger-banner:hover {
+    color: #b30000;
+}
+
+.non-conformity-banner.warning-banner {
+    color: orange;
+}
+
+.non-conformity-banner.warning-banner:hover {
+    color: #cc7a00;
+}
+
+.qcloud-row {
+    cursor: pointer;
+}
+
+.qcloud-row:hover {
+    background-color: rgba(0, 0, 0, 0.06);
 }
 
 .allow-cr {

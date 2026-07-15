@@ -1,16 +1,19 @@
-<h1 mat-dialog-title>QCloud2 non conformity files</h1>
+<h1 mat-dialog-title>QCloud non conformity files</h1>
 <div class="mat-dialog-content">
   <mat-list>
     <div *ngFor="let item of ncFiles; let i = index">
-      <div class="mat-subheader" style="margin-top: 30px;" [class.notFirst]="i == 0" (click)="goToQCloud2(item)"
-        style="cursor: pointer;">
+      <div class="mat-subheader qcloud-link" style="margin-top: 30px;" [class.notFirst]="i == 0"
+        (click)="goToQCloud2(item)">
         {{item.filename}}
       </div>
       <mat-list-item>
-        <mat-icon mat-list-icon [class.warning]="item.conformity === 'WARNING'"
-          [class.danger]="item.conformity === 'DANGER'">fiber_manual_record</mat-icon>
-        <div mat-line *ngFor="let conf of item.conformityError" style="font-size: 14px;">{{conf}}</div>
+        <div mat-line *ngFor="let conf of item.conformityError" style="font-size: 14px;"
+          [class.warning]="getConformitySeverity(conf) === 'WARNING'"
+          [class.danger]="getConformitySeverity(conf) === 'DANGER'">{{formatConformitySummary(conf)}}</div>
       </mat-list-item>
     </div>
   </mat-list>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" [mat-dialog-close]="true">OK</button>
 </div>

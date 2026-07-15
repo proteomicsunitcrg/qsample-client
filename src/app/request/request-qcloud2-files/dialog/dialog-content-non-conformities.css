@@ -1,5 +1,5 @@
 .warning {
-    color: yellow;
+    color: orange;
 }
 
 .danger {
@@ -7,4 +7,19 @@
 }
 .notFirst {
     margin-top: 0px !important;
+}
+
+.qcloud-link {
+    cursor: pointer;
+}
+
+.qcloud-link:hover {
+    color: #1565c0;
+    text-decoration: underline;
+}
+
+::ng-deep .mat-dialog-content .mat-line {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
 }

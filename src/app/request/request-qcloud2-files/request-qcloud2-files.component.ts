@@ -8,6 +8,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { NonConformitiesDialogComponent } from './dialog/non-conformities-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { formatConformityErrorsForTooltip } from './qcloud2-conformity.util';
 
 @Component({
   selector: 'app-request-qcloud2-files',
@@ -46,6 +47,7 @@ export class RequestQcloud2FilesComponent implements OnInit, OnDestroy {
 
   errorCounter = 0;
 
+  worstSeverity: 'WARNING' | 'DANGER' | null = null;
 
   ngOnInit(): void {
     if (this.requestCode) {
@@ -64,10 +66,18 @@ export class RequestQcloud2FilesComponent implements OnInit, OnDestroy {
         this.qCloud2Files = res;
         this.dataSource = new MatTableDataSource(res);
         this.dataSource.paginator = this.paginator;
+        this.errorCounter = 0;
+        this.nonConformityFiles = [];
+        this.worstSeverity = null;
         for (const file of this.qCloud2Files) {
           if (file.conformity !== 'OK') {
             this.errorCounter += 1;
             this.nonConformityFiles.push(file);
+            if (file.conformity === 'DANGER') {
+              this.worstSeverity = 'DANGER';
+            } else if (this.worstSeverity !== 'DANGER') {
+              this.worstSeverity = 'WARNING';
+            }
           }
         }
 
@@ -89,21 +99,7 @@ export class RequestQcloud2FilesComponent implements OnInit, OnDestroy {
   }
 
   public formatConformityErrors(errors: string[]): string {
-    if (!errors || errors.length === 0) {
-      return '';
-    }
-
-    return errors.map(error => {
-      const match = error.match(/^(WARNING|DANGER):\s*([0-9.]+)\s*in\s*(.+)\s+(Retention time|Peak area)$/);
-
-      if (!match) {
-        return error;
-      }
-
-      return `❌ ${match[4]}
-Delta: ${match[2]}
-Peptide: ${match[3]}`;
-    }).join('\n\n');
+    return formatConformityErrorsForTooltip(errors);
   }
 
 

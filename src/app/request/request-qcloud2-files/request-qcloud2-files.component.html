@@ -2,8 +2,9 @@
   <mat-card-title>
     QCloud related files
   </mat-card-title>
-  <mat-card-subtitle style="color: red; cursor: pointer;" *ngIf="errorCounter != 0" (click)="openDialog()">
-    Found {{errorCounter}} files with non-conformities
+  <mat-card-subtitle class="non-conformity-banner" [class.danger-banner]="worstSeverity === 'DANGER'"
+    [class.warning-banner]="worstSeverity === 'WARNING'" *ngIf="errorCounter != 0" (click)="openDialog()">
+    Found {{errorCounter}} files with non-conformities <span class="hint">(click for details)</span>
   </mat-card-subtitle>
   <mat-card-subtitle style="color: green; cursor: pointer;" *ngIf="errorCounter == 0 && qCloud2Files.length !== 0">
     All files are correct
@@ -29,7 +30,7 @@
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
         <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay" (click)="goToQCloud2(myRowData)"
-          style="cursor: pointer;"></tr>
+          class="qcloud-row"></tr>
       </table>
       <mat-paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
     </div>
