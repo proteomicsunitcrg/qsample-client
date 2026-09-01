@@ -64,6 +64,9 @@
           </div>
           <button mat-raised-button color="accent" (click)="submit()" [disabled]="leForm.invalid">Save</button>
           <button mat-raised-button color="warn" (click)="delete()" style="margin-left: 15px;"[disabled] = "!deleteable">Delete</button>
+          <span *ngIf="isEdit && !deleteable" style="margin-left: 15px; color: #f44336;">
+            Cannot delete: this request has associated files.
+          </span>
           <button mat-raised-button color="link" (click)="goBack()" style="margin-left: 15px;" >Go back</button>
 
         </mat-card-content>
