@@ -1,0 +1,12 @@
+:host {
+  --qsample-blue: #1143A8;
+  --qsample-blue-soft: #eaf5ff;
+}
+
+.qsample-icon-button {
+  color: var(--qsample-blue) !important;
+}
+
+.qsample-icon-button:hover {
+  background-color: var(--qsample-blue-soft) !important;
+}
