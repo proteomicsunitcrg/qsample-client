@@ -112,6 +112,18 @@
                 </div>
 
                 <div
+                  fxFlex.sm="100"
+                  fxFlex.xs="100"
+                  fxFlex.lt-lg="100"
+                  [ngStyle.sm]="{'width.%': 200}"
+                  *ngIf="requestCode">
+
+                  <app-request-remove-file>
+                  </app-request-remove-file>
+
+                </div>
+
+                <div
                   ffxFlex.sm="100"
                   fxFlex.xs="100"
                   fxFlex.lt-lg="100"

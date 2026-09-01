@@ -1,0 +1,23 @@
+<mat-card style="margin-top: 1vh; margin-bottom: 1vh; margin-left: 1vw;">
+  <mat-card-title>
+    Remove file
+  </mat-card-title>
+
+  <mat-card-content *ngIf="nothingSelected">
+    <p>
+      Click on a bar to select a file.
+    </p>
+  </mat-card-content>
+
+  <mat-card-content *ngIf="!nothingSelected && file" fxLayout="row" fxLayoutAlign="start center">
+    <span fxFlex>{{file.filename}}</span>
+
+    <button
+      mat-icon-button
+      *ngIf="isAdmin"
+      (click)="removeFile()"
+      title="Remove file">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </mat-card-content>
+</mat-card>

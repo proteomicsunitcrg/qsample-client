@@ -61,5 +61,8 @@ export class FileService {
     return this.httpClient.get<any>(`${this.apiPrefix}isWorkflowEnabled`);
   }
 
+  public deleteFile(fileId: number): Observable<void> {
+    return this.httpClient.delete<void>(`${this.apiPrefix}${fileId}`);
+  }
 
 }

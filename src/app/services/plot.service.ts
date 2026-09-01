@@ -13,6 +13,8 @@ export class PlotService {
 
   public selectedOrder = new BehaviorSubject<string>('filename');
 
+  public fileRemoved = new Subject<void>();
+
 
   public sendselectedSamples(list: any[]) {
     this.selectedSamples.next(list);
@@ -60,5 +62,13 @@ export class PlotService {
 
   public getselectedOrder(): Observable<string> {
     return this.selectedOrder.asObservable();
+  }
+
+  public notifyFileRemoved(): void {
+    this.fileRemoved.next();
+  }
+
+  public getFileRemoved(): Observable<void> {
+    return this.fileRemoved.asObservable();
   }
 }

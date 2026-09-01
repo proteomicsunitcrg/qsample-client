@@ -26,14 +26,17 @@ export class RequestPlotFileListComponent implements OnInit, OnDestroy {
   selectedSamples: RequestFile[] = [];
 
   orderSubscription$: Subscription;
+  fileRemovedSubscription$: Subscription;
   order: string;
 
   ngOnInit(): void {
     this.subscribeToOrder();
+    this.subscribeToFileRemoved();
   }
 
   ngOnDestroy(): void {
     this.orderSubscription$.unsubscribe();
+    this.fileRemovedSubscription$.unsubscribe();
   }
 
   public getFilesByRequestCode(): void {
@@ -94,6 +97,12 @@ export class RequestPlotFileListComponent implements OnInit, OnDestroy {
   private subscribeToOrder(): void {
     this.orderSubscription$ = this.plotService.selectedOrder.subscribe((order) => {
       this.order = order;
+      this.getFilesByRequestCode();
+    });
+  }
+
+  private subscribeToFileRemoved(): void {
+    this.fileRemovedSubscription$ = this.plotService.getFileRemoved().subscribe(() => {
       this.getFilesByRequestCode();
     });
   }

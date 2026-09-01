@@ -21,6 +21,7 @@ import { NonConformitiesDialogComponent } from './request-qcloud2-files/dialog/n
 import { RequestPlotFileListComponent } from './request-details/request-plot-file-list/request-plot-file-list.component';
 import { RequestFileUploaderComponent } from './request-file-uploader/request-file-uploader.component';
 import { RequestQuantificationComponent } from './request-details/request-quantification/request-quantification.component';
+import { RequestRemoveFileComponent } from './request-details/request-remove-file/request-remove-file.component';
 import { RequestHeatmapComponent } from './request-details/request-heatmap/request-heatmap.component';
 import { RequestPcaComponent } from './request-pca/request-pca.component';
 import { RequestPlotFileinfoComponent } from './request-plot-fileinfo/request-plot-fileinfo.component';
@@ -43,6 +44,7 @@ import { RequestDendogramComponent } from './request-dendogram/request-dendogram
     RequestPlotFileListComponent,
     RequestFileUploaderComponent,
     RequestQuantificationComponent,
+    RequestRemoveFileComponent,
     RequestHeatmapComponent,
     RequestPcaComponent,
     RequestPlotFileinfoComponent,
