@@ -6,3 +6,23 @@
 .qsample-active-order:hover {
   background: rgba(13, 71, 161, 0.04);
 }
+
+.status-icon {
+  font-size: 20px;
+  vertical-align: middle;
+}
+
+/* !important because plain `color` here was losing to Angular Material's
+   own default icon color (all three icons were rendering blue). */
+.status-progress {
+  color: #f9a825 !important;
+}
+
+.status-ok {
+  color: green !important;
+}
+
+.status-error {
+  color: red !important;
+  cursor: pointer;
+}

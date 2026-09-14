@@ -1,0 +1,33 @@
+<h1 mat-dialog-title>
+  <span class="material-icons error-icon">error</span>
+  Processing error
+</h1>
+<div class="mat-dialog-content">
+  <div class="fact-row"><span class="fact-label">Sample</span><span>{{filename}}</span></div>
+  <div class="fact-row" *ngIf="status.databaseName">
+    <span class="fact-label">Database</span>
+    <span>
+      {{status.databaseName}}
+      <span *ngIf="status.databaseStatus === 'OK'" class="db-status db-ok">(OK)</span>
+      <span *ngIf="status.databaseStatus && status.databaseStatus !== 'OK'" class="db-status db-issue">See Reason below for more info</span>
+    </span>
+  </div>
+  <div class="fact-row" *ngIf="status.sizeMb"><span class="fact-label">Size</span><span>{{status.sizeMb}} MB</span></div>
+  <div class="fact-row" *ngIf="status.processName"><span class="fact-label">Process</span><span>{{status.processName}}</span></div>
+
+  <div class="block" *ngIf="status.rawSummary">
+    <div class="block-label">RAW summary</div>
+    <div class="block-content">{{status.rawSummary}}</div>
+  </div>
+
+  <div class="block reason-block" *ngIf="status.errorReason">
+    <div class="block-label">Reason</div>
+    <div class="block-content">{{displayedReason}}</div>
+    <a *ngIf="reasonIsTruncated" class="show-more" (click)="showFullReason = !showFullReason">
+      {{showFullReason ? 'Show less' : 'Show more'}}
+    </a>
+  </div>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" [mat-dialog-close]="true">OK</button>
+</div>

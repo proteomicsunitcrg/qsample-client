@@ -12,11 +12,37 @@
   Name
 </button>
 <mat-card style="margin-top: 1vh; margin-bottom: 1vh; margin-left: 1vw;">
-  <mat-form-field style="width: 100%;">
-    <input matInput (keyup)="applyFilter($event)">
-    <mat-placeholder>Filter</mat-placeholder>
-  </mat-form-field>
+  <div style="display: flex; gap: 1em;">
+    <mat-form-field style="flex: 1;">
+      <input matInput (keyup)="applyFilter($event)">
+      <mat-placeholder>Filter by filename</mat-placeholder>
+    </mat-form-field>
+    <mat-form-field style="width: 12em;">
+      <mat-select [(ngModel)]="statusFilterValue" (ngModelChange)="applyStatusFilter()">
+        <mat-option value="ALL">All statuses</mat-option>
+        <mat-option value="RECEIVED">Received</mat-option>
+        <mat-option value="PROCESSING">Processing</mat-option>
+        <mat-option value="PROCESSED">Processed</mat-option>
+        <mat-option value="ERROR">Error</mat-option>
+        <mat-option value="NONE">No status yet</mat-option>
+      </mat-select>
+      <mat-placeholder>Status</mat-placeholder>
+    </mat-form-field>
+  </div>
   <table mat-table [dataSource]="dataSource" style="width: 100%;">
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef style="width: 5em;"> Status </th>
+      <td mat-cell *matCellDef="let entry">
+        <span *ngIf="statusIcon(entry)" class="material-icons status-icon"
+          [class.status-progress]="statusFor(entry)?.status === 'RECEIVED' || statusFor(entry)?.status === 'PROCESSING'"
+          [class.status-ok]="statusFor(entry)?.status === 'PROCESSED'"
+          [class.status-error]="statusFor(entry)?.status === 'ERROR'"
+          [matTooltip]="statusTooltip(entry)"
+          (click)="onStatusClick(entry)">
+          {{statusIcon(entry)}}
+        </span>
+      </td>
+    </ng-container>
     <ng-container matColumnDef="show">
       <th mat-header-cell *matHeaderCellDef> Filename </th>
       <td mat-cell *matCellDef="let entry">

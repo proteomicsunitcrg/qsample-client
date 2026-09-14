@@ -1,0 +1,62 @@
+.error-icon {
+  color: red;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+.fact-row {
+  display: flex;
+  margin-bottom: 6px;
+}
+
+.fact-label {
+  font-weight: 500;
+  width: 90px;
+  flex-shrink: 0;
+}
+
+.block {
+  margin-top: 14px;
+}
+
+.block-label {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.block-content {
+  white-space: pre-wrap;
+  font-size: 13px;
+}
+
+.reason-block .block-content {
+  background-color: #fdecea;
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+
+.show-more {
+  display: inline-block;
+  margin-top: 4px;
+  cursor: pointer;
+  color: #1565c0;
+  font-size: 13px;
+}
+
+.show-more:hover {
+  text-decoration: underline;
+}
+
+.db-status {
+  font-size: 12px;
+  margin-left: 6px;
+}
+
+.db-ok {
+  color: green;
+}
+
+.db-issue {
+  color: #b30000;
+  font-style: italic;
+}
