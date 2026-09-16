@@ -169,6 +169,9 @@ export class RequestPlotFileListComponent implements OnInit, OnDestroy {
     this.requestFileStatusService.getByRequestCode(this.requestCode).subscribe(
       (res) => {
         this.statuses = res || {};
+        if (this.order === 'pipeline' && this.dataSource) {
+          this.dataSource.data = this.sortByPipelineEntry(this.dataSource.data);
+        }
         // Re-run the filter predicate so an active Status filter reflects
         // newly polled statuses, without resetting pagination/selection -
         // that's a user-driven action, not something a background poll
@@ -210,6 +213,25 @@ export class RequestPlotFileListComponent implements OnInit, OnDestroy {
       const matchesStatus = !status || status === 'ALL' || entryStatus === status;
       return matchesText && matchesStatus;
     };
+  }
+
+  private sortByPipelineEntry(files: RequestFile[]): RequestFile[] {
+    // Newest pipeline entry first; files with no status yet (not received by
+    // Atlas yet) sink to the bottom since they have no date to sort by.
+    return [...files].sort((a, b) => {
+      const aDate = this.statuses[a.checksum]?.receivedDate;
+      const bDate = this.statuses[b.checksum]?.receivedDate;
+      if (!aDate && !bDate) {
+        return 0;
+      }
+      if (!aDate) {
+        return 1;
+      }
+      if (!bDate) {
+        return -1;
+      }
+      return new Date(bDate).getTime() - new Date(aDate).getTime();
+    });
   }
 
   private hasInFlightFiles(): boolean {

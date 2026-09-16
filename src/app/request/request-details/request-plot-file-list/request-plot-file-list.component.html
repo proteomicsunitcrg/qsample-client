@@ -11,6 +11,12 @@
   [class.qsample-active-order]="order === 'filename'">
   Name
 </button>
+<button
+  mat-button
+  (click)="changeOrder('pipeline')"
+  [class.qsample-active-order]="order === 'pipeline'">
+  Logs
+</button>
 <mat-card style="margin-top: 1vh; margin-bottom: 1vh; margin-left: 1vw;">
   <div style="display: flex; gap: 1em;">
     <mat-form-field style="flex: 1;">
