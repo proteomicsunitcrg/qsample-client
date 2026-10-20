@@ -39,6 +39,10 @@ export class FileService {
     return this.httpClient.get<RequestFile>(`${this.apiPrefix}getRequestFileByChecksum/${checksum}`);
   }
 
+  public getTicByChecksum(checksum: string): Observable<string> {
+    return this.httpClient.get(`${this.apiPrefix}tic/${checksum}`, { responseType: 'text' });
+  }
+
   public getRequestFilesDashboard(startDate: Date, endDate: Date, filename: string, code: string): Observable<any> {
     let params = new HttpParams();
     params = params.set('startDate', startDate.toISOString()).set('endDate', endDate.toISOString()); // Date params

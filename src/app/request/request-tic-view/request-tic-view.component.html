@@ -1,0 +1,38 @@
+<mat-expansion-panel class="tic-panel" (expandedChange)="onPanelChanged($event)">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <span class="material-icons tic-header-icon">timeline</span>
+      Total Ion Current view
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+
+  <div class="tic-body">
+    <div class="tic-select" *ngIf="files.length > 0">
+      <mat-form-field appearance="outline">
+        <mat-label>File</mat-label>
+        <mat-select
+          [value]="selectedChecksum"
+          (selectionChange)="onFileSelected($event.value)"
+          disableOptionCentering>
+          <mat-option *ngFor="let f of files" [value]="f.checksum">{{ f.filename }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="tic-state" *ngIf="loading">Loading TIC&hellip;</div>
+    <div class="tic-state" *ngIf="error === 'nofile'">
+      No file available for this request.
+    </div>
+    <div class="tic-state" *ngIf="error === 'notfound'">
+      No TIC recorded for this file (processed before the TIC feature, or extraction failed).
+    </div>
+    <div class="tic-state" *ngIf="error === 'decode'">
+      The stored TIC for this file could not be decoded - contact the proteomics team.
+    </div>
+    <div class="tic-state" *ngIf="error === 'http'">
+      The TIC for this file could not be loaded - try again later.
+    </div>
+
+    <div class="tic-chart" #ticPlot *ngIf="!loading && !error && series !== null"></div>
+  </div>
+</mat-expansion-panel>

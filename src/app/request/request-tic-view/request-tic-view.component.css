@@ -1,0 +1,27 @@
+.tic-panel {
+  margin-bottom: 12px;
+}
+
+.tic-header-icon {
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+.tic-body {
+  padding: 4px 8px 8px 8px;
+}
+
+.tic-select {
+  margin-bottom: 12px;
+  max-width: 420px;
+}
+
+.tic-chart {
+  width: 100%;
+  height: 420px;
+}
+
+.tic-state {
+  padding: 16px 0;
+  color: #666;
+}

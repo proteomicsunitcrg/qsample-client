@@ -28,6 +28,7 @@ import { RequestPlotFileinfoComponent } from './request-plot-fileinfo/request-pl
 import { RequestPlotModificationsComponent } from './request-plot-modifications/request-plot-modifications.component';
 import { RequestDendogramComponent } from './request-dendogram/request-dendogram.component';
 import { RequestFileStatusErrorDialogComponent } from './request-details/request-plot-file-list/dialog/request-file-status-error-dialog.component';
+import { RequestTicViewComponent } from './request-tic-view/request-tic-view.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { RequestFileStatusErrorDialogComponent } from './request-details/request
     RequestPlotFileinfoComponent,
     RequestPlotModificationsComponent,
     RequestDendogramComponent,
-    RequestFileStatusErrorDialogComponent
+    RequestFileStatusErrorDialogComponent,
+    RequestTicViewComponent
   ],
   imports: [
     FlexLayoutModule,

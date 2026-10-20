@@ -1,5 +1,8 @@
 <div *ngIf="requestCode != undefined" fxLayout="column">
 
+  <!-- Total Ion Current view (dedicated panel, QCloud2-style) -->
+  <app-request-tic-view [requestCode]="requestCode"></app-request-tic-view>
+
   <!-- Legacy plots disabled.
        These plots are now controlled by dynamic charts when available.
 
