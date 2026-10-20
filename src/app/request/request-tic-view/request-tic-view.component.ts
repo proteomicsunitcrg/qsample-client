@@ -1,6 +1,9 @@
-import { Component, Input, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { MatExpansionPanel } from '@angular/material/expansion';
+import { Subscription } from 'rxjs';
 
 import { FileService } from '../../services/file.service';
+import { PlotService } from '../../services/plot.service';
 
 declare var Plotly: any;
 
@@ -8,9 +11,11 @@ declare var Plotly: any;
  * Dedicated "Total Ion Current view" for a request (QCloud2-style).
  *
  * A collapsed panel at the top of the request charts. When the user opens it,
- * the full TIC curve of the last file of the request is fetched by checksum and
- * plotted (decimated, base peak = 100). Selecting a different file in the
- * dropdown successively loads that file's TIC.
+ * the full TIC curve of the last file of the request is fetched by checksum
+ * and plotted (decimated, base peak = 100). A file can be chosen in the
+ * dropdown, or by clicking one of its bars in the "Number of protein groups"
+ * chart (any dynamic bar chart emits the clicked file checksum through
+ * PlotService.selectedChecksum).
  *
  * The series is fetched lazily (only when opened / when a file is chosen) and
  * the plot is purged on close, so the page never loads the (up to 100k+)
@@ -23,11 +28,12 @@ declare var Plotly: any;
   templateUrl: './request-tic-view.component.html',
   styleUrls: ['./request-tic-view.component.css'],
 })
-export class RequestTicViewComponent implements OnDestroy {
+export class RequestTicViewComponent implements OnInit, OnDestroy {
 
   @Input() requestCode: string;
 
   @ViewChild('ticPlot', { static: false }) private ticPlotRef: ElementRef;
+  @ViewChild(MatExpansionPanel, { static: false }) private panelRef: MatExpansionPanel;
 
   files: any[] = [];
   selectedFile: any = null;
@@ -41,8 +47,44 @@ export class RequestTicViewComponent implements OnDestroy {
 
   series: number[][] = null;
   private filesLoaded = false;
+  private pendingChecksum: string = null;
+  private subscriptions = new Subscription();
 
-  constructor(private fileService: FileService) { }
+  constructor(private fileService: FileService, private plotService: PlotService) { }
+
+  ngOnInit(): void {
+    // Bar clicks in the request charts (e.g. "Number of protein groups")
+    // emit the clicked file's checksum.
+    this.subscriptions.add(
+      this.plotService.getselectedChecksum().subscribe((checksum) => {
+        this.showFileFromChart(checksum);
+      })
+    );
+  }
+
+  /**
+   * Selects a file clicked in a request chart. Expands the panel when
+   * collapsed; defers the selection until the file list is loaded when the
+   * list is not available yet.
+   */
+  showFileFromChart(checksum: string): void {
+    if (!checksum) {
+      return;
+    }
+    if (this.filesLoaded && !this.files.some((f) => f.checksum === checksum)) {
+      return; // not a file of this request
+    }
+    this.pendingChecksum = checksum;
+    if (!this.isExpanded) {
+      // toggle() -> expandedChange -> onPanelChanged(true) ->
+      // ensureFilesLoaded -> pending selection applied
+      this.panelRef.toggle();
+    } else if (this.filesLoaded) {
+      this.applyPendingSelection();
+      this.loadTic();
+    }
+    // else: the in-flight file load applies the pending selection on success
+  }
 
   onPanelChanged(expanded: boolean): void {
     this.isExpanded = expanded;
@@ -67,6 +109,7 @@ export class RequestTicViewComponent implements OnDestroy {
 
   private ensureFilesLoaded(): void {
     if (this.filesLoaded) {
+      this.applyPendingSelection();
       this.loadTic();
       return;
     }
@@ -82,6 +125,7 @@ export class RequestTicViewComponent implements OnDestroy {
           this.selectedFile = this.files[this.files.length - 1];
           this.selectedChecksum = this.selectedFile.checksum;
         }
+        this.applyPendingSelection();
         this.loadTic();
       },
       (err) => {
@@ -90,6 +134,18 @@ export class RequestTicViewComponent implements OnDestroy {
         this.error = 'http';
       }
     );
+  }
+
+  private applyPendingSelection(): void {
+    if (!this.pendingChecksum) {
+      return;
+    }
+    const file = this.files.find((f) => f.checksum === this.pendingChecksum);
+    if (file) {
+      this.selectedFile = file;
+      this.selectedChecksum = file.checksum;
+    }
+    this.pendingChecksum = null;
   }
 
   private loadTic(): void {
@@ -196,14 +252,20 @@ export class RequestTicViewComponent implements OnDestroy {
       type: 'scatter',
       mode: 'lines',
       line: { width: 1 },
-      name: 'TIC'
+      name: 'TIC',
+      hovertemplate: 'Time: %{x:.2f} min<br>RA: %{y:.1f}<extra></extra>'
     };
     const layout = {
       title: { text: 'Total Ion Current - ' + (this.selectedFile.filename || this.selectedFile.checksum) },
       xaxis: { title: { text: 'Time (min)' } },
       yaxis: { type: 'linear', range: [0, 100], title: { text: 'Relative abundance' } },
       margin: { l: 70, r: 20, t: 40, b: 45 },
-      hovermode: 'x unified'
+      // 'closest' (not 'x'): the box shows exactly the hovertemplate's
+      // Time/RA lines - with 'x', Plotly 1.x prepends a raw x-value header
+      // line that cannot be suppressed (checked hoverformat '' and '%.2f').
+      // hoverline keeps the dotted vertical guide.
+      hovermode: 'closest',
+      hoverline: { visible: true, width: 1, dash: 'dot' }
     };
     Plotly.react(this.ticPlotRef.nativeElement, [trace], layout, { responsive: true });
   }
@@ -216,6 +278,7 @@ export class RequestTicViewComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
     this.cleanupPlot();
   }
 }

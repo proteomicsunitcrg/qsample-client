@@ -16,6 +16,19 @@
   max-width: 420px;
 }
 
+/* QSample blue for the file selector (the focused label is already global in
+   styles.css; the selected option of the open panel is global too, via
+   .tic-file-select-panel). The outline appearance colors the focused border
+   through .mat-form-field-outline-thick `color` (its border is currentColor)
+   and the arrow is a mat-icon (fill = currentColor). */
+.tic-select ::ng-deep .mat-form-field.mat-focused .mat-form-field-outline-thick {
+  color: #1143A8 !important;
+}
+
+.tic-select ::ng-deep .mat-form-field.mat-focused.mat-primary .mat-select-arrow {
+  color: #1143A8 !important;
+}
+
 .tic-chart {
   width: 100%;
   height: 420px;

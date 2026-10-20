@@ -11,6 +11,7 @@
       <mat-form-field appearance="outline">
         <mat-label>File</mat-label>
         <mat-select
+          [panelClass]="'tic-file-select-panel'"
           [value]="selectedChecksum"
           (selectionChange)="onFileSelected($event.value)"
           disableOptionCentering>
