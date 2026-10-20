@@ -57,7 +57,7 @@ export class ApplicationChartEditorComponent implements OnInit {
   filteredContextSources: ContextSource[] = [];
   lastCreatedContextSourceApiKey: string | null = null;
   parameterTypes = ['string', 'number', 'boolean'];
-  chartTypes = ['bar'];
+  chartTypes = ['bar', 'line'];
   chartModes = [
     { value: 'SIMPLE_BAR', label: 'Simple bar' },
     { value: 'STACKED_BAR', label: 'Stacked bar' }
