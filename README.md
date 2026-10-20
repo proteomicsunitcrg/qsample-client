@@ -1,4 +1,7 @@
 # QSample Client
+> **Notice (2026-10):** Development of QSample Client has moved to an internal CRG repository (CRG staff only - not accessible from outside).
+> This GitHub repository is **frozen** and kept as a public archive: to download/install a version, see the [Releases](https://github.com/proteomicsunitcrg/qsample-client/releases) (clean snapshot per release).
+
 
 ![AngularJS](https://img.shields.io/badge/AngularJS-E23237?style=for-the-badge&logo=angularjs&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-green)
