@@ -26,12 +26,6 @@ export interface ChartSeriesDataPoint {
   creationDate: string;
 }
 
-export interface TicSeries {
-  checksum: string;
-  filename: string;
-  points: number[][];
-}
-
 export interface ApplicationChartConfig {
   id: number;
   applicationId: number;
@@ -439,17 +433,6 @@ export class ChartService {
   ): Observable<ChartSeriesDataPoint[]> {
     return this.http.get<ChartSeriesDataPoint[]>(
       `${this.apiUrl}/stacked-data/chart/${chartId}/request/${requestCode}?order=${order}`
-    );
-  }
-
-  getTicChartData(
-    requestCode: string,
-    order: string,
-    maxPoints?: number
-  ): Observable<TicSeries[]> {
-    const maxPointsSuffix = maxPoints ? `&maxPoints=${maxPoints}` : '';
-    return this.http.get<TicSeries[]>(
-      `/api/file/tic/request/${requestCode}?order=${order}${maxPointsSuffix}`
     );
   }
 }

@@ -7,8 +7,7 @@ import { Subscription } from 'rxjs';
 import {
   ChartService,
   ChartDataPoint,
-  ChartSeriesDataPoint,
-  TicSeries
+  ChartSeriesDataPoint
 } from '../../services/chart.service';
 
 import { ChartConfig } from '../../models/chart-config.model';
@@ -39,14 +38,7 @@ export class DynamicChartComponent implements OnInit, OnDestroy {
   selectedSampleChecksums: Set<string> | null = null;
   private subscriptions = new Subscription();
   private chartDataCache: { [key: number]: Array<ChartDataPoint | ChartSeriesDataPoint> } = {};
-  private ticDataCache: { [key: number]: TicSeries[] } = {};
   private requestSamples: any[] = [];
-
-  private static readonly TIC_TRACE_PALETTE = [
-    '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
-    '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf',
-    '#001f54', '#00a6d6', '#003566', '#48cae4', '#00509d', '#90e0ef'
-  ];
 
   constructor(
     private chartService: ChartService,
@@ -155,11 +147,6 @@ export class DynamicChartComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (chart.chartType === 'line') {
-      this.renderTicChart(chart);
-      return;
-    }
-
     if (this.isStackedChart(chart) && !this.wetlabId) {
       this.chartService.getStackedChartData(
         chart.id,
@@ -222,122 +209,6 @@ export class DynamicChartComponent implements OnInit, OnDestroy {
 
   isStackedChart(chart: ChartConfig): boolean {
     return chart.chartMode === 'STACKED_BAR';
-  }
-
-  isLineChart(chart: ChartConfig): boolean {
-    return chart.chartType === 'line';
-  }
-
-  renderTicChart(chart: ChartConfig): void {
-    if (!this.requestCode) {
-      // Line charts are request-scoped (per-file series); a wetlab page has
-      // no request to fetch them from.
-      this.chartsWithoutData[chart.id] = true;
-      this.clearPlotlyChart(chart);
-      return;
-    }
-
-    this.chartService.getTicChartData(this.requestCode, this.currentOrder).subscribe({
-      next: (series) => {
-        this.ticDataCache[chart.id] = series || [];
-        this.plotTicChartFromCache(chart);
-      },
-      error: () => {
-        this.chartsWithoutData[chart.id] = true;
-        this.clearPlotlyChart(chart);
-      }
-    });
-  }
-
-  private filterTicSeriesBySelectedSamples(series: TicSeries[]): TicSeries[] {
-    if (this.selectedSampleChecksums === null || !series) {
-      return series || [];
-    }
-
-    return series.filter(item =>
-      item.checksum && this.selectedSampleChecksums!.has(item.checksum)
-    );
-  }
-
-  private getTicTraceColor(filename: string, index: number): string {
-    const condition = this.getConditionFromLabel(this.parseFilename(filename));
-
-    return condition
-      ? this.getConditionColor(index)
-      : DynamicChartComponent.TIC_TRACE_PALETTE[index % DynamicChartComponent.TIC_TRACE_PALETTE.length];
-  }
-
-  plotTicChartFromCache(chart: ChartConfig): void {
-    const series = this.ticDataCache[chart.id];
-
-    if (!series) {
-      return;
-    }
-
-    const filteredSeries = this.filterTicSeriesBySelectedSamples(series);
-
-    if (!filteredSeries.length) {
-      this.chartsWithoutData[chart.id] = true;
-      this.clearPlotlyChart(chart);
-      return;
-    }
-
-    delete this.chartsWithoutData[chart.id];
-
-    setTimeout(() => {
-      const data = filteredSeries.map((item, index) => {
-        const basePeak = Math.max(...item.points.map(point => point[2]));
-
-        return {
-          x: item.points.map(point => point[0] / 60000),
-          y: item.points.map(point => basePeak > 0 ? point[2] / basePeak * 100 : 0),
-          mode: 'lines',
-          name: this.parseFilename(item.filename),
-          line: {
-            width: 1.5,
-            color: this.getTicTraceColor(item.filename, index)
-          },
-          customdata: item.points.map(point => [
-            item.filename,
-            point[0] / 60000,
-            point[2]
-          ]),
-          hovertemplate:
-            '<b>%{customdata[0]}</b><br>' +
-            'Time: %{x:.2f} min<br>' +
-            'Relative abundance: %{y:.1f}%<br>' +
-            'Intensity: %{customdata[2]:.3g}<extra></extra>',
-          type: 'scatter'
-        };
-      });
-
-      const layout = {
-        autosize: true,
-        hovermode: 'closest',
-        legend: {
-          orientation: 'h',
-          y: -0.2
-        },
-        margin: {
-          t: 20,
-          r: 20,
-          b: 60,
-          l: 60
-        },
-        xaxis: {
-          title: 'Time (min)'
-        },
-        yaxis: {
-          title: 'Relative abundance (%)',
-          range: [0, 105]
-        },
-        height: chart.parameters && chart.parameters.height
-          ? chart.parameters.height
-          : 400
-      };
-
-      this.renderPlotlyChart(chart, data, layout, { responsive: true });
-    }, 0);
   }
 
   private isPercentChart(chart: ChartConfig): boolean {
@@ -446,11 +317,6 @@ export class DynamicChartComponent implements OnInit, OnDestroy {
   }
 
   private renderChartFromCache(chart: ChartConfig): void {
-    if (chart.chartType === 'line') {
-      this.plotTicChartFromCache(chart);
-      return;
-    }
-
     const dataPoints = this.chartDataCache[chart.id];
 
     if (!dataPoints) {

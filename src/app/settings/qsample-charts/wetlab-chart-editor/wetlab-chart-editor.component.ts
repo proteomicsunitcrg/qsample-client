@@ -63,7 +63,7 @@ export class WetlabChartEditorComponent implements OnInit {
   lastCreatedContextSourceApiKey: string | null = null;
 
   parameterTypes = ['string', 'number', 'boolean'];
-  chartTypes = ['bar', 'line'];
+  chartTypes = ['bar'];
   chartModes = [
     { value: 'SIMPLE_BAR', label: 'Simple bar' },
     { value: 'STACKED_BAR', label: 'Stacked bar' }
