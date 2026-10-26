@@ -18,13 +18,16 @@
   Logs
 </button>
 <mat-card style="margin-top: 1vh; margin-bottom: 1vh; margin-left: 1vw;">
-  <div style="display: flex; gap: 1em;">
-    <mat-form-field style="flex: 1;">
+  <div class="qsample-plot-filters" style="display: flex; gap: 1em;">
+    <mat-form-field appearance="outline" style="flex: 1;">
       <input matInput (keyup)="applyFilter($event)">
       <mat-placeholder>Filter by filename</mat-placeholder>
     </mat-form-field>
-    <mat-form-field style="width: 12em;">
-      <mat-select [(ngModel)]="statusFilterValue" (ngModelChange)="applyStatusFilter()">
+    <mat-form-field appearance="outline" style="width: 12em;">
+      <mat-select
+        [panelClass]="'plot-status-select-panel'"
+        [(ngModel)]="statusFilterValue"
+        (ngModelChange)="applyStatusFilter()">
         <mat-option value="ALL">All statuses</mat-option>
         <mat-option value="RECEIVED">Received</mat-option>
         <mat-option value="PROCESSING">Processing</mat-option>

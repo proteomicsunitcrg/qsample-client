@@ -43,6 +43,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
   color: #1143A8 !important;
 }
 
+.plot-status-select-panel .mat-option.mat-selected:not(.mat-option-disabled) {
+  color: #1143A8 !important;
+}
+
 
 .dark-theme .mat-checkbox-checkmark-path {
   stroke: #fff !important;

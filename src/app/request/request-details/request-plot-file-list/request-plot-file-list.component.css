@@ -26,3 +26,14 @@
   color: red !important;
   cursor: pointer;
 }
+
+/* QSample blue for the filter fields (same treatment as the TIC file
+   selector; the open select's selected option is handled globally via
+   .plot-status-select-panel in styles.css). */
+.qsample-plot-filters ::ng-deep .mat-form-field.mat-focused .mat-form-field-outline-thick {
+  color: #1143A8 !important;
+}
+
+.qsample-plot-filters ::ng-deep .mat-form-field.mat-focused.mat-primary .mat-select-arrow {
+  color: #1143A8 !important;
+}
