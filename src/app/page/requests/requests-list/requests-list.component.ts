@@ -179,6 +179,35 @@ export class RequestsListComponent implements OnInit {
     this.getAllRequests();
   }
 
+  public windowLabel(): string {
+    const start = this.range.controls.start.value;
+    const end = this.range.controls.end.value;
+
+    if (!start || !end) {
+      return 'Loaded requests';
+    }
+
+    const days = Math.round((new Date(end).getTime() - new Date(start).getTime()) / 86400000);
+
+    if (days < 1) {
+      return 'Loaded requests';
+    }
+
+    const months = Math.round(days / 30.44);
+
+    if (months >= 12 && months % 12 === 0) {
+      const years = months / 12;
+
+      return `Last processed requests (${years} ${years === 1 ? 'year' : 'years'})`;
+    }
+
+    if (months >= 1) {
+      return `Last processed requests (${months} ${months === 1 ? 'month' : 'months'})`;
+    }
+
+    return `Last processed requests (${days} ${days === 1 ? 'day' : 'days'})`;
+  }
+
   private restoreDateRange(): void {
     const savedRange = window.sessionStorage.getItem(this.requestDateRangeStorageKey);
 

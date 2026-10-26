@@ -234,7 +234,7 @@
   </mat-progress-spinner>
 
     <div class="requests-table-header" *ngIf="!finding && allRequests && allRequests.length > 0">
-      <h3>Loaded requests</h3>
+      <h3>{{ windowLabel() }}</h3>
       <span>{{allRequests.length}} requests loaded</span>
     </div>
   <table
