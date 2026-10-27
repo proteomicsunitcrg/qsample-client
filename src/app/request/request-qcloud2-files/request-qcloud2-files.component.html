@@ -9,7 +9,7 @@
   <mat-card-subtitle style="color: green; cursor: pointer;" *ngIf="errorCounter == 0 && qCloud2Files.length !== 0">
     All files are correct
   </mat-card-subtitle>
-  <mat-card-subtitle *ngIf="qCloud2Files.length === 0">
+  <mat-card-subtitle *ngIf="qCloud2Files.length === 0 && error === undefined">
     Nothing found
   </mat-card-subtitle>
   <mat-card-content>
@@ -34,7 +34,7 @@
       </table>
       <mat-paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
     </div>
-    <div *ngIf="qCloud2Files != undefined">
+    <div *ngIf="qCloud2Files != undefined && error === undefined">
       <div *ngIf="qCloud2Files.length === 0">
         <p class="mat-body">
           Nothing found
@@ -42,12 +42,13 @@
       </div>
     </div>
     <div *ngIf="error !=  undefined">
-      <p class="mat-body">
-        {{error.error.error}}
+      <p class="mat-body" *ngIf="error.status === 0 || error.status >= 500">
+        QCloud2 service temporarily unavailable. QCloud related files cannot be loaded right now.
       </p>
-      <p class="mat-small">
-        {{error.error.message}}
-      </p>
+      <ng-container *ngIf="error.status > 0 && error.status < 500">
+        <p class="mat-body">{{error.error.error}}</p>
+        <p class="mat-small">{{error.error.message}}</p>
+      </ng-container>
     </div>
   </mat-card-content>
 </mat-card>
