@@ -71,18 +71,14 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
                     if (updatedRequests.hasOwnProperty(params.apiKey)) {
                       this.requestId = updatedRequests[params.apiKey]['id'];
                       this.isLoading = false;
-                      this.handleByRequestId(this.requestId);
+                      this.handleByRequestId(this.requestId, params.apiKey);
                     } else {
                       this.handleQSampleOnlyRequest(params.apiKey);
                     }
                   },
                   (err) => {
-                    this.request = null;
-                    this.requestCode = null;
-                    this.application = null;
-                    this.isLoading = false;
-                    this.isAgendoDown = true;
                     console.error(err);
+                    this.handleQSampleOnlyRequest(params.apiKey);
                   }
                 );
               }
@@ -215,12 +211,16 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       },
       (err) => {
-        this.request = null;
-        this.requestCode = null;
-        this.application = null;
-        this.isLoading = false;
-        this.isAgendoDown = true;
         console.error(err);
+        if (requestCode) {
+          this.handleQSampleOnlyRequest(requestCode);
+        } else {
+          this.request = null;
+          this.requestCode = null;
+          this.application = null;
+          this.isLoading = false;
+          this.isAgendoDown = true;
+        }
       }
     );
   }
@@ -255,7 +255,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
           this.isAgendoDown = true;
           this.isLoading = false;
         } else {
-          alert('Request not found in Agendo and no QSample data found!');
+          alert('Request not found in Agendo (or Agendo unavailable) and no QSample data found!');
           this.isLoading = false;
         }
       },
