@@ -243,6 +243,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
               email: ''
             },
             date_created: files[0].creation_date || files[0].creationDate || '',
+            group: 'Not available in Agendo',
             localCreator: 'Not available in Agendo',
             localCreationDate: files[0].creation_date || files[0].creationDate || '',
             status: 'QSample data only'
